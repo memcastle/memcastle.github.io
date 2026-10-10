@@ -1,0 +1,2168 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/authentication/">
+      
+      
+        <link rel="prev" href="../daemon/">
+      
+      
+        <link rel="next" href="../web/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Authentication - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Authentication
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-protected" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What is protected
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-where-the-token-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Choose where the token comes from
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provisioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Provisioning
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Provisioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-a-generated-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        With a generated token
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-a-shared-secret-from-a-secret-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        With a shared secret from a secret manager
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#under-systemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Under systemd
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Rotation
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Revocation
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP clients
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-web-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The web UI
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exposing-the-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Exposing the daemon
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reference
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-protected" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What is protected
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-where-the-token-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Choose where the token comes from
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provisioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Provisioning
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Provisioning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#with-a-generated-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        With a generated token
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#with-a-shared-secret-from-a-secret-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        With a shared secret from a secret manager
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#under-systemd" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Under systemd
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Rotation
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Revocation
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP clients
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-web-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The web UI
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exposing-the-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Exposing the daemon
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reference
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/authentication.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h1>
+<p>The daemon can require a bearer token from every client.
+It is optional and off by default, so the local workflow (a daemon on <code>127.0.0.1</code>, used by you) needs none.
+Turn it on when the daemon is reachable by anyone else: a non-loopback <code>server.bind</code>, a shared machine or a container.</p>
+<p>The decision and the alternatives that were rejected are in
+<a href="../adr/014-optional-token-authentication/">ADR-014</a>.</p>
+<h2 id="what-is-protected">What is protected<a class="headerlink" href="#what-is-protected" title="Permanent link">&para;</a></h2>
+<p>With authentication enabled, every request needs <code>Authorization: Bearer &lt;token&gt;</code>, with one exception:
+<code>GET /api/health</code>, the liveness probe, stays open.
+It answers only <code>{"status": "ok"}</code>, and <code>daemon restart</code>, supervisors and health checks depend on it.</p>
+<p>If you enable the <a href="../web/">web UI</a> (<code>web.enable</code>), its static files are a second exception:
+<code>GET</code> and <code>HEAD</code> of <code>/ui</code> and anything under <code>/ui/</code> need no token,
+because a browser cannot send a header when it loads a page, and so could never load the page that asks for the token.
+The files are the same for everyone and hold no data; every call the page then makes to <code>/api</code> carries the token and is
+checked like any other.
+With the dashboard off, <code>/ui</code> is guarded like every other path.</p>
+<p>A webhook delivery is not a request to this API and is not one of these exceptions: it goes to the separate
+<a href="../triggers/#the-webhook-listener">webhook listener</a>, which is off by default, loopback by default, and checks a
+delivery against its trigger's own shared secret, so no route of the main router is opened for it.</p>
+<p>Everything else is protected, including <code>/api/status</code>, <code>/api/shutdown</code>, every other REST route, and <code>/mcp</code>.
+A path that does not exist is refused with <code>401</code> too, rather than <code>404</code>.</p>
+<pre class="mermaid"><code>flowchart LR
+    client([client]) --&gt; layer{bearer token&lt;br/&gt;valid?}
+    layer -- "GET /api/health" --&gt; health[health probe]
+    layer -- yes --&gt; routes[REST routes and /mcp]
+    layer -- "no" --&gt; refused[401 memcastle::auth::unauthorized]</code></pre>
+<p>A refused request is a <code>401</code> with the usual <a href="../mcp-and-api/#errors">error body</a>, the code <code>memcastle::auth::unauthorized</code>
+and a <code>WWW-Authenticate: Bearer</code> header.
+The CLI shows it as a rejection by the daemon (<code>memcastle::client::remote_rejected</code>, status 401),
+which is not the same as <code>memcastle::client::not_running</code>: the daemon answered, it just did not accept the credential.
+<code>memcastle status</code> exits <code>1</code> for it, not <code>3</code>.</p>
+<p>Authentication answers "who are you", not "what may you do":
+<a href="../memory-modes/">memory modes</a> still apply on top, and there is one credential, not a user for each client.</p>
+<h2 id="choose-where-the-token-comes-from">Choose where the token comes from<a class="headerlink" href="#choose-where-the-token-comes-from" title="Permanent link">&para;</a></h2>
+<p>The daemon accepts a token from either of two sources.
+The CLI, and any other client, presents whatever is in <code>MEMCASTLE_AUTH_TOKEN</code> or <code>auth.token</code>,
+which is the shared secret or a token you generated and stored yourself:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Set by</th>
+<th>Kept</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A <strong>shared secret</strong></td>
+<td><code>MEMCASTLE_AUTH_TOKEN</code>, or <code>auth.token</code> in the config file</td>
+<td>by you, outside MemCastle</td>
+</tr>
+<tr>
+<td>A <strong>generated token</strong></td>
+<td><code>memcastle auth generate</code></td>
+<td>as a digest in the palace database</td>
+</tr>
+</tbody>
+</table>
+<p>A configured secret takes the usual <a href="../configuration/#precedence">precedence</a>: the environment beats the config file.
+Prefer the environment variable, so the secret stays out of the file and can come from a secret manager.
+A secret must be at least 16 characters.</p>
+<p>MemCastle never writes the secret anywhere.
+It is not in the registry file, the status report, the logs, the generated configuration or the database,
+and the daemon keeps only its hash in memory.
+The CLI accepts the token only through the environment or the config file, never as an argument,
+so it does not reach your shell history or the process list.</p>
+<h2 id="provisioning">Provisioning<a class="headerlink" href="#provisioning" title="Permanent link">&para;</a></h2>
+<h3 id="with-a-generated-token">With a generated token<a class="headerlink" href="#with-a-generated-token" title="Permanent link">&para;</a></h3>
+<p>The daemon has to be running without authentication the first time, because generating a token is a call to its API.</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>serve<span class="w"> </span><span class="p">&amp;</span><span class="w">                     </span><span class="c1"># authentication is off</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>generate<span class="w"> </span><span class="p">|</span><span class="w"> </span>op<span class="w"> </span>item<span class="w"> </span>create<span class="w"> </span>--category<span class="w"> </span>password<span class="w"> </span>--title<span class="w"> </span>memcastle<span class="w"> </span>-<span class="w"> </span><span class="s1">'password[password]=-'</span>
+</span></code></pre></div>
+<p><code>auth generate</code> prints the token, and nothing else, on standard output, so it can be piped straight into a secret manager.
+The instructions go to standard error.
+The daemon stores only a SHA-256 digest of the token, so <strong>it is shown once</strong> and cannot be recovered.</p>
+<p>Then turn authentication on and restart:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MEMCASTLE_AUTH_ENABLED</span><span class="o">=</span><span class="nb">true</span><span class="w">     </span><span class="c1"># or `enabled = true` under [auth] in the config file</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>memcastle<span class="w"> </span>daemon<span class="w"> </span>restart<span class="w">               </span><span class="c1"># `serve` refuses to start if nothing could authenticate a client</span>
+</span></code></pre></div>
+<p>From now on the CLI needs the token in its environment:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MEMCASTLE_AUTH_TOKEN</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>op<span class="w"> </span><span class="nb">read</span><span class="w"> </span><span class="s1">'op://Private/memcastle/password'</span><span class="k">)</span><span class="s2">"</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>memcastle<span class="w"> </span>status
+</span></code></pre></div>
+<h3 id="with-a-shared-secret-from-a-secret-manager">With a shared secret from a secret manager<a class="headerlink" href="#with-a-shared-secret-from-a-secret-manager" title="Permanent link">&para;</a></h3>
+<p>Skip generation and supply a secret you made yourself, to the daemon and to its clients:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MEMCASTLE_AUTH_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>op<span class="w"> </span>run<span class="w"> </span>--env-file<span class="o">=</span>memcastle.env<span class="w"> </span>--<span class="w"> </span>memcastle<span class="w"> </span>serve<span class="w">      </span><span class="c1"># memcastle.env: MEMCASTLE_AUTH_TOKEN=op://Private/memcastle/password</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>op<span class="w"> </span>run<span class="w"> </span>--env-file<span class="o">=</span>memcastle.env<span class="w"> </span>--<span class="w"> </span>memcastle<span class="w"> </span>status
+</span></code></pre></div>
+<p>Under systemd, give the unit an <code>EnvironmentFile=</code> with mode <code>0600</code>, or use <code>LoadCredential=</code> with a wrapper that
+exports the credential as <code>MEMCASTLE_AUTH_TOKEN</code>; see <a href="#under-systemd">Under systemd</a>.</p>
+<p><code>daemon start</code> and <code>daemon restart</code> start the new daemon with your environment and your <code>--config</code>,
+so a secret in either carries over without being passed on the command line.</p>
+<h3 id="under-systemd">Under systemd<a class="headerlink" href="#under-systemd" title="Permanent link">&para;</a></h3>
+<p>The packaged user unit (the Arch <code>memcastle-bin</code>, <code>.deb</code> and <code>.rpm</code> packages, <code>/usr/lib/systemd/user/memcastle.service</code>)
+is package-owned and holds no secret.
+It reads an optional, user-owned <code>EnvironmentFile=-%E/memcastle/secret.env</code>, which is <code>~/.config/memcastle/secret.env</code>
+unless you moved <code>XDG_CONFIG_HOME</code>.
+The <code>-</code> makes the file optional, so with authentication disabled (the default) nothing needs provisioning.</p>
+<p><strong>With a generated token</strong>, the daemon only needs to be told authentication is on.
+The verifier is already in the palace, in the <code>auth_state</code> table, not in a file:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>systemctl<span class="w"> </span>--user<span class="w"> </span>start<span class="w"> </span>memcastle<span class="w">                  </span><span class="c1"># authentication still off: the routes are open</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>generate<span class="w">                           </span><span class="c1"># prints mc_... once; store it in your secret manager</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>~/.config/memcastle/secret.env
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'MEMCASTLE_AUTH_ENABLED=true'</span><span class="w"> </span>&gt;<span class="w"> </span>~/.config/memcastle/secret.env
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>systemctl<span class="w"> </span>--user<span class="w"> </span>restart<span class="w"> </span>memcastle
+</span></code></pre></div>
+<p>The service never sees or stores the plaintext token.
+Your CLI and MCP clients read it from the secret manager, for example <code>op run --env-file=memcastle.env -- memcastle status</code>.</p>
+<p><strong>With a shared secret</strong>, put it in the same file instead, created with mode <code>0600</code> before it gets any content:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>~/.config/memcastle/secret.env
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>op<span class="w"> </span><span class="nb">read</span><span class="w"> </span>op://Private/memcastle/password<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">'s/^/MEMCASTLE_AUTH_TOKEN=/'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.config/memcastle/secret.env
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">'MEMCASTLE_AUTH_ENABLED=true'</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.config/memcastle/secret.env
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>systemctl<span class="w"> </span>--user<span class="w"> </span>restart<span class="w"> </span>memcastle
+</span></code></pre></div>
+<p>The file holds the plaintext secret, so it is only as safe as your home directory permissions and backups;
+keep it out of dotfile repositories.
+The secret is not in the unit, the process arguments, <code>systemctl status</code> or the journal.
+To avoid a plaintext file entirely, use a drop-in (<code>systemctl --user edit memcastle</code>) that sets <code>LoadCredential=</code>
+and a wrapper <code>ExecStart=</code> exporting it as <code>MEMCASTLE_AUTH_TOKEN</code>, or one that runs <code>op run</code>.</p>
+<p>If authentication is enabled with neither a configured secret nor a stored verifier, the service fails to start with
+<code>memcastle::auth::not_configured</code>, visible in <code>journalctl --user -u memcastle</code>.
+A <code>secret.env</code> that exists but is unreadable fails the unit before <code>ExecStart</code>,
+and <code>systemctl --user status memcastle</code> names the file.</p>
+<p>Rotation and revocation change only the palace verifier or your own <code>secret.env</code>, never a package-owned file.</p>
+<h2 id="rotation">Rotation<a class="headerlink" href="#rotation" title="Permanent link">&para;</a></h2>
+<p>Generate a new token while authenticated; the old one stops working the moment the new one exists:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>generate<span class="w"> </span><span class="p">|</span><span class="w"> </span>op<span class="w"> </span>item<span class="w"> </span>edit<span class="w"> </span>memcastle<span class="w"> </span>-<span class="w"> </span><span class="s1">'password[password]=-'</span>
+</span></code></pre></div>
+<p>The call needs the current token (<code>MEMCASTLE_AUTH_TOKEN</code>), and the rest of your clients must then switch to the new one.
+There is nothing to restart: the daemon checks the stored digest on each request.</p>
+<p>To rotate a <strong>configured</strong> secret, change <code>MEMCASTLE_AUTH_TOKEN</code> (or <code>auth.token</code>) for the daemon and its clients,
+and restart the daemon.</p>
+<h2 id="revocation">Revocation<a class="headerlink" href="#revocation" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>revoke
+</span></code></pre></div>
+<p>This removes the stored digest, and the generated token is refused from the next request.
+It does not touch a configured secret: that one lives outside the daemon, so change or unset it and restart.</p>
+<p>Revoking the last credential locks everyone out, including the CLI that would have stopped the daemon.
+If that happens, stop the process with your supervisor (or <code>kill</code>), and start it again with authentication disabled
+(unset <code>MEMCASTLE_AUTH_ENABLED</code>) or with a new configured secret.
+No data is lost: authentication guards access, and does not encrypt the palace.</p>
+<h2 id="mcp-clients">MCP clients<a class="headerlink" href="#mcp-clients" title="Permanent link">&para;</a></h2>
+<p>An MCP client sends the same header.
+Most clients have a setting for headers on a remote server:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">"memcastle"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http"</span><span class="p">,</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://127.0.0.1:8420/mcp"</span><span class="p">,</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">      </span><span class="nt">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"Authorization"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer ${MEMCASTLE_AUTH_TOKEN}"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Expand the token from the environment if your client supports it, and keep it out of a file that is committed.
+Without a valid token a client cannot even complete <code>initialize</code>.</p>
+<p><strong>MCP clients cannot manage credentials.</strong>
+Generating, rotating and revoking a token are REST and CLI operations only, and no MCP tool exists for them,
+so an agent with MCP access cannot mint, replace or remove the credential that guards the palace.
+The same token lets an agent use every MCP tool, so give it the token only if you want it to have that.
+The same goes for the OAuth tokens a mining source signs in with: starting a sign-in, and everything about the stored tokens,
+is REST and CLI only (<a href="../configuration/#credentials">Credentials</a>).</p>
+<p>The MCP endpoint also checks the <code>Host</code> header against the loopback names (<code>localhost</code>, <code>127.0.0.1</code>, <code>::1</code>),
+which is independent of authentication.
+Reaching <code>/mcp</code> through another name or address is refused until that changes, even with a valid token.</p>
+<h2 id="the-database-admin-endpoint">The database admin endpoint<a class="headerlink" href="#the-database-admin-endpoint" title="Permanent link">&para;</a></h2>
+<p>The <a href="../database-access/">database admin endpoint</a> is a separate listener, so the layer above does not wrap it.
+It applies the same token itself, whenever <code>auth.enabled</code> is true.
+Starting, stopping and inspecting it (<code>/api/db</code>) goes through the layer like any other route.</p>
+<p>A browser cannot set a header on a WebSocket, so Studio presents the token in-band:
+sign in as the user <code>memcastle</code> with the token as the password.
+A client that is not a browser may send <code>Authorization: Bearer &lt;token&gt;</code> on the upgrade instead.
+Both are checked by the same code as the REST API, so a token you rotate or revoke stops working for the next sign-in.
+A connection that is already signed in is not closed by a revocation.
+Five refused sign-ins close the connection, and until a session has signed in only the handshake methods work.</p>
+<p>The endpoint listens beyond loopback only when <code>auth.enabled</code> is true, and never otherwise.</p>
+<h2 id="the-web-ui">The web UI<a class="headerlink" href="#the-web-ui" title="Permanent link">&para;</a></h2>
+<p>When authentication is on, the <a href="../web/">web UI</a> shows a login page that works like the database console's:
+the user is <code>memcastle</code> and the password is the token.
+The token is sent as <code>Authorization: Bearer</code> with each request, so the page is checked by the same layer as everything else,
+and a token you rotate or revoke stops working at the next request, which returns the page to its login.
+It is kept in the browser tab's <code>sessionStorage</code> only, so closing the tab signs out.
+There is no cookie and no extra credential.
+There is no limit on refused sign-ins, as there is for a database connection, since each attempt is an independent request.</p>
+<h2 id="exposing-the-daemon">Exposing the daemon<a class="headerlink" href="#exposing-the-daemon" title="Permanent link">&para;</a></h2>
+<p>Authentication is not encryption.
+The token crosses the network in cleartext over plain HTTP, and TLS on the daemon's own listener is not supported.
+A daemon that is reachable beyond a trusted network needs a TLS-terminating proxy in front of it.</p>
+<p>The daemon logs a warning at startup when it listens beyond loopback with authentication disabled.</p>
+<h2 id="reference">Reference<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Environment variable</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auth.enabled</code></td>
+<td><code>MEMCASTLE_AUTH_ENABLED</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>auth.token</code> (at least 16 characters)</td>
+<td><code>MEMCASTLE_AUTH_TOKEN</code></td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>REST route</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle auth generate</code></td>
+<td><code>POST /api/auth/token</code></td>
+</tr>
+<tr>
+<td><code>memcastle auth revoke</code></td>
+<td><code>DELETE /api/auth/token</code></td>
+</tr>
+<tr>
+<td><code>memcastle db start</code>, <code>status</code>, <code>stop</code></td>
+<td><code>POST</code>, <code>GET</code>, <code>DELETE /api/db</code></td>
+</tr>
+</tbody>
+</table>
+<p>While authentication is disabled these two are open, which is how the first token is made.
+Once it is enabled they need a valid token like every other route.</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle::auth::unauthorized</code></td>
+<td>The token was missing, malformed or wrong.</td>
+</tr>
+<tr>
+<td><code>memcastle::auth::not_configured</code></td>
+<td>Authentication is enabled, but no secret is configured and no token was generated.</td>
+</tr>
+</tbody>
+</table>
+<p>Only a digest is stored, in the <code>auth_state</code> table of the palace, with the algorithm and a version,
+and it travels with a <a href="../storage/">backup</a> of the palace.
+A generated token is 256 random bits, written <code>mc_</code> followed by 64 hex digits.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

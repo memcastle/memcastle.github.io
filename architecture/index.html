@@ -1,0 +1,2707 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/architecture/">
+      
+      
+        <link rel="prev" href="../mcp-and-api/">
+      
+      
+        <link rel="next" href="../development/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Architecture - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-core-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The core idea
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Layers
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change-notices-a-bus-not-a-database-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Change notices: a bus, not a database feature
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-one-surrealdb-embedded-or-remote" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Storage: one SurrealDB, embedded or remote
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Storage: one SurrealDB, embedded or remote">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Migrations
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Domain model
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Search
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Memory flows
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-mode-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Memory mode enforcement
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jobs-a-durable-queue-not-an-in-memory-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Jobs: a durable queue, not an in-memory one
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Jobs: a durable queue, not an in-memory one">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#job-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Job lifecycle
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Job kinds
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-daemon-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The daemon lifecycle
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-packaging-and-runtime-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Release packaging and runtime assets
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-another-interface-on-the-daemon-not-a-special-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP: another interface on the daemon, not a special process
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals-for-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Non-goals for now
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-core-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The core idea
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Layers
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#change-notices-a-bus-not-a-database-feature" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Change notices: a bus, not a database feature
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-one-surrealdb-embedded-or-remote" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Storage: one SurrealDB, embedded or remote
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Storage: one SurrealDB, embedded or remote">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Migrations
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Domain model
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Search
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-flows" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Memory flows
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-mode-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Memory mode enforcement
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jobs-a-durable-queue-not-an-in-memory-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Jobs: a durable queue, not an in-memory one
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Jobs: a durable queue, not an in-memory one">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#job-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Job lifecycle
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#job-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Job kinds
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-daemon-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The daemon lifecycle
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-packaging-and-runtime-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Release packaging and runtime assets
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-another-interface-on-the-daemon-not-a-special-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP: another interface on the daemon, not a special process
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals-for-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Non-goals for now
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/architecture.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
+<p>This page is for people changing MemCastle, or who want to know why it is shaped the way it is.
+To use it, start at <a href="../installation/">Installation</a> and the <a href="../quickstart/">Quickstart</a>.
+Behaviour that users rely on is documented in the guides and references, and linked from here rather than repeated:
+<a href="../daemon/">Running the daemon</a>, <a href="../memory-modes/">Memory modes</a>, <a href="../storage/">Storage and data</a>,
+<a href="../migrations/">Migrations and upgrades</a>, <a href="../cli/">CLI</a> and <a href="../mcp-and-api/">MCP tools and REST API</a>.</p>
+<h2 id="the-core-idea">The core idea<a class="headerlink" href="#the-core-idea" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>MemCastle is a long-running memory server, not a CLI process that happens to expose MCP.</p>
+</blockquote>
+<p>There is one MemCastle daemon per palace.
+Multiple AI coding-agent instances — several OpenCode sessions, Claude Code, Cursor, the web UI —
+connect to that <em>same</em> daemon, so they share exactly the same palace, job queue and search.</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Clients
+        A1[OpenCode #1]
+        A2[OpenCode #2]
+        A3[Claude Code]
+        CLI[memcastle CLI]
+    end
+    subgraph Daemon["memcastle serve"]
+        L[HTTP listener&lt;br/&gt;/mcp and /api]
+        APP[AppServices]
+        SCH[Job scheduler]
+    end
+    DB[(SurrealDB&lt;br/&gt;embedded SurrealKV&lt;br/&gt;or remote)]
+    A1 &amp; A2 &amp; A3 --&gt;|MCP| L
+    CLI --&gt;|REST| L
+    L --&gt; APP
+    APP --&gt; SCH
+    APP --&gt; DB
+    SCH --&gt; DB</code></pre>
+<p>Tools that run one process per invocation load their configuration and open their storage on every command.
+MemCastle instead keeps one process that owns the store, so there is one writer per embedded palace
+and no second index file to drift out of sync with the database.
+A remote palace may be shared by several daemons, which job leases keep safe (see <a href="../adr/006-job-leases/">ADR-006</a>).</p>
+<h2 id="layers">Layers<a class="headerlink" href="#layers" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TD
+    subgraph Interfaces["Interfaces: parse, dispatch, serialize"]
+        CLIc[cli and client]
+        MCP[mcp]
+        API[api]
+    end
+    APP[app: AppServices]
+    subgraph Core["Model, scheduling and retrieval"]
+        DOM[domain]
+        JOBS[jobs]
+        SEARCH[search]
+        HANDLERS["mining, checkpoint, audit, repair"]
+    end
+    STORE[store]
+    DB[(SurrealDB)]
+    CLIc -.-&gt;|HTTP| API
+    MCP --&gt; APP
+    API --&gt; APP
+    APP --&gt; DOM
+    APP --&gt; JOBS
+    APP --&gt; SEARCH
+    JOBS --&gt; HANDLERS
+    HANDLERS --&gt; STORE
+    SEARCH --&gt; STORE
+    JOBS --&gt; STORE
+    APP --&gt; STORE
+    STORE --&gt; DB</code></pre>
+<p>Dependencies point inward: <code>cli / mcp / api -&gt; app -&gt; domain + store/jobs/search -&gt; store</code>.
+Nothing in <code>domain</code> knows SurrealDB exists, and nothing in <code>cli</code>, <code>mcp</code> or <code>api</code> knows <code>store</code> exists.
+The dotted line is the important one: the CLI is an HTTP client of the daemon, exactly as a script or dashboard would be.</p>
+<p><strong>The CLI has no business logic MCP/HTTP can't reuse.</strong>
+Every subcommand except <code>serve</code>/<code>daemon start</code>/<code>daemon restart</code>/<code>migrate</code>, the local <code>completions</code>, the local
+<code>source init</code>/<code>build</code>/<code>test</code>/<code>package</code>/<code>index</code>/<code>keygen</code> and the local <code>integration list</code>/<code>install</code>/<code>update</code>/<code>remove</code>
+is a thin <code>client::DaemonClient</code> call
+(<code>note</code> also reads the project directory through <code>crate::project</code> to choose a wing and room, then calls the daemon) —
+<code>memcastle mine ./project</code> submits a job over HTTP the way an MCP tool call would, rather than mining anything itself.
+<code>daemon stop</code> is one of them: it only asks the daemon to shut down.
+<code>daemon start</code> and <code>daemon restart</code> add only process management:
+they read the daemon's registry file (<code>server::lifecycle</code>) to know when the old daemon is really gone,
+then spawn <code>serve</code> detached, and never touch <code>store</code> or <code>jobs</code>.
+<code>serve</code> is the composition root (<code>server::run</code>): it owns the store, the scheduler and the HTTP/MCP listeners.
+<code>migrate</code> is a second, narrow exception: it connects to storage directly through <code>crate::migrate</code>,
+the same runner <code>serve</code> calls on every startup, because migration must work before a daemon exists
+(see <a href="../adr/004-versioned-database-migrations/">ADR-004</a>).</p>
+<p><code>app::AppServices</code> is the one seam every interface (<code>api</code>, <code>mcp</code> and <code>server::run</code> itself) calls through.
+The invariants that keep this true are listed in <code>AGENTS.md</code>, and each is enforced by a <code>prek</code> hook or a test:
+<code>store-isolation</code> greps for forbidden imports, and <code>single-writer</code> limits who may construct a store.</p>
+<h2 id="change-notices-a-bus-not-a-database-feature">Change notices: a bus, not a database feature<a class="headerlink" href="#change-notices-a-bus-not-a-database-feature" title="Permanent link">&para;</a></h2>
+<p>A client that wants to know "something changed" without polling reads <code>GET /api/events</code>, a server-sent events stream
+(<a href="../adr/041-server-sent-events-for-dashboard-updates/">ADR-041</a>).
+The notices come from a small in-process bus (<code>events::EventBus</code>, a bounded <code>tokio::sync::broadcast</code>) that <code>server::run</code>
+creates and hands to the scheduler and to <code>AppServices</code>.</p>
+<pre class="mermaid"><code>flowchart LR
+    SCH["jobs: transitions and&lt;br/&gt;JobContext::checkpoint"] --&gt;|publish| BUS(("EventBus"))
+    HAND["handlers: mining, checkpoint,&lt;br/&gt;extract, repair"] --&gt;|"ctx.events()"| BUS
+    APP["app: palace, graph and&lt;br/&gt;diary writes"] --&gt;|announce| BUS
+    BUS --&gt;|subscribe_events| API["api: GET /api/events"]
+    API --&gt;|"SSE: identifiers only"| CLIENT["dashboard or any client"]
+    CLIENT -.-&gt;|"re-reads, mode-gated"| API2["api: ordinary routes"]</code></pre>
+<p>An event is published after the change is saved and holds identifiers and kinds, never content,
+so a client re-reads through the routes that apply the memory mode and the stream cannot show what a read would refuse.
+A connection that falls behind the bounded channel is told to <code>resync</code> instead of being queued.
+The bus is this process's only: on a remote palace shared by several daemons, another daemon's writes are not announced
+here, which is why the dashboard keeps its Refresh button.
+Subscribing is a read (a <code>disabled</code> session gets a <code>403</code>), and the stream ends with the daemon's shutdown.</p>
+<h2 id="storage-one-surrealdb-embedded-or-remote">Storage: one SurrealDB, embedded or remote<a class="headerlink" href="#storage-one-surrealdb-embedded-or-remote" title="Permanent link">&para;</a></h2>
+<p><code>store::SurrealStore</code> wraps a single <code>Surreal&lt;Any&gt;</code> connection (<code>surrealdb::engine::any</code>),
+which dispatches on a connection string's scheme at runtime:
+<code>surrealkv:&lt;path&gt;</code> for the embedded default, or a <code>ws://</code>/<code>wss://</code> URL for a remotely hosted instance.
+The rest of the codebase never branches on the backend:
+<code>config::StoreConfig</code> picks one, <code>Backend</code> carries it, and <code>SurrealStore::connect</code> is the only place that cares.
+SurrealKV (pure Rust) is the only embedded backend compiled, see <a href="../adr/001-surrealkv-embedded-storage-engine/">ADR-001</a>.
+Choosing and building a server-side storage engine of our own is deferred until a deployment needs one.</p>
+<p>Every read and write is hand-written SurrealQL (<code>db.query(...).bind(...)</code>)
+rather than the SDK's typed <code>create</code>/<code>select</code> helpers:
+datetimes cross the boundary as RFC3339 strings with explicit <code>&lt;datetime&gt;</code>/<code>&lt;string&gt;</code> casts,
+in one canonical form written only by <code>store::stored</code> (why optional timestamps are strings is
+<a href="../adr/005-timestamp-representation/">ADR-005</a>),
+and a record's own <code>id</code> is always projected out via <code>record::id(id)</code>.
+That trades some verbosity for depending on only the smallest, most stable part of the driver's API,
+whose typed surface has already changed shape across SDK majors once.</p>
+<p>Where the data lives on disk, and how to back it up, is in <a href="../storage/">Storage and data</a>.</p>
+<h3 id="the-database-admin-endpoint">The database admin endpoint<a class="headerlink" href="#the-database-admin-endpoint" title="Permanent link">&para;</a></h3>
+<p>An embedded SurrealKV database has no server, so SurrealDB Studio cannot connect to it,
+and a second process may not open its directory.
+<code>memcastle db start</code> therefore asks the <em>daemon</em> to open a second listener, on loopback and only on request.
+The listener speaks SurrealDB's WebSocket protocol and runs each connection on a clone of the handle <code>store</code> already holds,
+which is a separate session over the same datastore.
+It adds no storage layer, opens no database and leaves schema and migrations where they were.
+See <a href="../database-access/">Database access</a> and <a href="../adr/015-database-admin-endpoint/">ADR-015</a>.</p>
+<pre class="mermaid"><code>flowchart LR
+    studio([SurrealDB Studio]) -- "ws://127.0.0.1:8000/rpc" --&gt; admin[dbadmin listener]
+    cli([memcastle db start]) -- "POST /api/db" --&gt; api[api]
+    api --&gt; app[app: AppServices]
+    app -- starts and stops --&gt; admin
+    admin -- "a clone of the handle: its own session" --&gt; store[store: one Surreal handle]
+    app --&gt; store
+    store --&gt; kv[(SurrealKV)]</code></pre>
+<h3 id="migrations">Migrations<a class="headerlink" href="#migrations" title="Permanent link">&para;</a></h3>
+<p>Two migration shapes are kept deliberately separate, both driven by one <code>crate::migrate::run</code>:</p>
+<ul>
+<li><strong>Schema.</strong> Declarative <code>.surql</code> files under <code>database/schema/</code>, embedded into the binary via SurrealKit's
+  <code>embed_schema!()</code> macro and applied through its <code>Sync</code> builder (<code>SurrealStore::sync_schema</code>).
+  SurrealKit, not MemCastle, owns diffing, content-hash tracking and pruning;
+  MemCastle does not implement a parallel schema-diff engine.</li>
+<li><strong>Data.</strong> An ordered, immutable list of versioned Rust steps (<code>crate::migrate::DataMigration</code>) for changes
+  that cannot be expressed as an additive schema sync.
+  A MemCastle-owned version watermark (the <code>migration_state</code> table, read and written only by <code>store::migration_state</code>)
+  makes each step run exactly once.</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+    S[serve startup] --&gt; R[migrate::run]
+    M["memcastle migrate"] --&gt; R
+    R --&gt; A[sync schema]
+    A --&gt; B[take lock]
+    B --&gt; C[run pending data steps]
+    C --&gt;     D[sync schema again, if a step ran]
+    D --&gt; E[release lock]
+    C -.-&gt;|a step fails| F[fail closed: daemon does not serve]</code></pre>
+<p><code>SurrealStore::connect</code> itself neither syncs schema nor migrates: that is this explicit step,
+not a side effect of opening a connection.
+A failed migration fails the daemon closed, and the watermark stays at the last step that succeeded,
+so a corrected run resumes instead of replaying.
+Operating instructions are in <a href="../migrations/">Migrations and upgrades</a>, and the design in
+<a href="../adr/004-versioned-database-migrations/">ADR-004</a>.</p>
+<h2 id="domain-model">Domain model<a class="headerlink" href="#domain-model" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>classDiagram
+    class Palace
+    class Wing
+    class Room
+    class Drawer {
+        +name?
+        +content
+        +source
+        +tags
+        +embedding
+        +provenance
+        +valid_from
+        +valid_to
+    }
+    class Entity {
+        +name
+        +kind
+        +key
+        +aliases
+    }
+    class Relationship
+    Palace "1" --&gt; "*" Wing : contains
+    Wing "1" --&gt; "*" Room : contains
+    Room "1" --&gt; "*" Drawer : holds
+    Entity "1" --&gt; "*" Relationship : relates_to</code></pre>
+<p>A <code>Drawer</code>'s <code>content</code> is immutable once written, and it may carry a <code>name</code> that is unique within its room,
+so it can be addressed as <code>wing/room/name</code>
+(wings, rooms and drawers are managed through REST and the CLI, see <a href="../adr/018-palace-hierarchy-management/">ADR-018</a>);
+provenance, tags, an optional <code>embedding</code> (derived data, see <a href="#search">Search</a>) and a <code>valid_from</code>/<code>valid_to</code> pair
+travel alongside it.
+A drawer is corrected by <em>superseding</em> it: its <code>valid_to</code> is set and a replacement opens from the same instant, so the old
+content is never rewritten.
+The two drawers record each other (<code>superseded_by</code>, <code>supersedes</code>), set in the same transaction, so the evolution of a piece
+of knowledge can be read back as a chain without guessing from names or timestamps
+(<a href="../adr/032-temporal-retrieval-and-history/">ADR-032</a>).
+Provenance has one meaning for every writer (diary, mining, checkpoint):
+<code>provenance.requested_by</code> is the <strong>channel</strong> the write came through (<code>cli</code>, <code>http</code>, <code>mcp</code>),
+and <code>source.agent</code> is the <strong>agent identity</strong> behind it, or absent when no agent is involved (mining).
+Diary drawers written before this rule carry the agent in both fields;
+migration 1 rewrites their <code>requested_by</code> to <code>unknown</code>, because the channel was never recorded.</p>
+<p><code>domain::entity</code> (<code>Entity</code>, <code>Relationship</code>) defines a bi-temporal knowledge-graph shape,
+and <code>store::entities</code> is wired to the schema: create, supersede, invalidate and list operations exist
+and are exercised by <code>checkpoint::run</code>'s optional <code>fact</code> mutation.
+<code>relates_to</code> is a SurrealDB-native graph edge table (<code>TYPE RELATION IN entity OUT entity</code>),
+unlike every other relationship in the model (wing to palace, room to wing, drawer to room),
+which is a plain foreign-key column on a regular table.
+A <code>mentions</code> edge (<code>TYPE RELATION IN drawer OUT entity</code>) links a drawer to the entities it talks about, which is how
+graph-aware search gets from canonical memory into the graph.
+The <code>extract</code> job fills the graph from mined content: it reads drawers that carry a source origin,
+or that were captured as a note (<code>memcastle note</code>), and adds entities, <code>mentions</code> links and <code>relates_to</code> edges,
+each recording the drawer, job and extractor it came from
+(<code>domain::FactProvenance</code>), and from a closed vocabulary of entity kinds and predicates.
+It never writes a drawer.
+Links can also be made explicitly (<code>POST /api/drawers/{id}/mentions</code>), and a checkpoint's <code>fact</code> still takes free-form labels.
+See <a href="../adr/024-entity-extraction-as-an-enrich-job/">ADR-024</a>.</p>
+<p>Deduplication is a domain decision with the database only proposing candidates.
+<code>domain::fingerprint</code> and <code>domain::resolution</code> hold the policy as pure functions, <code>store::duplicates</code> and
+<code>store::resolution</code> find candidates and record edges, and <code>dedup</code> orchestrates a drawer write for every writer.
+A new drawer is compared with the current drawers of its room: an exact copy is not stored, a likely copy gets a
+<code>similar_to</code> edge with its evidence, and nothing is merged.
+A name seen by extraction or by a manual link resolves to an existing entity when it is a spelling variant, a recorded
+alias or a unique typo, keeping the drawer's own spelling on the <code>mentions</code> edge, and otherwise stays distinct beside
+<code>possibly_same_as</code> candidates.
+See <a href="../deduplication/">Deduplication</a> and <a href="../adr/025-memory-deduplication-and-entity-resolution/">ADR-025</a>.</p>
+<h2 id="search">Search<a class="headerlink" href="#search" title="Permanent link">&para;</a></h2>
+<p>Retrieval is SurrealDB's work, and MemCastle owns the contract and the policy
+(<a href="../adr/021-richer-retrieval/">ADR-021</a>).
+The <code>search</code> module takes a <code>SearchQuery</code> (text, ranking, scope, point in time, expansion) and returns <code>SearchHit</code>s: the
+stored drawer verbatim, a score and the signals behind it.
+No second vector store, graph store or index file exists; everything runs against the one <code>drawer</code> table.</p>
+<pre class="mermaid"><code>flowchart LR
+    Q[SearchQuery] --&gt; R{ranking}
+    R --&gt;|lexical| BM[BM25 full-text index]
+    R --&gt;|semantic| HN[HNSW vector index]
+    R --&gt;|hybrid| BM &amp; HN
+    BM &amp; HN --&gt; FU[search::rrf fusion]
+    FU --&gt; TB[id tie-break]
+    TB --&gt; EX{expand?}
+    EX --&gt;|yes| GR[mentions, entity, relates_to traversal]
+    EX --&gt;|no| OUT[hits]
+    GR --&gt; OUT</code></pre>
+<ul>
+<li><strong>Lexical</strong> (BM25) first requires every word to match.
+  Only if that finds nothing does it retry with any single word sufficing,
+  because SurrealDB has no stop-word filter and a natural-language question carries words the stored text never contains.</li>
+<li><strong>Semantic</strong> is a k-nearest-neighbour query on an HNSW index over <code>drawer.embedding</code> (768 dimensions, cosine).</li>
+<li><strong>Hybrid</strong> runs both and merges them with SurrealDB's own <code>search::rrf</code>, which fuses by rank and so needs no score
+  normalisation.
+  Rust breaks ties by drawer id, so a query always ranks the same way.</li>
+<li><strong>One scope for every leg.</strong>
+  Wing, room, tags, source kind and validity form a single <code>WHERE</code> fragment that SurrealDB applies <em>before</em> ranking
+  and before the limit, including inside the vector index traversal,
+  instead of MemCastle fetching candidates and filtering them.</li>
+<li><strong>Time.</strong>
+  Validity time (<code>valid_from</code>, <code>valid_to</code>: when it was true) is searched, and record time (<code>created_at</code>: when it was
+  learned) is not.
+  A drawer or relationship is valid at an instant when <code>valid_from &lt;= t</code> and it has no <code>valid_to</code> or <code>valid_to &gt; t</code>,
+  and it overlaps a window <code>[from, until)</code> when <code>valid_from &lt; until</code> and it has no <code>valid_to</code> or <code>valid_to &gt; from</code>.
+  A point is a one-nanosecond window, so <em>now</em>, <code>as_of</code> and an interval are one clause, <code>VALIDITY_WHERE</code>,
+  shared by every leg and by graph expansion's <code>relates_to</code> hops, with no temporal index behind it
+  (<a href="../adr/032-temporal-retrieval-and-history/">ADR-032</a>).
+  Search defaults to now, <code>as_of</code> and <code>from</code> with <code>until</code> reach older memory, and <code>include_historical</code> applies no filter.
+  <code>drawer history</code> walks the supersession links to return how one piece of knowledge evolved.</li>
+<li><strong>Graph expansion</strong> appends drawers that share an entity with a hit, or sit one valid <code>relates_to</code> hop away,
+  after the direct hits, and never reorders them.</li>
+<li><strong>Where vectors come from.</strong>
+  The <code>embed</code> module wraps a provider (an operator's program, an OpenAI-compatible endpoint, or none) behind one trait,
+  and the <code>Embed</code> job fills drawers that have none.
+  A caller may instead send vectors itself.
+  With no provider, <code>auto</code> ranking is lexical, so a palace keeps working without any model.</li>
+</ul>
+<h2 id="memory-flows">Memory flows<a class="headerlink" href="#memory-flows" title="Permanent link">&para;</a></h2>
+<p>Writes reach the store through two routes, and reads through one.</p>
+<pre class="mermaid"><code>flowchart LR
+    subgraph Writes
+        DW[diary write] --&gt; G1{mode gate}
+        MI[mine] --&gt; G2{mode gate}
+        CP[checkpoint] --&gt; G3{mode gate}
+        G1 --&gt; D1[drawer in the wing's diary room]
+        G2 --&gt; Q1[mining job]
+        G3 --&gt; Q2[checkpoint job]
+        Q1 &amp; Q2 --&gt; S[scheduler]
+        S --&gt; D2[drawers, and optional graph facts]
+    end
+    subgraph Reads
+        RQ[search, recall, wake_up, diary read] --&gt; G4{mode gate}
+        G4 --&gt; LS[ranked search / recent drawers]
+        LS --&gt; RES[drawers returned verbatim]
+    end
+    D1 &amp; D2 --&gt; DB[(store)]
+    DB --&gt; LS</code></pre>
+<ul>
+<li><strong>Diary writes</strong> are a direct, synchronous call rather than a job, see
+  <a href="../adr/003-checkpoint-as-a-durable-job/">ADR-003</a> for why checkpoint differs.</li>
+<li><strong>Mining and checkpoint</strong> are durable jobs, resumable after a pause or a crash.
+  Mining is also <strong>source-driven</strong>: it acquires data from a source itself, with no agent writing and no model involved,
+  see <a href="../mining-sources/">Mining sources</a>.</li>
+<li><code>AppServices::recall</code> is <code>search</code> under a recall-oriented name, never paraphrasing or truncating a <code>Drawer.content</code>.
+  It exists as a name to hang future recall-specific ranking off, not to duplicate logic today.
+  MemCastle does not enforce a search-before-answer protocol; that discipline belongs to an integration or skill
+  (see the <a href="../integration-contract/">Integration contract</a>).</li>
+<li><code>AppServices::wake_up</code> builds a deterministic session-start context:
+  the agent's most recent diary entry (when a <code>wing</code> is given)
+  plus up to <code>WakeUpBudget::max_items</code> recent checkpoint-originated drawers, trimmed to <code>max_bytes</code> by whole drawers only.
+  A highlight too big for what is left of the budget is skipped, and older, smaller ones after it are still tried.
+  It is deliberately simple; a more elaborate token optimizer is not built.</li>
+<li><code>diary_write</code> and <code>diary_read</code> persist and read an agent's journal as drawers under a fixed per-wing <code>"diary"</code> room,
+  keyed by a caller-supplied <code>agent_identity</code> that MemCastle stores faithfully but never validates.</li>
+</ul>
+<h2 id="memory-mode-enforcement">Memory mode enforcement<a class="headerlink" href="#memory-mode-enforcement" title="Permanent link">&para;</a></h2>
+<p>The behaviour, and how to pick a mode, is in <a href="../memory-modes/">Memory modes</a>.
+Implementation-wise, <code>domain::MemoryMode</code> (<code>Full</code>/<code>ReadOnly</code>/<code>Disabled</code>) is deliberately never a process-wide setting,
+because the daemon serves many agents at once.</p>
+<p>Enforcement is centralized in <code>app::AppServices</code> (<code>require_read</code> and <code>require_write</code>, checked before any store contact).
+<code>api</code> and <code>mcp</code> only <em>extract</em> a <code>MemoryMode</code> and pass it down, never deciding what is allowed themselves.
+<code>Disabled</code> is symmetric on purpose: reads fail with the same typed <code>Error::ModeForbidden</code> as writes,
+never a silent empty <code>Ok</code>, which would be indistinguishable from "found nothing".
+The gate follows what an operation reads or writes rather than its name, see
+<a href="../adr/007-memory-mode-gate-follows-data-access/">ADR-007</a>.</p>
+<ul>
+<li><strong>HTTP</strong> reads <code>X-MemCastle-Mode</code> once per request through an <code>axum</code> extractor (<code>api::ModeHeader</code>),
+  defaulting to <code>Full</code> when absent and answering <code>400</code> for an unparsable value.</li>
+<li><strong>MCP</strong> has no per-request header in the tool-call model, so the mode is negotiated once per session.
+  A <code>memcastle_set_mode</code> call is remembered in a single slot inside <code>McpTools</code>,
+  tagged with the <code>mcp-session-id</code> that rmcp's streamable-HTTP transport assigns.
+  rmcp builds one <code>McpTools</code> per session and drops it when the session ends, so nothing accumulates.
+  A call with no session id has nothing to remember a mode under: it runs as <code>Full</code>,
+  and <code>memcastle_set_mode</code> on it is an error.</li>
+</ul>
+<p>The rationale and rejected alternatives are in <a href="../adr/002-memory-mode-session-scoping/">ADR-002</a>.</p>
+<h2 id="jobs-a-durable-queue-not-an-in-memory-one">Jobs: a durable queue, not an in-memory one<a class="headerlink" href="#jobs-a-durable-queue-not-an-in-memory-one" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>The queue state is durable; the in-memory scheduler is only the execution mechanism.</p>
+</blockquote>
+<p><code>domain::Job</code> is a plain record persisted in SurrealDB:
+<code>id</code>, <code>kind</code>, <code>status</code>, <code>priority</code>, timestamps, <code>progress</code>, <code>attempt</code>/<code>recovery_attempts</code>/<code>max_attempts</code>,
+<code>checkpoint</code>, <code>result</code>, <code>error</code>, the lease (<code>lease_owner</code>, <code>lease_expires_at</code>),
+and any pending <code>pause_requested</code> or <code>cancel_requested</code>.
+Its status only ever changes through <code>Job::apply(event)</code>, an explicit transition table;
+any <code>(status, event)</code> pair not listed is rejected with a <code>TransitionError</code>.</p>
+<h3 id="job-lifecycle">Job lifecycle<a class="headerlink" href="#job-lifecycle" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; Queued: submitted
+    Queued --&gt; Running: claimed
+    Running --&gt; Paused: cooperative pause
+    Paused --&gt; Queued: resumed
+    Running --&gt; Completed
+    Running --&gt; Failed
+    Running --&gt; Queued: crash recovery or shutdown drain
+    Failed --&gt; Queued: retry, keeps the checkpoint
+    Queued --&gt; Cancelled
+    Paused --&gt; Cancelled
+    Running --&gt; Cancelled
+    Completed --&gt; [*]
+    Cancelled --&gt; [*]</code></pre>
+<p>Retrying clears the error but keeps the checkpoint.
+<code>Failed</code> is terminal unless someone retries it.</p>
+<p><strong>Priority.</strong> <code>Job.priority</code> is <code>domain::Priority</code>, a five-level enum
+(<code>Background &lt; Low &lt; Normal &lt; High &lt; Critical</code>) — coarse buckets rather than an arbitrary integer,
+so callers cannot invent incomparable numeric scales.
+It serializes to the store's <code>job.priority</code> (<code>TYPE int</code>) column through fixed values
+(<code>Critical</code>=100, <code>High</code>=75, <code>Normal</code>=50, <code>Low</code>=25, <code>Background</code>=0, with headroom between levels).
+A value read back that matches none of the five is a surfaced <code>InvalidPriority</code> error, never coerced to a default.
+<code>SurrealStore::claim_next_job</code> claims the oldest, highest-priority <code>Queued</code> job first,
+backed by the composite index <code>job_status_idx ON job FIELDS status, priority, created_at</code>.
+Default priorities: <code>Mine</code> is <code>Background</code> (so mining never delays anything else), <code>Demo</code>, <code>Audit</code> and <code>Repair</code> are
+<code>Normal</code>, <code>Checkpoint</code> is <code>High</code>, and an emergency <code>Checkpoint</code> is <code>Critical</code>.</p>
+<p><strong>Scheduling.</strong> <code>jobs::Scheduler</code> is a single sequential dispatcher loop (<code>store.claim_next_job</code>, a claim-and-transition)
+that spawns bounded worker tasks (a <code>tokio::sync::Semaphore</code>, sized by <code>jobs.max_concurrency</code>).
+Mine, embed and extract jobs also share a second bound (<code>jobs.background_concurrency</code>, default 2);
+when the total limit exceeds one, the effective background limit leaves at least one job slot for other kinds.
+The dispatcher skips queued background jobs while their limit is full rather than claiming and leasing work it cannot start.
+Both limits constrain job execution, not the REST/MCP request handlers, which share the daemon's database handle.
+Mining may acquire two documents ahead, but files drawers, document records, cursors and checkpoints in candidate order;
+directory discovery and reads, chunking and heuristic extraction run on the blocking pool instead of request executor threads.
+The claim is a <code>SELECT</code> followed by a write guarded on the job still being <code>Queued</code>,
+so two daemons racing for one job cannot both win, without a distributed lock.
+The claim also leases the job (<code>lease_owner</code>, and <code>lease_expires_at</code> of now plus <code>jobs.lease_ttl_secs</code>),
+which the owning daemon renews with a heartbeat every third of that.
+Every write a worker makes to its job is fenced on still holding the lease, see <a href="../adr/006-job-leases/">ADR-006</a>.</p>
+<p><strong>Pause and cancel are cooperative, never a process kill.</strong>
+A handler (<code>jobs::demo</code>, <code>mining::run</code>) is a loop over discrete units of work (steps, files)
+that checks <code>JobContext::should_pause</code> and <code>is_cancelled</code> between units,
+persists a <code>checkpoint</code> before stopping, and returns; the scheduler transitions the status afterwards.
+Resuming re-reads the checkpoint and continues from there, not from zero.
+<code>Audit</code> and <code>Repair</code> honour both too (audit checks between wings, after the job scan and every 500 drawers;
+an applied repair checks before each delete).
+Neither keeps a checkpoint, so a paused or shutdown-interrupted one restarts from scratch when resumed.
+That is safe: an audit only reads, and a repair recomputes the live orphan set.
+The terminal console also offers a distinct, confirmed <strong>force-cancel</strong> for a locally owned running mining job.
+The daemon durably records the cancel request, aborts and joins its task, and then applies <code>JobEvent::Cancel</code>
+with a write guarded by the job's running status and lease owner.
+This fences later job checkpoints and lets crash recovery honour a request interrupted before completion.
+It cannot undo work already filed or immediately interrupt blocking work running outside the aborted task;
+a worker owned by another daemon must be stopped on that daemon or cancelled cooperatively.</p>
+<p><strong>Resuming is replay-safe.</strong>
+A handler writes an item's records first and saves the checkpoint after,
+so a crash between the two makes the resumed attempt redo that item.
+Checkpoint therefore derives each drawer's id (and each new fact edge's id) from the job id and item index
+and skips a record that already exists, so the replay lands on the same record instead of storing a second copy.
+Mining derives a chunk's drawer id from the job, the source, the document, the chunk and its hash, and commits drawers,
+then the document record, then the source's cursor, so a replay finds what it wrote and the cursor never runs ahead.
+See <a href="../adr/008-replay-safe-job-resume/">ADR-008</a>.</p>
+<p><strong>Crash recovery</strong> (<code>Scheduler::recover</code>, run once at daemon startup):
+any job left <code>Running</code> by an unclean shutdown is re-queued if its crash-recovery budget allows,
+or marked <code>Failed</code> with the reason recorded, never silently forgotten.
+The budget is <code>Job::max_attempts</code> (3), and what it counts is <code>Job::recovery_attempts</code>: crashes survived, and nothing else.
+<code>Job::attempt</code> is a separate, informational count of every claim,
+so a job that was merely paused twice is not one crash from failing.
+With an embedded palace, where SurrealKV's file lock admits one daemon, every <code>Running</code> job is a dead predecessor's
+and is recovered at startup.
+With a remote palace only jobs whose lease has expired are, so a second daemon cannot steal a live one's work.
+A reaper running alongside the heartbeat repeats that check periodically.
+<code>Queued</code> jobs need no recovery, and <code>Paused</code> jobs are deliberately left paused until someone resumes them.
+A pause or cancel request does not depend on in-memory state surviving:
+<code>request_pause</code> and <code>request_cancel</code> write <code>pause_requested</code> and <code>cancel_requested</code> on the <code>Running</code> job record
+before the API answers, and <code>Job::apply</code> clears them when the job leaves <code>Running</code>.
+<code>recover</code> honours them, so a job cancelled before a crash comes back <code>Cancelled</code> (cancel beats pause),
+and one paused comes back <code>Paused</code>; neither runs again, and neither spends attempt budget.</p>
+<p><strong><code>checkpoint</code> versus <code>result</code>.</strong> <code>Job.checkpoint</code> is handler-defined <em>resume</em> state
+(for checkpoint, <code>{"next_index": n}</code>; for mining, the run's cursor and counts, <code>{"cursor": ..., "stats": {...}}</code>),
+present on every job kind and defaulting to <code>{}</code>.
+<code>Job.result</code> is separate: the once-set output of a job whose point is to produce a report.
+Most kinds never set it; <code>Mine</code>, <code>Audit</code> and <code>Repair</code> do on completion.
+Two fields mean "where do I read progress from" and "where do I read what it found" never share one ambiguous field.</p>
+<h3 id="job-kinds">Job kinds<a class="headerlink" href="#job-kinds" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>Mine</code></strong> (<code>src/mining</code>) mines a <em>source</em> through the unified model of
+  <a href="../adr/023-unified-source-model-for-mining/">ADR-023</a>: a <code>SourceAdapter</code> discovers and reads documents past the
+  source's stored cursor, and one shared pipeline chunks them, files drawers idempotently and advances the cursor.
+  A directory is the one built-in adapter, and sources such as the Pi and OpenCode session histories
+  (<code>sources/pi</code>, <code>sources/opencode</code>) are installed as WebAssembly components behind the same trait (<a href="../adr/026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a>).
+  It stops at a bounded number of documents, recording <code>truncated: true</code> when it does, and a later job continues from
+  the cursor.
+  See <a href="../mining-sources/">Mining sources</a>.</li>
+<li><strong><code>Checkpoint</code></strong> (<code>src/checkpoint</code>) persists an already-classified batch of items as durable drawers.
+  Classification into destination buckets happens client-side, in the calling integration; MemCastle has no LLM client.
+  It mirrors <code>mining::run</code>: per-item cooperative pause and cancel, checkpointing <code>{"next_index": n}</code> after each item.
+  Every item gets a drawer (unless it is an exact copy of one its room already holds, see
+  <a href="../deduplication/">Deduplication</a>), and <em>additionally</em> applies its <code>fact</code> mutation when present,
+  so a checkpoint item is never only a graph mutation with no drawer to audit it.
+  There is deliberately no artificial per-item delay, because an emergency checkpoint exists to save state before a crash.</li>
+<li><strong><code>Embed</code></strong> (<code>src/embed/job.rs</code>) computes the embedding of every drawer that has none.
+  The database is its cursor: each pass asks for the next unembedded drawers, so pausing, crashing or running it again
+  loses and repeats nothing, and only the <code>embedding</code> field is ever written.
+  It is queued automatically after drawer-writing jobs and writes, and at startup.</li>
+<li><strong><code>Extract</code></strong> (<code>src/extract/job.rs</code>) reads every current mined drawer and note with no marker in <code>drawer_extraction</code>
+  and writes the entities, <code>mentions</code> links and <code>relates_to</code> edges its provider finds, then the marker.
+  Like <code>Embed</code> the database is its cursor, and every write is idempotent, so a crash or a retry repeats nothing.
+  It first closes the open facts whose evidence drawer has since been superseded.
+  The provider (<code>heuristic</code>, a <code>command</code>, or an OpenAI-compatible <code>http</code> endpoint) sits behind the <code>Extractor</code> trait,
+  and <code>Extraction::extract</code> holds every answer to the closed vocabulary and its bounds.
+  It is queued after a mining job completes, after a note is written and at startup, when a provider is configured.</li>
+<li><strong><code>Audit</code></strong> (<code>src/audit</code>) is a read-only consistency report, scoped to what is structurally possible
+  with a single database.
+  It checks for orphan drawers (a <code>room</code> reference that no longer resolves), dangling <code>provenance.job_id</code> references,
+  <code>Failed</code> jobs that exhausted their attempt budget, a plain count of <code>Running</code> jobs,
+  and drawers with no <code>embedding</code> (informational: a backlog the <code>Embed</code> job clears when a provider is configured).
+  A full scan is cheap and idempotent, so it keeps no per-unit checkpoint.</li>
+<li><strong><code>Repair</code></strong> (<code>src/repair</code>) turns a subset of audit findings into a fix.
+  It is dry-run-first (<code>dry_run = true</code> is the default at every entry point) and deliberately narrow:
+  only orphan-drawer removal shipped.
+  A second candidate, failing jobs stuck beyond a heuristic,
+  duplicated what <code>Scheduler::recover</code> already does at every start and was dropped.
+  <code>based_on_job</code> narrows a run to what a specific prior audit found but never replaces a fresh live scan,
+  because a destructive operation must not act on a report that may have gone stale.</li>
+<li><strong><code>Demo</code></strong> is a synthetic job with no side effects, used to exercise the scheduler.</li>
+</ul>
+<h2 id="the-daemon-lifecycle">The daemon lifecycle<a class="headerlink" href="#the-daemon-lifecycle" title="Permanent link">&para;</a></h2>
+<p><code>memcastle serve</code> runs in the <strong>foreground</strong>, which is what a supervisor (systemd, launchd, Docker) runs.
+<code>memcastle daemon start</code> is the convenience for everyone else: it spawns <code>serve</code> detached and waits until it is serving.
+The startup order, and what an operator sees, is in <a href="../daemon/#what-happens-on-startup">Running the daemon</a>.
+The design points worth knowing:</p>
+<ul>
+<li>The listener is bound first, before anything else has an effect,
+  so an address that is taken fails the start without having created, migrated or recovered anything
+  (see <a href="../adr/011-split-bind-address-and-port/">ADR-011</a>).</li>
+<li>The registry file, which is how clients find the daemon, is written only once the daemon is ready to serve.
+  It is <strong>operational metadata, never the source of truth</strong> for "is a daemon running":
+  that is always answered by a live HTTP request.
+  The file's PID is checked with a liveness probe before it is trusted, and a stale file is simply overwritten.</li>
+<li>On SIGINT, SIGTERM or <code>POST /api/shutdown</code>, the daemon stops accepting new jobs and asks every running job to stop
+  at its next unit-of-work boundary.
+  Each one checkpoints and goes straight back to <code>Queued</code> (a job the user had paused stays <code>Paused</code>),
+  so the next daemon resumes it.
+  The wait is bounded by <code>jobs.drain_timeout_secs</code>;
+  a job that does not stop in time is left <code>Running</code> and re-queued by <code>Scheduler::recover</code> on the next start.
+  See <a href="../adr/009-shutdown-drains-jobs/">ADR-009</a>.</li>
+<li>The embedded database has no explicit close: it stops itself in a background task once the last handle is dropped.
+  <code>serve</code> and <code>migrate</code> therefore keep the process alive, for at most ten seconds, until that task has finished,
+  so the storage engine is flushed before exit instead of being cancelled by the runtime's teardown.</li>
+<li><code>memcastle status</code> resolves the daemon the way every client does (a live registry file, then the configured address),
+  asks <code>GET /api/status</code>, and still reports from configuration and the registry file when no daemon answers.
+  The datastore section of <code>/api/status</code> comes from a ping and the migration watermark;
+  an unhealthy datastore is reported there with HTTP 200, while <code>/api/health</code> stays a plain liveness check.
+  See <a href="../adr/012-status-reports-a-stopped-daemon-and-exits-by-state/">ADR-012</a>.</li>
+</ul>
+<h2 id="release-packaging-and-runtime-assets">Release packaging and runtime assets<a class="headerlink" href="#release-packaging-and-runtime-assets" title="Permanent link">&para;</a></h2>
+<p>A release is a single executable that starts a daemon on a machine with nothing else installed and no network.
+What else a release may carry falls into three kinds, kept apart on purpose:</p>
+<ul>
+<li><strong>Embedded</strong> in the binary: anything small that must match its version exactly.
+  The SurrealDB schema (<code>surrealkit::embed_schema!</code>) and the data migrations (<code>crate::migrate</code>) are of this kind.</li>
+<li><strong>Installed</strong> by a package manager under <code>share/memcastle</code>: the sources bundled with MemCastle, the agent integrations
+  and the skills they read, and the web UI.</li>
+<li><strong>User data and configuration</strong>, under the XDG directories and never treated as assets.</li>
+</ul>
+<p><code>assets::Assets::resolve</code> picks one source for the run, in this order:</p>
+<pre class="mermaid"><code>flowchart TD
+    start([daemon starts]) --&gt; override{"--assets-dir,&lt;br/&gt;MEMCASTLE_ASSETS_DIR or&lt;br/&gt;assets.dir set?"}
+    override -- yes --&gt; exists{directory exists?}
+    exists -- yes --&gt; useOverride[use the override]
+    exists -- no --&gt; fail[[refuse to start:&lt;br/&gt;memcastle::assets::not_found]]
+    override -- no --&gt; installed{"share/memcastle found next to&lt;br/&gt;the executable, in /usr/local&lt;br/&gt;or in /usr, outside the XDG data dir?"}
+    installed -- yes --&gt; useInstalled[use the installed directory]
+    installed -- no --&gt; useEmbedded[use the embedded assets]</code></pre>
+<p>The resolver only reads directories, so startup never needs the network.
+Its consumers are the bundle of sources (<code>sources/</code>), the integration installer (<code>integrations/</code>, <code>skills/</code>) and the
+dashboard's static routes (<code>web/dist/</code>, only when <code>web.enable</code> is set).
+The assets root is a directory with that layout, so a checkout of the repository is a valid one,
+which is how a developer installs the integrations as built in their worktree (see below).
+The module is pure and the daemon's composition root calls it once, before binding the listener,
+so a mistyped override fails a start that has changed nothing.
+<a href="../adr/013-release-packaging-and-asset-resolution/">ADR-013</a> records the layout, the order and what was rejected;
+<a href="../installation/#standalone-binary-or-native-package">Installation</a> documents the layout for users.</p>
+<h2 id="mcp-another-interface-on-the-daemon-not-a-special-process">MCP: another interface on the daemon, not a special process<a class="headerlink" href="#mcp-another-interface-on-the-daemon-not-a-special-process" title="Permanent link">&para;</a></h2>
+<p><code>mcp::McpTools</code> implements <code>rmcp::ServerHandler</code> and is mounted at <code>/mcp</code> on the <em>same</em> <code>axum</code> router as the REST API,
+via <code>rmcp</code>'s streamable-HTTP server transport.
+It is HTTP-only on purpose: it is natively multi-client (the goal is N agents sharing one daemon),
+and most MCP clients already support a URL-based transport, so no bridging process is needed.
+A stdio bridge for clients that can only spawn a subprocess is deferred;
+tool logic never touches a transport type, so adding one is additive.</p>
+<p>The tool surface mirrors the CLI and REST <em>memory</em> operations,
+so an integration never has to leave MCP to remember or recall.
+Management stays off it on purpose:
+there are no tools for wings, rooms and drawers, authentication tokens, the database endpoint or daemon lifecycle.
+It is listed in <a href="../mcp-and-api/">MCP tools and REST API</a>.
+The instruction text sent at <code>initialize</code> is generated from the registered tools, and a test compares the two,
+so it cannot drift from the surface.</p>
+<p><strong>One error and logging surface.</strong>
+Whichever way a failure is reached, it is the same <code>{error, code, help}</code> (<code>Error::body</code>):
+the REST API serves it as the response body, every MCP tool returns it as the text of an error result
+(all through one <code>mcp::tool_result</code> helper, which also turns a value that fails to serialize into an error
+instead of an empty success), and the CLI renders the daemon's own <code>code</code> and <code>help</code> from it.
+Logging follows the same shape: a <code>tower-http</code> trace layer on the shared router records every request and response at
+<code>debug</code>, <code>api::ApiError</code> logs a rejected request at <code>warn</code> and a server failure at <code>error</code> with its diagnostic code,
+and every MCP tool call is traced at <code>debug</code> (a failed one at <code>warn</code>).</p>
+<p><strong>One authentication layer.</strong>
+When authentication is enabled, a single middleware on the merged router checks the bearer token before any REST
+handler or the MCP service sees the request, and only <code>GET /api/health</code> is exempt.
+It calls <code>AppServices::authenticate</code>, which checks a configured secret and the stored verifier in constant time.
+Generating and revoking a token are REST and CLI operations over <code>AppServices</code>, and MCP has no tool for either.
+The trace layer logs no headers, so the <code>Authorization</code> header never reaches the log.
+See <a href="../authentication/">Authentication</a> and <a href="../adr/014-optional-token-authentication/">ADR-014</a>.</p>
+<p><strong>Integrations are lifecycle glue over this surface.</strong>
+An agent integration decides when to call these tools and never reaches storage, the job code or the database console,
+and every integration is held to the same conformance matrix with the same fixtures.
+The core stays a memory runtime:
+it has no scheduler for an integration's timers and no session of its own beyond the MCP session.
+See the <a href="../integration-contract/">Integration contract</a> and <a href="../adr/019-shared-integration-contract/">ADR-019</a>.</p>
+<p><strong>Installing an integration is local tooling, not a daemon operation.</strong>
+<code>memcastle integration</code> finds an integration under the assets root, checks it against the running MemCastle and the
+agent's version, copies it to the user's data directory, and registers it through the agent's own mechanism:
+<code>pi install</code> for Pi, one marked plugin file for OpenCode.
+It lives in <code>crate::integration</code>, which like <code>crate::source</code> touches neither the store nor the jobs and opens no network,
+needs no daemon, and has no MCP tool or REST route, so an agent cannot change the code it runs.</p>
+<pre class="mermaid"><code>flowchart LR
+    root["assets root&lt;br/&gt;--assets-dir / package share/memcastle"] --&gt; catalog[integration::catalog]
+    catalog --&gt; install[integration::install]
+    install --&gt;|copy + receipt| data["~/.local/share/memcastle/agents/id"]
+    install --&gt;|register| agent["agent adapter:&lt;br/&gt;pi install / plugins/memcastle.ts"]</code></pre>
+<p>See <a href="../integrations/">Agent integrations</a> and <a href="../adr/034-agent-integration-distribution/">ADR-034</a>.</p>
+<p><strong>The database console is opt-in.</strong>
+<code>memcastle serve</code> opens one listener and nothing else.
+The admin endpoint exists only after an explicit <code>db start</code>, binds loopback unless <code>--allow-remote</code> and authentication are
+both given, refuses browser pages from other sites, and has no MCP tool.
+See <a href="../adr/015-database-admin-endpoint/">ADR-015</a>.</p>
+<p><strong>Mining sources are one contract with two kinds of implementation.</strong>
+A built-in adapter is Rust in the binary; an installed source is a WebAssembly component the daemon runs in a sandbox,
+and <code>mining::registry</code> turns a source name into either behind the same <code>SourceAdapter</code> trait, so the pipeline is
+identical for both.</p>
+<pre class="mermaid"><code>flowchart LR
+    J["Mine job"] --&gt; REG["mining::registry"]
+    REG --&gt; NAT["built-in adapter&lt;br/&gt;directory"]
+    REG --&gt; WA["mining::wasm&lt;br/&gt;one sandbox per call"]
+    WA --&gt; PKG[("installed packages&lt;br/&gt;sources_dir + source_package rows")]
+    NAT --&gt; PIPE["pipeline&lt;br/&gt;normalize, chunk, ingest, cursor"]
+    WA --&gt; PIPE
+    PIPE --&gt; DB[(SurrealDB)]</code></pre>
+<p>The sandbox grants only what the package's manifest lists and the user consented to at install: directories read-only,
+named programs without a shell, named environment variables, the network all or nothing, a memory ceiling and a time
+limit.
+The source never sees the store, and the core compiles no source-specific SDK.
+Installing, enabling and removing are administrative (REST and CLI, no MCP tool),
+and the <code>source init</code>, <code>build</code>, <code>test</code>, <code>package</code>, <code>index</code> and <code>keygen</code> commands work without a daemon.
+See <a href="../writing-sources/">Writing a mining source</a> and <a href="../adr/026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a>.</p>
+<p><strong>Sources arrive from four places and share one lifecycle.</strong>
+A built-in source is compiled in.
+A bundled source is an ordinary package unpacked beside the binary: it is installed from the start, run in place, and
+only its enabled state is stored (<code>mining::bundled</code>, <a href="../adr/040-bundled-sources-are-installed-from-the-start-and-the-official-registry-is-published/">ADR-040</a>).
+A registry source comes from a static <code>memcastle-index.json</code> the user configured, the official one by default.
+A local source is a file or a project directory the user installed.
+Only the daemon reaches a registry, and only <code>crate::distribution</code>, called from <code>app</code>, does the fetching
+(<code>config</code> calls it only to parse a location, to refuse a bad one at load):
+it reads an index, chooses the newest version that runs here, downloads the archive and proves it is the one the index
+published (a SHA-256, and optionally an ed25519 signature under a trust policy), then hands the bytes to the same install
+path a file uses, so consent, the compatibility check and the load proof are identical whatever the origin.</p>
+<pre class="mermaid"><code>flowchart LR
+    CLI["memcastle source&lt;br/&gt;search, install, update"] -- REST --&gt; APP["app::source_registry"]
+    APP --&gt; DIST["distribution&lt;br/&gt;index, fetch, trust"]
+    DIST --&gt; REGS[("registries&lt;br/&gt;https, file, directory")]
+    APP --&gt; INST["app::source_packages&lt;br/&gt;consent, compatibility, load proof"]
+    INST --&gt; PKG[("installed packages&lt;br/&gt;sources_dir + source_package rows")]
+    BUN[("bundle, unpacked&lt;br/&gt;share/memcastle/sources")] --&gt; LIST["mining::registry&lt;br/&gt;one list of installed sources"]
+    PKG --&gt; LIST</code></pre>
+<p>Installing from a registry is administrative like installing from a file: REST and CLI only, no MCP tool.
+See <a href="../publishing-sources/">Publishing and installing sources</a> and <a href="../adr/033-source-distribution/">ADR-033</a>.</p>
+<p><strong>What to mine is configuration the daemon keeps in the file it was started from.</strong>
+A miner is a named <code>[[miners]]</code> entry (a source, a locator, saved options, a credential reference), not mined data:
+the cursor stays on the source, so a miner can be renamed, disabled or given new options without losing
+where its source stopped.
+<code>app::miners</code> holds the last good copy, re-reads the file when it changes, and rewrites only that section in place through
+<code>config::miners_file</code>, so comments and everything else in the file survive.
+The CLI, REST and MCP's two read-only tools all call it; changing a miner has no MCP tool, like installing a source.
+See <a href="../configuration/#miners">Configuration</a> and <a href="../adr/037-persistent-miner-configuration/">ADR-037</a>.</p>
+<p><strong>When to mine on its own is configuration too, and is opt-in.</strong>
+A trigger is a named <code>[[triggers]]</code> entry (a miner, a type, its settings) kept in the same file, the same way, by
+<code>app::triggers</code>.
+The <code>trigger</code> module is the supervisor: it runs one task per <em>enabled</em> trigger (a timetable, a poll, a file watcher) and
+the one webhook listener, and it knows nothing of the store, the jobs or any source.
+Everything it needs it asks of the daemon through a trait that <code>app</code> implements, and everything it does ends in one call,
+the request for a run that <code>miner run</code> makes, so a trigger can cause nothing a person could not.
+The daemon starts nothing until the user enables a trigger, and what it remembers in the palace (progress, the deliveries
+it accepted) never says whether one is enabled.
+See <a href="../triggers/">Triggers</a> and <a href="../adr/043-source-triggers/">ADR-043</a>.</p>
+<pre class="mermaid"><code>flowchart LR
+    FILE[("[[triggers]]&lt;br/&gt;configuration file")] --&gt; APP["app::triggers&lt;br/&gt;desired: enabled and runnable"]
+    APP --&gt; SUP["trigger::Supervisor"]
+    SUP --&gt; TIMER["schedule / poll task"]
+    SUP --&gt; WATCH["watch task"]
+    SUP --&gt; LISTEN["webhook listener&lt;br/&gt;own port, opt-in"]
+    TIMER &amp; WATCH &amp; LISTEN --&gt;|"FireRequest"| FIRE["app: fire"]
+    FIRE --&gt;|"join a waiting run, or queue"| RUN["request_miner_run&lt;br/&gt;(same as miner run)"]
+    RUN --&gt; JOB[("mining job")]
+    FIRE --&gt; STATE[("trigger_state&lt;br/&gt;trigger_delivery")]</code></pre>
+<pre class="mermaid"><code>flowchart LR
+    CLI["memcastle miner"] -- REST --&gt; APP["app::miners"]
+    MCP["MCP&lt;br/&gt;miner_list, miner_get"] -- read only --&gt; APP
+    APP --&gt; FILE[("config.toml&lt;br/&gt;[[miners]]")]
+    FILE -- "changed? re-read" --&gt; APP
+    APP -- "miner run" --&gt; JOBS["mine job&lt;br/&gt;source + locator"]
+    JOBS --&gt; CUR[("source cursor&lt;br/&gt;keyed by source + locator")]</code></pre>
+<h2 id="non-goals-for-now">Non-goals for now<a class="headerlink" href="#non-goals-for-now" title="Permanent link">&para;</a></h2>
+<p>Deliberately out of scope, and each is structurally possible without rework given the module boundaries above:</p>
+<ul>
+<li>Semantic processing of mined documents beyond entity extraction (summaries): mining stops at filing drawers, and the
+  <code>extract</code> job is the stage that reads what was filed.</li>
+<li>Handing a static credential (an environment variable or a file) to a source: the model stores a credential
+  <em>reference</em> and never a secret, and the source contract takes no static credential yet.
+  What exists is an OAuth sign-in a source can declare, which the daemon runs, keeps and renews, and hands over as an
+  access token (<a href="../adr/039-oauth-credentials-for-mining-sources/">ADR-039</a>); the shipped <code>chatgpt</code> source uses it in
+  <a href="../mining-sources/#chatgpt">experimental web mode</a>, while importing an export needs no sign-in.</li>
+<li>Restricting an installed source's network access by host name and a filesystem write permission for sources: the package
+  contract allows each, and neither is built.</li>
+<li>A registry server and a search across registries beyond their names and descriptions: the official registry is a static
+  file in the documentation that names GitHub repositories, and no service is run for it.</li>
+<li>Propagating a deletion at the source: a document that disappears is not noticed.</li>
+<li>Extracting entities from a <em>query</em> to resolve its words to the graph: extraction reads drawers, and expansion starts from
+  drawers already found.</li>
+<li>Re-extracting drawers when the provider changes, and extracting from drawers that were not mined (checkpoints, the diary).</li>
+<li>Merging memories or entities that already exist.
+  <a href="../deduplication/">Deduplication</a> stops new duplicates and links likely ones, but never merges or deletes, and decides
+  with no model; semantic (embedding) similarity at write time and folding accents are out of scope.</li>
+<li>A stdio MCP bridge for clients that cannot speak HTTP.</li>
+<li>The CLI auto-starting a daemon on demand.</li>
+<li>A <code>maintenance</code> command (a reserved name that returns <code>not_implemented</code>).</li>
+<li>Remote SurrealDB authentication beyond root sign-in.</li>
+<li>TLS on the daemon's own listener (use a TLS-terminating proxy).</li>
+<li>A read-only mode, live queries or transactions on the database admin endpoint
+  (<a href="../adr/015-database-admin-endpoint/">ADR-015</a>).</li>
+<li>OAuth/OIDC, users, roles and scopes for <em>access to the daemon</em>: there is one optional shared bearer token,
+  and the authentication layer is where those would attach (<a href="../adr/014-optional-token-authentication/">ADR-014</a>).
+  OAuth as a <em>client</em>, to sign a mining source in to someone else's service, is a different thing and exists
+  (<a href="../adr/039-oauth-credentials-for-mining-sources/">ADR-039</a>).</li>
+<li>Robust cross-platform process supervision for <code>memcastle daemon start</code> and <code>daemon restart</code>
+  (they are a best-effort detached spawn; use a real supervisor in production).</li>
+<li>A dashboard that is more than an API client.
+  The <a href="../web/">web UI</a> is one: a Vue application in <code>web/</code> that calls the REST API as the CLI does, is served from
+  the runtime assets under <code>/ui</code> only when asked to be, and reaches no storage
+  (<a href="../adr/035-web-ui/">ADR-035</a>).</li>
+<li>Any network-based asset download.</li>
+</ul>
+<p>Decisions and their rejected alternatives are collected in the <a href="../adr/">Architecture Decisions</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

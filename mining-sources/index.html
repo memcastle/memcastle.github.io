@@ -1,0 +1,2619 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/mining-sources/">
+      
+      
+        <link rel="prev" href="../storage/">
+      
+      
+        <link rel="next" href="../triggers/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Mining sources - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mining sources
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-source-is-mined" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How a source is mined
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How a source is mined">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entities-and-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Entities and relationships
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duplicates-across-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Duplicates across documents
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-cursor-and-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Identity, cursor and documents
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-incremental-and-idempotent-mean-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What "incremental" and "idempotent" mean here
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chunking" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Chunking
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Limits
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Using it
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#remembering-what-to-mine" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Remembering what to mine
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sources-memcastle-ships" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The sources MemCastle ships
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The sources MemCastle ships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>directory</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>pi</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claude" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>claude</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opencode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>opencode</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codex" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>codex</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chatgpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>chatgpt</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>github</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Writing a source
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-source-is-mined" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How a source is mined
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How a source is mined">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entities-and-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Entities and relationships
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duplicates-across-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Duplicates across documents
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-cursor-and-documents" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Identity, cursor and documents
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-incremental-and-idempotent-mean-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What "incremental" and "idempotent" mean here
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chunking" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Chunking
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Limits
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Using it
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using it">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#remembering-what-to-mine" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Remembering what to mine
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sources-memcastle-ships" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The sources MemCastle ships
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The sources MemCastle ships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>directory</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>pi</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#claude" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>claude</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opencode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>opencode</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#codex" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>codex</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chatgpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>chatgpt</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>github</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#writing-a-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Writing a source
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/mining-sources.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="mining-sources">Mining sources<a class="headerlink" href="#mining-sources" title="Permanent link">&para;</a></h1>
+<p>MemCastle can fill the palace itself, without an agent writing anything and without spending a model's tokens.
+Mining reads a <strong>source</strong>, such as a directory or an agent's session history, and files what it finds as drawers.
+This page is the model behind it and the reference for the sources MemCastle ships.
+The reasoning is in <a href="../adr/023-unified-source-model-for-mining/">ADR-023</a>.</p>
+<p>Memory reaches the palace two ways.
+<strong>Agent-driven</strong> memory is what an agent writes through MCP (a <a href="../mcp-and-api/#checkpoint-payload">checkpoint</a>, a diary
+entry).
+<strong>Source-driven</strong> memory is what MemCastle acquires on its own: <code>memcastle mine</code> reads a source and no agent is involved.
+Both end as drawers, and search does not tell them apart except by <code>source_kind</code>.</p>
+<h2 id="how-a-source-is-mined">How a source is mined<a class="headerlink" href="#how-a-source-is-mined" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    S[(source)] --&gt; D["discover&lt;br/&gt;what is new past the cursor"]
+    D --&gt; R["read&lt;br/&gt;one document"]
+    R --&gt; C{"revision&lt;br/&gt;changed?"}
+    C -- no --&gt; K
+    C -- yes --&gt; N["normalize&lt;br/&gt;adapter, no I/O"] --&gt; H["chunk"] --&gt; W["file drawers&lt;br/&gt;supersede what changed"]
+    W --&gt; K["advance cursor"]
+    K --&gt; D</code></pre>
+<p>Everything left of "chunk" is the <strong>adapter's</strong> job and is specific to the source.
+Everything from "chunk" on, and the loop itself, is the same for every source.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Done by</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>discover</td>
+<td>adapter</td>
+<td>Lists documents after the source's cursor, cheaply and in order.</td>
+</tr>
+<tr>
+<td>read</td>
+<td>adapter</td>
+<td>Acquires one document as the source provides it. No model, no agent.</td>
+</tr>
+<tr>
+<td>normalize</td>
+<td>adapter</td>
+<td>Expresses it in MemCastle's terms: title, room, name, text segments. Pure.</td>
+</tr>
+<tr>
+<td>chunk and file</td>
+<td>MemCastle</td>
+<td>Cuts it into drawer-sized chunks, skips what is unchanged, supersedes what changed.</td>
+</tr>
+<tr>
+<td>enrich</td>
+<td>the <code>extract</code> job</td>
+<td>Reads what was filed and adds entities and relationships to the knowledge graph; it never rewrites a drawer.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="entities-and-relationships">Entities and relationships<a class="headerlink" href="#entities-and-relationships" title="Permanent link">&para;</a></h3>
+<p>Mining files drawers and stops.
+When an <a href="../configuration/#extraction">extraction provider</a> is configured, the daemon then queues an <code>extract</code> job that reads
+the drawers mining filed and adds the entities and relationships they name to the knowledge graph.
+It is a separate job on purpose: the pipeline above does not know it exists, no adapter takes part, and a slow or failing
+model cannot hold up a mining cursor.
+Each fact records the source, document, chunk and revision it was read from, so it can be traced to the drawer that is its
+evidence and stops being current when that drawer is replaced.
+Any source that mines through the model above is covered, because extraction reads drawers, not sources.
+Names that differ only in spelling across documents converge on one entity, and each mention keeps the spelling its
+document used.
+See <a href="../adr/024-entity-extraction-as-an-enrich-job/">ADR-024</a> and <a href="../deduplication/">Deduplication</a>.</p>
+<h3 id="duplicates-across-documents">Duplicates across documents<a class="headerlink" href="#duplicates-across-documents" title="Permanent link">&para;</a></h3>
+<p>Two documents with the same text are two documents, so mining stores both.
+After storing a chunk, though, it notes what the chunk resembles among the drawers already in its room: an identical or
+nearly identical chunk gets a <code>similar_to</code> link with the evidence, and the job's result counts these as <code>similar</code>.
+Nothing is skipped or merged, and the pipeline learns nothing about sources from it.
+See <a href="../deduplication/">Deduplication</a>.</p>
+<h3 id="identity-cursor-and-documents">Identity, cursor and documents<a class="headerlink" href="#identity-cursor-and-documents" title="Permanent link">&para;</a></h3>
+<p>A source is identified by <code>(source, account, locator)</code>: the adapter's name, the account on it if it has accounts, and the
+part of it that is read (a directory, a sessions folder, a channel).
+Two jobs that name the same place share one source, and therefore one cursor.</p>
+<p>MemCastle keeps, for each source:</p>
+<ul>
+<li>the <strong>cursor</strong>: where the last run stopped, in the adapter's own terms.
+  A later job continues from it, which is what makes mining incremental;</li>
+<li>the <strong>last job</strong> that advanced it and when;</li>
+<li>a <strong>credential reference</strong>, if the source needs one: the name of an environment variable, the path of a file, or
+  <code>oauth</code> for a source that signs in with OAuth and whose tokens the daemon keeps and renews
+  (<a href="../configuration/#credentials">Credentials</a>).
+  A secret is never stored, logged or returned, see <a href="../authentication/">Authentication</a>;</li>
+</ul>
+<p>and for each document of a source, the <strong>revision</strong> last filed and the <strong>chunks</strong> it became.
+Each mined drawer also snapshots that revision's source metadata and event time in its origin.
+This lets <a href="../configuration/#source-preferences">source preferences</a> match connector-specific metadata without changing
+how the source identifies itself, and keeps an older drawer's preference criteria explainable after a re-mine.</p>
+<h3 id="what-incremental-and-idempotent-mean-here">What "incremental" and "idempotent" mean here<a class="headerlink" href="#what-incremental-and-idempotent-mean-here" title="Permanent link">&para;</a></h3>
+<ul>
+<li>A re-mine of an unchanged incremental source reads nothing: the cursor is past everything.
+  A non-incremental source such as <code>chatgpt</code> rescans and skips documents whose content hash has not changed.</li>
+<li>If the cursor is lost or you pass <code>--full</code>, everything is read again, and an unchanged document is recognised by its
+  revision and skipped.
+  Nothing is duplicated either way, so the cursor is a speed-up, not something correctness depends on.</li>
+<li>An edited document keeps the drawers whose text did not change and <strong>supersedes</strong> the ones that did.
+  If its metadata changes, the affected chunks are superseded even when their text is the same, to retain the
+  revision-specific evidence context.
+  The old text stays as history (<code>valid_to</code>), and a search for "as of" an earlier date still finds it.
+  Appending to a transcript changes only its last chunk.</li>
+<li>A document that got shorter closes the chunks past its new end, so stale text is not searchable as if it were current.</li>
+<li>A document that vanished from the source is not noticed: deletions are not propagated.</li>
+<li>A job that is paused, interrupted or crashed resumes from its own checkpoint and files nothing twice.</li>
+</ul>
+<h3 id="chunking">Chunking<a class="headerlink" href="#chunking" title="Permanent link">&para;</a></h3>
+<p>A document that fits in <code>mining.chunk_chars</code> characters (6000 by default) is <strong>one drawer, verbatim</strong>.
+A longer one is cut into several:
+whole units the adapter delimited (a message, say) are packed together up to the size, and a unit larger than a chunk is
+cut at a paragraph break, else a line break, else mid-line.
+Only the first drawer of a document carries its name.
+Sizes count characters, so a cut never lands inside a character.</p>
+<h3 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h3>
+<p>One job files at most <code>mining.max_documents</code> documents (2000 by default).
+If the source has more, the job completes with <code>"truncated": true</code>, its progress message says to run it again, and the
+next job continues from the cursor.</p>
+<h2 id="using-it">Using it<a class="headerlink" href="#using-it" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>sources<span class="w">                        </span><span class="c1"># what can be mined, and what has been</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>~/project<span class="w">                 </span><span class="c1"># a directory (the shorthand for `memcastle mine directory ~/project`)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>pi<span class="w">                        </span><span class="c1"># Pi session history, from its default location (once installed, below)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>pi<span class="w"> </span>/backups/pi/sessions
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>pi<span class="w"> </span><span class="nv">dir</span><span class="o">=</span>/work/app<span class="w"> </span>--full
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>opencode<span class="w"> </span><span class="nv">since</span><span class="o">=</span><span class="m">2026</span>-09<span class="w"> </span><span class="nv">dir</span><span class="o">=</span>/path/to/workspace<span class="w">   </span><span class="c1"># OpenCode session history (once installed)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>claude<span class="w"> </span><span class="nv">since</span><span class="o">=</span><span class="m">2026</span>-09<span class="w"> </span><span class="nv">dir</span><span class="o">=</span>/path/to/workspace<span class="w">     </span><span class="c1"># Claude Code session history (once installed)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>codex<span class="w">                                           </span><span class="c1"># Codex rollout history (once installed)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span>/path/to/chatgpt-export.zip<span class="w">            </span><span class="c1"># ChatGPT data export (once installed)</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>github<span class="w"> </span><span class="nv">include</span><span class="o">=</span>acme/docs<span class="w"> </span><span class="nv">wiki_include</span><span class="o">=</span>acme/docs<span class="w"> </span><span class="c1"># selected GitHub repository and wiki history</span>
+</span></code></pre></div>
+<p>The first word is a source, and what follows is that source's own: at most one place to read, then <code>key=value</code> options
+that the source declares (<code>memcastle sources</code> lists them; an unknown key is refused before anything is queued).
+A word that is not shaped like a source name (<code>.</code>, <code>~/project</code>, <code>./pi</code>) is a directory.
+See <a href="../cli/#mine"><code>mine</code></a> for the whole grammar.</p>
+<p><code>memcastle sources</code> (<code>GET /api/sources</code>) lists the adapters (built in and installed, with their state), then each source
+that has been mined with its document count, last job and last run.
+Over HTTP, a source job is <code>{"type": "mine", "source": "pi", "locator": "...", "options": {"since": "2026-09"},
+"full": false}</code>
+on <code>POST /api/jobs</code>, and over MCP <code>memcastle_mine</code> takes <code>source</code>, <code>locator</code>, <code>options</code> and <code>full</code> beside <code>path</code> and <code>wing</code>.
+The command line's grammar is only a way to type that request: the daemon, REST and MCP take the resolved source,
+place and options.
+Mining is a write, so a <a href="../memory-modes/">read-only or disabled session</a> cannot start it.</p>
+<h3 id="remembering-what-to-mine">Remembering what to mine<a class="headerlink" href="#remembering-what-to-mine" title="Permanent link">&para;</a></h3>
+<p><code>memcastle mine</code> names a source and where to read every time.
+A <strong>miner</strong> is a named definition of one, kept as <code>[[miners]]</code> in the configuration file:
+a source, a locator, saved options and a reference to a credential
+(<a href="../configuration/#miners">Configuration</a>, <a href="../cli/#miner"><code>memcastle miner</code></a>).
+<code>memcastle miner run &lt;name&gt;</code> submits the same job <code>mine</code> would, with the miner's saved options,
+so a miner continues from the cursor its source already has.
+The cursor belongs to the source, which is the <code>source</code> and <code>locator</code>, and not to the miner:
+renaming, disabling, re-scoping or removing a miner never loses it or what it mined.
+An agent can read the miners (<code>memcastle_miner_list</code>, <code>memcastle_miner_get</code>) but only the user changes them.</p>
+<p>A miner runs when asked.
+To have it run on its own (daily, when files change, when a service calls a webhook) the user defines a
+<a href="../triggers/">trigger</a> for it, which starts disabled and which no source, install or miner ever enables.
+The trigger only decides when; the source still decides how to read.</p>
+<p>The job's <code>result</code> reports <code>documents</code>, <code>created</code>, <code>superseded</code>, <code>retired</code>, <code>unchanged</code>, <code>skipped</code>, <code>similar</code> and <code>truncated</code>.</p>
+<h2 id="the-sources-memcastle-ships">The sources MemCastle ships<a class="headerlink" href="#the-sources-memcastle-ships" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Kind</th>
+<th>Reads</th>
+<th>Cursor</th>
+<th>Keeps raw</th>
+<th>Credentials</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>directory</code></td>
+<td>built in</td>
+<td>the text files under a directory</td>
+<td>modification time</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>pi</code></td>
+<td>bundled package, <code>sources/pi/</code></td>
+<td>Pi coding-agent session history</td>
+<td>modification time</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>opencode</code></td>
+<td>bundled package, <code>sources/opencode/</code></td>
+<td>OpenCode coding-agent session history</td>
+<td><code>time_updated</code> of the session</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>claude</code></td>
+<td>bundled package, <code>sources/claude/</code></td>
+<td>Claude Code session history</td>
+<td>modification time</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>codex</code></td>
+<td>bundled package, <code>sources/codex/</code></td>
+<td>Codex rollout history</td>
+<td>modification time</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>chatgpt</code></td>
+<td>bundled package, <code>sources/chatgpt/</code></td>
+<td>ChatGPT export or experimental web history</td>
+<td>repeated sweep</td>
+<td>yes</td>
+<td>OAuth for web, optional manual fallback</td>
+</tr>
+<tr>
+<td><code>github</code></td>
+<td>bundled package, <code>sources/github/</code></td>
+<td>selected repositories, issues, PRs and wiki revisions</td>
+<td>API updates / Git history</td>
+<td>yes</td>
+<td>optional <code>GH_TOKEN</code> or <code>GITHUB_TOKEN</code></td>
+</tr>
+</tbody>
+</table>
+<p>Only <code>directory</code> is compiled into MemCastle.
+<code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> are <a href="../writing-sources/">WebAssembly sources</a>.
+They are built from their directories in the repository and shipped alongside each release
+(release archives and the <code>.deb</code> and <code>.rpm</code> carry them, unpacked, under
+<code>share/memcastle/sources/</code>), so they are installed from the start.
+<code>memcastle source enable &lt;name&gt;</code> is all one needs, with no registry and no network.
+No Pi, OpenCode, Claude Code, Codex, ChatGPT or GitHub acquisition code is part of the core.
+They run under the same sandbox and pipeline as any source a user writes.
+Other sources are found in <a href="../publishing-sources/">registries</a>.
+<code>directory</code> and <code>pi</code> have a modification-time watermark as their cursor:
+files are ordered by modification time, then by path, and the cursor is the last one done.
+A file that appears with an old modification time (restored from a backup, copied with its times preserved) is behind the
+watermark and is picked up by <code>--full</code>.</p>
+<h3 id="directory"><code>directory</code><a class="headerlink" href="#directory" title="Permanent link">&para;</a></h3>
+<p>One document per file, identified by its path under the mined root, filed in the room <code>files</code> of the wing you give
+(default: the wing the directory's <a href="../project-config/#mining">project file</a> declares, else the directory's name)
+and named by that path, so <code>wing/files/src/lib.rs</code> addresses it.</p>
+<ul>
+<li>It skips directories named <code>.git</code>, <code>target</code>, <code>node_modules</code>, <code>.venv</code>, <code>venv</code>, <code>dist</code>, <code>build</code> and <code>.cache</code>, at any depth,
+  along with any other directory whose name starts with <code>.</code> and any symlink.</li>
+<li>It skips empty files, files larger than <code>mining.max_file_bytes</code> (2 MiB by default) and files that are not valid UTF-8.</li>
+<li><code>source.kind</code> is <code>file</code> and <code>source.uri</code> is the file's absolute path.</li>
+</ul>
+<h3 id="pi"><code>pi</code><a class="headerlink" href="#pi" title="Permanent link">&para;</a></h3>
+<p>The conversation history of the <a href="https://github.com/badlogic/pi-mono">Pi</a> coding agent, read straight from its session
+files: <code>~/.pi/agent/sessions/&lt;working directory&gt;/&lt;session&gt;.jsonl</code>,
+or the folder you name as the place to read (<code>memcastle mine pi &lt;folder&gt;</code>).
+It works on sessions of any age and with no Pi process running.
+This is how Pi's <em>history</em> gets into MemCastle; the live integration (<code>integrations/pi/</code>) is a separate thing that talks
+to the daemon over MCP and decides <em>when</em> to ask for mining, and never reads these files itself.</p>
+<p>It ships with your MemCastle and is installed already: turn it on, and mine it:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pi
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>pi
+</span></code></pre></div>
+<p>A build that was not installed from a release (a checkout, <code>cargo install</code>) has no bundle.
+Install it from the <a href="../publishing-sources/#the-official-registry">official registry</a> (<code>memcastle source install pi --enable</code>),
+or from the project directory, which builds and packages it first, or write the two steps out:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>sources/pi<span class="w"> </span>--enable
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># or: memcastle source package sources/pi &amp;&amp; memcastle source install sources/pi/dist/pi-0.1.0.tar.gz --enable</span>
+</span></code></pre></div>
+<p>Installing it from a registry or a directory lists what the source asks for and needs your consent to exactly that;
+<code>memcastle source show pi</code> lists the same for the bundled one, which is enabled without it.
+It asks for read-only access to the folder it is asked to mine and to <code>~/.pi/agent/sessions</code>,
+and the one environment variable <code>HOME</code> (to find that folder when no place is given).
+It asks for no network, runs no program, writes no file and needs no credentials.
+<code>memcastle source test sources/pi</code> runs its conformance cases, and CI does the same on every change.</p>
+<p>Two options narrow what is read.
+<code>since=2026-09</code> keeps the sessions whose file was modified at or after the date,
+and <code>dir=/work/app</code> keeps the sessions that
+were started in that working directory (read from each session's header).
+A <code>dir</code> may be a pattern: <code>*</code> matches any run of characters, <code>/</code> included,
+so <code>'dir=/work/*'</code> is every working directory under <code>/work</code>.
+The path is cleaned up the way Pi records it, so a trailing slash, a <code>.</code> or a <code>..</code> makes no difference, and
+<code>memcastle mine</code> resolves links in the part that exists before it reaches the daemon.
+A session file with no readable header has no directory, so a <code>dir</code> never selects it.
+<code>dir</code> is part of the source's identity, so every directory has a cursor of its own;
+<code>since</code> only narrows and shares the source's cursor.</p>
+<p>Each session is one document, identified by its path under the sessions folder (<code>&lt;working directory&gt;/&lt;session file&gt;</code>),
+filed in the wing <code>pi</code> (or the one you give), in a room named after the session's working directory, and named by its
+file, so it can be addressed as <code>pi/&lt;project&gt;/&lt;session file&gt;</code>.
+Drawers have <code>source.kind</code> <code>transcript</code> and the tags <code>transcript</code> and <code>pi</code>.
+Provenance is the session itself: <code>source.uri</code> is the session file's path, the document's metadata carries the session
+id, working directory and format version from its header, and the document's time is when the session started (the
+header's timestamp), not when its file was last written.</p>
+<p>What is filed: a header (session id and working directory), then each user and assistant message as text with the time
+it was written.
+Tool calls are kept as one-line markers (<code>[tool call: read]</code>) and shell commands the user ran as <code>[bash: ...]</code>.
+What is deliberately left out: model reasoning, tool results (large, and usually file contents that can be mined as files)
+and everything that is not a conversation message.
+A line that is not JSON or an entry type the reader does not know is skipped, not an error.
+The reader follows Pi's session format version 3 and only lists <code>*.jsonl</code> files, directly in the sessions folder or one
+folder down, so it never opens anything else under Pi's directory, in particular not its credentials file, and it does not
+follow symlinks.
+The raw session file is kept next to the drawers, because Pi's sessions are the user's to rotate away.
+Mining is incremental and idempotent: a session that has not changed is not read again, and one that grew files only its
+new tail.</p>
+<h3 id="claude"><code>claude</code><a class="headerlink" href="#claude" title="Permanent link">&para;</a></h3>
+<p>The conversation history of <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a>, read straight from its
+per-session JSONL transcripts under <code>~/.claude/projects/&lt;project&gt;/&lt;session&gt;.jsonl</code>, or from a projects folder named as the
+locator.
+It works on sessions of any age and with no Claude Code process running.
+It is history mining only: it does not read Claude Code settings, credentials, prompt history or debug logs, and it is not
+the live Claude Code MCP client.</p>
+<p>It ships with your MemCastle and is installed already:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>claude
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>claude
+</span></code></pre></div>
+<p>A checkout has no unpacked bundle, so install from the official registry or the project directory:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w"> </span>--enable
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># or: memcastle source install sources/claude --enable</span>
+</span></code></pre></div>
+<p>It asks for read-only access to the locator and <code>~/.claude/projects</code>, and <code>HOME</code> only to find the latter when no locator
+is given.
+It asks for no network, process, write or credential permission.
+The reader lists only <code>.jsonl</code> files exactly one project directory below that root and does not follow symlinks.</p>
+<p>Each session is one <code>transcript</code> document, identified by its path under the projects root, filed in wing <code>claude</code> and
+in a room named after its recorded working directory.
+It has the <code>transcript</code> and <code>claude</code> tags; provenance is the transcript file and its recorded session id, working directory
+and start timestamp when present.
+The source keeps ordered user and assistant text plus compact tool-use markers such as <code>[tool: Read]</code>.
+It deliberately excludes thinking, tool results and output, system and compaction records, attachments, patches, malformed
+lines and unknown record kinds.
+A transcript with no retained message becomes no segments.</p>
+<p><code>since=2026-09</code> narrows to files modified at or after that date; <code>dir=/work/app</code> narrows to the recorded working directory,
+and accepts the same <code>*</code> patterns as <code>pi</code>.
+<code>dir</code> is a separate source identity and cursor; <code>since</code> only narrows the current source.
+Files are ordered by modification time and path, so an appended transcript is discovered again without skipping a tie.
+Earlier message segments stay byte-identical when a session gains a tail.</p>
+<p>The source declares <code>watch</code>, but that is only a capability.
+It never creates a miner or enables a trigger:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude"</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">[[triggers]]</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history-watch"</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"watch"</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">debounce</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"5s"</span>
+</span></code></pre></div>
+<p>Enable the trigger only after reviewing the locator and source permissions.
+Without a trigger, <code>memcastle miner run claude-history</code> is the manual fallback.</p>
+<h3 id="opencode"><code>opencode</code><a class="headerlink" href="#opencode" title="Permanent link">&para;</a></h3>
+<p>The conversation history of the <a href="https://opencode.ai">OpenCode</a> coding agent, acquired by asking OpenCode for it.
+OpenCode keeps every session in one SQLite database that it writes while it runs, so this source does not open that
+file: it runs the <code>opencode</code> command, which owns the database, and turns its answers into documents.
+It works on sessions of any age and with no OpenCode session running, calls no model and replays nothing.
+This is how OpenCode's <em>history</em> gets into MemCastle; the live integration (<code>integrations/opencode/</code>) is a separate
+thing that talks to the daemon over MCP and decides <em>when</em> to ask for mining.</p>
+<p>It needs OpenCode 1.2 or later (the version that moved history into the database) installed so that <code>opencode</code> is on the
+daemon's <code>PATH</code>; it was written against 1.18.
+It ships with MemCastle like <code>pi</code> (or install it from a checkout with <code>memcastle source install sources/opencode</code>):</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>opencode
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>opencode
+</span></code></pre></div>
+<p>Installing it from a registry or a directory lists what the source asks for and needs your consent to exactly that;
+<code>memcastle source show opencode</code> lists the same for the bundled one.
+It asks for running the program <code>opencode</code>, and the environment variable <code>XDG_DATA_HOME</code>
+(OpenCode reads it to find its data when you have moved it; <code>PATH</code> and <code>HOME</code> are always passed to a program).
+It asks for no file access, no network, and needs no credentials.
+A program is a wider grant than a file: <code>opencode</code> runs with the daemon's own authority over the machine,
+and the sandbox only decides <em>which program</em>, not what that program does.
+That is the reason the grant is one named program, with no shell, and the reason installing asks you to agree to it.
+<code>memcastle source test sources/opencode</code> runs its conformance cases against a stand-in <code>opencode</code> that
+<code>sources/opencode/fixtures/bin/</code> ships, which has to be first on the <code>PATH</code> (<code>mise run sources:test -- opencode</code> does
+that), and CI does the same on every change.</p>
+<p>Each session is one document, identified by its OpenCode session id (<code>ses_...</code>), filed in the wing <code>opencode</code>
+(or the one you give), in a room named after the session's working directory, and named by its id,
+so it can be addressed as <code>opencode/&lt;project&gt;/&lt;session id&gt;</code>.
+Drawers have <code>source.kind</code> <code>transcript</code> and the tags <code>transcript</code> and <code>opencode</code>.
+Provenance is the session itself: <code>source.uri</code> is <code>opencode://session/&lt;id&gt;</code>, the document's metadata carries the session
+id, project id, working directory, title and OpenCode version, and the document's time is when the session was created.</p>
+<p>What is filed: a header (session id and working directory), then each user and assistant message as text with the time it
+was written.
+Tool calls are kept as one-line markers (<code>[tool: read] scripts/rotate.sh</code>) and attached files as their names
+(<code>[file: TODO.md]</code>).
+What is deliberately left out: model reasoning, tool outputs (large, and usually file contents that can be mined as
+files), patches and snapshots, text OpenCode injected itself (parts it marks <code>synthetic</code> or <code>ignored</code>), the summaries it
+writes when it compacts a session, and file contents.
+A part type the reader does not know is skipped, not an error.</p>
+<p>Mining is incremental and idempotent.
+Discovery asks <code>opencode db</code> for the sessions whose <code>time_updated</code> is past the cursor, in order, so a session OpenCode
+has written to since is read again and one that has not is not.
+A session that grew files only its new tail, and renaming a session changes none of what is already filed.
+A session with no messages is skipped, and is read again when it gets some.
+The place to read (<code>memcastle mine opencode &lt;name&gt;</code>) is only a name for the history being mined; without one,
+the source is
+identified by the database path <code>opencode db path</code> prints,
+so a moved <code>XDG_DATA_HOME</code> is a different source with a cursor of its own.</p>
+<p>Two options narrow what is read.
+<code>since=2026-09</code> keeps the sessions whose <code>time_updated</code> is at or after the date,
+and <code>dir=/path/to/workspace</code> keeps the sessions
+whose recorded project directory is that path, or matches it when it holds a <code>*</code> (any run of characters, <code>/</code> included:
+<code>'dir=/work/*'</code> is every project under <code>/work</code>).
+Both sides are compared without a trailing slash and with <code>.</code> and <code>..</code> resolved, so how the path is spelled makes no difference.
+Quote a pattern in a shell, which would otherwise expand the star itself.
+<code>dir</code> selects a different slice of the history,
+so it is part of the source's identity and every directory has a cursor of its own;
+<code>since</code> only narrows, so it shares the cursor of the unfiltered source (<code>--full</code> reads back past it).</p>
+<p>Limits to know about:</p>
+<ul>
+<li><strong>One query depends on OpenCode's internals.</strong>
+  <code>opencode session list</code> cannot ask for only what changed, so discovery reads the <code>id</code> and <code>time_updated</code> columns of
+  OpenCode's <code>session</code> table through <code>opencode db</code>.
+  If a future OpenCode renames them, the job fails with OpenCode's own message and nothing is filed wrongly.</li>
+<li><strong>A session whose export exceeds 16 MiB is skipped.</strong>
+  A program's output is capped at that size for every source, and a session that large is usually one whose tool outputs
+  dominate; it is not an error, so it does not stop the sessions after it.</li>
+<li><strong>A command's output is captured through files, not pipes.</strong>
+  OpenCode can exit before a large answer has drained from a pipe, which cuts it off while the exit status is still 0.
+  The host therefore has the program write to a scratch file it reads back, so a long list of sessions or a large export
+  arrives whole.
+  If a discovery answer is still not valid JSON, the job's error quotes how many bytes arrived and how they began.</li>
+<li><strong>Each command takes a few seconds on a large database</strong>, and a job's calls are limited to 60 seconds each
+  (<code>mining.source_timeout_secs</code>).</li>
+<li><strong>The legacy JSON history</strong> that OpenCode wrote before 1.2 under <code>storage/</code> is not read.</li>
+</ul>
+<h3 id="codex"><code>codex</code><a class="headerlink" href="#codex" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://developers.openai.com/codex">Codex</a> history source reads the dated JSONL rollout files under
+<code>~/.codex/sessions/YYYY/MM/DD/</code>, or a sessions directory named as its locator.
+It is separate from the Codex integration: this source acquires old and inactive transcripts, while the integration only
+decides when a live Codex session uses MCP.</p>
+<p>It ships with MemCastle and is installed already:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>codex
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>codex
+</span></code></pre></div>
+<p>The source reads only files named <code>rollout-*.jsonl</code> at the documented date depth, never <code>history.jsonl</code> or another file
+under <code>~/.codex</code>.
+It asks only for read access to that sessions directory and <code>HOME</code> to locate it when no locator is supplied.
+It needs no network, process, write, or credential permission.</p>
+<p>Each rollout is a transcript document in the <code>codex</code> wing and a room named after its recorded working directory.
+The cursor is its modification time and path, and the revision is a hash of the full JSONL file, so an unchanged rollout
+is not read twice and an appended rollout preserves the chunks made from its unchanged prefix.
+It files user and assistant text and concise tool-call markers.
+It deliberately excludes model reasoning, tool output, command and file contents, injected context, and record types it
+does not understand.</p>
+<h3 id="chatgpt"><code>chatgpt</code><a class="headerlink" href="#chatgpt" title="Permanent link">&para;</a></h3>
+<p>ChatGPT conversation history is imported from an official export ZIP with a top-level <code>conversations.json</code>.
+A standalone <code>conversations.json</code> extracted from it is accepted too.
+The source ships disabled like the other bundled packages; enable it, then provide the path on the <strong>daemon's</strong> machine:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>chatgpt
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span>/path/to/chatgpt-export.zip
+</span></code></pre></div>
+<p>The export path is the source's identity.
+Replacing the file at that path with a newer export and mining again revisits each conversation without duplicating
+unchanged drawers; a different file path starts a separate source.
+One conversation is one transcript document in <code>chatgpt/conversations</code>, identified by the conversation ID, with source
+metadata, parent/child branches, assistant model information, attachment/reference descriptors and timestamps retained
+in the raw document when present.
+User and assistant text is searchable, including alternate branches; non-text attachments are not downloaded.
+An absent conversation ID or message collection fails with an actionable error; unsupported non-text content stays in
+the raw document and is not searchable.
+The source permits up to 128 MiB of JSON and 16 MiB per conversation; split larger exports before importing.
+Exports and raw retained documents contain private conversations.</p>
+<p>An <strong>experimental</strong> alternative uses the undocumented ChatGPT web API:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span><span class="nv">mode</span><span class="o">=</span>web<span class="w"> </span><span class="nv">account</span><span class="o">=</span>personal
+</span></code></pre></div>
+<p><code>account</code> is a non-secret label that keeps different accounts' cursors separate.
+Without a project filter, the web backend combines ordinary conversations and the full paginated history of each
+project, including archived projects; the sidebar's preview alone is never treated as complete history.
+<code>projects=id:PROJECT_ID</code> or <code>projects=name:Exact Name</code> selects one project; comma-separated selectors choose several.
+Names must be unique and exact, and an ID is the stable choice for a scheduled miner because renames or reused names
+change what the name selects.
+A project selection has its own cursor, separate from the account's unfiltered history.
+Export files cannot be project-filtered until their project membership is verified.
+Configure the filter persistently with <code>memcastle miner set</code> and an <code>--option 'projects=name:Exact Name'</code> flag
+(<a href="../configuration/#chatgpt-project-miner">Configuration</a>).
+The daemon needs <code>curl</code>; run <code>memcastle source auth chatgpt</code> on its machine before web mining.
+The daemon keeps and renews the OAuth credential, and the source asks for a current bearer through the host function.
+Fresh desktop-compatible OAuth access and renewed tokens read conversation and project history <strong>without cookies</strong> when
+the request uses a browser-style User-Agent; plain curl received a 403 edge challenge with the same token.
+OpenAI's documented third-party sign-in does not grant history access, so this private desktop-compatible integration
+can change independently of the generic MemCastle OAuth mechanism.
+The previous fallback still accepts <code>MEMCASTLE_CHATGPT_BEARER</code> (and an optional <code>MEMCASTLE_CHATGPT_COOKIE</code>) from the daemon
+environment; no session value belongs in a mine option or config setting.
+It revisits conversations on every run and fails on incomplete message pages rather than filing a partial transcript.
+This backend is tested against synthetic replies, not yet against a fresh live session; endpoints, login requirements and
+pagination may change.
+See <a href="https://github.com/memcastle/memcastle/tree/main/sources/chatgpt">the source README</a> for its session setup and
+limits.</p>
+<h3 id="github"><code>github</code><a class="headerlink" href="#github" title="Permanent link">&para;</a></h3>
+<p>The <code>github</code> source is shipped with releases, but must be enabled explicitly with <code>memcastle source enable github</code>.
+It mines only repositories selected by the required <code>include</code> option, with <code>exclude</code> taking precedence.
+An exact <code>owner/repo</code> names one repository; <code>org/*</code> enumerates repositories owned by that organization, and
+<code>owner/repo-*</code> selects a subset of an owner's repositories.
+The separate <code>wiki_include</code> and <code>wiki_exclude</code> patterns select wikis only within those repositories.
+Set <code>issues=false pulls=false metadata=false wiki_include=acme/docs</code> for a wiki-only mine.</p>
+<p>The default document kinds are repository metadata, issues and pull requests.
+Turn on <code>comments=true</code> to include conversation comments and <code>reviews=true</code> for review summaries and inline comments.
+<code>labels</code> narrows issues and PRs, <code>topics</code> narrows repositories, <code>paths</code> narrows wiki pages, and <code>since</code> is a bootstrap date.
+Changing a selecting pattern creates a new source cursor; moving <code>since</code> earlier requires <code>--full</code>.
+Git wiki history is not exposed through the REST API: the source clones each selected wiki transiently and files each
+changed Markdown page/commit as a separate document, with page path, commit and repository provenance.
+The wiki revision's URL points at the page in the repository wiki; the commit ID is also kept in its metadata.</p>
+<p>The daemon needs <code>curl</code> for the official REST API, <code>git</code> for wikis, a writable <code>/tmp</code> for temporary clones, and <code>rm</code> to
+clean them up.
+<code>GH_TOKEN</code> or <code>GITHUB_TOKEN</code> (in that order) can be set in the daemon's environment for private repositories or higher
+rate limits; no token belongs in the miner options or <code>memcastle.toml</code>.
+Public repositories can be read without a token.
+The manifest grants the two variable names and the three programs, not a general filesystem or WASI network grant.
+For an opt-in <a href="../triggers/">poll or schedule trigger</a>, point it at a GitHub miner; the trigger only requests a normal run.
+See the <a href="https://github.com/memcastle/memcastle/tree/main/sources/github">GitHub source README</a> for full scope examples
+and acquisition limits.</p>
+<h2 id="writing-a-source">Writing a source<a class="headerlink" href="#writing-a-source" title="Permanent link">&para;</a></h2>
+<p>There are two ways to add a source.</p>
+<ul>
+<li><strong>A package</strong> is a WebAssembly component the user installs, in any language that produces one.
+  This is the extension model: the core compiles no source-specific code, and a source can be written, shipped and
+  updated without a MemCastle release.
+  <a href="../writing-sources/">Writing a mining source</a> is the guide (the contract, the manifest, permissions, lifecycle,
+  conformance, packaging), and <code>memcastle source init</code> scaffolds one.</li>
+<li><strong>A built-in adapter</strong> is Rust compiled into MemCastle, for the few sources that are simpler or faster native.</li>
+</ul>
+<p>Both implement the same contract, and a source cannot tell which kind it is.
+The contract is <code>mining::adapter::SourceAdapter</code>, one file under <code>src/mining/adapters/</code> for a built-in:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code>, <code>description</code>, <code>capabilities</code></td>
+<td>The name users give, one line about it, and whether it is incremental, keeps raw documents and needs credentials.</td>
+</tr>
+<tr>
+<td><code>identify(locator)</code></td>
+<td>Validate the locator and return the source's identity. Make equivalent spellings identical (a canonical path), so they share a cursor.</td>
+</tr>
+<tr>
+<td><code>default_wing</code>, <code>default_room</code></td>
+<td>Where drawers go when nobody chose.</td>
+</tr>
+<tr>
+<td><code>discover(source, cursor, limit)</code></td>
+<td>Candidates strictly after the cursor, in cursor order, at most <code>limit</code>, each with the cursor to store once it is done; and whether anything is left. Cheap: a listing.</td>
+</tr>
+<tr>
+<td><code>read(source, candidate)</code></td>
+<td>One <code>RawDocument</code> with a <strong>revision</strong> that changes exactly when the content does, or <code>None</code> to skip.</td>
+</tr>
+<tr>
+<td><code>normalize(raw)</code></td>
+<td>A <code>CanonicalDocument</code>. Pure: no I/O, so it is testable from fixtures.</td>
+</tr>
+</tbody>
+</table>
+<p>A built-in adapter also needs a variant in <code>mining::registry::AnySource</code>, its name in <code>registry::BUILTIN_NAMES</code> (which
+keeps an installed package from shadowing it), and a section on this page.
+What an adapter must not do, and a test (<code>tests/source_isolation.rs</code>) enforces: touch the store or the job machinery, which
+the pipeline owns; and what the pipeline must not do: name an adapter, name the WebAssembly runtime, or read a file.
+The same conformance cases (<code>tests/fixtures/sources/conformance/</code>) run against built-in and installed sources.
+A cursor is the adapter's own JSON object, opaque to MemCastle.
+An adapter whose cursor does not parse returns <code>memcastle::source::cursor_invalid</code>, whose help says to mine with <code>--full</code>.</p>
+<p>A model that suits the planned adapters for chat and issue trackers:
+the cursor is the service's own page token or timestamp, <code>external_id</code> is the service's id for the message or issue,
+the revision is its <code>updated_at</code> or etag, and <code>needs_credentials</code> is set, with the credential stored as a reference
+(or, for a source that signs in with OAuth, declared in the manifest and asked of the host at run time:
+<a href="../writing-sources/#signing-in-with-oauth">Signing in with OAuth</a>).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

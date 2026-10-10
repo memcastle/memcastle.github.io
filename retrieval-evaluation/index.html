@@ -1,0 +1,2442 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/retrieval-evaluation/">
+      
+      
+        <link rel="prev" href="../development/">
+      
+      
+        <link rel="next" href="../adr/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Retrieval evaluation - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Retrieval evaluation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#run-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Run it
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How it works
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bundled-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The bundled dataset
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The bundled dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#time-in-epochs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Time, in epochs
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retrieval-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Retrieval configurations
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vectors-engine-quality-kept-apart-from-model-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Vectors: engine quality, kept apart from model quality
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Metrics
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latency-and-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Latency and throughput
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reports-and-comparing-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reports and comparing them
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reports and comparing them">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-committed-baseline-and-the-floor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The committed baseline and the floor
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-documented-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The documented baseline
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-numbers-do-and-do-not-establish" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What the numbers do and do not establish
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extending-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Extending it
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#longmemeval" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        LongMemEval
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Environment variables
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Not goals
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#run-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Run it
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How it works
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bundled-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The bundled dataset
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The bundled dataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#time-in-epochs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Time, in epochs
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#retrieval-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Retrieval configurations
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vectors-engine-quality-kept-apart-from-model-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Vectors: engine quality, kept apart from model quality
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Metrics
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latency-and-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Latency and throughput
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reports-and-comparing-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reports and comparing them
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reports and comparing them">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-committed-baseline-and-the-floor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The committed baseline and the floor
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-documented-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The documented baseline
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-numbers-do-and-do-not-establish" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What the numbers do and do not establish
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extending-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Extending it
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#longmemeval" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        LongMemEval
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Environment variables
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Not goals
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/retrieval-evaluation.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="retrieval-evaluation">Retrieval evaluation<a class="headerlink" href="#retrieval-evaluation" title="Permanent link">&para;</a></h1>
+<p>MemCastle ships a reproducible way to measure how well search finds what it should, and how fast.
+It exists so that a change to retrieval (a new ranking, a new index setting, a new capability) can be judged by numbers
+instead of by a handful of hand-picked queries, and so that an old behaviour cannot regress without anyone noticing.</p>
+<p>It is a development tool.
+Nothing of it is in the <code>memcastle</code> binary or in a release, and it is not a release gate.
+Read <a href="#what-the-numbers-do-and-do-not-establish">What the numbers do and do not establish</a> before quoting one.</p>
+<h2 id="run-it">Run it<a class="headerlink" href="#run-it" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w">                       </span><span class="c1"># measure the bundled dataset, print a report, write target/eval/report.json</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>a.json<span class="w"> </span>b.json<span class="w">   </span><span class="c1"># what changed between two reports, failing on a drop</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:baseline<span class="w">              </span><span class="c1"># re-measure and rewrite the committed baseline (a deliberate act)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>longmemeval_s.json<span class="w">   </span><span class="c1"># session retrieval on a downloaded LongMemEval file</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--<span class="w"> </span>retrieval_eval<span class="w">     </span><span class="c1"># the everyday check: the bundled dataset against the committed baseline</span>
+</span></code></pre></div>
+<p>The <code>eval*</code> tasks are explicit and are never part of <code>mise run check</code> or <code>mise run ci</code>.
+<code>mise run test -- retrieval_eval</code> is the part that runs in the everyday suite, in about half a minute.</p>
+<p>A typical before-and-after of a change looks like this:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>stash<span class="w">                  </span><span class="c1"># or check out the commit before the change</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>target/eval/report.json<span class="w"> </span>/tmp/before.json
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>git<span class="w"> </span>stash<span class="w"> </span>pop<span class="w">              </span><span class="c1"># or check out the change</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>target/eval/report.json<span class="w"> </span>/tmp/after.json
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>/tmp/before.json<span class="w"> </span>/tmp/after.json
+</span></code></pre></div>
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    D[dataset JSON] --&gt; S[seed over HTTP]
+    V[stand-in vectors] --&gt; S
+    S --&gt; P[(a fresh daemon&lt;br/&gt;embedded palace)]
+    Q[judged queries] --&gt; R[run each query under&lt;br/&gt;each configuration]
+    P --&gt; R
+    R --&gt; M[metrics and latency]
+    M --&gt; J[report JSON]
+    J --&gt; C[compare with a baseline]</code></pre>
+<p>The harness is a client of a real daemon, started in-process in a temporary palace, and it talks to it over HTTP only:
+it writes drawers, supersedes some of them, links entities and attaches vectors through the REST API,
+then searches through <code>POST /api/search</code>.
+So what is measured is what any client of the daemon gets, including the filters, the fusion and the graph expansion,
+and it never reaches into the store.
+The code is under <code>tests/in_process/retrieval_eval/</code>, which keeps it out of the binary and out of every release artifact.</p>
+<h2 id="the-bundled-dataset">The bundled dataset<a class="headerlink" href="#the-bundled-dataset" title="Permanent link">&para;</a></h2>
+<p><code>tests/fixtures/retrieval/core.json</code> is a small household-and-team knowledge base:
+59 drawers in four wings, four of them corrections of an earlier drawer, fifteen entity links, and 39 judged queries.
+It is small on purpose, so it is deterministic and cheap enough for the everyday suite.</p>
+<p>Each query belongs to one category, and a report breaks the numbers down by category:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Queries</th>
+<th>What it asks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lexical</code></td>
+<td>10</td>
+<td>The query uses the document's own words. The easy case that every configuration should get right.</td>
+</tr>
+<tr>
+<td><code>paraphrase</code></td>
+<td>9</td>
+<td>The query shares no meaningful word with its answer, so only vector search can find it.</td>
+</tr>
+<tr>
+<td><code>scoped</code></td>
+<td>5</td>
+<td>The same words occur in several wings, and the query is restricted to one wing or room.</td>
+</tr>
+<tr>
+<td><code>temporal</code></td>
+<td>10</td>
+<td>A drawer and its correction say nearly the same thing, and the query asks for now, for a past instant, or for a window.</td>
+</tr>
+<tr>
+<td><code>graph</code></td>
+<td>5</td>
+<td>The answer shares an entity with the best hit but shares no words with the query.</td>
+</tr>
+</tbody>
+</table>
+<p>Relevance is graded, not binary: 2 marks the answer and 1 marks a drawer that is related to it.
+The dataset names its documents with ids of its own, because the daemon assigns drawer ids,
+and the harness translates the ids a search returns back into the dataset's.</p>
+<p>A file is identified by the SHA-256 of its bytes, recorded in every report.
+Two reports of different datasets are never compared silently.</p>
+<h3 id="time-in-epochs">Time, in epochs<a class="headerlink" href="#time-in-epochs" title="Permanent link">&para;</a></h3>
+<p>No write route accepts a timestamp, so the daemon stamps validity times itself.
+The dataset therefore speaks of epochs.
+Epoch 0 is the state after every document was written, and epoch 1 is the state after the corrections were made.
+The harness writes epoch by epoch, pauses, and records an instant after each.
+A temporal query is asked about those instants:
+<code>as_of_epoch: 0</code> is a point in time, <code>between_epochs: [0, 1]</code> a window, and <code>historical</code> every version.
+No query carries a wall-clock date, so the outcome does not depend on when it ran.</p>
+<h2 id="retrieval-configurations">Retrieval configurations<a class="headerlink" href="#retrieval-configurations" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Ranking</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lexical</code></td>
+<td>BM25</td>
+<td>The baseline: how retrieval worked before vectors.</td>
+</tr>
+<tr>
+<td><code>semantic</code></td>
+<td>vector similarity</td>
+<td>Needs a query vector, which the harness supplies.</td>
+</tr>
+<tr>
+<td><code>hybrid</code></td>
+<td>lexical and vector fused by reciprocal rank</td>
+<td>The <code>auto</code> default once a query can be embedded.</td>
+</tr>
+<tr>
+<td><code>lexical+expand</code></td>
+<td>BM25, then drawers related through the knowledge graph</td>
+<td>Run on the <code>graph</code> queries only.</td>
+</tr>
+</tbody>
+</table>
+<p>Every query is run under the first three, and the <code>graph</code> queries also under the fourth.
+Scope and time are not configurations: they are filters that every configuration applies,
+so they are measured as categories of query, under each ranking.</p>
+<p>Expansion is measured on top of lexical search for a reason.
+It appends related drawers after the direct hits, and a vector search always fills its page,
+so under a vector ranking the related drawers would fall beyond every cut-off, seeded by whatever filled the page.
+Lexical direct hits are only drawers that match, which keeps the comparison meaningful.
+A vector-seeded expansion is not measured here.</p>
+<h2 id="vectors-engine-quality-kept-apart-from-model-quality">Vectors: engine quality, kept apart from model quality<a class="headerlink" href="#vectors-engine-quality-kept-apart-from-model-quality" title="Permanent link">&para;</a></h2>
+<p>An embedding model is a different thing to evaluate from the retrieval engine around it, and mixing them makes a number
+mean nothing: a better model would look like a better engine.
+So the bundled dataset runs with the daemon's embedding provider off, and the harness computes the vectors itself
+and hands them over (<code>PUT /api/drawers/{id}/embedding</code> and <code>query_embedding</code>).</p>
+<p>The stand-in model is a hashed bag of concepts.
+Each word lights one slot of a 768-dimensional unit vector, stop words are dropped,
+and the dataset's <code>concepts</code> table names words that mean the same thing, so "sedan" and "automobile" land together.
+A faint dense component per word keeps unrelated texts from sitting at exactly equal distance,
+because an exact tie would leave the order at a cut-off to chance.
+It is deterministic and needs no download, and it is exactly as strong as the <code>concepts</code> table says:
+a real model is stronger in some ways and weaker in others.
+What it measures is that the index, the filters, the fusion and the graph behave, not that a model understands language.</p>
+<p>A report records where its vectors came from.
+For the bundled dataset that is the fixed stand-in; for a LongMemEval run with a provider it is the provider and its model.</p>
+<h2 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h2>
+<p>All metrics are computed per query over the ranked list of document ids, then averaged.
+<code>k</code> is a cut-off, and a report measures at 1, 3, 5 and 10.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>recall@k</code></td>
+<td>The share of the query's relevant documents among the first <code>k</code> results.</td>
+</tr>
+<tr>
+<td><code>precision@k</code></td>
+<td>The share of the first <code>k</code> slots that are relevant. It divides by <code>k</code>, so returning nothing scores 0.</td>
+</tr>
+<tr>
+<td><code>hit@k</code></td>
+<td>1 when any relevant document is among the first <code>k</code> (LongMemEval's <code>recall_any@k</code>).</td>
+</tr>
+<tr>
+<td><code>all@k</code></td>
+<td>1 when every relevant document is among the first <code>k</code> (LongMemEval's <code>recall_all@k</code>).</td>
+</tr>
+<tr>
+<td><code>ndcg@k</code></td>
+<td>Discounted cumulative gain with gain <code>2^grade - 1</code> and discount <code>log2(rank + 1)</code>, over the best possible ordering.</td>
+</tr>
+<tr>
+<td><code>mrr</code></td>
+<td>The reciprocal of the rank of the first relevant document.</td>
+</tr>
+</tbody>
+</table>
+<p>Precision is low by construction here, since most queries have one or two relevant documents and <code>k</code> is 5 or 10.
+Read it for comparison between configurations, not as a score out of one.</p>
+<p>Equal scores are ordered by the dataset's document id before scoring.
+The daemon orders equal scores by an identifier it generated at random, and a metric must not depend on that.</p>
+<h2 id="latency-and-throughput">Latency and throughput<a class="headerlink" href="#latency-and-throughput" title="Permanent link">&para;</a></h2>
+<p>Each configuration is run once untimed (a warm-up, which is also the pass that is scored)
+and then <code>EVAL_REPETITIONS</code> times (5 by default) over the whole query set, one request at a time.
+The report gives the mean, the 50th, 95th and 99th percentile of the round trip as the client sees it, in milliseconds,
+and the sequential throughput in queries per second.
+It also gives the ingest rate: documents written, with their vectors attached, per second.</p>
+<p>Percentiles are nearest-rank, so each is a value that was actually measured.
+Throughput here is one client at a time: it says nothing about concurrent load.</p>
+<p>Latency depends on the machine, and the build.
+<code>mise run eval</code> uses the debug test profile, which makes SurrealDB several times slower than a release build.
+Compare latency between two runs on the same machine, with the same build, and never between machines.
+For a figure that reflects a release build, run the explicit test with nextest's <code>--cargo-profile release</code>
+(a long first compile).</p>
+<p>To see how latency grows, add filler documents:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">EVAL_SCALE</span><span class="o">=</span><span class="m">2000</span><span class="w"> </span>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span>
+</span></code></pre></div>
+<p>The filler is generated from a fixed seed in invented words that no query uses, so the judgments stay true,
+and the same scale always gives the same corpus.
+It changes what the vector search returns at the tail, so quality at scale is not comparable with the baseline,
+and a comparison says so.</p>
+<h2 id="reports-and-comparing-them">Reports and comparing them<a class="headerlink" href="#reports-and-comparing-them" title="Permanent link">&para;</a></h2>
+<p>A report is JSON and records its configuration with its numbers:
+the MemCastle version, the dataset (name, version, hash, size), where the vectors came from,
+the embedding provider and model the daemon had, the storage backend, the cut-offs, the number of repetitions and the scale.
+Without these a number cannot be interpreted a month later.</p>
+<p><code>mise run eval:compare -- &lt;base&gt; &lt;new&gt; [threshold]</code> lists every metric that changed, worst first, and flags a drop larger
+than the threshold (0.02 unless given).
+It exits with a failure for a drop, for different datasets and for different parameters.
+Configurations present in only one report are listed, never dropped quietly.</p>
+<p>Comparing two retrieval implementations (two commits, or a branch and <code>main</code>) is the same operation:
+run <code>mise run eval</code> on each, and compare the files.
+The harness starts the daemon of the checkout it runs from, so it measures the retrieval code in that tree.</p>
+<h3 id="the-committed-baseline-and-the-floor">The committed baseline and the floor<a class="headerlink" href="#the-committed-baseline-and-the-floor" title="Permanent link">&para;</a></h3>
+<p><code>tests/fixtures/retrieval/baseline.json</code> holds the quality metrics of the bundled dataset, with no timings,
+since those belong to a machine.
+The everyday suite (<code>mise run test</code>) runs the dataset against it,
+and fails when any metric of any configuration falls by more than 0.02.
+That margin is not a target.
+It absorbs an approximate vector index and the arbitrary order of equal scores without hiding a real regression.</p>
+<p>The same test checks that no query returns a drawer outside the wing, room or time it asked for, whatever the ranking,
+and that the dataset still tells the configurations apart (vector search finds paraphrases that lexical search misses,
+and expansion reaches the drawers the graph links).
+That last check guards the measurement itself:
+a benchmark that stopped separating them would make every later comparison empty.</p>
+<p>When a change is meant to move quality, <code>mise run eval:baseline</code> rewrites the baseline and the diff is reviewed like code.
+The baseline is an agreement about what retrieval does today, not a statement about what it should do.</p>
+<h2 id="the-documented-baseline">The documented baseline<a class="headerlink" href="#the-documented-baseline" title="Permanent link">&para;</a></h2>
+<p>The baseline for the bundled dataset (v1), measured on the current retrieval implementation, with the stand-in vectors:</p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Queries</th>
+<th>recall@5</th>
+<th>recall@10</th>
+<th>ndcg@10</th>
+<th>mrr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lexical</code></td>
+<td>39</td>
+<td>0.762</td>
+<td>0.762</td>
+<td>0.801</td>
+<td>0.872</td>
+</tr>
+<tr>
+<td><code>semantic</code></td>
+<td>39</td>
+<td>0.907</td>
+<td>0.928</td>
+<td>0.945</td>
+<td>0.970</td>
+</tr>
+<tr>
+<td><code>hybrid</code></td>
+<td>39</td>
+<td>0.907</td>
+<td>0.928</td>
+<td>0.942</td>
+<td>0.987</td>
+</tr>
+</tbody>
+</table>
+<p>By category, <code>recall@5</code> and <code>mrr</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th><code>lexical</code></th>
+<th><code>semantic</code></th>
+<th><code>hybrid</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lexical</code> (10)</td>
+<td>1.000 / 1.000</td>
+<td>1.000 / 1.000</td>
+<td>1.000 / 1.000</td>
+</tr>
+<tr>
+<td><code>paraphrase</code> (9)</td>
+<td>0.315 / 0.444</td>
+<td>0.944 / 0.870</td>
+<td>0.944 / 0.944</td>
+</tr>
+<tr>
+<td><code>scoped</code> (5)</td>
+<td>1.000 / 1.000</td>
+<td>1.000 / 1.000</td>
+<td>1.000 / 1.000</td>
+</tr>
+<tr>
+<td><code>temporal</code> (10)</td>
+<td>1.000 / 1.000</td>
+<td>1.000 / 1.000</td>
+<td>1.000 / 1.000</td>
+</tr>
+<tr>
+<td><code>graph</code> (5)</td>
+<td>0.373 / 1.000</td>
+<td>0.373 / 1.000</td>
+<td>0.373 / 1.000</td>
+</tr>
+</tbody>
+</table>
+<p>On the five <code>graph</code> queries, adding expansion to lexical search takes <code>recall@10</code> from 0.373 to 1.000.</p>
+<p>The lexical row is the baseline that the richer retrievals are measured against.
+The <code>paraphrase</code> row is where it is weakest, by design, and where vectors help.
+Scoped and temporal queries are answered correctly by every ranking: those are properties of the filters,
+and the dataset keeps them there as a floor.
+Do not read the 1.000 values as "perfect retrieval".
+They mean the cases in this small dataset are all handled, and a larger or harder dataset would find the next problem.</p>
+<p>Timings are deliberately not in this page.
+Run <code>mise run eval</code> on your machine.</p>
+<h2 id="what-the-numbers-do-and-do-not-establish">What the numbers do and do not establish<a class="headerlink" href="#what-the-numbers-do-and-do-not-establish" title="Permanent link">&para;</a></h2>
+<p>They establish:</p>
+<ul>
+<li>That, on this dataset and with these vectors, one retrieval configuration ranks the judged documents higher than another.</li>
+<li>That a change did or did not move those rankings, which is what makes a regression visible.</li>
+<li>That scope and time filters hold under every ranking.</li>
+<li>Roughly how latency and ingest rate compare between two runs on one machine.</li>
+</ul>
+<p>They do not establish:</p>
+<ul>
+<li>How well MemCastle retrieves your memories, or any real conversation.
+  The dataset is 59 short, clean drawers written for this purpose, and a real palace is larger, noisier and longer.</li>
+<li>How good any embedding model is.
+  The vectors are a stand-in, on purpose.</li>
+<li>That the engine is better than another memory system.
+  No other system was run on this dataset, so nothing here supports a claim of equivalence with MemPalace or anything else,
+  and a number from another benchmark's paper is not comparable with one from this page.</li>
+<li>Anything about answer quality.
+  The harness measures whether the right drawers come back, not what an agent does with them.</li>
+<li>Statistical significance.
+  With 39 queries a difference of a few points is within what one different query would move.
+  Treat small differences as noise and look at categories before totals.</li>
+<li>Production latency or concurrent throughput.</li>
+</ul>
+<p>Do not optimize for a single number at the expense of the retrieval contract.
+A change that raises <code>recall@5</code> by returning something other than the stored, verbatim drawer, or by ignoring a scope,
+is not an improvement, and the invariants check above exists to catch the second.</p>
+<h2 id="extending-it">Extending it<a class="headerlink" href="#extending-it" title="Permanent link">&para;</a></h2>
+<p>When a retrieval capability lands, the suite is updated in the same change:</p>
+<ol>
+<li>Add a configuration to <code>RUNS</code> in <code>tests/in_process/retrieval_eval/dataset.rs</code>, and make the harness request it.</li>
+<li>Add queries to <code>core.json</code> that the new capability should win and the old ones lose, with judgments written first.</li>
+<li>Run <code>mise run eval</code> and look at the categories, then <code>mise run eval:baseline</code> and review the diff.</li>
+<li>Update the baseline table on this page and the list of configurations.</li>
+</ol>
+<p>Keep queries free of words that match many documents equally (<code>the</code>, <code>on</code>, <code>for</code>) unless that is the point:
+equal scores in the lexical half of a hybrid ranking are ordered by a random identifier,
+and they make a number change from run to run.
+Run <code>mise run eval</code> several times and compare the reports before committing a new baseline; they should be identical.</p>
+<p>The dataset is versioned by its <code>version</code> field and its hash.
+Changing it invalidates the baseline, which the comparison reports instead of comparing.</p>
+<h2 id="longmemeval">LongMemEval<a class="headerlink" href="#longmemeval" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/xiaowu0162/LongMemEval">LongMemEval</a> is a third-party benchmark of long-term chat memory.
+<code>mise run eval:longmemeval -- &lt;file&gt;</code> reads its file format and measures retrieval of the session that holds the answer.</p>
+<p>The data is not bundled and never will be.
+It is large, and its licence and where to obtain it are the benchmark's own.
+Download it from the project, check its terms for your use, and pass the path.
+A tiny synthetic file in the same format (<code>tests/fixtures/retrieval/longmemeval-synthetic.json</code>)
+is what the everyday suite uses to prove the path works, and it says nothing about the real data.</p>
+<p>The mapping is:</p>
+<ul>
+<li>Each question has its own haystack of chat sessions.
+  Each session becomes one drawer (its turns, in order, as <code>role: content</code> lines), in a wing named for the question,
+  so a question searches only its own haystack.</li>
+<li>The question is the query, scoped to its wing, and the sessions in <code>answer_session_ids</code> are the relevant documents.</li>
+<li>Abstention questions, which have no answer session, have no retrieval metric and are skipped.
+  The count is in the report.</li>
+<li><code>hit@k</code> is LongMemEval's <code>recall_any@k</code> and <code>all@k</code> its <code>recall_all@k</code>, at session level.</li>
+</ul>
+<p>Lexical search always runs.
+To add the semantic and hybrid configurations, name an OpenAI-compatible embeddings endpoint:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">EVAL_EMBEDDINGS_URL</span><span class="o">=</span>http://127.0.0.1:11434/v1<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">EVAL_EMBEDDINGS_MODEL</span><span class="o">=</span>nomic-embed-text<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>longmemeval_s.json
+</span></code></pre></div>
+<p>The daemon then embeds every session and every question with that provider, and the run waits for the embedding job to finish.
+The report records the provider and model, and the cost of embedding is the provider's:
+for the full dataset it is many thousands of sessions.
+<code>EVAL_LONGMEMEVAL_LIMIT=20</code> runs only the first twenty questions, which is the way to try it out.
+An API key goes in <code>EVAL_EMBEDDINGS_API_KEY</code>.</p>
+<p>This is a session retrieval measurement, not a LongMemEval score.
+It does not answer the questions, so it says nothing about end-to-end accuracy and cannot be set beside published numbers.</p>
+<h2 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Used by</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EVAL_REPETITIONS</code></td>
+<td><code>eval</code>, <code>eval:longmemeval</code></td>
+<td>Timed passes per configuration (5, and 1 for LongMemEval). <code>0</code> skips latency.</td>
+</tr>
+<tr>
+<td><code>EVAL_SCALE</code></td>
+<td><code>eval</code></td>
+<td>Filler documents added to the bundled dataset (0).</td>
+</tr>
+<tr>
+<td><code>EVAL_OUT</code></td>
+<td><code>eval</code>, <code>eval:longmemeval</code></td>
+<td>Where the report is written (<code>target/eval/report.json</code>).</td>
+</tr>
+<tr>
+<td><code>EVAL_DATASET</code></td>
+<td><code>eval</code></td>
+<td>Another dataset file in the same format.</td>
+</tr>
+<tr>
+<td><code>EVAL_THRESHOLD</code></td>
+<td><code>eval:compare</code></td>
+<td>The largest tolerated drop in any metric (0.02).</td>
+</tr>
+<tr>
+<td><code>EVAL_EMBEDDINGS_URL</code>, <code>EVAL_EMBEDDINGS_MODEL</code>, <code>EVAL_EMBEDDINGS_API_KEY</code></td>
+<td><code>eval:longmemeval</code></td>
+<td>A provider, for the vector configurations.</td>
+</tr>
+<tr>
+<td><code>EVAL_LONGMEMEVAL_LIMIT</code></td>
+<td><code>eval:longmemeval</code></td>
+<td>Run only the first N questions.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="not-goals">Not goals<a class="headerlink" href="#not-goals" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Making benchmark performance a release gate.
+  The floor in the everyday suite protects against regressing what the dataset covers; it is not a quality bar for a release.</li>
+<li>Embedding a large dataset in the binary or in a release artifact.</li>
+<li>Claiming equivalence with another memory system without a directly comparable evaluation.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

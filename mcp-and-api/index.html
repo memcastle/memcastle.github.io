@@ -1,0 +1,3284 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/mcp-and-api/">
+      
+      
+        <link rel="prev" href="../cli/">
+      
+      
+        <link rel="next" href="../architecture/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>MCP tools and REST API - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MCP tools and REST API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP tools
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCP tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tool-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Tool annotations
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint-payload" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Checkpoint payload
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        REST API
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="REST API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-dashboards-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The dashboard's files
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-event-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The event stream
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#searching" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Searching
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        History
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wings-rooms-and-drawers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wings, rooms and drawers
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Authentication
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Installing sources
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-sources-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Signing sources in
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#miners" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Miners
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Triggers
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-knowledge-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The knowledge graph
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitting-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Submitting jobs
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Errors
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP tools
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCP tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tool-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Tool annotations
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint-payload" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Checkpoint payload
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        REST API
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="REST API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-dashboards-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The dashboard's files
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-event-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The event stream
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#searching" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Searching
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        History
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wings-rooms-and-drawers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wings, rooms and drawers
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Authentication
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Installing sources
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-sources-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Signing sources in
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#miners" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Miners
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Triggers
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-knowledge-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The knowledge graph
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submitting-jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Submitting jobs
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Errors
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/mcp-and-api.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="mcp-tools-and-rest-api">MCP tools and REST API<a class="headerlink" href="#mcp-tools-and-rest-api" title="Permanent link">&para;</a></h1>
+<p>The daemon serves two interfaces on the same listener (<code>127.0.0.1:8420</code> by default, see
+<a href="../configuration/#the-listener-address-and-port">Configuration</a>):</p>
+<ul>
+<li><strong>MCP</strong> at <code>/mcp</code>, over streamable HTTP, for agents.
+  <a href="../mcp-clients/">Connect an MCP client</a> shows how to point a client at it.</li>
+<li><strong>REST</strong> under <code>/api</code>, which is what the CLI uses, what the <a href="../web/">web UI</a> calls, and what a script can call.</li>
+</ul>
+<p>Both are thin layers over the same application services, so they accept the same arguments,
+enforce the same <a href="../memory-modes/">memory modes</a> and fail with the same error body.</p>
+<h2 id="mcp-tools">MCP tools<a class="headerlink" href="#mcp-tools" title="Permanent link">&para;</a></h2>
+<p>Every tool returns pretty-printed JSON as text.
+A failure comes back as an MCP error result carrying the <a href="#errors">error body</a> below.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Arguments</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle_set_mode</code></td>
+<td><code>mode</code></td>
+<td>Choose this session's <a href="../memory-modes/">memory mode</a>.</td>
+</tr>
+<tr>
+<td><code>memcastle_status</code></td>
+<td>none</td>
+<td>Daemon health: version, uptime, pid, address, palace, datastore and migration state, counts.</td>
+</tr>
+<tr>
+<td><code>memcastle_search</code></td>
+<td><code>query</code>, <code>limit?</code>, <code>wing?</code>, <code>room?</code>, <code>ranking?</code>, <code>tags?</code>, <code>source_kind?</code>, <code>as_of?</code>, <code>from?</code>, <code>until?</code>, <code>include_historical?</code>, <code>expand?</code></td>
+<td>Search drawer content: lexical, semantic or hybrid, see <a href="#searching">Searching</a>.</td>
+</tr>
+<tr>
+<td><code>memcastle_recall</code></td>
+<td>the same, without <code>room</code></td>
+<td>Verbatim recall of matching content.</td>
+</tr>
+<tr>
+<td><code>memcastle_history</code></td>
+<td><code>drawer_id</code></td>
+<td>How one piece of knowledge evolved: every version of a drawer's supersession chain, oldest first, see <a href="#history">History</a>.</td>
+</tr>
+<tr>
+<td><code>memcastle_fact_history</code></td>
+<td><code>relationship_id</code>, <code>as_of?</code></td>
+<td>An assertion and its linked confirmations, conflicts or corrections, with provenance and reasons. Read-only.</td>
+</tr>
+<tr>
+<td><code>memcastle_wake_up</code></td>
+<td><code>agent_identity</code>, <code>wing?</code>, <code>max_items?</code>, <code>max_bytes?</code></td>
+<td>Session-start context for an agent.</td>
+</tr>
+<tr>
+<td><code>memcastle_diary_write</code></td>
+<td><code>agent_identity</code>, <code>wing</code>, <code>content</code></td>
+<td>Write a diary entry.</td>
+</tr>
+<tr>
+<td><code>memcastle_diary_read</code></td>
+<td><code>agent_identity</code>, <code>wing</code>, <code>limit?</code></td>
+<td>Read an agent's newest diary entries.</td>
+</tr>
+<tr>
+<td><code>memcastle_checkpoint</code></td>
+<td><code>payload</code>, <code>emergency?</code></td>
+<td>Submit a durable checkpoint job.</td>
+</tr>
+<tr>
+<td><code>memcastle_mine</code></td>
+<td><code>path</code> or <code>source</code>, <code>locator?</code>, <code>options?</code>, <code>full?</code>, <code>wing?</code></td>
+<td>Submit a job that mines a directory, or a <a href="../mining-sources/">source</a> such as <code>pi</code>.</td>
+</tr>
+<tr>
+<td><code>memcastle_miner_list</code></td>
+<td>none</td>
+<td>The configured <a href="../configuration/#miners">miners</a>: name, source, state, saved options and last run. Read-only.</td>
+</tr>
+<tr>
+<td><code>memcastle_miner_get</code></td>
+<td><code>name</code></td>
+<td>One configured miner, and why it cannot run when it cannot. Read-only.</td>
+</tr>
+<tr>
+<td><code>memcastle_trigger_list</code></td>
+<td>none</td>
+<td>The configured <a href="../triggers/">triggers</a>: miner, type, whether the user enabled them, whether they work, last fired and last error. Read-only.</td>
+</tr>
+<tr>
+<td><code>memcastle_trigger_get</code></td>
+<td><code>name</code></td>
+<td>One configured trigger, and what it still needs when it cannot be enabled yet. Read-only.</td>
+</tr>
+<tr>
+<td><code>memcastle_audit</code></td>
+<td><code>wing?</code></td>
+<td>Submit a read-only consistency audit job.</td>
+</tr>
+<tr>
+<td><code>memcastle_repair</code></td>
+<td><code>dry_run?</code>, <code>based_on_job?</code></td>
+<td>Submit a repair job; a dry run unless <code>dry_run</code> is <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>memcastle_job_list</code></td>
+<td><code>status?</code></td>
+<td>List jobs, newest first.</td>
+</tr>
+<tr>
+<td><code>memcastle_job_get</code></td>
+<td><code>id</code></td>
+<td>Show one job.</td>
+</tr>
+<tr>
+<td><code>memcastle_job_pause</code></td>
+<td><code>id</code></td>
+<td>Ask a running job to pause at its next checkpoint.</td>
+</tr>
+<tr>
+<td><code>memcastle_job_resume</code></td>
+<td><code>id</code></td>
+<td>Resume a paused job.</td>
+</tr>
+<tr>
+<td><code>memcastle_job_cancel</code></td>
+<td><code>id</code></td>
+<td>Cancel a queued, paused or running job.</td>
+</tr>
+<tr>
+<td><code>memcastle_job_retry</code></td>
+<td><code>id</code></td>
+<td>Retry a failed job.</td>
+</tr>
+</tbody>
+</table>
+<p>Defaults are the same as the CLI's: <code>limit</code> is 10 for <code>memcastle_search</code> and <code>memcastle_recall</code>, 20 for
+<code>memcastle_diary_read</code>, and every read limit is capped at 200.
+A <code>limit</code> of <code>0</code> means the default, on the CLI and REST as well.
+<code>memcastle_wake_up</code> defaults to 10 items and 8192 bytes.
+<code>memcastle_mine</code> (and a <code>mine</code> job over <code>POST /api/jobs</code>) needs an absolute <code>path</code>,
+because the daemon does not share your shell's working directory.
+Give exactly one of <code>path</code> and <code>source</code>: a source is mined incrementally from where its last run stopped,
+and <code>full</code> reads it again from the beginning.
+<code>options</code> is an object of strings for the source (<code>{"since": "2026-09", "dir": "/work/app"}</code>);
+each source declares the keys it accepts in <code>GET /api/sources</code>, and any other key is refused with a <code>400</code> that lists them.
+Mining, checkpoint, audit and repair return the submitted job immediately;
+poll it with <code>memcastle_job_get</code> to see its progress and result.</p>
+<h3 id="tool-annotations">Tool annotations<a class="headerlink" href="#tool-annotations" title="Permanent link">&para;</a></h3>
+<p>Every tool advertises a <code>title</code> and all four <a href="https://modelcontextprotocol.io/specification/2025-06-18/schema#toolannotations">MCP behaviour hints</a>
+as explicit booleans, so a host can warn before it runs one.
+The protocol's defaults assume the worst (destructive, open-world, not idempotent),
+and some directories reject a tool whose hint is missing.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th><code>readOnlyHint</code></th>
+<th><code>destructiveHint</code></th>
+<th><code>idempotentHint</code></th>
+<th><code>openWorldHint</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle_status</code>, <code>memcastle_history</code>, <code>memcastle_fact_history</code>, <code>memcastle_wake_up</code>, <code>memcastle_diary_read</code>, <code>memcastle_job_list</code>, <code>memcastle_job_get</code>, <code>memcastle_miner_list</code>, <code>memcastle_miner_get</code>, <code>memcastle_trigger_list</code>, <code>memcastle_trigger_get</code></td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>memcastle_search</code>, <code>memcastle_recall</code></td>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>memcastle_set_mode</code></td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>memcastle_mine</code></td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>memcastle_checkpoint</code>, <code>memcastle_repair</code></td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>memcastle_audit</code>, <code>memcastle_diary_write</code></td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>memcastle_job_pause</code>, <code>memcastle_job_resume</code>, <code>memcastle_job_retry</code></td>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>memcastle_job_cancel</code></td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p>A few of these are judgement calls:</p>
+<ul>
+<li>Search and recall are open-world because a configured embedding provider (a command or an HTTP endpoint)
+  receives the query text.</li>
+<li><code>memcastle_mine</code> is open-world because it reads the local filesystem and an installed source may be granted the network.
+  It is idempotent because mining skips unchanged documents.</li>
+<li><code>memcastle_checkpoint</code> is destructive because a fact can supersede or invalidate an earlier one.
+  <code>memcastle_repair</code> is destructive because <code>dry_run=false</code> removes orphan drawers, though it defaults to a dry run.</li>
+<li>The job-control tools are idempotent because repeating one is refused and leaves the job as it was.
+  Cancelling drops the work, so it is destructive.</li>
+<li><code>memcastle_audit</code> and <code>memcastle_diary_write</code> are not idempotent because each call adds a job record or a drawer.</li>
+</ul>
+<p>A test pins this table, and fails for a tool that has no row.</p>
+<p>The instructions an MCP client receives at <code>initialize</code> are generated from this list of tools,
+and a test compares the two, so what a client is told cannot drift from what the daemon offers.</p>
+<h3 id="checkpoint-payload">Checkpoint payload<a class="headerlink" href="#checkpoint-payload" title="Permanent link">&para;</a></h3>
+<p><code>memcastle_checkpoint</code> and <code>memcastle checkpoint</code> take an already-classified batch of memories.
+MemCastle does not decide what is worth remembering; the calling integration does, and this is the result:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">      </span><span class="nt">"destination"</span><span class="p">:</span><span class="w"> </span><span class="s2">"preference"</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">"wing"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Always run the formatter before committing."</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"workflow"</span><span class="p">],</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"manual"</span><span class="p">,</span><span class="w"> </span><span class="nt">"uri"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"agent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"opencode"</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="nt">"fact"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>destination</code></td>
+<td>One of <code>preference</code>, <code>project</code>, <code>diary</code> or <code>general</code>.</td>
+</tr>
+<tr>
+<td><code>wing</code></td>
+<td>Optional wing override. Without it, the item is filed under <code>preferences</code>, <code>projects</code>, <code>diary</code> or <code>general</code>.</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>The text to store, verbatim.</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>Free-form labels stored with the drawer. Required, may be empty.</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>Where the memory came from: <code>kind</code> is <code>file</code> or <code>manual</code> (the MCP schema allows only these; REST and the CLI also accept <code>transcript</code> and <code>note</code>, and store any other value as <code>other</code>), <code>uri</code> and <code>agent</code> are optional.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>Optional name for the drawer, unique within its room, so it can be addressed as <code>wing/room/name</code>. A name held by another drawer fails the item with <code>memcastle::palace::drawer_name_taken</code>; an unusable one is refused at submission.</td>
+</tr>
+<tr>
+<td><code>fact</code></td>
+<td>Optional knowledge-graph change made alongside the drawer: <code>{"op": "add" \| "supersede" \| "invalidate" \| "link", ...}</code>; a <code>confidence</code> outside 0 to 1 is refused at submission.</td>
+</tr>
+</tbody>
+</table>
+<p><code>supersede</code> and <code>invalidate</code> accept an optional <code>reason</code> and record the checkpoint drawer as the correction's evidence.
+<code>link</code> takes <code>relationship_id</code>, <code>other_id</code>, <code>kind</code> (<code>confirms</code>, <code>contradicts</code> or <code>refines</code>) and a required nonblank <code>reason</code>.
+It relates two existing assertions without closing either; use <code>supersede</code> to replace one atomically.</p>
+<p>Over MCP, <code>payload</code> is a JSON object, and the tool's input schema describes its shape.
+A JSON-encoded string of that object is accepted too, because some clients serialise it before sending.
+A string that is not valid JSON is refused as <code>memcastle::input::invalid</code>, blamed on <code>payload</code>.</p>
+<p>Every item produces a drawer.
+A payload with no items, or an item whose <code>content</code> is blank, is refused at submission as <code>memcastle::input::invalid</code>,
+blamed on <code>payload</code>, so a job never completes having stored nothing.
+A job that is interrupted resumes where it stopped and never stores an item twice.
+An unnamed item whose content is identical to a drawer already valid in its room is not stored again;
+it still counts as done, and the job's result reports <code>{"items": n, "duplicates": d}</code>.
+A fact-bearing item always keeps its own drawer, even if the content matches, so its assertion or correction has evidence.
+A named item is always stored, and a likely copy (a typo, a case variant) is stored and linked, never merged:
+see <a href="../deduplication/">Deduplication</a>.</p>
+<h2 id="rest-api">REST API<a class="headerlink" href="#rest-api" title="Permanent link">&para;</a></h2>
+<p>Requests and responses are JSON.
+The routes that read or write memory (including <code>GET /api/jobs*</code>) accept the optional <code>X-MemCastle-Mode</code> header,
+and <code>/api/status</code> accepts it only to report the mode
+(<code>full</code>, <code>read_only</code> or <code>disabled</code>; <code>full</code> when absent), and an unrecognized value is a <code>400</code>, never silently treated
+as <code>full</code>.
+<code>/api/health</code>, job control (pause, resume, cancel, force-cancel, retry) and <code>/api/shutdown</code> are never gated and ignore it.
+<code>GET /api/events</code> is a read: it accepts the header and refuses a <code>disabled</code> session.</p>
+<p>A mode the daemon refuses is a <code>403</code> with the code <code>memcastle::mode::forbidden</code>.
+A request without a valid token, on a daemon with <a href="../authentication/">authentication</a> enabled,
+is a <code>401</code> with the code <code>memcastle::auth::unauthorized</code> and a <code>WWW-Authenticate: Bearer</code> header.
+Other statuses are <code>400</code> for invalid input, a transition the job's state does not allow, or a database admin endpoint
+that would be unsafe (<code>memcastle::db::unsafe_bind</code>), <code>404</code> for an unknown job, wing, room or drawer,
+<code>409</code> for a job recorded as running that has no worker (restart the daemon), a job that kept changing state
+under the request (run it again), a database admin endpoint that is already
+open or cannot bind its address (<code>memcastle::db::bind_failed</code>), a drawer name already held by other content,
+a wing or room delete while a job that writes to the palace is pending, or superseding a drawer that was already
+superseded (<code>memcastle::palace::drawer_superseded</code>), <code>502</code> when the embedding or extraction provider fails
+(<code>memcastle::embed::failed</code>, <code>memcastle::extract::failed</code>), and <code>500</code> for a server failure.
+A search that needs a vector it cannot get (<code>memcastle::search::semantic_unavailable</code>) and a request that needs an embedding
+provider when none is configured (<code>memcastle::embed::not_configured</code>, <code>memcastle::extract::not_configured</code>) are <code>400</code>s.</p>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Purpose</th>
+<th>Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /api/health</code></td>
+<td>Liveness: <code>{"status": "ok"}</code>. Touches nothing else.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/status</code></td>
+<td>The full status report, also used by <code>memcastle status</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/events</code></td>
+<td>A stream of change notices (server-sent events), so a client can read again instead of polling: see <a href="#the-event-stream">The event stream</a>. A read, so a <code>disabled</code> session gets a <code>403</code>. There is no MCP tool.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/config</code></td>
+<td>The configuration in effect, for the <a href="../web/">dashboard's</a> settings page: listener, palace, datastore, whether authentication and the dashboard are on, where the runtime assets come from, scheduler limits, provider names and models, mining limits. It carries no token, key, provider URL or command line; a remote datastore location may be a URL with userinfo removed. This is daemon information like <code>status</code>, so no memory mode gates it. There is no MCP tool.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/search</code></td>
+<td>Search drawers.</td>
+<td>query string: <code>q</code> (or <code>query</code>), <code>limit</code>, <code>wing</code>, <code>room</code>, <code>ranking</code>, <code>tags</code>, <code>source_kind</code>, <code>as_of</code>, <code>from</code>, <code>until</code>, <code>include_historical</code>, <code>expand</code></td>
+</tr>
+<tr>
+<td><code>POST /api/search</code></td>
+<td>The same search as a JSON <a href="#searching"><code>SearchQuery</code></a>, the only way to send a <code>query_embedding</code>.</td>
+<td>JSON body</td>
+</tr>
+<tr>
+<td><code>GET /api/recall</code></td>
+<td>Recall drawers.</td>
+<td>as <code>GET /api/search</code>, and <code>room</code> is ignored</td>
+</tr>
+<tr>
+<td><code>POST /api/recall</code></td>
+<td>The JSON form of recall.</td>
+<td>JSON body</td>
+</tr>
+<tr>
+<td><code>GET /api/wake-up</code></td>
+<td>Session-start context.</td>
+<td><code>agent_identity</code>, <code>wing</code>, <code>max_items</code>, <code>max_bytes</code></td>
+</tr>
+<tr>
+<td><code>GET /api/diary</code></td>
+<td>Read diary entries.</td>
+<td><code>agent_identity</code>, <code>wing</code>, <code>limit</code></td>
+</tr>
+<tr>
+<td><code>POST /api/diary</code></td>
+<td>Write a diary entry.</td>
+<td>JSON body: <code>agent_identity</code>, <code>wing</code>, <code>content</code>, <code>requested_by?</code></td>
+</tr>
+<tr>
+<td><code>POST /api/notes</code></td>
+<td>Capture a note: an unnamed drawer of source kind <code>note</code>. <code>201</code> when stored, <code>200</code> when an identical note was already in the room. There is no MCP tool: agents write memory through <code>memcastle_checkpoint</code> and the diary.</td>
+<td>JSON body: <code>wing</code>, <code>room</code>, <code>content</code>, <code>uri?</code>, <code>requested_by?</code></td>
+</tr>
+<tr>
+<td><code>GET /api/sources</code></td>
+<td>The mining adapters this daemon can run and the sources that have been mined: <code>{adapters, sources}</code>. A read.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/miners</code></td>
+<td>The configured <a href="../configuration/#miners">miners</a>: <code>{miners, config_file?, error?}</code>. <code>error</code> says why the configuration file cannot be read, and <code>miners</code> is then the last good copy. A read.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/miners/{name}</code></td>
+<td>One miner with its state (<code>ready</code>, <code>disabled</code>, <code>unavailable</code> and why), its credential as a kind and an availability, and the source it has mined. A read.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>PUT /api/miners/{name}</code></td>
+<td>Create the miner, or change the fields the body names: <code>{miner, created, changed, identity_changed}</code>. A change that may broaden its options is a <code>409</code> unless <code>allow_broaden</code> is set.</td>
+<td>JSON body, all optional once the miner exists: <code>source</code>, <code>enabled</code>, <code>locator</code>, <code>wing</code>, <code>credential</code>, <code>options</code>, <code>unset_options</code>, <code>unset</code>, <code>allow_broaden</code></td>
+</tr>
+<tr>
+<td><code>POST /api/miners/{name}/enable</code></td>
+<td>Switch a miner on, after checking that it can run. Idempotent.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/miners/{name}/disable</code></td>
+<td>Switch a miner off. Idempotent.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/miners/{name}</code></td>
+<td>Remove a miner's definition; what it mined stays: <code>{"removed": name}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/miners/reload</code></td>
+<td>Read the configuration file again now: <code>{miners, added, removed, changed, enabled, disabled, broadened}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/miners/{name}/run</code></td>
+<td>Submit the miner's mining job, from the cursor its source already has. <code>options</code> replaces/adds keys for this run only; possibly broader changes require <code>allow_broaden</code>. Answers the job. A write, so a read-only session is refused.</td>
+<td>optional JSON body: <code>full</code>, <code>requested_by</code>, <code>options</code> (string map), <code>allow_broaden</code></td>
+</tr>
+<tr>
+<td><code>GET /api/triggers</code></td>
+<td>The configured <a href="../triggers/">triggers</a>: <code>{triggers, webhook, config_file?, error?}</code>. <code>webhook</code> is the listener's state (<code>enabled</code>, <code>bind</code>, <code>port</code>, <code>allow_remote</code>, <code>listening?</code>). A read.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/triggers/{name}</code></td>
+<td>One trigger: <code>status</code> (<code>disabled</code>, <code>active</code>, <code>failing</code>, <code>unavailable</code>), <code>reason</code>, <code>setup</code> (what enabling still needs), <code>running</code>, <code>endpoint</code> (a listening webhook's URL), counters, <code>next_due</code>, <code>last_error</code>. A read.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>PUT /api/triggers/{name}</code></td>
+<td>Create the trigger <strong>disabled</strong>, or change the fields the body names: <code>{trigger, created, changed}</code>. Enabling needs every prerequisite, else <code>409</code>.</td>
+<td>JSON body, all optional once the trigger exists: <code>miner</code>, <code>type</code>, <code>enabled</code>, <code>credential</code>, <code>settings</code>, <code>unset_settings</code>, <code>unset</code></td>
+</tr>
+<tr>
+<td><code>POST /api/triggers/{name}/enable</code></td>
+<td>Switch a trigger on, after checking that everything it needs is in place. Idempotent.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/triggers/{name}/disable</code></td>
+<td>Switch a trigger off. Idempotent.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/triggers/{name}</code></td>
+<td>Remove a trigger and what the daemon remembered about it: <code>{"removed": name}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/triggers/reload</code></td>
+<td>Read the configuration file again now: <code>{triggers, added, removed, changed}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/triggers/{name}/fire</code></td>
+<td>Ask for a run through the trigger now: <code>{outcome: "queued" \| "coalesced", job}</code>. A write, and refused (<code>409</code>) while the trigger is disabled.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/jobs</code></td>
+<td>List jobs, newest first. Without <code>kind</code> and <code>limit</code> it answers every job; with either it answers a bounded page.</td>
+<td>query string: <code>status</code>, <code>kind</code> (the job's <code>type</code>, such as <code>mine</code> or <code>audit</code>), <code>limit</code> (default 50, at most 200)</td>
+</tr>
+<tr>
+<td><code>POST /api/jobs</code></td>
+<td>Submit a job.</td>
+<td>JSON body, see <a href="#submitting-jobs">below</a></td>
+</tr>
+<tr>
+<td><code>GET /api/jobs/{id}</code></td>
+<td>Show one job.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/jobs/{id}/pause</code></td>
+<td>Request a pause.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/jobs/{id}/resume</code></td>
+<td>Resume a paused job.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/jobs/{id}/cancel</code></td>
+<td>Cancel a job.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/jobs/{id}/force-cancel</code></td>
+<td>Best-effort abort of a locally owned running mining job. Returns <code>{"status":"force_cancelled"}</code> only after the worker has stopped and cancellation was persisted; refuses remote ownership or an invalid state. REST only.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/jobs/{id}/retry</code></td>
+<td>Retry a failed job.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/shutdown</code></td>
+<td>Shut the daemon down gracefully.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/wings</code></td>
+<td>List wings with their room and drawer counts.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/wings</code></td>
+<td>Create a wing, or find it: <code>201</code> when created, <code>200</code> when it existed.</td>
+<td>JSON body: <code>name</code>, <code>description?</code></td>
+</tr>
+<tr>
+<td><code>GET /api/wings/{wing}</code></td>
+<td>One wing with its totals and rooms.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/wings/{wing}</code></td>
+<td>Delete the wing, its rooms and their drawers: <code>{wings, rooms, drawers}</code> removed.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/wings/{wing}/rooms</code></td>
+<td>List a wing's rooms with their drawer counts.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/wings/{wing}/rooms</code></td>
+<td>Create a room (and its wing), or find it.</td>
+<td>JSON body: <code>name</code>, <code>description?</code></td>
+</tr>
+<tr>
+<td><code>GET /api/wings/{wing}/rooms/{room}</code></td>
+<td>One room.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/wings/{wing}/rooms/{room}</code></td>
+<td>Delete the room and its drawers.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/wings/{wing}/rooms/{room}/drawers</code></td>
+<td>List the newest drawers, with a preview of each.</td>
+<td>query string: <code>limit</code> (default 50, at most 200)</td>
+</tr>
+<tr>
+<td><code>POST /api/wings/{wing}/rooms/{room}/drawers</code></td>
+<td>Write a drawer, creating its wing and room if needed: <code>201</code> when stored, <code>200</code> with <code>created: false</code> when an unnamed drawer with identical content was already in the room.</td>
+<td>JSON body: <code>content</code>, <code>name?</code>, <code>requested_by?</code></td>
+</tr>
+<tr>
+<td><code>GET /api/wings/{wing}/rooms/{room}/drawers/{drawer}</code></td>
+<td>One drawer in full.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/wings/{wing}/rooms/{room}/drawers/{drawer}</code></td>
+<td>Delete one drawer.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/drawers/{id}/supersede</code></td>
+<td>End a drawer's validity now, with a replacement when <code>content</code> is given: <code>{superseded, replacement}</code>.</td>
+<td>JSON body: <code>content?</code>, <code>tags?</code>, <code>requested_by?</code></td>
+</tr>
+<tr>
+<td><code>PUT /api/drawers/{id}/embedding</code></td>
+<td>Attach a vector you computed to a drawer.</td>
+<td>JSON body: <code>embedding</code> (768 numbers)</td>
+</tr>
+<tr>
+<td><code>GET /api/drawers/{id}/duplicates</code></td>
+<td>The drawers this one was recorded as a likely duplicate of, or that resemble it, with the evidence: <code>{drawer, similar}</code>. See <a href="../deduplication/">Deduplication</a>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/drawers/{id}/history</code></td>
+<td>How the knowledge a drawer belongs to evolved: <code>{drawer, versions}</code>, every version of its supersession chain oldest first, from any version of it. See <a href="#history">History</a>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/drawers/{id}/mentions</code></td>
+<td>Record that a drawer mentions an entity, for graph expansion: <code>201</code> when linked, <code>200</code> when it already was. The name converges on an entity it is a variant of.</td>
+<td>JSON body: <code>name</code>, <code>kind</code></td>
+</tr>
+<tr>
+<td><code>GET /api/entities</code></td>
+<td>List entities of the <a href="#the-knowledge-graph">knowledge graph</a>, by name.</td>
+<td>query string: <code>name</code> (contains, any case), <code>kind</code>, <code>limit</code> (default 50, at most 200)</td>
+</tr>
+<tr>
+<td><code>GET /api/entities/{id}/relationships</code></td>
+<td>The relationships touching an entity, with provenance, validity and lifecycle explanation.</td>
+<td>query string: <code>include_expired</code> or <code>as_of</code> (mutually exclusive)</td>
+</tr>
+<tr>
+<td><code>GET /api/relationships/{id}/history</code></td>
+<td>A fact and the facts linked to it, including historical assertions, decisions and evidence.</td>
+<td>query string: <code>as_of?</code> (RFC 3339 or date)</td>
+</tr>
+<tr>
+<td><code>GET /api/entities/{id}/mentions</code></td>
+<td>The drawers that mention an entity, with the provenance of each link and the name as that drawer spelled it.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/entities/{id}/candidates</code></td>
+<td>The entities this one resembles without having been equated with, or that resemble it.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/entities/{id}/aliases</code></td>
+<td>Record another spelling of an entity, so later sightings converge on it.</td>
+<td>JSON body: <code>alias</code></td>
+</tr>
+<tr>
+<td><code>GET /api/graph</code></td>
+<td>A piece of the <a href="#the-knowledge-graph">knowledge graph</a> in one answer, for drawing: <code>{nodes, edges, truncated}</code>. With <code>entity</code> it is that entity's neighbourhood (open facts, either direction); without it, the first entities by name and the facts among them. A read; there is no MCP tool.</td>
+<td>query string: <code>entity</code>, <code>depth</code> (1 to 3, default 1), <code>limit</code> (entities, default 50, at most 200)</td>
+</tr>
+<tr>
+<td><code>POST /api/auth/token</code></td>
+<td>Generate a token, replacing any previous one: <code>{token, algorithm, version, created_at}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/auth/token</code></td>
+<td>Revoke the generated token: <code>{"revoked": true}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/source-packages</code></td>
+<td>Install a <a href="../writing-sources/">source package</a>: the body is the <code>.tar.gz</code> itself. Answers <code>{source, replaced}</code>.</td>
+<td>query string: <code>consent</code> (the digest of the permissions agreed to), <code>enable</code></td>
+</tr>
+<tr>
+<td><code>GET /api/source-packages/{name}</code></td>
+<td>One source, built in or installed: capabilities, state, permissions.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/source-packages/{name}/enable</code></td>
+<td>Allow an installed source to be mined. Idempotent.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/source-packages/{name}/disable</code></td>
+<td>Stop an installed source from being mined. Idempotent.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/source-packages/{name}</code></td>
+<td>Remove an installed source, its files and its stored credentials: <code>{"removed": name}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/source-packages/{name}/auth</code></td>
+<td>Start signing an installed source in with OAuth, and say what the user must do: <code>{flow, kind, user_code?, verification_uri?, url?, expires_in}</code>. Replaces a sign-in already waiting for the same source.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/source-packages/{name}/auth/{flow}/wait</code></td>
+<td>Wait, up to <code>timeout</code> seconds, for the sign-in <code>flow</code> to finish: <code>{"status": "pending"}</code> until it does, then <code>{"status": "signed_in", source, signed_in, expires_at, scopes, stored_in}</code>. A sign-in that was declined or expired is an error answer.</td>
+<td>query string: <code>timeout</code> (seconds, at most 30)</td>
+</tr>
+<tr>
+<td><code>GET /api/source-registry/search</code></td>
+<td>Search the configured registries: <code>{entries, warnings}</code>, each entry with the version an install would take and what is installed.</td>
+<td>query string: <code>q</code>, <code>registry</code></td>
+</tr>
+<tr>
+<td><code>GET /api/source-registry/sources/{name}</code></td>
+<td>Download and verify a source and say what installing it would do, installing nothing: <code>{name, version, description, origin, registry, signed_by, archive_digest, permissions, consent_digest, replaces}</code>.</td>
+<td>query string: <code>version</code>, <code>registry</code></td>
+</tr>
+<tr>
+<td><code>POST /api/source-registry/install</code></td>
+<td>Install a source by name from a registry. Answers <code>{source, replaced}</code>; a name the release ships is refused (<code>memcastle::source::bundled</code>).</td>
+<td>JSON body: <code>name</code>, <code>version?</code>, <code>registry?</code>, <code>consent?</code>, <code>enable?</code></td>
+</tr>
+<tr>
+<td><code>GET /api/source-registry/updates</code></td>
+<td>The installed sources that have a newer version: <code>{updates, warnings}</code>.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/source-registry/update</code></td>
+<td>Update one source, or every source with an update. Answers a list of <code>{name, from, to, status}</code>, where <code>status</code> is <code>updated</code>, <code>current</code>, <code>needs_consent</code> (with <code>permissions</code> and <code>digest</code>) or <code>failed</code> (with <code>message</code>).</td>
+<td>JSON body: <code>name?</code>, <code>consent?</code></td>
+</tr>
+<tr>
+<td><code>GET /api/db</code></td>
+<td>Whether the <a href="../database-access/">database admin endpoint</a> is listening, and where.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/db</code></td>
+<td>Open the database admin endpoint, or report it when it is already open.</td>
+<td>JSON body, all optional: <code>bind</code>, <code>port</code>, <code>allow_remote</code>, <code>allowed_origins</code></td>
+</tr>
+<tr>
+<td><code>DELETE /api/db</code></td>
+<td>Close the database admin endpoint. Succeeds when it was not open.</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<p><code>requested_by</code> records which channel a write came through; it defaults to <code>http</code> (the CLI sends <code>cli</code>, MCP uses <code>mcp</code>).
+The status report keeps <code>/api/health</code> cheap: an unhealthy datastore is reported inside <code>/api/status</code> with a <code>200</code>,
+so a supervisor restarting on <code>/api/health</code> does not restart a daemon that would recover on its own.</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8420/api/health
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">'http://127.0.0.1:8420/api/search?q=formatter&amp;limit=5'</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:8420/api/jobs?status<span class="o">=</span>running
+</span></code></pre></div>
+<h3 id="the-dashboards-files">The dashboard's files<a class="headerlink" href="#the-dashboards-files" title="Permanent link">&para;</a></h3>
+<p>With <a href="../configuration/#web-ui"><code>web.enable</code></a>, the same listener also serves the dashboard's static files under
+<code>/ui</code> (<code>GET</code> and <code>HEAD</code> only).
+They are not part of the API and carry no data; see <a href="../web/">Web UI</a> and <a href="../authentication/#what-is-protected">Authentication</a>
+for why they are the one thing besides the liveness probe that needs no token.</p>
+<h3 id="the-event-stream">The event stream<a class="headerlink" href="#the-event-stream" title="Permanent link">&para;</a></h3>
+<p><code>GET /api/events</code> is a <a href="https://html.spec.whatwg.org/multipage/server-sent-events.html">server-sent events</a> stream
+on the main listener, for the <a href="../web/">dashboard</a> and any other client that would rather be told than poll.
+It is an ordinary route: it needs the <code>Authorization: Bearer</code> token when <a href="../authentication/">authentication</a> is on,
+and a browser's <code>EventSource</code>, which cannot send one, is not the way to read it (use <code>fetch</code>, as the dashboard does).
+It accepts <code>X-MemCastle-Mode</code>: a <code>disabled</code> session is refused with a <code>403</code>, and a <code>read_only</code> one gets the same stream.</p>
+<p>Each frame is named by its kind and carries one JSON object:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>event: job
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>data: {"kind":"job","action":"updated","id":"0b2e…","job_kind":"mine","status":"running"}
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Frame</th>
+<th>Sent when</th>
+<th>Fields beyond <code>kind</code> and <code>action</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td>first, once the stream is live</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>job</code></td>
+<td>a job is queued, claimed, makes progress, changes state or finishes</td>
+<td><code>id</code>, <code>job_kind</code>, <code>status</code></td>
+</tr>
+<tr>
+<td><code>drawer</code></td>
+<td>a drawer is written, superseded or deleted; a mining run sends one without an <code>id</code> per document</td>
+<td><code>id</code>, except for a batch</td>
+</tr>
+<tr>
+<td><code>wing</code>, <code>room</code></td>
+<td>one is created or deleted</td>
+<td><code>id</code></td>
+</tr>
+<tr>
+<td><code>entity</code></td>
+<td>an entity or its aliases changed; an extraction sweep sends one without an <code>id</code> per pass</td>
+<td><code>id</code>, except for a batch</td>
+</tr>
+<tr>
+<td><code>trigger</code></td>
+<td>a trigger fired, joined a waiting run, failed, or was defined, changed or removed</td>
+<td><code>id</code> (the trigger's name), <code>status</code>: <code>queued</code>, <code>coalesced</code>, <code>failed</code> or <code>changed</code></td>
+</tr>
+<tr>
+<td><code>resync</code></td>
+<td>this connection fell behind and missed events</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<p><code>action</code> is <code>created</code>, <code>updated</code> or <code>deleted</code>.
+An event names what changed and never what it holds: no title, text, job input, path or progress line.
+Read the change through the ordinary route (<code>GET /api/jobs/{id}</code>, <code>GET /api/wings</code>, ...), which applies the memory mode.
+After a <code>resync</code>, and after any reconnect, read everything you show, since events were missed while the stream was down.
+A comment line is sent every 15 seconds so a proxy does not close a quiet stream (behind nginx, turn response buffering
+off for this route).
+The stream ends when the daemon shuts down.</p>
+<p>Events come from this daemon only.
+With several daemons on one remote palace, another daemon's writes are not announced here, so keep a manual refresh.</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-N<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$MEMCASTLE_AUTH_TOKEN</span><span class="s2">"</span><span class="w"> </span>http://127.0.0.1:8420/api/events
+</span></code></pre></div>
+<h3 id="searching">Searching<a class="headerlink" href="#searching" title="Permanent link">&para;</a></h3>
+<p><code>memcastle_search</code>, <code>memcastle_recall</code>, <code>GET /api/search</code> and <code>GET /api/recall</code> take the same options.
+Only the query is required, so a plain <code>?q=word</code> means what it always did.
+<code>as_of</code>, <code>from</code> with <code>until</code>, and <code>include_historical</code> each say which memory to look at, so they cannot be combined.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ranking</code></td>
+<td><code>auto</code> (the default), <code>lexical</code>, <code>semantic</code> or <code>hybrid</code>.</td>
+</tr>
+<tr>
+<td><code>wing</code>, <code>room</code></td>
+<td>Restrict to a wing or room by name. <code>recall</code> ignores <code>room</code>.</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>Drawers carrying every one of these tags: a list over MCP, comma-separated in a query string (<code>tags=a,b</code>).</td>
+</tr>
+<tr>
+<td><code>source_kind</code></td>
+<td><code>file</code>, <code>manual</code>, <code>transcript</code>, <code>note</code> or <code>other</code>.</td>
+</tr>
+<tr>
+<td><code>as_of</code></td>
+<td>An RFC 3339 instant (<code>2026-01-31T12:00:00Z</code>) or a date (<code>2026-01-31</code>, midnight UTC): search the memory that was valid then.</td>
+</tr>
+<tr>
+<td><code>from</code>, <code>until</code></td>
+<td>An interval, in the same forms: search the memory that was valid at some moment of <code>[from, until)</code>. Both are required together.</td>
+</tr>
+<tr>
+<td><code>include_historical</code></td>
+<td>Also return memory that has been superseded.</td>
+</tr>
+<tr>
+<td><code>expand</code></td>
+<td>Append drawers related to the hits through the knowledge graph.</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>At most this many hits, 10 by default and 200 at most.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ranking.</strong>
+<code>lexical</code> is BM25 over the words, stemmed and without synonyms, matching every word first and any of them only when
+nothing matched.
+<code>semantic</code> ranks by vector similarity, and <code>hybrid</code> fuses the two by reciprocal rank.
+<code>auto</code> is hybrid when the query can be embedded and lexical otherwise: a palace with no
+<a href="../configuration/#embeddings">embedding provider</a> keeps searching exactly as before, and a provider that is down
+degrades <code>auto</code> to lexical with a warning in the daemon log.
+An explicit <code>semantic</code> or <code>hybrid</code> that cannot get a vector fails with <code>memcastle::search::semantic_unavailable</code>
+instead of answering lexically.</p>
+<p><strong>Time.</strong>
+Time here is <em>validity time</em>: <code>valid_from</code> and <code>valid_to</code> say when a piece of knowledge was true,
+and <code>created_at</code> says when MemCastle recorded it.
+Only validity is searched, so a memory discovered long after the period it describes is found by asking about that period.
+A drawer is valid from its <code>valid_from</code> until, but not including, its <code>valid_to</code>, and with no <code>valid_to</code> it stays valid.
+Four questions are asked with the same options on every interface:</p>
+<table>
+<thead>
+<tr>
+<th>You want</th>
+<th>Ask with</th>
+<th>Finds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What is true now?</td>
+<td>nothing (the default)</td>
+<td>What is valid at this moment.</td>
+</tr>
+<tr>
+<td>What was true at date X?</td>
+<td><code>as_of=X</code></td>
+<td>What was valid at the instant X.</td>
+</tr>
+<tr>
+<td>What was true during X to Y?</td>
+<td><code>from=X</code> and <code>until=Y</code></td>
+<td>Everything valid at some moment of the window <code>[X, Y)</code>, so a belief held only part of it is included.</td>
+</tr>
+<tr>
+<td>Every version ever recorded?</td>
+<td><code>include_historical</code></td>
+<td>Current and superseded alike, with no time filter.</td>
+</tr>
+</tbody>
+</table>
+<p>An instant is an RFC 3339 timestamp or a <code>YYYY-MM-DD</code> date, read as midnight UTC at the start of that day:
+<code>as_of=2026-01-01</code> is the very start of the year, and <code>from=2026-01-01&amp;until=2026-02-01</code> is exactly January.
+Both ends of an interval are required, <code>from</code> must be before <code>until</code>, and a request that breaks either rule fails with
+<code>memcastle::input::invalid</code> naming the option.</p>
+<p>The end of validity, and the end of a window, are exclusive.
+A drawer superseded at an instant and its replacement are never both valid at that instant and never both absent,
+and a window only touching a drawer's validity does not overlap it:
+a drawer closed exactly at <code>from</code> is not found, and neither is one opened exactly at <code>until</code>.
+A single instant is the window <code>[t, t + 1ns)</code>, so <code>as_of</code> and an interval are one rule and cannot disagree at a boundary.</p>
+<p>The same rule applies to every ranking (lexical, semantic and hybrid) and to <code>expand</code>:
+related drawers must be valid in the requested time too, and a <code>relates_to</code> hop is followed only when the relationship held
+then.
+For example, to learn what the database was at the start of the year and how that changed during it:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span>search<span class="w"> </span><span class="s2">"database we use"</span><span class="w"> </span>--as-of<span class="w"> </span><span class="m">2026</span>-01-01
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span>search<span class="w"> </span><span class="s2">"database we use"</span><span class="w"> </span>--from<span class="w"> </span><span class="m">2026</span>-01-01<span class="w"> </span>--until<span class="w"> </span><span class="m">2027</span>-01-01
+</span></code></pre></div>
+<p>The first returns the one belief that was true on 1 January.
+The second returns every belief held at some point in 2026, which is the way to notice that one changed.
+Each hit carries its <code>valid_from</code>, its <code>valid_to</code> (absent while it is still true) and its <code>id</code>, so a hit can be followed
+to its <a href="#history">history</a>.</p>
+<p><strong>Expansion.</strong>
+With <code>expand</code>, drawers that share an entity with a hit (or sit one currently valid <code>relates_to</code> hop away) follow the direct
+hits, best first, up to <code>limit</code> more.
+Each carries a <code>graph</code> signal and <code>via</code>, the entities that connect it.
+Expansion never reorders or replaces a direct hit.
+Link drawers to entities with <code>POST /api/drawers/{id}/mentions</code> or <code>memcastle drawer mention</code>,
+or let the <a href="#the-knowledge-graph"><code>extract</code> job</a> do it for mined content.</p>
+<p><strong>Results.</strong>
+Every hit is the stored drawer, verbatim, plus these fields:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"valid_from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"valid_to"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0328</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">"signals"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"lexical"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.2</span><span class="p">,</span><span class="w"> </span><span class="nt">"semantic"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.91</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">"via"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"alice"</span><span class="p">]</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>score</code> normally means what the ranking says (BM25, cosine similarity or reciprocal-rank fusion),
+and is comparable only within one response.
+<code>signals</code> shows which legs matched and how strongly, and is absent when none did; <code>via</code> appears only on expanded hits.
+With source preferences configured, <code>score</code> is normalized within the candidate page and includes bounded authority and
+freshness adjustments; the original ranking legs remain in <code>signals</code>.
+<code>signals.preference</code> gives the effective <code>level</code>, the mining <code>source</code> when present, and the matched metadata <code>criterion</code>
+when one applied; the drawer's <code>source.origin</code> retains the original document metadata and revision.
+Preferences never bypass <code>source_kind</code>, wing, room or temporal filters.
+Equal scores order by drawer id, so a query ranks identically every time.
+A hit never carries the embedding vector.</p>
+<p><strong>Your own vectors.</strong>
+<code>POST /api/search</code> takes the request as JSON, so it can carry a <code>query_embedding</code>.
+Its text is <code>text</code> (or <code>query</code>, like everywhere else), and the scope is a nested <code>filter</code> rather than the flat
+<code>wing</code>, <code>room</code> and <code>tags</code> of the <code>GET</code> form:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"ranking"</span><span class="p">:</span><span class="w"> </span><span class="s2">"semantic"</span><span class="p">,</span><span class="w"> </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">"filter"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"wing"</span><span class="p">:</span><span class="w"> </span><span class="s2">"work"</span><span class="p">,</span><span class="w"> </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"style"</span><span class="p">],</span><span class="w"> </span><span class="nt">"temporal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"current"</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">"query_embedding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="w"> </span><span class="s2">"… 768 numbers"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div>
+<p><code>temporal</code> is <code>"current"</code>, <code>"all"</code>, <code>{"as_of": "2026-01-31T12:00:00Z"}</code> or
+<code>{"between": {"from": "2026-01-01T00:00:00Z", "until": "2026-02-01T00:00:00Z"}}</code>.
+An interval whose <code>from</code> is not before its <code>until</code> is refused with <code>memcastle::input::invalid</code>.
+Attach a document vector with <code>PUT /api/drawers/{id}/embedding</code>, whose body is <code>{"embedding": [...]}</code>.
+Both need exactly 768 numbers: the dimension is part of the palace's schema.</p>
+<p><strong>Correcting a drawer.</strong>
+<code>POST /api/drawers/{id}/supersede</code> closes the drawer and, when the body has <code>content</code>, files a replacement in the same room
+from the same instant.
+The replacement takes over the drawer's name (the old one stays reachable by id) and its tags unless <code>tags</code> says otherwise.
+Without <code>content</code> the drawer is only invalidated.
+The old content is never rewritten.
+The two drawers are linked: the old one gains <code>superseded_by</code> and the replacement gains <code>supersedes</code>,
+set together in the same transaction.
+Superseding is a REST and CLI operation with no MCP tool, which is why an agent cannot rewrite what is true,
+only read how it changed.
+These routes take a drawer id, which every search hit carries.</p>
+<h3 id="history">History<a class="headerlink" href="#history" title="Permanent link">&para;</a></h3>
+<p><code>memcastle_history</code>, <code>GET /api/drawers/{id}/history</code> and <code>memcastle drawer history</code> answer <em>how did this knowledge evolve?</em>
+Given the id of any version of a piece of knowledge, current or superseded, they return the whole chain,
+oldest first, by following the <code>supersedes</code> and <code>superseded_by</code> links in both directions:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"drawer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…the id you asked about…"</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">"versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"we run the database on postgres"</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">      </span><span class="nt">"valid_from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-01-01T00:00:00Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"valid_to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-06-01T00:00:00Z"</span><span class="p">,</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">"provenance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"requested_by"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cli"</span><span class="p">,</span><span class="w"> </span><span class="nt">"job_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"manual"</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nt">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"superseded_by"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">"we run the database on surrealdb"</span><span class="p">,</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">      </span><span class="nt">"valid_from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-06-01T00:00:00Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"valid_to"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"supersedes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Each version is the drawer verbatim, so its identity, validity period, provenance and content are all kept.
+A version's <code>valid_to</code> is the next version's <code>valid_from</code>, so the periods tile the timeline.
+The last version has no <code>valid_to</code> while it is still true, and it has one when the knowledge was later invalidated
+without a replacement.
+A drawer nobody corrected is a history of one version, and an unknown id is <code>404</code> with <code>memcastle::palace::drawer_not_found</code>.
+History is a read, so a read-only session may use it and a disabled one may not.</p>
+<p>Neither <code>created_at</code> nor <code>updated_at</code> orders the chain: those are when MemCastle recorded each version,
+which can be long after the period it describes, and the order is the order of the links.
+Drawers that were superseded before MemCastle recorded the links are paired when the daemon first starts on the new version,
+when exactly one successor qualifies; an unpaired one reads as a history of one version.</p>
+<h3 id="wings-rooms-and-drawers">Wings, rooms and drawers<a class="headerlink" href="#wings-rooms-and-drawers" title="Permanent link">&para;</a></h3>
+<p><code>{wing}</code> and <code>{room}</code> are a name or a UUID, and <code>{drawer}</code> is a name or a UUID within its room.
+A drawer name may contain <code>/</code>, so <code>{drawer}</code> takes the rest of the path.
+Creating something that exists is not an error: the answer is <code>200</code> instead of <code>201</code>, and its body says <code>"created": false</code>.
+The answers of <code>wing</code> and <code>room</code> carry their counts, computed when asked, and a listing never returns drawer content.
+Reads are gated as reads and creates and deletes as writes, see <a href="../memory-modes/">Memory modes</a>.</p>
+<p>There is deliberately no MCP tool for these routes, as for token generation and the database endpoint:
+deleting a wing is a human decision, and an agent that can file memories can already do so through
+<code>memcastle_checkpoint</code> and <code>memcastle_diary_write</code>.
+The decision is recorded in <a href="../adr/018-palace-hierarchy-management/">ADR-018</a>.</p>
+<h3 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h3>
+<p>Authentication is optional and off by default.
+When the daemon has it enabled, every request, REST and <code>/mcp</code> alike, must carry <code>Authorization: Bearer &lt;token&gt;</code>.
+The one exception is <code>GET /api/health</code>, which stays open for liveness probes.</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$MEMCASTLE_AUTH_TOKEN</span><span class="s2">"</span><span class="w"> </span>http://127.0.0.1:8420/api/status
+</span></code></pre></div>
+<p>The two <code>/api/auth/token</code> routes are open while authentication is disabled, which is how the first token is made,
+and need a valid token once it is enabled.
+The token in the response to <code>POST /api/auth/token</code> is the only time it is ever shown, and the response is sent with
+<code>Cache-Control: no-store</code>.
+Neither route has an MCP tool: MCP exposes memory capabilities and never credential management.
+The status report's <code>auth_enabled</code> says whether the daemon requires a token, and never includes one.</p>
+<h3 id="installing-sources">Installing sources<a class="headerlink" href="#installing-sources" title="Permanent link">&para;</a></h3>
+<p>The <code>/api/source-packages</code> routes install, inspect, enable, disable and remove <a href="../writing-sources/">mining sources</a>:
+WebAssembly components that run in the daemon, in a sandbox, with only the permissions their manifest lists.
+They are guarded by <a href="../authentication/">authentication</a> like every other route, accept a body up to 64 MiB,
+and have no MCP tool: an agent must not be able to install code or widen its own reach
+(<a href="../adr/026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a>).
+Installing, enabling, disabling, removing and updating are not gated by a memory mode, which guards access to memory;
+listing and showing (<code>GET /api/sources</code> and <code>GET .../{name}</code>) are reads, so a <code>disabled</code> session is refused them.</p>
+<p>The <code>/api/source-registry</code> routes find sources in the registries configured under <code>mining.registries</code>
+(the official one by default), and install or update them by name (<a href="../publishing-sources/">Publishing and installing sources</a>).
+They are the only routes through which the daemon reaches out for code, so they are held to the same rules:
+guarded by authentication, no MCP tool, and the same consent to the permissions of exactly the package that was fetched
+(<a href="../adr/033-source-distribution/">ADR-033</a>).
+Searching and previewing are reads of an index and an archive, and nothing is installed until <code>install</code> or <code>update</code>.
+A package that fails verification is <code>502</code> with <code>memcastle::source::integrity</code>, an unreadable registry is <code>502</code> with
+<code>memcastle::source::registry_unavailable</code>, a name or version nobody offers is <code>404</code> with
+<code>memcastle::source::not_in_registry</code>, and one the trust policy refuses is <code>400</code> with <code>memcastle::source::untrusted</code>.
+A package that asks for permissions is refused with <code>memcastle::source::consent_required</code> (a <code>400</code>) unless <code>consent</code>
+carries the digest of exactly those permissions, which the refusal's <code>help</code> names.
+A built-in source cannot be disabled or removed (<code>memcastle::source::builtin</code>, <code>400</code>).
+A bundled source is installed from the start, so it can be enabled and disabled like any other, and without consent,
+but it cannot be installed from a registry, updated or removed (<code>memcastle::source::bundled</code>, <code>400</code>);
+an unknown name is a <code>404</code>
+(<code>memcastle::source::not_found</code>); enabling a source that is <code>unavailable</code>, or mining one that is not enabled, is a <code>409</code>
+(<code>memcastle::source::not_enabled</code>).
+<code>POST /api/jobs</code> refuses a <code>mine</code> for such a source the same way, at submission.</p>
+<h3 id="signing-sources-in">Signing sources in<a class="headerlink" href="#signing-sources-in" title="Permanent link">&para;</a></h3>
+<p>A source that cannot be reached with a static token declares an OAuth sign-in in its manifest (<a href="../writing-sources/#signing-in-with-oauth">Writing a mining source</a>),
+and two routes under <code>/api/source-packages/{name}</code> run it (<a href="../adr/039-oauth-credentials-for-mining-sources/">ADR-039</a>).
+<code>POST .../auth</code> starts the flow, which the daemon runs and finishes on its own, and answers what the user must do:
+for the device flow (<code>kind: "device"</code>) a <code>user_code</code> to type at <code>verification_uri</code>,
+with a <code>url</code> that has the code filled in when the provider offers one;
+for the browser flow (<code>kind: "browser"</code>) a <code>url</code> to open, whose redirect lands on a one-shot listener the daemon opens on
+the loopback address of its own machine, so that flow needs a browser on the daemon's machine.
+<code>POST .../auth/{flow}/wait</code> is a long poll a client repeats until it is told the outcome.
+Both answers carry no token, and are sent with <code>Cache-Control: no-store</code>.</p>
+<p>They are guarded by <a href="../authentication/">authentication</a> like every other route, and have no MCP tool:
+starting a sign-in lets installed code act on someone's account, so an agent must not be able to begin one.
+A source that does not declare a sign-in (a built-in one included) is <code>400</code> with <code>memcastle::credential::oauth_unsupported</code>,
+a sign-in that was declined, expired or refused is <code>502</code> with <code>memcastle::credential::flow_failed</code>,
+and a <code>wait</code> for a sign-in that was replaced, forgotten or already reported is the same code.
+A run of a source that is not signed in fails with <code>memcastle::credential::required</code>,
+which a <code>409</code> reports when a miner is asked to run,
+and a credential that could not be renewed just now with <code>memcastle::credential::refresh_failed</code>, a <code>502</code>.
+<code>GET /api/sources</code> and <code>GET /api/source-packages/{name}</code> add <code>auth</code> to a source that signs in:
+<code>{signed_in, expires_at?, scopes, provider, flows}</code>.</p>
+<h3 id="miners">Miners<a class="headerlink" href="#miners" title="Permanent link">&para;</a></h3>
+<p>The <code>/api/miners</code> routes manage the <code>[[miners]]</code> section of the daemon's configuration file
+(<a href="../configuration/#miners">Configuration</a>, <a href="../adr/037-persistent-miner-configuration/">ADR-037</a>).
+Reading is offered to MCP (<code>memcastle_miner_list</code>, <code>memcastle_miner_get</code>), so an agent can say what is configured.
+Changing a miner is REST and CLI only, like installing a source: no MCP tool adds, changes, enables, disables, removes,
+reloads or runs one, so an agent cannot widen what the daemon mines.
+Every route is guarded by <a href="../authentication/">authentication</a>.
+Listing and showing are reads, so a <code>disabled</code> session is refused them (<code>403</code>); <code>run</code> is a write, because it files
+drawers; creating, changing, enabling, disabling, removing and reloading are not gated by a memory mode,
+which guards access to memory and not what the daemon is configured to do.</p>
+<p>A definition that does not validate, or an enabled miner whose source is not usable or whose credential does not resolve,
+is <code>400</code> with <code>memcastle::miner::invalid</code> and nothing is written.
+An unknown miner is <code>404</code> (<code>memcastle::miner::not_found</code>).
+A <code>409</code> is a change to options that may broaden what the miner reads (<code>memcastle::miner::scope_broadened</code>), a disabled miner
+(<code>memcastle::miner::disabled</code>), a run of one that cannot run as configured (<code>memcastle::miner::not_runnable</code>),
+and a configuration file that cannot be read or was edited under the request (<code>memcastle::miner::config_file</code>).
+A credential is shown as <code>{kind, available}</code>: the variable's name or the file's path is not given back.
+<code>kind</code> is <code>env</code>, <code>file</code> or <code>oauth</code>, and for <code>oauth</code> <code>available</code> says whether the source is signed in.</p>
+<h3 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h3>
+<p>The <code>/api/triggers</code> routes manage the <code>[[triggers]]</code> section of the daemon's configuration file
+(<a href="../triggers/">Triggers</a>, <a href="../adr/043-source-triggers/">ADR-043</a>).
+Reading is offered to MCP (<code>memcastle_trigger_list</code>, <code>memcastle_trigger_get</code>).
+Defining, changing, enabling, disabling, removing, reloading and firing a trigger are REST and CLI only: no MCP tool does
+any of them, so an agent cannot decide what the daemon does unattended.
+Every route is guarded by <a href="../authentication/">authentication</a>.
+Listing and showing are reads and <code>fire</code> is a write; the rest are not gated by a memory mode.</p>
+<p>A definition that does not validate is <code>400</code> with <code>memcastle::trigger::invalid</code> and nothing is written.
+A trigger that is enabled, or asked to be, while something it needs is missing is <code>409</code> with
+<code>memcastle::trigger::not_activatable</code>, whose message says what to set up; nothing is written and nothing is started.
+Firing a disabled trigger is <code>409</code> with <code>memcastle::trigger::disabled</code>, and an unknown one is <code>404</code>
+(<code>memcastle::trigger::not_found</code>).
+The trigger's shared secret is shown as <code>{kind, available}</code>, never its name, its path or its value.</p>
+<p>A webhook <strong>delivery is not one of these routes</strong>.
+It is <code>POST /hooks/{trigger}</code> on the separate <a href="../triggers/#the-webhook-listener">webhook listener</a>, which is off by
+default, loopback by default and authenticates each delivery with its trigger's own secret, so every route of this API
+stays behind the daemon's token.
+It answers <code>202</code> with <code>{status: "queued" | "coalesced" | "duplicate", job}</code>, <code>401</code> (empty) for anything it will not
+accept, <code>413</code> for a body over <code>webhook.max_body_bytes</code> and <code>429</code> with <code>Retry-After</code> while <code>webhook.max_concurrent</code>
+deliveries are in flight.</p>
+<h3 id="the-database-admin-endpoint">The database admin endpoint<a class="headerlink" href="#the-database-admin-endpoint" title="Permanent link">&para;</a></h3>
+<p>The three <code>/api/db</code> routes open and close a separate listener that speaks SurrealDB's own protocol, so SurrealDB Studio
+can inspect the live database.
+They are guarded by <a href="../authentication/">authentication</a> like every other route, and have no MCP tool:
+an agent must not be able to open a database console onto the palace.
+The listener itself is not part of this API: it is not MemCastle's REST or MCP, and its protocol is SurrealDB's.
+The routes answer with <code>{running, addr, url, namespace, database, user, remote, auth_required, started_at, already_running}</code>.
+<code>already_running</code> is <code>true</code> only on a <code>POST</code> that found the endpoint already open and asked for nothing different:
+that answer is a <code>200</code> with the open endpoint's details.
+A <code>POST</code> asking for another <code>bind</code>, <code>port</code> or origin than the open endpoint has is a <code>409</code> with
+<code>memcastle::db::already_running</code>; a <code>port</code> of <code>0</code> means "any free port" and so never conflicts.
+<a href="../database-access/">Database access</a> describes the workflow and the security model.</p>
+<h3 id="the-knowledge-graph">The knowledge graph<a class="headerlink" href="#the-knowledge-graph" title="Permanent link">&para;</a></h3>
+<p>Entities and the relationships between them are derived from drawers, never the other way round.
+Three things write them: a checkpoint's <code>fact</code>, <code>POST /api/drawers/{id}/mentions</code>,
+and the <code>extract</code> job, which reads every mined drawer and note it has not read and adds what the text names.
+<code>extract</code> is queued after a mining job completes, after a note is written and at startup, and <code>memcastle extract</code> or
+<code>POST /api/jobs {"type": "extract", "wing": "docs"}</code> runs one by hand.
+It needs an <a href="../configuration/#extraction"><code>[extraction]</code> provider</a> and is a <code>400</code> with
+<code>memcastle::extract::not_configured</code> without one; it is a write, so a read-only session is refused.
+A provider that fails is a <code>502</code> with <code>memcastle::extract::failed</code> on the job, and the drawers it did not reach are read
+next time.
+There is no MCP tool for it, as there is none for embedding.</p>
+<p>The <code>GET /api/entities</code> routes read the graph.
+A relationship says what it relates and when it holds, and where an extractor derived it, what from:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"predicate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"works_on"</span><span class="p">,</span><span class="w"> </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">"valid_from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-07-14T14:27:12Z"</span><span class="p">,</span><span class="w"> </span><span class="nt">"valid_to"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">"provenance"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="nt">"drawer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"extractor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"heuristic"</span><span class="p">,</span><span class="w"> </span><span class="nt">"job_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"extracted_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="nt">"origin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"source_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"directory"</span><span class="p">,</span><span class="w"> </span><span class="nt">"document"</span><span class="p">:</span><span class="w"> </span><span class="s2">"team.md"</span><span class="p">,</span><span class="w"> </span><span class="nt">"chunk"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"revision"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">}</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>provenance</code> is absent on a fact somebody asserted directly.
+For a directly asserted checkpoint fact, <code>assertion</code> names its checkpoint drawer instead.
+A fact stops being current (<code>valid_to</code> is set) when the drawer it was read from is superseded, and <code>include_expired</code>
+returns that history too.
+Each graph assertion also has <code>lifecycle: {state, links, preferred?, basis?}</code>.
+States are <code>current</code>, <code>conflicting</code>, <code>superseded</code>, <code>invalidated</code> and <code>historical</code>.
+Each link has <code>from</code>, <code>to</code>, <code>kind</code>, <code>origin</code>, <code>reason</code>, <code>at</code> and optional <code>evidence</code> (a drawer ID).
+<code>preferred</code> is a deterministic ranking hint among conflicting assertions, never a declaration that the others are false.
+The policy ranks direct assertions first, then confidence, validity start and fact ID; both sides remain visible.
+The same metadata appears in <code>/api/graph</code>, the entity relationships route and <code>memcastle fact history</code>.
+An <code>as_of</code> request computes the state at that instant and cannot be combined with <code>include_expired</code> on an entity listing.
+The exact fact-history route accepts the ID of any related assertion, even one no longer current.
+Drawer search/recall still returns canonical evidence and uses the existing validity filters.
+A conflict does not delete or hide its source drawer.
+Extracted facts use a closed vocabulary: kinds <code>person</code>, <code>organization</code>, <code>project</code>, <code>tool</code>, <code>place</code>, <code>concept</code> and <code>other</code>;
+predicates <code>works_on</code>, <code>member_of</code>, <code>depends_on</code>, <code>uses</code>, <code>owns</code>, <code>part_of</code>, <code>located_in</code> and <code>related_to</code>.
+An unknown entity is a <code>404</code> with <code>memcastle::graph::entity_not_found</code>.</p>
+<p>An entity carries the <code>aliases</code> it has been seen under, and a name that differs only in spelling from a known entity
+converges on it instead of adding a second one.
+Each <code>mentions</code> entry has an <code>observation</code>, the name as the drawer wrote it, the rule that tied it to the entity and a
+confidence, so resolving two spellings to one entity loses neither.
+Names that could not be settled stay separate entities, listed by <code>GET /api/entities/{id}/candidates</code>.
+There is no MCP tool for any of it.
+<a href="../deduplication/">Deduplication</a> has the rules.
+The reasoning is in <a href="../adr/024-entity-extraction-as-an-enrich-job/">ADR-024</a> and
+<a href="../adr/046-fact-lifecycle-and-contradictions/">the lifecycle decision</a>.</p>
+<h3 id="submitting-jobs">Submitting jobs<a class="headerlink" href="#submitting-jobs" title="Permanent link">&para;</a></h3>
+<p><code>POST /api/jobs</code> takes a body tagged by <code>type</code>:</p>
+<table>
+<thead>
+<tr>
+<th><code>type</code></th>
+<th>Other fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mine</code></td>
+<td><code>path</code> (absolute directory) or <code>source</code> (a <a href="../mining-sources/">source</a> by name) with <code>locator?</code>, then <code>options?</code> (an object of strings), <code>wing?</code> and <code>full?</code></td>
+</tr>
+<tr>
+<td><code>checkpoint</code></td>
+<td><code>payload</code> (see <a href="#checkpoint-payload">above</a>), <code>emergency?</code></td>
+</tr>
+<tr>
+<td><code>audit</code></td>
+<td><code>wing?</code></td>
+</tr>
+<tr>
+<td><code>embed</code></td>
+<td><code>wing?</code>; fills the embeddings that are missing, and needs an <code>[embeddings]</code> provider (REST and CLI only, no MCP tool)</td>
+</tr>
+<tr>
+<td><code>extract</code></td>
+<td><code>wing?</code>, see <a href="#the-knowledge-graph">the knowledge graph</a></td>
+</tr>
+<tr>
+<td><code>repair</code></td>
+<td><code>dry_run?</code> (default <code>true</code>), <code>based_on_job?</code></td>
+</tr>
+<tr>
+<td><code>demo</code></td>
+<td><code>steps</code></td>
+</tr>
+</tbody>
+</table>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8420/api/jobs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"type": "mine", "path": "/home/alice/project", "wing": "project"}'</span>
+</span></code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8420/api/jobs<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"type": "mine", "source": "opencode", "options": {"since": "2026-09", "dir": "/work/app"}}'</span>
+</span></code></pre></div>
+<p>An unknown <code>source</code> is a <code>400</code> that names the known ones, and an <code>options</code> key the source does not declare is a <code>400</code> that
+names the ones it accepts.
+Each entry of <code>adapters</code> lists them as <code>options: [{name, description, type, breadth?}]</code>.
+<code>GET /api/sources</code> lists the adapters and the sources that have been mined:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="nt">"adapters"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pi"</span><span class="p">,</span><span class="w"> </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span><span class="w"> </span><span class="nt">"capabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"incremental"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"retains_raw"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"needs_credentials"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">},</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">                 </span><span class="nt">"origin"</span><span class="p">:</span><span class="w"> </span><span class="s2">"package"</span><span class="p">,</span><span class="w"> </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.1.0"</span><span class="p">,</span><span class="w"> </span><span class="nt">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enabled"</span><span class="p">,</span><span class="w"> </span><span class="nt">"permissions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">}}],</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">"sources"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span><span class="w"> </span><span class="nt">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pi"</span><span class="p">,</span><span class="w"> </span><span class="nt">"account"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="nt">"locator"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/home/alice/.pi/agent/sessions"</span><span class="p">,</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">               </span><span class="nt">"cursor"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"mtime_ns"</span><span class="p">:</span><span class="w"> </span><span class="mi">1784039240000000000</span><span class="p">,</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">},</span><span class="w"> </span><span class="nt">"last_job"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span><span class="w"> </span><span class="nt">"last_run_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span><span class="w"> </span><span class="nt">"documents"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">}]</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>An adapter's <code>origin</code> is <code>builtin</code> or <code>package</code>; an installed one also has a <code>version</code>, and a <code>state</code> of <code>installed</code>,
+<code>enabled</code>, <code>disabled</code> or <code>unavailable</code> (with an <code>unavailable_reason</code>).
+It is a read, so a <code>disabled</code> session is refused, and it is guarded like every route but the health check.
+There is no MCP tool for it, and none for credentials or for installing sources.</p>
+<p>The <code>demo</code> job kind is REST and CLI only; it is not offered over MCP.</p>
+<h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
+<p>Whichever interface you use, a failure has the same three fields:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">"error"</span><span class="p">:</span><span class="w"> </span><span class="s2">"`diary_write` is not permitted in read_only mode"</span><span class="p">,</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"memcastle::mode::forbidden"</span><span class="p">,</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">"help"</span><span class="p">:</span><span class="w"> </span><span class="s2">"switch the session/request to Full mode to allow writes, or to Full/ReadOnly to allow reads"</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>error</code> says what failed, <code>help</code> says what to do, and <code>code</code> is a stable identifier to match on.
+The REST API sends it as the response body with a matching HTTP status,
+MCP returns it as the text of an error result, and the CLI prints it as a diagnostic.
+See <a href="../troubleshooting/">Troubleshooting</a> for the codes you are most likely to meet.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

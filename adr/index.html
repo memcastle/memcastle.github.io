@@ -1,0 +1,1842 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/adr/">
+      
+      
+        <link rel="prev" href="../retrieval-evaluation/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Architecture Decisions - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture Decisions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#format" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Format
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Index
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#format" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Format
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#index" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Index
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/adr/README.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="architecture-decisions">Architecture Decisions<a class="headerlink" href="#architecture-decisions" title="Permanent link">&para;</a></h1>
+<p>Records of the decisions that shape this project, and — more usefully — the reasons behind them.
+An ADR is written when a choice is hard to reverse or likely to be re-proposed.</p>
+<p>The point is not the decision; it is the alternatives that were rejected and why.
+A record that only states the outcome saves nobody the argument.</p>
+<p>A decision is changed by writing a new ADR that supersedes the old one, never by editing the old one.
+The one allowed edit is an <em>amendment</em>: a dated note at the end of a record, or a pointer in its Status,
+for a change that leaves the decision standing (a mechanism that moved, or a list that grew).
+The history is the value.</p>
+<h2 id="format">Format<a class="headerlink" href="#format" title="Permanent link">&para;</a></h2>
+<p><code>NNN-kebab-case-title.md</code>, numbered in the order written, with the sections:</p>
+<ul>
+<li><strong>Status</strong> — Proposed, Accepted, Superseded by ADR-NNN, or Accepted with a pointer to the ADR that amends it</li>
+<li><strong>Context</strong> — the forces in play, before any decision</li>
+<li><strong>Decision</strong> — what was decided</li>
+<li><strong>Alternatives rejected</strong> — what else was on the table and why it lost; a record whose alternatives are
+  argued in its Context, or that is about scope, may say so there or use <strong>Non-goals</strong> instead</li>
+<li><strong>Consequences</strong> — what this costs, including what it makes harder</li>
+</ul>
+<h2 id="index">Index<a class="headerlink" href="#index" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="001-surrealkv-embedded-storage-engine/">ADR-001</a> — SurrealKV as the only embedded storage engine in Phase 1
+  (C-free claim narrowed by a dated note)</li>
+<li><a href="002-memory-mode-session-scoping/">ADR-002</a> — memory mode is per-session/per-request, never daemon-global
+  (gated operations amended by ADR-007)</li>
+<li><a href="003-checkpoint-as-a-durable-job/">ADR-003</a> — checkpoint is a durable job; diary writes are a direct call
+  (submission methods renamed by a dated note)</li>
+<li><a href="004-versioned-database-migrations/">ADR-004</a> — versioned MemCastle data migrations,
+  decoupled from the SurrealDB engine and storage backend</li>
+<li><a href="005-timestamp-representation/">ADR-005</a> — timestamps are <code>datetime</code> when required,
+  canonical RFC 3339 strings when optional</li>
+<li><a href="006-job-leases/">ADR-006</a> — running jobs are held by a heartbeat lease,
+  not by an assumption of one daemon</li>
+<li><a href="007-memory-mode-gate-follows-data-access/">ADR-007</a> — the memory-mode gate follows what an operation
+  reads or writes, not its method name (extended by ADR-018)</li>
+<li><a href="008-replay-safe-job-resume/">ADR-008</a> — resuming a job is replay-safe (mining's identity amended by ADR-023)</li>
+<li><a href="009-shutdown-drains-jobs/">ADR-009</a> — shutdown drains running jobs and hands them back to the queue</li>
+<li><a href="010-unix-xdg-paths/">ADR-010</a> — configuration, data and state follow the Unix XDG layout on Linux and macOS</li>
+<li><a href="011-split-bind-address-and-port/">ADR-011</a> — the listener's address and port are separate settings,
+  bound before the daemon does anything else (non-loopback warning added by ADR-014,
+  commands renamed by ADR-017)</li>
+<li><a href="012-status-reports-a-stopped-daemon-and-exits-by-state/">ADR-012</a> — <code>status</code> answers for a stopped daemon too,
+  and its exit code says which state it found (<code>--json</code> extended by ADR-015, form by stream amended by ADR-016,
+  the start command renamed by ADR-017)</li>
+<li><a href="013-release-packaging-and-asset-resolution/">ADR-013</a> — releases are one binary plus an optional package layout,
+  and assets resolve override, installed, embedded
+  (<code>.deb</code> and <code>.rpm</code> packages and shell completions added by dated notes, bundled sources by ADR-033,
+  integrations and skills by ADR-034)</li>
+<li><a href="014-optional-token-authentication/">ADR-014</a> — authentication is an optional bearer token, checked at one layer,
+  and never an MCP capability (commands renamed by ADR-017)</li>
+<li><a href="015-database-admin-endpoint/">ADR-015</a> — the database admin endpoint is an opt-in listener inside the daemon,
+  over its own database handle (<code>db serve</code> renamed <code>db start</code> by an amendment)</li>
+<li><a href="016-cli-presentation-follows-the-output-stream/">ADR-016</a> — the CLI shows tables, colour and prompts to a terminal
+  and plain data to a pipe, with no flag to choose</li>
+<li><a href="017-daemon-lifecycle-commands-live-under-daemon/">ADR-017</a> — the daemon's background lifecycle lives under
+  <code>memcastle daemon</code> (<code>start</code>, <code>stop</code>, <code>restart</code>), and <code>serve</code> stays the foreground server</li>
+<li><a href="018-palace-hierarchy-management/">ADR-018</a> — wings, rooms and drawers are managed through REST and the CLI,
+  with cascading transactional deletes, optional drawer names and no MCP tool (re-mining amended by ADR-023)</li>
+<li><a href="019-shared-integration-contract/">ADR-019</a> — integrations share one documented contract and language-neutral
+  fixtures, not a framework, and reach MemCastle only over MCP and HTTP</li>
+<li><a href="020-skills-are-versioned-with-the-repository/">ADR-020</a> — agent skills are plain files versioned with the
+  repository and installed by copying, and a test holds them to the tools, commands and routes they name
+  (packaged and installed with an integration by ADR-034)</li>
+<li><a href="021-richer-retrieval/">ADR-021</a> — retrieval is SurrealDB-native and derived: one HNSW index, one shared scope,
+  <code>search::rrf</code> fusion, point-in-time validity, drawer supersession and graph expansion, with embeddings from a provider
+  or the caller (temporal rule and supersession amended by ADR-032)</li>
+<li><a href="022-integrations-are-bun-packages-tested-against-a-real-daemon/">ADR-022</a> — integrations are self-contained bun
+  packages, each with its own small client, tested against a real daemon in their own CI job
+  (cross-integration tests amended by ADR-027, bundled releases by ADR-034)</li>
+<li><a href="023-unified-source-model-for-mining/">ADR-023</a> — mining goes through one source model in three stages (acquire,
+  normalize, chunk and ingest), with idempotent ingestion and a cursor MemCastle keeps per source; re-mining no longer
+  duplicates (<code>pi-sessions</code> as a built-in adapter partly superseded by ADR-028)</li>
+<li><a href="024-entity-extraction-as-an-enrich-job/">ADR-024</a> — entity extraction is an enrich job that only adds graph
+  records, with provenance on every edge and a closed vocabulary for extracted facts, from a built-in heuristic or
+  an external provider (the drawers it reads widened to notes by ADR-031)</li>
+<li><a href="025-memory-deduplication-and-entity-resolution/">ADR-025</a> — deduplication is a conservative domain decision:
+  an exact copy in a room is not stored twice, a typo or a case variant is stored and linked with its evidence, and
+  entity spelling variants converge while ambiguous names stay distinct; nothing is merged and nothing needs a model
+  (amends ADR-008, ADR-023 and ADR-024)</li>
+<li><a href="026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a> — mining sources are pluggable as
+  WebAssembly components behind the same adapter contract, with explicit consented permissions, a computed lifecycle,
+  a <code>source</code> command group for development and one conformance suite run against native and WebAssembly sources
+  (<code>pi-sessions</code> as a built-in adapter partly superseded by ADR-028, distribution completed by ADR-033)</li>
+<li><a href="027-cross-integration-tests-live-in-a-common-package/">ADR-027</a> — tests that need two integrations live in a
+  test-only <code>integrations/common</code> package that imports their sources, and production code stays per package
+  (amends ADR-022)</li>
+<li><a href="028-pi-history-is-an-installed-webassembly-source/">ADR-028</a> — Pi's conversation history is an installed WebAssembly
+  source built from <code>sources/pi/</code>, and the core has no Pi-specific code; the native <code>pi-sessions</code> adapter is removed
+  (supersedes part of ADR-023 and ADR-026)</li>
+<li><a href="029-project-local-configuration/">ADR-029</a> — a project declares its wing and room in <code>.config/memcastle.toml</code>
+  and <code>MEMCASTLE_WING</code> / <code>MEMCASTLE_ROOM</code>, read by each integration and passed as ordinary arguments; the daemon reads it
+  only to choose a mined directory's wing (and the CLI only for <code>note</code>, per ADR-031),
+  and a project file cannot pick a palace</li>
+<li><a href="030-opencode-history-is-an-installed-webassembly-source/">ADR-030</a> — OpenCode's conversation history is an
+  installed WebAssembly source built from <code>sources/opencode/</code> that acquires sessions by running the <code>opencode</code> command,
+  a wider permission than a file grant, so no OpenCode or SQLite code enters the core</li>
+<li><a href="031-note-capture/">ADR-031</a> — <code>memcastle note</code> captures a thought as an unnamed drawer of source kind <code>note</code>, written
+  through a synchronous service like the diary and read for entities like mined content; the CLI resolves the project
+  scope itself with the reader the mining adapter shares, and there is no MCP tool
+  (amends ADR-029)</li>
+<li><a href="032-temporal-retrieval-and-history/">ADR-032</a> — temporal retrieval is one overlap rule over validity time:
+  <code>current</code>, <code>as_of</code> and an interval (<code>from</code> and <code>until</code>) are the same clause over a window,
+  shared by every ranking and by graph expansion,
+  and a superseded drawer records what replaced it so <code>drawer history</code> can return how knowledge evolved
+  (amends ADR-021)</li>
+<li><a href="033-source-distribution/">ADR-033</a> — sources are distributed as versioned packages through static JSON registry
+  indexes (a URL, a <code>file://</code> URL or a directory, so offline needs no separate mechanism), pinned by SHA-256 and optionally
+  signed with ed25519 under a <code>mining.trust</code> policy; bundled, registry and local sources share one lifecycle, <code>update</code>
+  never widens a source's permissions without consent, and releases bundle <code>pi</code>, <code>opencode</code> and <code>claude</code> as ordinary packages
+  (completes ADR-026)</li>
+<li><a href="034-agent-integration-distribution/">ADR-034</a> — integrations ship with MemCastle as bundles (no npm package, no
+  <code>bun install</code>) under the one assets root beside <code>sources/</code> and <code>skills/</code>, a checkout being a valid root;
+  <code>memcastle integration list|install|update|remove</code> is local tooling that copies an integration to the user's data
+  directory, registers it through the agent's own mechanism (<code>pi install</code>, one marked OpenCode plugin file), records a
+  receipt, and refuses what its manifest does not support
+  (amends ADR-013, ADR-020 and ADR-022)</li>
+<li><a href="035-web-ui/">ADR-035</a> — the web UI is a Vue and OpenVue client in <code>web/</code>, opt-in (<code>web.enable</code>) and
+  served under <code>/ui</code> from <code>web/dist/</code> of the one assets root, in a checkout and in a package alike;
+  its static shell is the second public path,
+  it signs in as the database console does (user <code>memcastle</code>, the token as the password, checked by every request),
+  carries a memory mode, and a hook holds <code>web/</code> to HTTP
+  (amends ADR-013, ADR-014, ADR-015 and ADR-034; its read-on-demand rule amended by ADR-041)</li>
+<li><a href="036-retrieval-evaluation-framework/">ADR-036</a> — retrieval is evaluated by an HTTP-only harness under
+  <code>tests/in_process/retrieval_eval/</code>, so nothing ships in the binary or a release;
+  a small bundled dataset runs in the everyday suite against a committed quality baseline,
+  vectors come from the harness so engine quality is not confounded with model quality,
+  time is seeded in epochs over HTTP, timings are reported and never gated,
+  and LongMemEval is a converter for a file the user downloads
+  (relates to ADR-021, ADR-032)</li>
+<li><a href="037-persistent-miner-configuration/">ADR-037</a> — miners are named <code>[[miners]]</code> definitions in the configuration file
+  (source, locator, saved options, a credential <em>reference</em>), edited in place by the daemon with comments kept and
+  re-read when the file changes, read-only over MCP and administrative over REST and the CLI;
+  a cursor belongs to the source a miner points at and not to its name, an option change that may broaden requires
+  <code>--allow-broaden</code>
+  (triggers were stored but not acted on, until ADR-043 replaced them with <code>[[triggers]]</code>)</li>
+<li><a href="038-one-output-contract-for-every-command/">ADR-038</a> — every command with a data answer is readable in a terminal
+  and JSON in a pipe, and the global <code>--json</code> forces JSON on a terminal
+  (amends ADR-012, ADR-015 and ADR-016)</li>
+<li><a href="039-oauth-credentials-for-mining-sources/">ADR-039</a> — a mining source that cannot use a static token declares
+  <code>[permissions.oauth]</code> (a public client, endpoints, scopes; part of the consent digest) and asks the host for an access
+  token through a new <code>host.access-token</code> function (source contract <code>0.3.0</code>);
+  the daemon runs the device or browser-with-PKCE sign-in for <code>memcastle source auth &lt;source&gt;</code>, keeps the refresh token
+  in the platform keyring or an owner-only file and never in the palace, renews it under one lock per source,
+  and signing in is administrative with no MCP tool
+  (amends ADR-026, builds on ADR-014 and ADR-037)</li>
+<li><a href="040-bundled-sources-are-installed-from-the-start-and-the-official-registry-is-published/">ADR-040</a> — bundled
+  sources are unpacked beside the binary, installed from the start and run in place, so enabling is all they need and
+  <code>install</code> and <code>update</code> are for registry sources only; the official registry is a static file in the documentation
+  that names GitHub repositories, whose releases are the versions, and is the default <code>mining.registries</code>
+  (amends ADR-033 and ADR-026)</li>
+<li><a href="041-server-sent-events-for-dashboard-updates/">ADR-041</a> — the daemon announces changes on an in-process bus and
+  <code>GET /api/events</code> relays them as server-sent events: identifiers and kinds, never content, behind the ordinary
+  authentication layer and read gate (<code>disabled</code> is refused), a slow connection told to <code>resync</code>, the stream ended by
+  shutdown;
+  the dashboard reads it with <code>fetch</code> (not <code>EventSource</code>, which cannot send the token) and <code>useLoad</code> re-reads quietly,
+  keeping the Refresh button for a stream-less session or a shared remote palace
+  (amends ADR-035, builds on ADR-006, ADR-007 and ADR-014)</li>
+<li><a href="042-mine-takes-a-source-and-its-options/">ADR-042</a> — <code>memcastle mine &lt;source&gt; [place] [key=value]...</code> replaces
+  <code>--source</code> and <code>--locator</code>, with <code>memcastle mine &lt;path&gt;</code> kept as the directory shorthand;
+  sources declare the options they accept (<code>[options.&lt;name&gt;]</code>) and the daemon refuses the rest before queuing,
+  the source contract is <code>0.4.0</code> (<code>identify</code> takes the options, <code>source-ref</code> carries them) and the source decides which
+  options are identity and which only narrow; a miner's single options table becomes the defaults of its run
+  (amends ADR-023, ADR-026 and ADR-037)</li>
+<li><a href="043-source-triggers/">ADR-043</a> — triggers are <code>[[triggers]]</code> entries (<code>schedule</code>, <code>poll</code>, <code>webhook</code>, <code>watch</code>), disabled
+  until the user enables them, that only decide <em>when</em> and end in the request <code>miner run</code> makes,
+  a source declares what it supports (<code>[triggers.&lt;kind&gt;]</code>, a capability and not a permission),
+  a webhook has its own opt-in, loopback-by-default listener authenticated by a per-trigger secret,
+  bursts join a waiting run, deliveries are idempotent and restart-safe, and changing any of it is REST and CLI only
+  (amends ADR-037)</li>
+<li><a href="044-pi-integration-uses-pis-mcp-client-library/">ADR-044</a> — Pi 1.0 is the minimum Pi version, and the Pi integration's
+  MCP session is built on Pi's own <code>@earendil-works/pi-mcp</code> client library (bundled) instead of the MCP SDK
+  (amends ADR-022 for Pi)</li>
+<li><a href="045-codex-history-is-an-installed-webassembly-source/">ADR-045</a> — Codex rollout history is an installed WebAssembly
+  source built from <code>sources/codex/</code>, with read-only access only to the dated rollout directory and no Codex-specific
+  code in the daemon core</li>
+<li><a href="046-fact-lifecycle-and-contradictions/">ADR-046</a> — graph assertions keep auditable confirmation, contradiction and
+  supersession links; unresolved conflicts remain visible and explicit corrections retain their evidence
+  (builds on ADR-024, ADR-025 and ADR-032)</li>
+<li><a href="047-terminal-operations-console/">ADR-047</a> — the TUI reads the same SSE endpoint as the web dashboard and
+  performs all controls over REST; a confirmed force-cancel durably requests cancellation before aborting a locally
+  owned mining worker and fences its terminal transition against the worker's lease
+  (builds on ADR-006 and ADR-041)</li>
+<li><a href="048-source-preferences/">ADR-048</a> — global and palace-local source authority levels merge field-by-field;
+  connector-specific metadata criteria shape extraction context, conflict hints and relevant retrieval candidates
+  without overriding validity, explicit corrections, confidence or provenance
+  (builds on ADR-023, ADR-024, ADR-032 and ADR-046)</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

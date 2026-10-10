@@ -1,0 +1,2461 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/integration-contract/">
+      
+      
+        <link rel="prev" href="../integrations-codex/">
+      
+      
+        <link rel="next" href="../daemon/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Integration contract - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integration contract
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#who-does-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Who does what
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conformance-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Conformance matrix
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conformance matrix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-identity-and-memory-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Session identity and memory mode
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wake-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wake-up
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall-and-search-before-answering" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Recall and search before answering
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Checkpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emergency-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Emergency checkpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistent-mcp-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Persistent MCP session
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skills-reuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Skills reuse
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-mining" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Background mining
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionable-failure-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Actionable failure reporting
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Project context
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-and-repair" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Audit and repair
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documenting-a-gap" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Documenting a gap
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-an-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Adding an integration
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The fixtures
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#who-does-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Who does what
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conformance-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Conformance matrix
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Conformance matrix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-identity-and-memory-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Session identity and memory mode
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wake-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wake-up
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall-and-search-before-answering" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Recall and search before answering
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Checkpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emergency-checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Emergency checkpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistent-mcp-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Persistent MCP session
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#skills-reuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Skills reuse
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-mining" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Background mining
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionable-failure-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Actionable failure reporting
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Project context
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-and-repair" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Audit and repair
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documenting-a-gap" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Documenting a gap
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-an-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Adding an integration
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The fixtures
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/integration-contract.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="integration-contract">Integration contract<a class="headerlink" href="#integration-contract" title="Permanent link">&para;</a></h1>
+<p>An integration is the glue that makes one agent (Pi, OpenCode, or Claude Code) use MemCastle at the right moments.
+This page is the contract every integration satisfies, and the checklist for writing a new one.
+It exists so that a capability is implemented once, in MemCastle, and each client is then validated against the same
+expectations instead of rediscovering the architecture.</p>
+<p>It is a contract and a test layer, not a framework.
+There is no shared runtime, no abstract base class and no code that hides how Pi and OpenCode differ.</p>
+<h2 id="who-does-what">Who does what<a class="headerlink" href="#who-does-what" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    subgraph client["One per agent: lifecycle"]
+        pi["integrations/pi"]
+        oc["integrations/opencode"]
+        cc["integrations/claude-code"]
+    end
+    skills["skills/: reusable agent instructions"]
+    surface["MCP tools and REST API"]
+    core["MemCastle core: behaviour and persistence"]
+    pi --&gt; surface
+    oc --&gt; surface
+    cc --&gt; surface
+    pi -.-&gt; skills
+    oc -.-&gt; skills
+    cc -.-&gt; skills
+    surface --&gt; core</code></pre>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Owns</th>
+<th>Does not own</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MemCastle core</td>
+<td>What each operation does, what a mode permits, durable jobs, error codes</td>
+<td>When a client calls it</td>
+</tr>
+<tr>
+<td>MCP and REST</td>
+<td>The protocol every client speaks</td>
+<td>Anything client specific</td>
+</tr>
+<tr>
+<td><code>skills/</code></td>
+<td>Agent instructions that are the same text everywhere</td>
+<td>Lifecycle hooks</td>
+</tr>
+<tr>
+<td><code>integrations/&lt;client&gt;/</code></td>
+<td>When to call MemCastle: session start, compaction, timers, commands</td>
+<td>How memory works</td>
+</tr>
+</tbody>
+</table>
+<p>An integration talks to MemCastle only over MCP and HTTP, and carries no copy of the persistence layer.
+The one piece of memory logic that lives on the client is deciding what is worth remembering and which bucket it belongs
+to, because that needs the client's own model and conversation.
+MemCastle persists whatever classified payload it is given and never classifies.</p>
+<p>Client lifecycle logic does not move into MemCastle to make two clients look alike.
+If a client has no hook for something, the gap is documented, not faked (see <a href="#documenting-a-gap">Documenting a gap</a>).</p>
+<h2 id="conformance-matrix">Conformance matrix<a class="headerlink" href="#conformance-matrix" title="Permanent link">&para;</a></h2>
+<p>Each row is one capability.
+The first column is a stable id, and <code>tests/fixtures/integration/capabilities.json</code> lists the same ids,
+so the daemon test fails if this table and the fixtures disagree.
+A gap is allowed only where the last column says so, and then it must be documented.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>MemCastle operation</th>
+<th>Client responsibility</th>
+<th>Gap allowed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session-mode</code></td>
+<td><code>memcastle_set_mode</code>, <code>memcastle_status</code></td>
+<td>Choose full, read-only or off once per session and translate the label</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>wake-up</code></td>
+<td><code>memcastle_wake_up</code></td>
+<td>Call at session start and inject the result as established context</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>recall</code></td>
+<td><code>memcastle_recall</code>, <code>memcastle_search</code></td>
+<td>Search before answering questions about past work, quote verbatim</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>checkpoint</code></td>
+<td><code>memcastle_checkpoint</code>, <code>memcastle_job_get</code></td>
+<td>Classify what is worth keeping, submit it, watch the job</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>emergency-checkpoint</code></td>
+<td><code>memcastle_checkpoint</code> with <code>emergency</code></td>
+<td>Submit with <code>emergency: true</code> before context is lost</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>persistent-session</code></td>
+<td>one MCP session</td>
+<td>Keep one handshake open for the whole agent session</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>none</td>
+<td>Load the shared instructions from <code>skills/</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>project-context</code></td>
+<td>none, <code>wing</code> and <code>room</code> arguments</td>
+<td>Resolve the project's wing and room from <code>.config/memcastle.toml</code> and <code>MEMCASTLE_*</code>, and pass them as ordinary arguments</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>background-mining</code></td>
+<td><code>memcastle_mine</code></td>
+<td>Trigger mining on the client's own schedule, never twice for one event; or leave it to a daemon-side <a href="../triggers/">trigger</a></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>failure-reporting</code></td>
+<td>error bodies, <code>Job.error</code></td>
+<td>Tell the failure classes apart and show the user <code>help</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>audit-repair</code></td>
+<td><code>memcastle_audit</code>, <code>memcastle_repair</code></td>
+<td>Offer audit, confirm, dry-run, then apply only what was confirmed</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>The sections below give the expected behaviour and say what must be proved against a real daemon.
+"Daemon-side" is proved once, by <code>tests/in_process/integration_contract.rs</code>, replaying the fixtures.
+"Client-side" is proved by each integration's own tests, because only it knows its lifecycle.</p>
+<h3 id="session-identity-and-memory-mode">Session identity and memory mode<a class="headerlink" href="#session-identity-and-memory-mode" title="Permanent link">&para;</a></h3>
+<p>Operations: <code>memcastle_set_mode</code> and <code>memcastle_status</code>.</p>
+<p>A session is one MCP connection.
+The daemon identifies it by the <code>mcp-session-id</code> it issues at <code>initialize</code>, and keeps the chosen mode only for that session.
+Over REST the mode travels in the <code>X-MemCastle-Mode</code> header instead.
+A session that never selects a mode runs as <code>full</code>, and a closed session's mode is not inherited by the next one.
+There is no other daemon-side session entity.
+<code>agent_identity</code> is a free string the client supplies to wake-up and the diary, which the daemon stores but never validates.</p>
+<p>The wire values are <code>full</code>, <code>read_only</code> and <code>disabled</code>.
+Clients usually offer the labels <code>full</code>, <code>read-only</code> and <code>off</code>, so the client translates them
+(<code>tests/fixtures/integration/modes.json</code> holds the mapping).
+Sending a label that is not a wire value is refused with <code>memcastle::input::invalid</code>, and never treated as <code>full</code>.
+After selecting a mode, the client can read back what the daemon believes through <code>memcastle_status</code>.</p>
+<p>Client responsibility: select the mode before any other call, and honour it.
+For <code>off</code> that means more than the daemon's refusals.
+The daemon rejects every read and write with <code>memcastle::mode::forbidden</code>, but it cannot stop a client from injecting
+memory it fetched earlier, or from loading a skill that carries it.
+A disabled session must behave as if MemCastle does not exist, and context isolation is the client's job.</p>
+<ul>
+<li><strong><code>full</code>:</strong> every capability runs.</li>
+<li><strong><code>read-only</code>:</strong> wake-up, the search reminder and recall run, and no write is attempted.
+  The client skips the interval review, the manual checkpoint and the emergency checkpoint up front
+  and says why, with the way out, as information and not as a fault.
+  It does not send the write and handle the refusal, because the daemon would refuse it only after a rejected call and,
+  for a review, after a paid model call whose result must be discarded.</li>
+<li><strong><code>off</code>:</strong> the client does not connect.
+  It makes no request at all, not even a health check, injects nothing into the model's context, registers no skill,
+  tool or hook that carries MemCastle material, and any command that remains says only that MemCastle is not active.
+  The daemon's refusals are the backstop, not the mechanism.</li>
+<li><strong>A mode that cannot be parsed</strong> fails closed: the user is told, and the client behaves as <code>off</code>.</li>
+<li><strong>Out of scope:</strong> a copy of a MemCastle skill the user installed by hand, or the host's own MCP entry for MemCastle,
+  is loaded by the host and not by the integration.
+  An <code>off</code> integration registers nothing rather than staying active to guard a hook, so the documentation tells the user
+  to remove those copies when a project must be free of MemCastle.</li>
+</ul>
+<p>Daemon-side (tested): three sessions in three modes share one daemon and each reads back its own mode,
+every wire value outcome in the fixture holds for every gated tool, and a refused mode leaves the session unchanged.
+Client-side (tested): <code>integrations/common/test/off-isolation.test.ts</code> replays <code>off-isolation.json</code> against each
+integration, driving every path that could put MemCastle material in front of the model in <code>off</code>
+(which must surface nothing and make no request) and in <code>full</code> (which must surface something, so the driver is not vacuous);
+<code>integrations/common/test/mixed-modes.test.ts</code> runs Pi and OpenCode sessions in all three modes against one daemon
+and checks, from the requests each made, that a <code>full</code> session's checkpoint lands while an <code>off</code> session beside it does
+nothing and a <code>read-only</code> session never calls a write tool.
+A new integration adds its drivers and an actor to those two files (<a href="../adr/027-cross-integration-tests-live-in-a-common-package/">ADR-027</a>).</p>
+<h3 id="wake-up">Wake-up<a class="headerlink" href="#wake-up" title="Permanent link">&para;</a></h3>
+<p>Operation: <code>memcastle_wake_up</code> with <code>agent_identity</code>, and optionally <code>wing</code>, <code>max_items</code> and <code>max_bytes</code>.</p>
+<p>It returns <code>diary</code> (the agent's latest entry in the wing, or <code>null</code>), <code>recent_highlights</code>
+(recent checkpointed drawers, newest first) and <code>generated_at</code>.
+Without a <code>wing</code> the diary lookup is skipped.
+The byte budget trims highlights by whole drawer and never the diary entry.
+An empty palace answers with no diary and no highlights, which is a normal answer and not an error.</p>
+<p>Client responsibility: call it at session start, decide whether to wait for it or let it arrive asynchronously,
+and inject the result as established fact.
+The highlights are not filtered by <code>agent_identity</code>, only by wing.</p>
+<p>Daemon-side (tested): the diary and the highlights come back, and the budget holds.
+Client-side (tested in Pi and OpenCode): the injected context is present on the first turn when the client waits for it,
+an asynchronous client never makes a turn wait,
+and the client does not block the session when the daemon is unavailable.</p>
+<h3 id="recall-and-search-before-answering">Recall and search before answering<a class="headerlink" href="#recall-and-search-before-answering" title="Permanent link">&para;</a></h3>
+<p>Operations: <code>memcastle_recall</code> and <code>memcastle_search</code>.</p>
+<p>Both rank lexically unless the daemon has an embedding provider, and then by meaning and words together (<code>ranking: auto</code>).
+The lexical leg matches every query word first and any word if there was none.
+Both accept optional <code>ranking</code>, <code>tags</code>, <code>source_kind</code>, <code>as_of</code>, <code>from</code>, <code>until</code>, <code>include_historical</code> and <code>expand</code>
+arguments, and a client that sends only <code>query</code> keeps working.
+The time arguments choose which memory is valid: <code>as_of</code> for a date or instant, <code>from</code> with <code>until</code> for a period,
+<code>include_historical</code> for every version.
+A client that needs to explain how a belief changed follows a hit's <code>id</code> with <code>memcastle_history</code>, which an integration
+may use but is not required to.
+Content is returned verbatim, so a client can quote it.
+No match is an empty list.
+Neither tool forces a client to search, and nothing in MemCastle enforces the habit.</p>
+<p>Client responsibility: the search-before-answer instruction (<code>skills/search-before-answer</code>), and re-injecting it
+each turn if the client drops system context.</p>
+<p>Daemon-side (tested): stored text comes back byte for byte, including whitespace and non-ASCII text.
+Client-side (tested in Pi and OpenCode): the instruction reaches the model on every turn, read from the shared skill and
+never copied, at the level <code>forceMemoryRecall.level</code> names (<code>off</code>, <code>sometimes</code> or <code>always</code>).
+Whether the model then searches is the model's behaviour and is not tested.</p>
+<h3 id="checkpoint">Checkpoint<a class="headerlink" href="#checkpoint" title="Permanent link">&para;</a></h3>
+<p>Operations: <code>memcastle_checkpoint</code>, then <code>memcastle_job_get</code> to watch the job.</p>
+<p>The payload is already classified by the client into <code>preference</code>, <code>project</code>, <code>diary</code> or <code>general</code>
+(see <a href="../mcp-and-api/#checkpoint-payload">the payload</a>).
+A checkpoint is a durable job at High priority, so it survives a daemon restart and resumes from where it stopped.
+Submission refuses an empty <code>items</code> list, blank content, a fact confidence outside 0 to 1 and a malformed name,
+before any job exists, with <code>memcastle::input::invalid</code> or <code>memcastle::palace::path_invalid</code>.
+Some clients send the payload as a JSON string, which is accepted.</p>
+<p>Client responsibility: decide what is worth keeping, classify it, choose between waiting for the job and not,
+and report a failed job.</p>
+<p>Daemon-side (tested): every valid fixture is accepted, completes and is recallable, and every invalid fixture is refused
+with its code and leaves no job behind.
+Client-side (tested in Pi and OpenCode): the client sends well-formed payloads for what its classifier produced,
+and surfaces a refusal.</p>
+<h3 id="emergency-checkpoint">Emergency checkpoint<a class="headerlink" href="#emergency-checkpoint" title="Permanent link">&para;</a></h3>
+<p>Operation: <code>memcastle_checkpoint</code> with <code>emergency: true</code>.</p>
+<p>An emergency checkpoint is a Critical (100) job, claimed before anything else queued, where a normal one is High (75).
+It follows the session's mode like any write.</p>
+<p>Client responsibility: submit it at the client's last point before context is lost, typically before compaction.
+Where the client exposes no such point, this capability has a documented gap and a manual command is the fallback.</p>
+<p>Daemon-side (tested): priorities are 100 and 75.
+Client-side (tested in Pi and OpenCode): the adapter sends <code>emergency: true</code> at that lifecycle point.</p>
+<h3 id="persistent-mcp-session">Persistent MCP session<a class="headerlink" href="#persistent-mcp-session" title="Permanent link">&para;</a></h3>
+<p>Operations: all of them, over one session.</p>
+<p>The client opens one MCP connection and keeps it for the whole agent session.
+The mode is chosen once at the start and is still in force many calls later, so reconnecting per call would silently
+reset the session to <code>full</code>.
+The client reconnects after a lost connection and then selects the mode again before anything else.</p>
+<p>The daemon forgets a session after five idle minutes, when the daemon restarts, or when the session is deleted.
+It then answers the next request on that session with HTTP 404 <code>Session not found</code>, and a new session starts as <code>full</code>.
+A client therefore treats a 404 as a lost session and not as a failed call:
+it opens a new session, selects the mode, and sends the same call again once.
+This is safe for a write, because the daemon refuses the request before running anything.
+A connection that fails without a 404, such as a restarted daemon that no longer answers at the old address,
+is reported to the caller, and the next call reconnects.
+A client that stays idle pings the daemon at an interval well inside the five-minute limit, so a quiet session is not
+dropped and then silently replaced.</p>
+<p>Daemon-side (tested): one session runs wake-up, checkpoint and recall, and a mode chosen first still applies at the end.
+Client-side (tested in Pi and OpenCode): no reconnect between wake-up, recall and checkpoint,
+a forgotten session is replaced with its mode re-selected and a write applied exactly once,
+a restarted daemon is reconnected to in the same mode, and an idle session keeps itself alive.</p>
+<h3 id="skills-reuse">Skills reuse<a class="headerlink" href="#skills-reuse" title="Permanent link">&para;</a></h3>
+<p>There is no MemCastle operation here, because a skill is plain agent text.
+<code>skills/</code> is the one source of those instructions, and an integration loads them rather than keeping its own copy:
+its manifest names the shared skills it exposes, <code>memcastle integration install</code> puts those inside the installed copy,
+and the agent lists them from there (see <a href="../integrations/#what-an-integration-packages">Agent integrations</a>).
+A skill that only one integration needs may ship in that integration's own <code>skills/</code> directory instead.
+Skills stay usable without an integration, as a copy made by hand.
+The five <a href="../skills/">agent skills</a> are <code>memcastle-setup</code>, <code>search-before-answer</code>, <code>checkpoint-instructions</code>, <code>wake-up</code>
+and <code>diary</code>.
+A skill never overrides a mode: in <code>off</code> it must not be loaded if it would carry MemCastle-derived content.
+The shipped skills carry instructions only and no palace content, and each one that calls a gated tool says to stop when
+the mode refuses it.</p>
+<p>Client-side (tested in Pi and OpenCode): the integration reads its instructions from <code>skills/</code> and does not duplicate
+them.
+Pi and OpenCode both list the skills through the agent's own skill mechanism, offering none in an <code>off</code> session
+(the <code>native-skills</code> path of <code>off-isolation.json</code>), and Pi also appends <code>search-before-answer</code> to the system prompt.
+Nothing is tested against a daemon, and the matrix records that with a <code>null</code> daemon test.
+What is tested is the skills themselves:
+<code>tests/in_process/skills.rs</code> checks every tool, command and route a skill names against this release (see <a href="../adr/020-skills-are-versioned-with-the-repository/">ADR-020</a>).</p>
+<h3 id="background-mining">Background mining<a class="headerlink" href="#background-mining" title="Permanent link">&para;</a></h3>
+<p>Operation: <code>memcastle_mine</code> with an absolute <code>path</code> and optionally <code>wing</code>,
+or with a <code>source</code> such as <code>pi</code> (an installed source: acquisition stays in the source, the integration only decides when
+to ask).</p>
+<p>Mining is a Background (0) job, so it never delays a checkpoint, and a relative path is refused with
+<code>memcastle::input::invalid</code>.
+A request from a client is a request: asking twice is two jobs.
+The daemon can also ask for runs by itself, but only when the user defines and enables a <a href="../triggers/">trigger</a>
+(a timetable, a poll, a file watcher or a webhook), which is the user's decision and never an integration's; an
+integration cannot create or enable one, and installing it starts none.
+What it does deduplicate is the work: a source remembers where it stopped and which version of each document it filed,
+so the second job finds nothing new to file.
+It also does not store the same memory twice: an exact copy of a checkpoint item or a diary entry already in its room is
+not written again, and a likely copy is stored and linked, see <a href="../deduplication/">Deduplication</a>.
+"Once a day" and "never twice for one event" are therefore the client's to keep when it triggers mining itself, and an
+integration never needs to read a source itself: it only decides when to ask.
+A user who would rather have the daemon keep the schedule (<code>memcastle trigger set ... --type schedule</code>) needs no
+client-side timer, and an integration that finds such a trigger running has nothing to add.</p>
+<p>Client responsibility: trigger it from the client's own mechanism, where one exists, or leave it to a daemon-side
+trigger when the user has set one up.
+Where the client has no suitable timer or event, the gap is documented and a manual trigger
+(for example <code>memcastle mine</code> from a command) is the fallback.</p>
+<p>Daemon-side (tested): the priority, the absolute path rule, and that a repeated request is a second job.
+Client-side (to test): one trigger per scheduled event.</p>
+<h3 id="actionable-failure-reporting">Actionable failure reporting<a class="headerlink" href="#actionable-failure-reporting" title="Permanent link">&para;</a></h3>
+<p>An integration must tell these classes apart, and say what to do about each.
+<code>tests/fixtures/integration/failure-classes.json</code> is the machine-readable form.</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>How it is detected</th>
+<th>Code</th>
+<th>Shown as</th>
+<th>The client tells the user</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>daemon_unavailable</code></td>
+<td>The connection fails, no answer</td>
+<td>none</td>
+<td>warning</td>
+<td>The daemon cannot be reached and how to start it</td>
+</tr>
+<tr>
+<td><code>unauthorized</code></td>
+<td>HTTP 401</td>
+<td><code>memcastle::auth::unauthorized</code></td>
+<td>warning</td>
+<td>A token is needed, and <code>help</code></td>
+</tr>
+<tr>
+<td><code>mode_rejected</code></td>
+<td>Tool error, HTTP 403</td>
+<td><code>memcastle::mode::forbidden</code></td>
+<td>information</td>
+<td>The session's own choice refused it, which is not a fault</td>
+</tr>
+<tr>
+<td><code>invalid_input</code></td>
+<td>Tool error, HTTP 400</td>
+<td><code>memcastle::input::invalid</code>, or one of the more specific <code>also_codes</code></td>
+<td>warning</td>
+<td>The request was malformed, and <code>help</code></td>
+</tr>
+<tr>
+<td><code>job_failed</code></td>
+<td>A job reaches <code>failed</code></td>
+<td>none</td>
+<td>warning</td>
+<td><code>Job.error</code>, and that the job can be retried</td>
+</tr>
+</tbody>
+</table>
+<p>A failure that is none of these is the daemon's own fault, and is shown as an error.</p>
+<p>Over MCP a tool error carries no HTTP status, so the code alone classifies it.
+The fixture lists the codes the daemon answers with a 400 for a request an integration can get wrong
+(<code>memcastle::palace::path_invalid</code> among them), and a client reads each of them as <code>invalid_input</code>
+rather than as a fault of the daemon.
+A malformed job id is not among them, because an integration only sends job ids the daemon gave it.</p>
+<p>Every error body is <code>{error, code, help}</code>, and a diagnostic code is a public identifier.
+The client shows <code>help</code> because it names the next step, and never swallows a failure into an empty memory.
+A daemon that is down is not "nothing remembered".</p>
+<p>Daemon-side (tested): each class is produced for real, and carries the documented code and a <code>help</code> line.
+Client-side (tested by each integration's own suite): each class is shown with the fixture's <code>severity</code>,
+its message carries the text the fixture's <code>message_must_contain</code> lists,
+a mode refusal is information and not a fault, and the session continues without MemCastle.</p>
+<h3 id="project-context">Project context<a class="headerlink" href="#project-context" title="Permanent link">&para;</a></h3>
+<p>Operations: none of its own.
+The resolved project only supplies the <code>wing</code> (and, for search, the <code>room</code>) that other operations are called with.</p>
+<p>A project declares its memory scope in <code>.config/memcastle.toml</code>, and <code>MEMCASTLE_WING</code> and <code>MEMCASTLE_ROOM</code> override it.
+The file, the discovery rules and the precedence are specified in <a href="../project-config/">Project configuration</a>.
+The daemon never resolves a project for a client: each integration reads the file and the environment itself,
+in its own language, so that client lifecycle logic does not move into MemCastle.
+That is why two implementations exist, and why the same fixtures hold them to one contract.</p>
+<p>Client responsibility: resolve the project once per working directory, never in an <code>off</code> session,
+report a broken file or variable once and carry on without a project scope, and use the context for
+the wake-up wing (the default <code>project</code> source; an explicit <code>user</code>, <code>custom</code> or <code>none</code> source wins),
+the wing a <code>project</code> or <code>diary</code> checkpoint item defaults to (never <code>preference</code> or <code>general</code>),
+and the wing and room the model is told to pass to its searches.
+Nothing in the file is an authorization boundary, and nothing in it is a secret.</p>
+<p>Daemon-side (tested): a mined directory takes the wing its project file declares, resolved by the directory adapter from
+<code>tests/fixtures/project-config/cases.json</code> (<code>src/project.rs</code>, the reader <code>memcastle note</code> shares).
+Client-side (tested in Pi and OpenCode): every case of that fixture file resolves the same way in TypeScript,
+the wake-up asks about the project's wing, a checkpoint item takes it, the recall instruction names it,
+two sessions in different directories keep their own project, and an <code>off</code> session reads no project file.</p>
+<h3 id="audit-and-repair">Audit and repair<a class="headerlink" href="#audit-and-repair" title="Permanent link">&para;</a></h3>
+<p>Operations: <code>memcastle_audit</code>, then <code>memcastle_repair</code>, with <code>memcastle_job_get</code> for the reports.</p>
+<p>An audit is read-only and reports its findings in <code>Job.result</code>.
+A repair is a dry run unless <code>dry_run</code> is <code>false</code>, and <code>based_on_job</code> narrows it to what a completed audit found.
+Applying a repair is a write, so a read-only session is refused, while the audit and the dry run are allowed in any mode.
+Repair is deliberately narrow: it removes orphan drawers only.</p>
+<p>Client responsibility: where the client can expose a command, run the audit, show the findings one at a time,
+confirm, run a dry run, apply only what was confirmed, and optionally record a summary in the diary.
+Where it cannot expose a command, document the gap.</p>
+<p>Daemon-side (tested): the audit changes nothing, the dry run is allowed in <code>read_only</code>, applying is refused there,
+and omitting <code>dry_run</code> is a dry run.
+Real orphan data cannot be created through HTTP or MCP, so applying a repair to real orphans is covered by the unit
+tests in <code>src/repair</code>.
+Client-side (tested in Pi and OpenCode): nothing is applied that the user did not confirm.
+Pi asks once, with a dialog, for the whole dry-run plan, because the daemon cannot repair a subset of it.
+OpenCode has no dialog a plugin can ask with, so its equivalent is two commands: the audit plans and changes nothing,
+and only the repair command applies the plan that session was shown, once.
+A tool argument is never the confirmation.
+A <code>read-only</code> session gets the audit and the plan and is never offered the repair, and the diary entry is written
+only after a repair was applied.</p>
+<h2 id="documenting-a-gap">Documenting a gap<a class="headerlink" href="#documenting-a-gap" title="Permanent link">&para;</a></h2>
+<p>A client may lack the lifecycle point a capability needs, and the rule is to say so, never to fake it.
+Each integration's README records every gap in the same three lines:</p>
+<ul>
+<li><strong>Missing</strong>: the lifecycle point or mechanism the client does not expose.</li>
+<li><strong>Fallback</strong>: what the user can do instead, such as a manual command.</li>
+<li><strong>Effect</strong>: what the user loses compared with a client that has it.</li>
+</ul>
+<p>Only the capabilities marked as allowing a gap may have one.
+A gap in <code>session-mode</code>, <code>wake-up</code>, <code>recall</code>, <code>checkpoint</code>, <code>persistent-session</code>, <code>skills</code>, <code>project-context</code> or
+<code>failure-reporting</code> means
+the integration does not conform yet.</p>
+<p>Tool names can differ by client without being a gap.
+OpenCode's native MCP client prefixes each tool with the server name, so the tools appear there as <code>memcastle_memcastle_search</code>;
+the OpenCode plugin registers its own, unprefixed names (<code>memcastle_search</code>).
+An integration maps to the daemon's names and never renames anything in MemCastle.</p>
+<h2 id="adding-an-integration">Adding an integration<a class="headerlink" href="#adding-an-integration" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Copy the conformance matrix into the integration's README, and mark each row implemented, a documented gap or not yet.</li>
+<li>Implement each row in the client's own language and idiom, talking to MemCastle over MCP and HTTP only.</li>
+<li>Replay the fixtures under <code>tests/fixtures/integration/</code> against a real daemon from the client's own test suite.</li>
+<li>Write the client-side tests that this page lists for each capability.</li>
+<li>Document every gap in the three-line form above.</li>
+<li>Make it installable: add a <code>memcastle-integration.toml</code>, an adapter for the agent in <code>src/integration/agent.rs</code>
+   and its bundle to <code>packaging/integrations/build.sh</code>, as <a href="../integrations/#the-manifest">Agent integrations</a> describes.</li>
+</ol>
+<p>The <code>integrations-http-only</code> hook (see <a href="../development/#the-architecture-guard">Development</a>)
+fails the build if anything under <code>integrations/</code> reaches into MemCastle's storage or job code
+instead of using the protocol.</p>
+<h2 id="the-fixtures">The fixtures<a class="headerlink" href="#the-fixtures" title="Permanent link">&para;</a></h2>
+<p>The fixtures are strict JSON in <code>tests/fixtures/integration/</code>, so any language can read them.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>capabilities.json</code></td>
+<td>The matrix ids, their operations and the daemon test for each</td>
+</tr>
+<tr>
+<td><code>modes.json</code></td>
+<td>The label to wire mapping, every gated operation and what each mode must do with it</td>
+</tr>
+<tr>
+<td><code>checkpoint-payloads.json</code></td>
+<td>Valid payloads with a token to recall them by, and invalid ones with the code they are refused with</td>
+</tr>
+<tr>
+<td><code>checkpoint-classifications.json</code></td>
+<td>Model replies a client's review may meet, with the items each must become or the refusal it must get</td>
+</tr>
+<tr>
+<td><code>failure-classes.json</code></td>
+<td>The failure classes, how each is detected, the code and status, and how each is shown</td>
+</tr>
+<tr>
+<td><code>off-isolation.json</code></td>
+<td>A marker drawer to seed, and every path by which an integration could show an <code>off</code> session MemCastle material</td>
+</tr>
+</tbody>
+</table>
+<p>The project-context cases live apart, in <code>tests/fixtures/project-config/cases.json</code>, because the daemon's mining reads the
+same file format: each case is a file tree, an optional home directory and environment, and either the wing, room and
+name it must resolve to or the error it must be refused with.</p>
+<p>In <code>modes.json</code>, an argument written as <code>{{mine_dir}}</code> stands for an existing absolute directory the test creates.</p>
+<p><code>tests/in_process/integration_contract.rs</code> replays them against an in-process daemon over MCP, using the helpers in
+<code>tests/common/mcp.rs</code>.
+A client-side suite in another language reads the same files and checks the same expectations through its own client,
+which is how Pi and OpenCode are held to the same behaviour.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

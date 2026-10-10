@@ -1,0 +1,2056 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/triggers/">
+      
+      
+        <link rel="prev" href="../mining-sources/">
+      
+      
+        <link rel="next" href="../deduplication/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Triggers - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Triggers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#defining-a-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Defining a trigger
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-each-type-needs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What each type needs
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What each type needs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Examples
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-webhook-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The webhook listener
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bursts-repeats-and-restarts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Bursts, repeats and restarts
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Failures
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-source-declares-what-can-trigger-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How a source declares what can trigger it
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-triggers-from-an-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reading triggers from an agent
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#defining-a-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Defining a trigger
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-each-type-needs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What each type needs
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What each type needs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Examples
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-webhook-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The webhook listener
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bursts-repeats-and-restarts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Bursts, repeats and restarts
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Failures
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-a-source-declares-what-can-trigger-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How a source declares what can trigger it
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-triggers-from-an-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reading triggers from an agent
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/triggers.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="triggers">Triggers<a class="headerlink" href="#triggers" title="Permanent link">&para;</a></h1>
+<p>A <strong>trigger</strong> asks the daemon to mine a miner's source on its own: on a timetable, on a poll, when a file changes, or when
+an external service calls a webhook.
+It decides <em>when</em>.
+How the source is read, how a document is normalised and what is new stay the job of the source and the mining
+pipeline, which a trigger never touches (<a href="../adr/043-source-triggers/">ADR-043</a>).</p>
+<p>Everything here is opt-in:</p>
+<ul>
+<li><strong>A source supports triggers; it does not start them.</strong>
+  A source can say what can trigger it, and that is all the declaration does.</li>
+<li><strong>A trigger is created disabled.</strong>
+  Installing a source, defining a miner, enabling a miner or writing a trigger into the configuration file starts no
+  task, opens no port and watches no file.</li>
+<li><strong>Enabling a trigger checks everything it needs first</strong>, says what is missing and how to set it up, and changes nothing
+  until all of it holds.</li>
+</ul>
+<pre class="mermaid"><code>flowchart LR
+    subgraph signals [Signals]
+        T[timetable]
+        P[poll]
+        W[webhook delivery]
+        F[file change]
+        M[memcastle trigger fire]
+    end
+    signals --&gt; S[trigger supervisor]
+    S --&gt;|"one request for a run"| R[miner run path]
+    R --&gt;|"joins a waiting run, or queues one"| J[(mining job)]
+    J --&gt; PL[mining pipeline: acquire, normalise, dedupe, store]</code></pre>
+<p>Every signal ends in the same request that <code>memcastle miner run</code> makes, so a trigger can cause nothing a person could not
+ask for by hand, and a manual firing, a timetable and a webhook all take one path.</p>
+<h2 id="defining-a-trigger">Defining a trigger<a class="headerlink" href="#defining-a-trigger" title="Permanent link">&para;</a></h2>
+<p>Triggers are the <code>[[triggers]]</code> entries of the configuration file, next to the <code>[[miners]]</code> they ask to run.
+They are managed from the file or from <a href="../cli/#trigger"><code>memcastle trigger</code></a>, and read (never changed) over MCP.
+The daemon rewrites only that section, in place, so your comments and the rest of the file survive.</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[[triggers]]</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"pi-nightly"</span><span class="w">        </span><span class="c1"># unique: lowercase letters, digits, `-` and `_`; `reload` is reserved</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"pi"</span><span class="w">               </span><span class="c1"># the miner it asks to run</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"schedule"</span><span class="w">          </span><span class="c1"># "schedule", "poll", "webhook" or "watch"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">            </span><span class="c1"># off unless you say otherwise; the daemon never turns it on by itself</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">every</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"1d"</span><span class="w">               </span><span class="c1"># the other keys depend on the type</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"03:30"</span>
+</span></code></pre></div>
+<p>A key the type does not take is an error, not an ignored typo.
+A secret is never written in the file: a webhook's shared secret is a <code>credential</code> reference to an environment variable
+or a file, and a setting that reads like a secret (<code>token</code>, <code>secret</code>, <code>api_key</code>, ...) is refused.</p>
+<p>The state in the palace (when a trigger last fired, when it is next due, its last failure, the deliveries it accepted)
+never says whether a trigger is enabled: only the file does, so a restart, a recovery or a re-install cannot override
+your choice.</p>
+<h2 id="what-each-type-needs">What each type needs<a class="headerlink" href="#what-each-type-needs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Fires</th>
+<th>Settings</th>
+<th>Needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schedule</code></td>
+<td>every <code>every</code>, or at <code>at</code> (UTC) every <code>every</code> days</td>
+<td><code>every</code> (<code>30s</code>, <code>5m</code>, <code>2h</code>, <code>1d</code>; at least <code>1s</code>), <code>at</code> (<code>HH:MM</code>, whole days only)</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td><code>poll</code></td>
+<td>every <code>every</code>, backing off while it keeps failing</td>
+<td><code>every</code>, <code>max_backoff</code> (default eight intervals)</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td><code>watch</code></td>
+<td>once a change under <code>path</code> has been quiet for <code>debounce</code></td>
+<td><code>path</code> (absolute), <code>debounce</code> (default <code>2s</code>, <code>100ms</code> to <code>1h</code>), <code>recursive</code> (default <code>true</code>)</td>
+<td>a source that declares <code>watch</code>; the path must exist</td>
+</tr>
+<tr>
+<td><code>webhook</code></td>
+<td>when an authentic delivery reaches the listener</td>
+<td><code>auth</code>, <code>header</code>, <code>prefix</code>, <code>encoding</code>, <code>delivery_header</code>; and a <code>credential</code></td>
+<td>a source that declares <code>webhook</code>; the <a href="#the-webhook-listener">webhook listener</a></td>
+</tr>
+</tbody>
+</table>
+<p><code>schedule</code> and <code>poll</code> are available to every source: they only mean "mine again".
+A <code>webhook</code> and a <code>watch</code> need the source to say what a delivery or a change means for it, so they need a declaration
+(<a href="#how-a-source-declares-what-can-trigger-it">below</a>).
+<code>memcastle sources</code> shows what each source supports.</p>
+<p>A timetable never fires on the spot when you enable it: its first request is one interval (or the next time of day) away.
+When the daemon was down at a due time, it fires once on its way back and not once per missed slot.</p>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<p>A daily background mine of Pi sessions, replacing what the Pi integration used to do on its own
+(<a href="https://github.com/noirbizarre/memcastle/issues/26">#26</a>):</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">set</span><span class="w"> </span>pi<span class="w"> </span>--source<span class="w"> </span>pi
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>pi-nightly<span class="w"> </span>--miner<span class="w"> </span>pi<span class="w"> </span>--type<span class="w"> </span>schedule<span class="w"> </span>--setting<span class="w"> </span><span class="nv">every</span><span class="o">=</span>1d<span class="w"> </span>--setting<span class="w"> </span><span class="nv">at</span><span class="o">=</span><span class="m">03</span>:30
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pi-nightly
+</span></code></pre></div>
+<p>Re-mine a directory when its files change:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">set</span><span class="w"> </span>notes<span class="w"> </span>--source<span class="w"> </span>directory<span class="w"> </span>--locator<span class="w"> </span>/home/me/notes
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>notes-watch<span class="w"> </span>--miner<span class="w"> </span>notes<span class="w"> </span>--type<span class="w"> </span>watch<span class="w"> </span>--setting<span class="w"> </span><span class="nv">path</span><span class="o">=</span>/home/me/notes<span class="w"> </span>--setting<span class="w"> </span><span class="nv">debounce</span><span class="o">=</span>2s
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>notes-watch
+</span></code></pre></div>
+<p>A source with no event mechanism, polled:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>docs-poll<span class="w"> </span>--miner<span class="w"> </span>docs<span class="w"> </span>--type<span class="w"> </span>poll<span class="w"> </span>--setting<span class="w"> </span><span class="nv">every</span><span class="o">=</span>15m<span class="w"> </span>--enable
+</span></code></pre></div>
+<p>Watch Claude Code transcripts after defining its miner.
+The source only declares the capability: neither installing it nor a Claude Code client creates or enables this trigger.</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">set</span><span class="w"> </span>claude-history<span class="w"> </span>--source<span class="w"> </span>claude<span class="w"> </span>--locator<span class="w"> </span>/home/me/.claude/projects
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>claude-history-watch<span class="w"> </span>--miner<span class="w"> </span>claude-history<span class="w"> </span>--type<span class="w"> </span>watch<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span>--setting<span class="w"> </span><span class="nv">path</span><span class="o">=</span>/home/me/.claude/projects<span class="w"> </span>--setting<span class="w"> </span><span class="nv">debounce</span><span class="o">=</span>5s
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Review the source's read permission, then opt in:</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>claude-history-watch
+</span></code></pre></div>
+<h2 id="the-webhook-listener">The webhook listener<a class="headerlink" href="#the-webhook-listener" title="Permanent link">&para;</a></h2>
+<p>A webhook trigger is delivered to a listener of its own: a separate socket from the REST API and the MCP endpoint.
+The daemon's token authenticates <em>clients</em> of the daemon, while the sender of a webhook can only be given a shared secret
+for its own trigger, so the two are kept apart, and every route on the main API stays behind the daemon's authentication.</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[webhook]</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">enable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">            </span><span class="c1"># off by default; nothing listens while it is off</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">bind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="w">       </span><span class="c1"># loopback by default</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8787</span><span class="w">              </span><span class="c1"># must differ from `server.port` and `db.port`</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">allow_remote</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">     </span><span class="c1"># a bind beyond loopback needs this *and* `auth.enabled`</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">max_body_bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1048576</span><span class="w"> </span><span class="c1"># larger deliveries are refused</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">max_concurrent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="w">      </span><span class="c1"># deliveries worked on at once; more are told to retry (429)</span>
+</span></code></pre></div>
+<p>Nothing listens until you have set <code>enable</code> <strong>and</strong> enabled a webhook trigger: the listener is bound when the first
+webhook trigger starts and closed when the last one stops.
+It is never exposed to the outside by the daemon.
+Reaching it from the internet is yours to arrange, and these are the prerequisites:</p>
+<ol>
+<li><strong>A reachable address.</strong>
+   Keep <code>bind = "127.0.0.1"</code> and put a reverse proxy or a tunnel in front of it, or set <code>allow_remote = true</code> with
+   <code>auth.enabled = true</code> to bind a network interface (the daemon refuses a remote bind without authentication).</li>
+<li><strong>TLS.</strong>
+   The listener speaks plain HTTP.
+   Terminate TLS in the proxy: a webhook sender should never be given an <code>http://</code> URL on the internet.</li>
+<li><strong>A firewall or router rule</strong> that lets the sender reach the proxy or tunnel, and nothing else.</li>
+<li><strong>A shared secret</strong> in an environment variable of the daemon or in a file, referenced by the trigger's <code>credential</code>.
+   It is read at each delivery, so rotating it needs no restart.</li>
+<li><strong>The sender's configuration</strong>: the URL <code>https://&lt;your host&gt;/hooks/&lt;trigger name&gt;</code>, and the same secret.</li>
+</ol>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HOOK_SECRET</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>openssl<span class="w"> </span>rand<span class="w"> </span>-hex<span class="w"> </span><span class="m">32</span><span class="k">)</span><span class="s2">"</span><span class="w">           </span><span class="c1"># in the daemon's environment</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>notes-hook<span class="w"> </span>--miner<span class="w"> </span>notes<span class="w"> </span>--type<span class="w"> </span>webhook<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span>--credential-env<span class="w"> </span>HOOK_SECRET<span class="w"> </span>--setting<span class="w"> </span><span class="nv">delivery_header</span><span class="o">=</span>x-github-delivery
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>notes-hook<span class="w">                    </span><span class="c1"># refused, with the missing setup, until all of it holds</span>
+</span></code></pre></div>
+<p>A delivery is <code>POST /hooks/&lt;trigger name&gt;</code> and proves itself in one of two ways:</p>
+<ul>
+<li><code>auth = "hmac-sha256"</code> (the default): a header (<code>header</code>, default <code>x-hub-signature-256</code>) holds the HMAC-SHA-256 of the
+  raw body keyed with the secret, after <code>prefix</code> (default <code>sha256=</code>) and encoded as <code>hex</code> (default) or <code>base64</code>.
+  This is GitHub's scheme.</li>
+<li><code>auth = "token"</code>: the header (default <code>x-memcastle-token</code>) holds the secret itself.</li>
+</ul>
+<p>Whatever is wrong with a delivery (an unknown trigger, a disabled one, a missing secret, a bad or absent signature) is the
+same empty <code>401</code>, so the listener does not say which triggers exist.
+Signatures are compared in constant time.
+The body is hashed to check the signature and then dropped: it is never stored, logged or handed on, because a trigger
+says <em>that</em> something changed and the source decides what.
+Schemes that sign a timestamp as well (Slack's) are not supported yet; a source that needs one can be fronted by a proxy
+that verifies it.</p>
+<p>An accepted delivery is answered <code>202</code> with <code>{"status": "queued" | "coalesced" | "duplicate", "job": ...}</code>.</p>
+<h2 id="bursts-repeats-and-restarts">Bursts, repeats and restarts<a class="headerlink" href="#bursts-repeats-and-restarts" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>A burst is one job.</strong>
+  A request for a run that finds a run of the same source with the same settings still <em>queued</em> joins it instead of
+  queueing another: that run reads whatever has changed by the time it starts.
+  A run already <em>running</em> does not count, because it may have passed the part that changed, so a change during a run
+  queues one follow-up.
+  At most one run is running and one waiting per miner, however many events arrive.
+  This is <code>coalesced</code> in the answers and in <code>memcastle trigger get</code>.</li>
+<li><strong>Concurrency is bounded.</strong>
+  The webhook listener works on <code>max_concurrent</code> deliveries at once and answers <code>429</code> with <code>Retry-After</code> beyond that;
+  a watcher collapses a burst of changes into one request; and jobs run under <code>jobs.max_concurrency</code> as always.</li>
+<li><strong>A repeated delivery runs once.</strong>
+  With <code>delivery_header</code> set, a delivery whose id was already accepted is answered <code>202</code> (so the sender stops retrying)
+  and not run again.
+  The id is remembered for seven days.
+  A delivery that could not be queued is forgotten, so the sender's retry is a new attempt.
+  Without <code>delivery_header</code> there is nothing to tell a repeat from a new event, and coalescing is what bounds the work.
+  Either way the mining pipeline is idempotent: an unchanged document is skipped, so a repeat costs one pass over the
+  source and never a duplicate memory.</li>
+<li><strong>A restart is safe.</strong>
+  A delivery accepted but not yet queued when the daemon died is queued when it starts again, if its trigger is still
+  enabled in the file.
+  A timetable keeps the time it was waiting for.
+  A trigger the file says is disabled stays disabled, whatever the palace remembers.</li>
+</ul>
+<h2 id="failures">Failures<a class="headerlink" href="#failures" title="Permanent link">&para;</a></h2>
+<p>Every enabled trigger is one of:</p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>disabled</code></td>
+<td>switched off, which is how every trigger starts</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>enabled and working</td>
+</tr>
+<tr>
+<td><code>failing</code></td>
+<td>enabled, but its last attempts failed; <code>last_error</code> says what, and how many in a row</td>
+</tr>
+<tr>
+<td><code>unavailable</code></td>
+<td>enabled, but something it needs is missing (the miner was disabled or removed, the secret or the watched path is gone, the source no longer supports it); the reason says what</td>
+</tr>
+</tbody>
+</table>
+<p>A failing or unavailable trigger never stops the daemon or another trigger, and <code>unavailable</code> is worked out each time and
+never stored.
+The supervisor looks again every few seconds, so the cause of a failure being fixed is enough:</p>
+<ul>
+<li>a watcher that cannot be set up (the path is missing, the system's watch limit is reached) is set up again with a
+  growing wait, up to a minute;</li>
+<li>a poll that fails waits longer each time, up to <code>max_backoff</code>, and returns to its interval on the first success;</li>
+<li>a listener that cannot bind (the port is taken) is retried on every look, and the reason is on each webhook trigger;</li>
+<li>a hand edit of the configuration file is picked up within a few seconds, or by <code>memcastle trigger reload</code>.</li>
+</ul>
+<p><code>memcastle trigger list</code> shows every trigger's status, when it last fired and what last went wrong, and the dashboard
+shows the same under <em>Triggers</em>.
+Failures are also published on the <a href="../mcp-and-api/#the-event-stream">event stream</a> as <code>trigger</code> events, which carry the
+trigger's name and a fixed word and never a message.</p>
+<h2 id="how-a-source-declares-what-can-trigger-it">How a source declares what can trigger it<a class="headerlink" href="#how-a-source-declares-what-can-trigger-it" title="Permanent link">&para;</a></h2>
+<p>A source lists the mechanisms it supports beyond the two every source has, in its manifest
+(<a href="../writing-sources/">Writing a mining source</a>):</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">[triggers.watch]</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"a session file is created or changed under the session directory"</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">[triggers.webhook]</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"the service reports that a conversation changed"</span>
+</span></code></pre></div>
+<p>This is a capability and nothing more.
+It is not a permission, so it is no part of what a user consents to when installing, and it changes neither the source
+contract nor the manifest format.
+A source that declares nothing is a complete source: it is still schedulable and pollable, and <code>memcastle miner run</code>
+mines it on demand.
+The built-in <code>directory</code> source declares <code>watch</code> and <code>webhook</code>, as do the reference sources where a watched path makes
+sense.</p>
+<p>The trigger layer never reads the source, never runs its code and never carries a payload to it.
+When a trigger fires, the source is asked to <code>discover</code> and <code>read</code> from its cursor like any other run, and finds whatever
+the signal was about.
+Vendor integrations (Todoist, GitHub, Slack, ...) are therefore sources that read their service on request, plus a trigger
+the user chooses and enables, and not code in the trigger layer.</p>
+<h2 id="reading-triggers-from-an-agent">Reading triggers from an agent<a class="headerlink" href="#reading-triggers-from-an-agent" title="Permanent link">&para;</a></h2>
+<p><code>memcastle_trigger_list</code> and <code>memcastle_trigger_get</code> show what is configured, and nothing over MCP can define, enable,
+disable, remove or fire a trigger: what runs unattended is the user's decision, like what a miner mines.
+Secrets are reported as <code>env</code> or <code>file</code> and whether they resolve, never their name, their path or their value.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3260 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/cli/">
+      
+      
+        <link rel="prev" href="../configuration/">
+      
+      
+        <link rel="next" href="../mcp-and-api/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>CLI - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CLI
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#output-colour-and-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Output, colour and prompts
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#global-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Global flags
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daemon-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Daemon lifecycle
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Daemon lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#doctor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Doctor
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shell-completion" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shell completion
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Database access
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exit-codes-of-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Exit codes of <code>status</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Memory
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>search</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>recall</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wake-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>wake-up</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diary" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>diary</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>note</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mine" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>mine</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>sources</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>source</code>
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="source">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>source auth</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#miner" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>miner</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>trigger</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>integration</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>checkpoint</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>fact history</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wings-rooms-and-drawers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wings, rooms and drawers
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Maintenance
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#embed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>embed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extract" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>extract</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>audit</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repair" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>repair</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Jobs
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Authentication
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-implemented-yet" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Not implemented yet
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#output-colour-and-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Output, colour and prompts
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#global-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Global flags
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daemon-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Daemon lifecycle
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Daemon lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#doctor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Doctor
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shell-completion" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shell completion
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#database-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Database access
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exit-codes-of-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Exit codes of <code>status</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Memory
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#search" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>search</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recall" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>recall</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wake-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>wake-up</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diary" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>diary</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>note</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mine" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>mine</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>sources</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>source</code>
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="source">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>source auth</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#miner" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>miner</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>trigger</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>integration</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>checkpoint</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fact-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>fact history</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wings-rooms-and-drawers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wings, rooms and drawers
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Maintenance
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Maintenance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#embed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>embed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extract" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>extract</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>audit</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repair" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>repair</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Jobs
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Authentication
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-implemented-yet" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Not implemented yet
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/cli.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="cli-reference">CLI reference<a class="headerlink" href="#cli-reference" title="Permanent link">&para;</a></h1>
+<p>The <code>memcastle</code> binary is one daemon plus a set of thin clients.
+<code>serve</code> runs the daemon in the foreground, <code>daemon start</code> runs it in the background,
+and <code>migrate</code> talks to storage directly.
+<code>doctor</code> checks local configuration without a daemon and uses read-only HTTP requests for runtime checks when one is available.
+Most other subcommands are HTTP calls to a running daemon, so they fail with <code>memcastle::client::not_running</code>
+(and points you at <code>memcastle daemon start</code>) when none is running.
+Other commands differ:
+<code>status</code> reports a stopped daemon instead of failing, <code>doctor</code> reports offline checks without failing,
+<code>daemon restart</code> starts a daemon when none is running,
+<code>completions</code> prints a script locally and needs neither a daemon nor a configuration file,
+the local <code>source</code> commands (<code>init</code>, <code>build</code>, <code>test</code>, <code>package</code>, <code>index</code> and <code>keygen</code>) work on a project directory or on
+archives with no daemon at all,
+the <code>integration</code> commands (<code>list</code>, <code>install</code>, <code>update</code> and <code>remove</code>) work on files and the agent's own commands with no
+daemon at all,
+<code>note</code> reads the project directory to choose a wing and room before it calls the daemon,
+and the reserved command (see <a href="#not-implemented-yet">Not implemented yet</a>) fails with <code>memcastle::cli::not_implemented</code>
+without contacting a daemon.
+Run <code>memcastle &lt;command&gt; --help</code> for the authoritative text of any flag.
+There is no <code>help</code> subcommand: <code>--help</code> is the one way to ask.</p>
+<p>Every command that has an answer to give follows one rule:
+it prints a readable rendering when standard output is a terminal, and JSON when it is not (or when <code>--json</code> is given).
+<code>memcastle mine .</code> in a terminal prints the queued job and how to follow it,
+and <code>memcastle mine . | jq .id</code> prints the job as JSON.
+See <a href="#output-colour-and-prompts">Output, colour and prompts</a>.</p>
+<h2 id="output-colour-and-prompts">Output, colour and prompts<a class="headerlink" href="#output-colour-and-prompts" title="Permanent link">&para;</a></h2>
+<p>What the CLI shows depends on where its output goes, so a script needs no flag:
+a terminal gets a readable rendering with colour, and a pipe or a file gets plain JSON.
+The readable rendering is not meant to be parsed and may change between releases, whereas the JSON is the contract.
+<code>--json</code> forces the JSON form on a terminal, for <code>memcastle search auth --json | jq</code> or to see the same data a script
+would receive.
+On a colour-capable terminal JSON is indented and syntax-highlighted; <code>NO_COLOR</code> leaves it indented but plain.
+In a pipe or a file JSON stays indented and free of escape codes, even with <code>FORCE_COLOR</code>.
+It is a global flag, accepted before or after any subcommand, and it never changes a command's exit code.</p>
+<p>This applies to <code>status</code>, <code>doctor</code>, <code>db</code>, <code>integration</code>, <code>migrate</code>, <code>daemon stop</code>, <code>mine</code>
+and the other commands that queue a job
+(<code>audit</code>, <code>embed</code>, <code>extract</code>, <code>repair</code>, <code>checkpoint</code>), <code>job</code> (all subcommands), <code>search</code>, <code>recall</code>, <code>wake-up</code>, <code>diary</code>,
+<code>note</code>, <code>sources</code>, <code>miner</code>, every daemon-side <code>source</code> command, and the <code>wing</code>, <code>room</code> and <code>drawer</code> commands.
+Four groups of commands have no answer to render and print the same text on every stream:</p>
+<ul>
+<li><code>daemon start</code> and <code>daemon restart</code> print the <code>started:</code> or <code>restarted:</code> line.</li>
+<li>The local <code>source</code> commands (<code>init</code>, <code>build</code>, <code>test</code>, <code>package</code>, <code>index</code> and <code>keygen</code>) print their progress.</li>
+<li><code>auth generate</code> prints the token and nothing else, so it can be captured.
+  A secret is never put in JSON.</li>
+<li><code>completions</code> prints a script.</li>
+</ul>
+<p><code>--json</code> is accepted on these too and changes nothing.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NO_COLOR</code> set to anything</td>
+<td>No colour anywhere, even on a terminal.</td>
+</tr>
+<tr>
+<td><code>FORCE_COLOR=1</code></td>
+<td>Colour even in piped text (help, diagnostics and progress), but never in piped JSON.</td>
+</tr>
+<tr>
+<td><code>FORCE_COLOR=0</code></td>
+<td>Disable colour.</td>
+</tr>
+<tr>
+<td><code>TERM=dumb</code></td>
+<td>Disable automatic colour detection; <code>FORCE_COLOR=1</code> overrides it.</td>
+</tr>
+</tbody>
+</table>
+<p>Colour is added around words and never replaces them.
+It colours <code>--help</code>, <code>status</code> and <code>db status</code> reports (healthy in green, degraded or unavailable in red,
+things that need attention in yellow), the table of <code>job list</code>, the card of a job, and the diagnostics printed on failure.
+JSON is also highlighted when requested on a terminal; piped JSON never receives escape codes, even with <code>FORCE_COLOR=1</code>.
+<code>NO_COLOR</code> takes precedence when both colour variables are set.
+A job status has the same colour wherever it is shown:
+queued yellow, running cyan, paused magenta, completed green, failed red and cancelled dim.
+Standard output and standard error are decided separately:
+with <code>memcastle status 2&gt; errors.log</code> the report stays coloured and the log stays plain.</p>
+<p><code>repair --apply</code>, <code>auth generate</code>, <code>auth revoke</code>, <code>job cancel</code>, <code>source remove</code> and the <code>delete</code> commands of <code>wing</code>, <code>room</code>
+and <code>drawer</code> ask for confirmation, with a prompt on standard error that defaults to "no".
+<code>--yes</code> (or <code>-y</code>) skips the question.
+When standard input or standard error is not a terminal, a script or CI job for instance,
+they never ask and proceed, because the caller has already decided.
+Declining the prompt exits with <code>memcastle::cli::aborted</code> and changes nothing.</p>
+<p><code>source install</code> and <code>source update</code> are the exception, because what they ask about is code that will run with
+permissions: when a package asks for any, they ask in a terminal, and without a terminal they refuse
+(<code>memcastle::source::consent_required</code>, or exit <code>1</code> for <code>update</code>) unless <code>--yes</code> is given.
+For an unattended install, <code>source install --consent &lt;digest&gt;</code> agrees only to the displayed permissions digest;
+<code>source update</code> accepts <code>--yes</code> but not <code>--consent</code> (see <a href="#source"><code>source</code></a>).</p>
+<h2 id="global-flags">Global flags<a class="headerlink" href="#global-flags" title="Permanent link">&para;</a></h2>
+<p>These flags are accepted by every subcommand, before or after its name.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Environment variable</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-v</code>, <code>-vv</code></td>
+<td>none</td>
+<td>Log MemCastle at <code>debug</code> (<code>-v</code>) or <code>trace</code> (<code>-vv</code>), and print the full cause chain of an error.</td>
+</tr>
+<tr>
+<td><code>--json</code></td>
+<td>none</td>
+<td>Print JSON even on a terminal, see <a href="#output-colour-and-prompts">Output, colour and prompts</a>.</td>
+</tr>
+<tr>
+<td><code>--config &lt;FILE&gt;</code></td>
+<td><code>MEMCASTLE_CONFIG</code></td>
+<td>Config file to read. It must exist when named explicitly.</td>
+</tr>
+<tr>
+<td><code>--palace &lt;PATH&gt;</code></td>
+<td>none</td>
+<td>Absolute palace directory, overriding <code>MEMCASTLE_PALACE_PATH</code> and <code>palace.path</code>.</td>
+</tr>
+<tr>
+<td><code>--mode &lt;MODE&gt;</code></td>
+<td><code>MEMCASTLE_MODE</code></td>
+<td>Run the command as a session in <code>full</code> (the default), <code>read_only</code> or <code>disabled</code> mode.</td>
+</tr>
+</tbody>
+</table>
+<p><code>--mode</code> makes a client command behave like an agent session in that mode: the daemon rejects what the mode forbids.
+It is a way to check what a restricted session can do, see <a href="../memory-modes/">Memory modes</a>.
+See <a href="../configuration/">Configuration</a> for how these flags combine with the config file and environment variables.</p>
+<h2 id="daemon-lifecycle">Daemon lifecycle<a class="headerlink" href="#daemon-lifecycle" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle serve [--bind &lt;IP&gt;] [--port &lt;PORT&gt;] [--assets-dir &lt;DIR&gt;]</code></td>
+<td>Run the daemon in the foreground.</td>
+</tr>
+<tr>
+<td><code>memcastle daemon start [--bind &lt;IP&gt;] [--port &lt;PORT&gt;] [--assets-dir &lt;DIR&gt;]</code></td>
+<td>Start a detached daemon and wait until it serves. Fails if one is already running.</td>
+</tr>
+<tr>
+<td><code>memcastle daemon stop</code></td>
+<td>Ask the running daemon to shut down gracefully.</td>
+</tr>
+<tr>
+<td><code>memcastle daemon restart [--bind &lt;IP&gt;] [--port &lt;PORT&gt;] [--assets-dir &lt;DIR&gt;]</code></td>
+<td>Stop the running daemon, start a detached new one and wait until it serves.</td>
+</tr>
+<tr>
+<td><code>memcastle status</code></td>
+<td>Report whether the daemon is running, where, which palace, and whether the datastore is healthy.</td>
+</tr>
+<tr>
+<td><code>memcastle tui</code></td>
+<td>Open the interactive operations console for mining jobs and maintenance; see <a href="../tui/">Terminal operations console</a>.</td>
+</tr>
+<tr>
+<td><code>memcastle doctor</code></td>
+<td>Diagnose configuration, local prerequisites, and available daemon/runtime state without changing anything.</td>
+</tr>
+<tr>
+<td><code>memcastle migrate [--check \| --status]</code></td>
+<td>Apply, or just inspect, the palace's migrations without a daemon.</td>
+</tr>
+<tr>
+<td><code>memcastle completions &lt;SHELL&gt;</code></td>
+<td>Print a shell completion script, see <a href="#shell-completion">Shell completion</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>--bind</code>, <code>--port</code> and <code>--assets-dir</code> only exist on <code>serve</code>, <code>daemon start</code> and <code>daemon restart</code>;
+client commands find the daemon through its registry file instead.
+<code>--assets-dir</code> names a directory of runtime assets that outranks the installed and built-in ones,
+see <a href="../configuration/#runtime-assets">Runtime assets</a>.
+<code>tui</code> requires interactive standard input and output and refuses <code>--json</code>;
+the ordinary CLI commands continue to provide JSON for scripts.
+See <a href="../daemon/">Running the daemon</a> for the details of each, and <a href="../migrations/">Migrations and upgrades</a> for <code>migrate</code>.</p>
+<h3 id="doctor">Doctor<a class="headerlink" href="#doctor" title="Permanent link">&para;</a></h3>
+<p>Run <code>memcastle doctor</code> to check the effective configuration (defaults, file, environment and CLI overrides),
+unknown file keys, directory prerequisites, configured providers, enabled miner and trigger prerequisites,
+and the running daemon's storage and migration state when it answers.
+An absent default config file is normal; an explicitly named missing config file is an error.
+Unknown TOML keys are warnings, because normal loading currently ignores them.
+Checks that depend on invalid configuration or a stopped daemon are marked <code>SKIPPED</code>.
+A stopped daemon is a warning: offline checks can succeed without starting one.
+The command never initializes a palace, opens the database, executes a provider, contacts a provider/model or source registry,
+or writes to the filesystem; actual write access and provider/model availability remain unverified.
+It prints no credential values or raw sensitive settings.</p>
+<p>Example terminal output (a new palace with no daemon):</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>MemCastle doctor
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Configuration
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  [OK] file: No default file; built-in defaults apply.
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  [OK] effective: Effective configuration passes validation.
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Paths
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  [SKIPPED] palace.path: Optional directory does not exist yet.
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  [SKIPPED] embedded database: Optional directory does not exist yet.
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>  [SKIPPED] mining.sources_dir: Optional directory does not exist yet.
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>  [SKIPPED] write access: Write access is not tested without creating files.
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Providers
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  [OK] embeddings: No external provider is selected.
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  [OK] extraction: No external provider is selected.
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>Daemon and storage
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  [WARNING] daemon: No daemon is reachable for this palace.
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        Fix: Start it with `memcastle daemon start` to run online checks.
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  [SKIPPED] storage and migrations: Requires an authenticated running daemon.
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Sources and miners
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>  [SKIPPED] runtime prerequisites: Requires an authenticated running daemon.
+</span></code></pre></div>
+<p><code>memcastle doctor --json</code> (also the default when piped) returns an object with <code>findings</code> in presentation order.
+An excerpt showing one finding:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="nt">"findings"</span><span class="p">:[{</span><span class="nt">"area"</span><span class="p">:</span><span class="s2">"Daemon and storage"</span><span class="p">,</span><span class="nt">"check"</span><span class="p">:</span><span class="s2">"daemon"</span><span class="p">,</span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"warning"</span><span class="p">,</span><span class="nt">"summary"</span><span class="p">:</span><span class="s2">"No daemon is reachable for this palace."</span><span class="p">,</span><span class="nt">"remediation"</span><span class="p">:</span><span class="s2">"Start it with `memcastle daemon start` to run online checks."</span><span class="p">}]}</span>
+</span></code></pre></div>
+<p>Each finding has <code>area</code>, <code>check</code>, <code>status</code> (<code>ok</code>, <code>warning</code>, <code>error</code>, <code>skipped</code>), <code>summary</code>,
+and an optional <code>remediation</code>.
+Exit status is <code>0</code> when there are no blocking <code>error</code> findings (warnings and skipped checks alone do not fail),
+or <code>1</code> when at least one check is an error; the full report is printed on standard output either way.</p>
+<h3 id="shell-completion">Shell completion<a class="headerlink" href="#shell-completion" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>memcastle<span class="w"> </span>completions<span class="w"> </span>&lt;SHELL&gt;
+</span></code></pre></div>
+<p><code>&lt;SHELL&gt;</code> is <code>bash</code>, <code>zsh</code>, <code>fish</code>, <code>powershell</code> or <code>elvish</code>.
+The script goes to standard output, and the command needs neither a daemon nor a working configuration file.
+Completion offers subcommands, flags and the values of <code>--mode</code> and <code>job list --status</code>.
+It does not complete job ids, which would need a running daemon.
+Install it once, for your shell:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># bash (needs the bash-completion package)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>memcastle<span class="w"> </span>completions<span class="w"> </span>bash<span class="w"> </span>&gt;<span class="w"> </span>~/.local/share/bash-completion/completions/memcastle
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># zsh: any directory on your $fpath, before compinit runs</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>memcastle<span class="w"> </span>completions<span class="w"> </span>zsh<span class="w"> </span>&gt;<span class="w"> </span>~/.zfunc/_memcastle
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># fish</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>memcastle<span class="w"> </span>completions<span class="w"> </span>fish<span class="w"> </span>&gt;<span class="w"> </span>~/.config/fish/completions/memcastle.fish
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># PowerShell: add this line to your profile</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>memcastle<span class="w"> </span>completions<span class="w"> </span>powershell<span class="w"> </span><span class="p">|</span><span class="w"> </span>Out-String<span class="w"> </span><span class="p">|</span><span class="w"> </span>Invoke-Expression
+</span></code></pre></div>
+<p>The Homebrew formula, the <code>.deb</code> and <code>.rpm</code> packages and the AUR package install the bash, zsh and fish scripts for you.</p>
+<h3 id="database-access">Database access<a class="headerlink" href="#database-access" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle db start [--bind &lt;IP&gt;] [--port &lt;PORT&gt;] [--allow-remote] [--allow-origin &lt;ORIGIN&gt;]...</code></td>
+<td>Ask the running daemon to open its database admin endpoint, then return. Succeeds, reporting the same details, when it is already open.</td>
+</tr>
+<tr>
+<td><code>memcastle db status</code></td>
+<td>Report whether the endpoint is open, and where.</td>
+</tr>
+<tr>
+<td><code>memcastle db stop</code></td>
+<td>Close the endpoint and its connections.</td>
+</tr>
+</tbody>
+</table>
+<p>These are client commands: the endpoint lives in the daemon, the only process that may open the embedded database,
+so <code>db start</code> returns as soon as it is listening and never starts a second database process.
+It listens on <code>127.0.0.1</code> port <code>8000</code> unless told otherwise, and prints the URL, the namespace and the database to give
+SurrealDB Studio.
+A non-loopback <code>--bind</code> is refused (<code>memcastle::db::unsafe_bind</code>) unless <code>--allow-remote</code> is given and the daemon has
+authentication enabled.
+<code>--allow-origin</code> may be repeated, and lets a browser page from that origin connect;
+pages served from this machine and the SurrealDB Studio desktop app need no flag.
+Running <code>db start</code> while the endpoint is already open is not an error:
+it prints <code>already running on</code> the URL instead of <code>listening on</code>, followed by the same details, and exits <code>0</code>
+(as JSON, <code>already_running</code> is <code>true</code>).
+Flags that contradict the open endpoint
+(another <code>--bind</code>, a <code>--port</code> other than the one it uses, or an <code>--allow-origin</code> it does not allow)
+are refused with <code>memcastle::db::already_running</code>: run <code>db stop</code> first to change them.
+<code>db status</code> prints the user to sign in with, which is <code>memcastle</code>.
+Flags left out fall back to the <code>[db]</code> <a href="../configuration/#the-database-admin-endpoint">settings</a>.
+See <a href="../database-access/">Database access</a>.</p>
+<h3 id="exit-codes-of-status">Exit codes of <code>status</code><a class="headerlink" href="#exit-codes-of-status" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>A daemon is running and its datastore is healthy.</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>A daemon answered but is degraded (datastore unreachable or migrations pending), or an error occurred.</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>No daemon is running.</td>
+</tr>
+</tbody>
+</table>
+<p>Every other command exits <code>0</code> on success and <code>1</code> on any failure.
+Failures print a diagnostic with a <code>memcastle::&lt;module&gt;::&lt;kind&gt;</code> code and what to do about it.</p>
+<h2 id="memory">Memory<a class="headerlink" href="#memory" title="Permanent link">&para;</a></h2>
+<h3 id="search"><code>search</code><a class="headerlink" href="#search" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span>search<span class="w"> </span>&lt;QUERY&gt;<span class="w"> </span><span class="o">[</span>--limit<span class="w"> </span>&lt;N&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--room<span class="w"> </span>&lt;ROOM&gt;<span class="o">]</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">                 </span><span class="o">[</span>--ranking<span class="w"> </span>&lt;auto<span class="p">|</span>lexical<span class="p">|</span>semantic<span class="p">|</span>hybrid&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--tag<span class="w"> </span>&lt;TAG&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--source-kind<span class="w"> </span>&lt;KIND&gt;<span class="o">]</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">                 </span><span class="o">[</span>--as-of<span class="w"> </span>&lt;WHEN&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--from<span class="w"> </span>&lt;WHEN&gt;<span class="w"> </span>--until<span class="w"> </span>&lt;WHEN&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--include-historical<span class="o">]</span><span class="w"> </span><span class="o">[</span>--expand<span class="o">]</span>
+</span></code></pre></div>
+<p>Search drawer content, lexically, by meaning or both.
+<code>--ranking auto</code> (the default) is hybrid when the daemon has an <a href="../configuration/#embeddings">embedding provider</a> and
+lexical otherwise.
+Lexical matching returns drawers containing every word of the query and, if there are none, drawers containing any of them.
+<code>--limit</code> defaults to 10 and is capped at 200.
+<code>--wing</code> restricts results to a wing, <code>--room</code> to a room directly, <code>--tag</code> (repeatable) to drawers carrying every tag,
+and <code>--source-kind</code> to <code>file</code>, <code>manual</code>, <code>transcript</code>, <code>note</code> or <code>other</code>.
+Only memory valid now is searched, and four options choose another time (they cannot be combined):
+<code>--as-of</code> searches what was true at one instant, <code>--from</code> with <code>--until</code> what was true at some moment of the window
+<code>[from, until)</code>, and <code>--include-historical</code> every version, superseded ones too.
+An instant (<code>&lt;WHEN&gt;</code>) is an RFC 3339 timestamp such as <code>2026-01-31T12:00:00Z</code>, or a date such as <code>2026-01-31</code> meaning midnight
+UTC at the start of that day.</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>memcastle<span class="w"> </span>search<span class="w"> </span><span class="s2">"database we use"</span><span class="w"> </span>--as-of<span class="w"> </span><span class="m">2026</span>-01-01
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>memcastle<span class="w"> </span>search<span class="w"> </span><span class="s2">"database we use"</span><span class="w"> </span>--from<span class="w"> </span><span class="m">2026</span>-01-01<span class="w"> </span>--until<span class="w"> </span><span class="m">2027</span>-01-01
+</span></code></pre></div>
+<p>Both ends of an interval are required, and <code>--until</code> is exclusive and must be after <code>--from</code>,
+so the second command is exactly 2026.
+The rules, and how a boundary behaves, are in <a href="../mcp-and-api/#searching">Searching</a>.
+<code>--expand</code> appends drawers related to the hits through the knowledge graph.
+The option is <code>--ranking</code> because <code>--mode</code> is the <a href="../memory-modes/">memory mode</a>.
+In a terminal each hit is a numbered block with its score, where it came from and the first lines of its content;
+the full content is in <code>memcastle drawer show</code> and in the JSON.
+Piped, or with <code>--json</code>, the output is JSON, and the fields of each hit are described in
+<a href="../mcp-and-api/#searching">Searching</a>.</p>
+<h3 id="recall"><code>recall</code><a class="headerlink" href="#recall" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span>recall<span class="w"> </span>&lt;QUERY&gt;<span class="w"> </span><span class="o">[</span>--limit<span class="w"> </span>&lt;N&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--ranking<span class="w"> </span>&lt;…&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--tag<span class="w"> </span>&lt;TAG&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--source-kind<span class="w"> </span>&lt;KIND&gt;<span class="o">]</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">                 </span><span class="o">[</span>--as-of<span class="w"> </span>&lt;WHEN&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--from<span class="w"> </span>&lt;WHEN&gt;<span class="w"> </span>--until<span class="w"> </span>&lt;WHEN&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--include-historical<span class="o">]</span><span class="w"> </span><span class="o">[</span>--expand<span class="o">]</span>
+</span></code></pre></div>
+<p>The recall-oriented counterpart to <code>search</code>.
+It returns matching drawers verbatim, with the same options and limit rules, except that it has no <code>--room</code>.</p>
+<h3 id="wake-up"><code>wake-up</code><a class="headerlink" href="#wake-up" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>memcastle<span class="w"> </span>wake-up<span class="w"> </span>--agent-identity<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--max-items<span class="w"> </span>&lt;N&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--max-bytes<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Builds the session-start context for an agent identity:
+its most recent diary entry (only when <code>--wing</code> is given) plus recent checkpoint-originated highlights.
+<code>--max-items</code> defaults to 10 and <code>--max-bytes</code> to 8192; highlights are dropped whole, never cut mid-content.
+<code>wake_up</code> is accepted as an alias.</p>
+<h3 id="diary"><code>diary</code><a class="headerlink" href="#diary" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>memcastle<span class="w"> </span>diary<span class="w"> </span>write<span class="w"> </span>--agent-identity<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>--wing<span class="w"> </span>&lt;WING&gt;<span class="w"> </span>&lt;CONTENT&gt;
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>memcastle<span class="w"> </span>diary<span class="w"> </span><span class="nb">read</span><span class="w">  </span>--agent-identity<span class="w"> </span>&lt;ID&gt;<span class="w"> </span>--wing<span class="w"> </span>&lt;WING&gt;<span class="w"> </span><span class="o">[</span>--limit<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Writes an entry to an agent's journal in a wing, or reads the newest entries back.
+<code>--limit</code> defaults to 20.
+MemCastle stores and returns the agent identity exactly as given, so use one consistent string per agent.</p>
+<h3 id="note"><code>note</code><a class="headerlink" href="#note" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>memcastle<span class="w"> </span>note<span class="w"> </span><span class="o">[</span>TEXT<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--file<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--edit<span class="o">]</span><span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--room<span class="w"> </span>&lt;ROOM&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Captures a thought as it comes, without asking you where it goes.
+The note is stored verbatim as a drawer of source kind <code>note</code>, so it is found by <code>search</code> and <code>recall</code>,
+embedded, deduplicated and, when an <a href="../configuration/#extraction">extraction provider</a> is configured,
+read for the entities and relationships it names, exactly like any other memory.
+There is no separate note store, and no tag or folder to choose.</p>
+<p>The text comes from, in order:</p>
+<ol>
+<li>the words on the command line (several words are joined with a space, so quoting is optional);</li>
+<li><code>--file &lt;PATH&gt;</code>, where <code>-</code> reads standard input;</li>
+<li><code>--edit</code>, which opens <code>$VISUAL</code> (else <code>$EDITOR</code>, either may carry arguments such as <code>code --wait</code>) on a scratch file,
+   starting from the words when you gave some;</li>
+<li>piped standard input;</li>
+<li>with none of these and a terminal on standard input, the editor.</li>
+</ol>
+<p>Text from a file, standard input or an editor loses its trailing whitespace, since a final newline is how the text was
+made and not part of the thought; words given on the command line are kept exactly.
+A note with nothing in it is refused.
+Text that starts with a dash needs <code>--</code> first: <code>memcastle note -- "- buy milk"</code>.</p>
+<p>The note is filed under the current project, resolved from the directory you run the command in, for the wing and
+the room separately:</p>
+<ol>
+<li>the <code>--wing</code> and <code>--room</code> flags;</li>
+<li><code>MEMCASTLE_WING</code> and <code>MEMCASTLE_ROOM</code>;</li>
+<li>the nearest <a href="../project-config/"><code>.config/memcastle.toml</code></a>: <code>[memcastle] wing</code> (else <code>[project] name</code>) and <code>room</code>;</li>
+<li>the working directory's name for the wing, and <code>notes</code> for the room.</li>
+</ol>
+<p>With both flags given the project is not read at all.
+A project file or variable that cannot be used is an error naming it (<code>memcastle::project::invalid</code>),
+not a silent fallback, because a wrong scope would file the note somewhere you did not mean.
+The rules, including how the project is found, are on the <a href="../project-config/">project configuration</a> page.</p>
+<p>Each note records when it was captured (<code>created_at</code> and <code>valid_from</code>), the directory it was captured in
+(<code>source.uri</code>) and the channel it came through (<code>provenance.requested_by</code>, <code>cli</code>).
+Writing the same note into the same room again stores nothing and reports the existing one.</p>
+<p>The confirmation is a line in a terminal and JSON when piped, with the drawer's <code>id</code>, which is the stable handle for
+<code>memcastle drawer show &lt;wing&gt;/&lt;room&gt;/&lt;id&gt;</code>:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>memcastle<span class="w"> </span>note<span class="w"> </span><span class="s2">"ask Ada about the migration order"</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># Saved note 0198f4c2-... in memcastle/notes</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>memcastle<span class="w"> </span>note<span class="w"> </span><span class="s2">"Standup:"</span><span class="w"> </span><span class="s2">"- ship the CLI"</span><span class="w"> </span><span class="s2">"- write docs"</span><span class="w">    </span><span class="c1"># words are joined with spaces</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>git<span class="w"> </span>log<span class="w"> </span>-5<span class="w"> </span>--oneline<span class="w"> </span><span class="p">|</span><span class="w"> </span>memcastle<span class="w"> </span>note<span class="w">                         </span><span class="c1"># piped, longer text</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>memcastle<span class="w"> </span>note<span class="w"> </span>--edit<span class="w">                                         </span><span class="c1"># write it in $EDITOR</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>memcastle<span class="w"> </span>note<span class="w"> </span>--file<span class="w"> </span>draft.md<span class="w">                                </span><span class="c1"># from a file</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>memcastle<span class="w"> </span>note<span class="w"> </span>--wing<span class="w"> </span>ideas<span class="w"> </span>--room<span class="w"> </span>inbox<span class="w"> </span><span class="s2">"a CLI for tide tables"</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="nv">MEMCASTLE_WING</span><span class="o">=</span>release<span class="w"> </span>memcastle<span class="w"> </span>note<span class="w"> </span><span class="s2">"freeze on Friday"</span><span class="w">     </span><span class="c1"># one-off scope</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>memcastle<span class="w"> </span>note<span class="w"> </span><span class="s2">"..."</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span>.id<span class="w">                              </span><span class="c1"># the stable identifier</span>
+</span></code></pre></div>
+<h3 id="mine"><code>mine</code><a class="headerlink" href="#mine" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>&lt;SOURCE&gt;<span class="w"> </span><span class="o">[</span>PLACE<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--full<span class="o">]</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--full<span class="o">]</span>
+</span></code></pre></div>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>directory<span class="w"> </span>/some/path
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>/some/path<span class="w">                                        </span><span class="c1"># the same: a path is the directory shorthand</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>opencode<span class="w"> </span><span class="nv">since</span><span class="o">=</span><span class="m">2026</span>-09<span class="w"> </span><span class="nv">dir</span><span class="o">=</span>/path/to/workspace
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>pi<span class="w"> </span>/backups/pi/sessions<span class="w"> </span><span class="nv">since</span><span class="o">=</span><span class="m">2026</span>-09-14<span class="w"> </span>--full
+</span></code></pre></div>
+<p>Submits a job that reads a source into drawers: a directory (one drawer per file, or several for a long one), or a named
+source such as <code>pi</code> or <code>opencode</code>, a coding agent's session history (installed sources: see
+<a href="../mining-sources/#pi">Mining sources</a> and <a href="../mining-sources/#opencode"><code>opencode</code></a>).
+The first word says what to read.
+<code>directory</code> is the built-in source and takes the path to read as its one <code>PLACE</code>.
+Any other word is the name of a source (<code>memcastle sources</code> lists them with the options each accepts).
+A word that cannot be a source name is always a directory: one with a <code>/</code>, one that starts with <code>.</code> or <code>~</code>, or one with
+a capital letter, so <code>memcastle mine .</code> and <code>memcastle mine ~/project</code> keep working as the shorthand for
+<code>memcastle mine directory &lt;path&gt;</code>.
+A plain word that is not a source but is a directory in the current directory is a directory too, as it always was;
+a source of that name wins, so write <code>./pi</code> for a directory called <code>pi</code>.
+Anything else is refused with the list of sources.
+After it come at most one bare word, the <code>PLACE</code> to read within the source (<code>pi</code>'s sessions directory; <code>directory</code>'s
+path), and any number of <code>KEY=VALUE</code> options in any order.
+A word is an option when its key is lowercase letters, digits, <code>-</code> or <code>_</code> and starts with a letter,
+so a path that contains an <code>=</code> (<code>./a=b</code>) is still a path.
+An option's key may be given once.
+Each source declares the options it accepts, and the daemon refuses any other key before it queues the job,
+naming the ones it accepts:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Option</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>directory</code></td>
+<td><code>since=DATE</code></td>
+<td>Only files modified at or after <code>DATE</code>.</td>
+</tr>
+<tr>
+<td><code>pi</code></td>
+<td><code>since=DATE</code></td>
+<td>Only sessions modified at or after <code>DATE</code>.</td>
+</tr>
+<tr>
+<td><code>pi</code></td>
+<td><code>dir=PATH</code></td>
+<td>Only sessions started in this working directory, or in directories matching a pattern.</td>
+</tr>
+<tr>
+<td><code>opencode</code></td>
+<td><code>since=DATE</code></td>
+<td>Only sessions updated at or after <code>DATE</code>.</td>
+</tr>
+<tr>
+<td><code>opencode</code></td>
+<td><code>dir=PATH</code></td>
+<td>Only sessions of this project directory, or of directories matching a pattern.</td>
+</tr>
+</tbody>
+</table>
+<p><code>DATE</code> is <code>2026-09</code> (the first of the month), <code>2026-09-14</code> or an RFC 3339 time, in UTC.
+A <code>dir</code> selects a different slice of the same history, so each directory has a cursor of its own;
+<code>since</code> only narrows, so it shares the source's cursor, and <code>--full</code> is how to read back past it.
+A <code>path</code> option is made absolute against the shell's working directory before the daemon sees it, like the path of <code>directory</code>.</p>
+<p>A <code>dir</code> is a directory or a pattern in which <code>*</code> matches any run of characters, <code>/</code> included:
+<code>dir=/work/app</code> is one project and <code>'dir=/work/*'</code> is every project under <code>/work</code>, however deeply nested.
+Quote a pattern, because a shell expands an unquoted star before <code>memcastle</code> sees it (zsh refuses with "no matches found").
+It is compared the way the tools record a working directory, so how it is spelled does not matter:
+the CLI makes it absolute, removes <code>.</code>, <code>..</code> and trailing or doubled slashes, and resolves links in the part that exists
+(the part before the first <code>*</code> in a pattern), and the source applies the same clean-up to the value it compares with.
+Only <code>*</code> is a wildcard; <code>?</code> and <code>[</code> are ordinary characters.
+Mining is incremental and idempotent: the daemon remembers where each source's last run stopped,
+so mining it again reads only what changed and files nothing twice.
+<code>--wing</code> defaults to the wing the directory's <a href="../project-config/#mining">project file</a> declares, else the directory's
+name, or to the source's own default.
+<code>--full</code> reads the source again from the beginning; unchanged documents are still skipped, so nothing is duplicated.
+The <code>PLACE</code> names where within a source to read, when it needs more than its default; for <code>pi</code> it is a sessions
+directory.
+It is made absolute for a source that reads it as a directory.
+For <code>opencode</code> it is only a name for the history (OpenCode decides where its own database is), and is rarely needed.
+The <code>--source</code> and <code>--locator</code> flags of earlier versions are gone: the source is the first word and the locator is the <code>PLACE</code>.
+The command returns the job immediately; follow it with <code>memcastle job show &lt;id&gt;</code>.
+In a terminal it prints the queued job as a short card (kind, status, source, wing, progress) and that hint;
+piped, or with <code>--json</code>, it prints the job as JSON, whose <code>id</code> is what <code>job show</code> takes.
+The other commands that queue a job (<code>audit</code>, <code>embed</code>, <code>extract</code>, <code>repair</code>, <code>checkpoint</code> and <code>job demo</code>)
+print the same way.
+See <a href="../mining-sources/">Mining sources</a> for the model,
+and <a href="../storage/#what-mining-reads">Storage and data</a> for which files a directory mine reads.</p>
+<h3 id="sources"><code>sources</code><a class="headerlink" href="#sources" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>memcastle<span class="w"> </span>sources
+</span></code></pre></div>
+<p>Lists the sources the daemon can mine, built in and installed, with each one's state and the permissions an installed
+one was given, and, for each one that has been mined, how many documents it holds, when it last ran and which job did.
+In a terminal this is two tables; piped, it is JSON with <code>adapters</code> and <code>sources</code>.
+<code>memcastle source list</code> is the same command.</p>
+<h3 id="source"><code>source</code><a class="headerlink" href="#source" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>init<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--template<span class="w"> </span>rust<span class="p">|</span>typescript<span class="p">|</span>python<span class="p">|</span>cli<span class="o">]</span><span class="w"> </span><span class="o">[</span>--parent<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>build<span class="w"> </span><span class="o">[</span>&lt;PATH&gt;<span class="o">]</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="o">[</span>&lt;PATH&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--no-build<span class="o">]</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>package<span class="w"> </span><span class="o">[</span>&lt;PATH&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--no-build<span class="o">]</span><span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>keygen<span class="w"> </span>&lt;FILE&gt;
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>index<span class="w"> </span>&lt;ARCHIVE&gt;...<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--base-url<span class="w"> </span>&lt;URL&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--sign<span class="w"> </span>&lt;KEYFILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--name<span class="w"> </span>&lt;NAME&gt;<span class="o">]</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w"> </span><span class="o">[</span>&lt;QUERY&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--registry<span class="w"> </span>&lt;LOCATION&gt;<span class="o">]</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>&lt;FILE<span class="w"> </span><span class="p">|</span><span class="w"> </span>DIR<span class="w"> </span><span class="p">|</span><span class="w"> </span>NAME<span class="o">[</span>@VERSION<span class="o">]</span>&gt;<span class="w"> </span><span class="o">[</span>--registry<span class="w"> </span>&lt;LOCATION&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="w"> </span><span class="p">|</span><span class="w"> </span>--consent<span class="w"> </span>&lt;DIGEST&gt;<span class="o">]</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>update<span class="w"> </span><span class="o">[</span>&lt;NAME&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--check<span class="o">]</span><span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>list
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>show<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>auth<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>disable<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>remove<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span></code></pre></div>
+<p>Develop, publish, find and install mining sources: WebAssembly components that read an origin and hand MemCastle
+documents to file.
+<a href="../writing-sources/">Writing a mining source</a> is the guide to making one,
+<a href="../publishing-sources/">Publishing and installing sources</a> the guide to distributing one; this is the reference.</p>
+<p>The first six are <strong>local</strong>: they work on a project directory or on archives, need no daemon, no palace and no
+configuration file, and never touch the network.
+<code>init</code> creates <code>&lt;NAME&gt;</code> (in the current directory, or in <code>--parent</code>) from a template and refuses to write into a
+directory that is not empty.
+The default template is <code>rust</code>; <code>cli</code> wraps a command-line program, and <code>typescript</code> and <code>python</code> need their own
+toolchains (see the guide).
+<code>build</code> runs the command in the manifest's <code>[build]</code> section and checks that the result is a component;
+the component is placed in <code>dist/source.wasm</code>.
+<code>test</code> builds, then runs the manifest's conformance cases against the component in the same sandbox the daemon uses,
+printing <code>PASS</code> or <code>FAIL</code> for each and exiting non-zero when one fails.
+<code>package</code> builds, then writes <code>dist/&lt;name&gt;-&lt;version&gt;.tar.gz</code>, or <code>--output</code>, and prints the archive's SHA-256 (also written
+to <code>&lt;archive&gt;.sha256</code>), the component's digest and the permissions it asks for.
+<code>--no-build</code> uses the component already in <code>dist/</code>.
+<code>keygen</code> writes a new ed25519 signing key to <code>&lt;FILE&gt;</code>, readable by you alone and never overwriting a file, and prints its
+id and the public key users put under <code>mining.trusted_keys</code>.
+<code>index</code> adds the archives to a registry index (<code>memcastle-index.json</code>, or <code>--output</code>), creating it or extending the one
+there.
+Each package's URL is <code>--base-url</code> plus the file name, or just the file name when the archives will sit beside the index.
+<code>--sign</code> signs each archive with a key from <code>keygen</code>.
+Publishing the same archive again refreshes its entry; a different archive under a version already listed is refused.</p>
+<p>The rest talk to the daemon, which is the one that reads registries and downloads packages.
+<code>search</code> lists what the configured registries offer (the <a href="../publishing-sources/#the-official-registry">official one</a>
+unless <code>mining.registries</code> says otherwise), whose name or description contains <code>&lt;QUERY&gt;</code>, with the version <code>install</code> would
+take and what is installed already, bundled sources included; a registry that cannot be read is a warning, so it does not
+hide the others.
+<code>install</code> takes a package file, a source project directory (it is built and packaged first), or a name,
+optionally pinned as <code>name@1.2.0</code>, resolved from the configured registries in order.
+A name the release already ships (<code>pi</code>, <code>opencode</code>) is installed from the start: <code>install</code> refuses it with
+<code>memcastle::source::bundled</code>, and <code>memcastle source enable &lt;NAME&gt;</code> is what it needs.
+Write <code>./name</code> for a path that looks like a name.
+<code>--registry</code> consults only that location (a URL, or an absolute path) instead of the usual ones, and the trust policy
+still applies to what it serves.
+<code>install</code> shows the permissions of the package it fetched before installing it: in a terminal it asks, and without
+one it refuses unless <code>--yes</code> agrees to them or <code>--consent</code> carries the digest of the permissions you reviewed, so a script
+never consents on your behalf.
+A package that asks for nothing is installed without asking.
+<code>--enable</code> turns the source on once installed; otherwise it is <code>installed</code> and <code>memcastle source enable &lt;NAME&gt;</code> is needed
+before it can be mined.
+Installing a name that is already installed replaces it and keeps its state.
+<code>update</code> installs the newest version of the sources that came from a registry, from the same place, and keeps their
+state; a source installed from a file has no upstream and is left alone, and a bundled source is updated with MemCastle
+(<code>update &lt;NAME&gt;</code> for one is refused with <code>memcastle::source::bundled</code>, and a bare <code>update</code> skips it).
+A version that asks for permissions the installed one did not is not installed until you agree to them (a prompt, or
+<code>--yes</code>); without either the command says what is waiting and exits non-zero.
+<code>--check</code> only lists what has an update.
+<code>enable</code> and <code>disable</code> turn a source on or off, and a bundled source needs no consent to be enabled: it ships with
+MemCastle, and <code>show</code> prints what it may do.
+<code>disable</code> keeps the files and <code>remove</code> deletes them, along with the source's stored credentials; a bundled source cannot
+be removed, only disabled.
+What a source mined stays in the palace.
+<code>list</code> and <code>show</code> are reads, so they take <code>--mode</code> and a <code>disabled</code> session cannot use them;
+the other commands are administrative: <code>--mode</code> is accepted (it is a global flag) but ignored by them,
+and no MCP tool exists for any of them.</p>
+<h4 id="source-auth"><code>source auth</code><a class="headerlink" href="#source-auth" title="Permanent link">&para;</a></h4>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>auth<span class="w"> </span>&lt;NAME&gt;
+</span></code></pre></div>
+<p>Signs an installed source in with OAuth, for a source that cannot be reached with a static token.
+Only a source whose manifest declares <code>[permissions.oauth]</code> (<a href="../writing-sources/#signing-in-with-oauth">Writing a mining source</a>)
+can be signed in, and <code>source show</code> and <code>source list</code> say which are, and whether they are.
+It is not <code>memcastle auth</code>, which manages the daemon's own bearer token.</p>
+<p>The daemon runs the flow and keeps the result, so this command only tells you what to do and waits.
+A source that declares a device authorization endpoint uses the device flow:
+the command prints a page and a code, you open the page on any device and type the code,
+and the command returns when you have finished.
+Otherwise it uses the browser flow with PKCE: the command opens your browser (or prints the address when it cannot),
+you agree, and the provider redirects to a port the daemon opened on its own machine,
+so the browser must be on the machine the daemon runs on.
+In a terminal the browser is opened for you; without one, the instructions are printed and nothing is opened.
+Instructions and progress go to standard error, so standard output holds only the result, which carries no token:
+<code>{"source", "signed_in", "expires_at", "scopes", "stored_in"}</code>, where <code>stored_in</code> is <code>keyring</code> or <code>file</code>.
+The command waits up to ten minutes (the device code's own lifetime when the provider sets a shorter one) and fails with
+<code>memcastle::credential::flow_failed</code> when you decline, the code expires, or the provider refuses.</p>
+<p>There is no <code>login</code>, <code>logout</code> or <code>status</code> subcommand: the source name is enough to choose the flow,
+<code>source show</code> is the status, and the daemon renews the credential itself.
+Run <code>source auth</code> again to sign in as someone else, which replaces the stored credential and any sign-in still waiting.
+<code>source remove</code> forgets the credential, and so does a provider that revokes it, in which case the next run fails with
+<code>memcastle::credential::required</code> and the command to run.
+The tokens are kept in the platform credential store when there is one, and in an owner-only file otherwise
+(see <a href="../configuration/#credentials">Credentials</a>).
+Like installing a source, it is administrative: <code>--mode</code> is ignored and no MCP tool exists for it.</p>
+<h3 id="miner"><code>miner</code><a class="headerlink" href="#miner" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>list
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>get<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--source<span class="w"> </span>&lt;SOURCE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--locator<span class="w"> </span>&lt;WHERE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">                           </span><span class="o">[</span>--credential-env<span class="w"> </span>&lt;VAR&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-file<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-oauth<span class="o">]</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">                           </span><span class="o">[</span>--option<span class="w"> </span>&lt;<span class="nv">KEY</span><span class="o">=</span>VALUE&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--unset-option<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span>...
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">                           </span><span class="o">[</span>--unset<span class="w"> </span>locator<span class="p">|</span>wing<span class="p">|</span>credential<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--disabled<span class="o">]</span><span class="w"> </span><span class="o">[</span>--allow-broaden<span class="o">]</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>disable<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>remove<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>reload
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>run<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--full<span class="o">]</span><span class="w"> </span><span class="o">[</span>--allow-broaden<span class="o">]</span>
+</span></code></pre></div>
+<p>Manages the <code>[[miners]]</code> of the configuration file: named, persistent definitions of what to mine,
+described in <a href="../configuration/#miners">Configuration</a>.
+Every command is a call to the daemon's <code>/api/miners</code> routes, which are the rules MCP's read-only
+<code>memcastle_miner_list</code> and <code>memcastle_miner_get</code> follow too, so there is one model.</p>
+<p><code>set</code> creates the miner when there is none (it needs <code>--source</code>), and otherwise changes only what it is given:
+everything not named stays as it is, and a repeated command changes nothing.
+<code>--option groups=MemCastle,Ops</code> sets a saved source option; <code>--option window=30</code> takes JSON when the value parses as
+JSON, and a string otherwise.
+A field is cleared by name with <code>--unset</code>, and an option key with <code>--unset-option</code>.
+<code>--disabled</code> creates the miner switched off, or switches it off.
+An enabled miner is checked before anything is written (its source usable, its credential resolving, and for
+<code>directory</code> an absolute <code>--locator</code>), and a change that might expand what is mined is refused unless <code>--allow-broaden</code> is
+given.
+<code>--credential-env</code> and <code>--credential-file</code> say where the credential is read from; the secret itself is never an argument.
+<code>--credential-oauth</code> says the source signs in with OAuth, so the daemon uses the sign-in <code>source auth</code> made;
+it is refused for a source that does not declare one.
+<code>miner run NAME key=value</code> replaces or adds that source option for this run only; the saved definition is unchanged.
+Like <code>mine</code>, a declared <code>path</code> option is resolved on the CLI machine before it reaches the daemon.
+If the override might mine more than the saved options, repeat with <code>--allow-broaden</code>.
+A miner for a source that signs in is not ready until the source is signed in, whatever its <code>credential</code> says, and the
+reason names <code>memcastle source auth &lt;source&gt;</code>.
+The file is edited in place: its comments and the other tables are kept.
+<code>enable</code> and <code>disable</code> are <code>set</code> for the enabled state alone, and <code>enable</code> runs the same checks.
+<code>remove</code> deletes the definition and asks first in a terminal, <code>--yes</code> skips it; what the miner mined and its source's
+cursor stay.
+<code>reload</code> reads the file again now and says what changed; the daemon also notices an edited file on its own.
+<code>run</code> submits the miner's mining job and prints it, like <code>mine</code>, continuing from the cursor its source has;
+it refuses a disabled miner.
+The miner's saved options are passed to the source as the run's options,
+exactly as <code>memcastle mine &lt;source&gt; key=value</code> would:
+a scalar is its text, a list of strings is comma-joined,
+a key the source does not declare makes the miner not runnable, and a nested table is refused.</p>
+<p><code>list</code> and <code>get</code> are reads, so they take <code>--mode</code> and a <code>disabled</code> session cannot use them, and <code>run</code> is a write;
+the others are administrative: <code>--mode</code> is accepted (it is a global flag) but ignored by them,
+and no MCP tool exists for any of them.
+<code>miner set</code> and the rest print the miner as it is now when standard output is a terminal, and JSON when it is not.</p>
+<h3 id="trigger"><code>trigger</code><a class="headerlink" href="#trigger" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>list
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>get<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--miner<span class="w"> </span>&lt;MINER&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--type<span class="w"> </span>schedule<span class="p">|</span>poll<span class="p">|</span>webhook<span class="p">|</span>watch<span class="o">]</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">                             </span><span class="o">[</span>--credential-env<span class="w"> </span>&lt;VAR&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-file<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">                             </span><span class="o">[</span>--setting<span class="w"> </span>&lt;<span class="nv">KEY</span><span class="o">=</span>VALUE&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--unset-setting<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span>...
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">                             </span><span class="o">[</span>--unset<span class="w"> </span>credential<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable<span class="o">]</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>disable<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>remove<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>reload
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>fire<span class="w"> </span>&lt;NAME&gt;
+</span></code></pre></div>
+<p>Manages the <code>[[triggers]]</code> of the configuration file: what asks for a mining run on its own, described on the
+<a href="../triggers/">Triggers</a> page (<a href="../adr/043-source-triggers/">ADR-043</a>).
+A trigger only decides <em>when</em>; it asks for the same run <code>miner run</code> does.
+Every command is a call to the daemon's <code>/api/triggers</code> routes, the same rules MCP's read-only <code>memcastle_trigger_list</code>
+and <code>memcastle_trigger_get</code> follow.</p>
+<p><code>set</code> creates a trigger when there is none (it needs <code>--miner</code> and <code>--type</code>), and otherwise changes only what it is
+given.
+<strong>A trigger is created disabled</strong>, and <code>set</code> never enables one unless <code>--enable</code> is given, so writing a definition starts
+nothing.
+<code>--setting every=1d</code>, <code>--setting at=03:30</code>, <code>--setting path=/notes</code> and <code>--setting debounce=2s</code> take JSON when the value
+parses as JSON and a string otherwise.
+A webhook's shared secret is a reference, <code>--credential-env</code> or <code>--credential-file</code>, never an argument.
+Changing <code>--type</code> drops the settings of the old type.
+<code>enable</code> checks every prerequisite first (the miner exists and can run, the source supports the type, the webhook
+listener is on and its secret resolves, the watched path exists), and when one is missing it is refused with
+<code>memcastle::trigger::not_activatable</code>, says what to set up, and writes nothing.
+<code>get</code> shows the same list under <code>to enable:</code> for a disabled trigger.
+<code>disable</code> stops it and keeps what it did; <code>remove</code> deletes the definition and what the daemon remembered about it,
+and asks first in a terminal (<code>--yes</code> skips it).
+<code>reload</code> reads the file again now; the daemon also notices an edited file within a few seconds.
+<code>fire</code> asks for a run through the trigger now, the way it would on its own (joining a run already waiting); it is
+refused while the trigger is disabled, and is a write, so <code>--mode read_only</code> is refused.</p>
+<p><code>list</code> and <code>get</code> are reads and <code>fire</code> is a write; the others are administrative like <code>miner</code>'s, and no MCP tool exists
+for any of them.
+Output is the trigger as it is now in a terminal, and JSON when standard output is not one.</p>
+<h3 id="integration"><code>integration</code><a class="headerlink" href="#integration" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>&lt;AGENT&gt;
+</span></code></pre></div>
+<p>Install, update and remove the integrations MemCastle ships for coding agents: <code>pi</code>, <code>opencode</code>, <code>claude-code</code> and <code>codex</code>.
+<a href="../integrations/">Integrations</a> is the guide; this is the reference.</p>
+<p>All four are <strong>local</strong>: they read files and run the agent's own command, need no daemon, no palace and no network, and are
+not available to MCP clients.
+<code>&lt;AGENT&gt;</code> is an integration id as <code>list</code> shows it, which is the agent's name.</p>
+<p><code>list</code> shows each shipped integration with the version shipped and the version installed, the agent's version,
+and a state: <code>not installed</code>, <code>installed</code>, <code>outdated</code> (the package ships a different version or different files),
+<code>modified</code> (a file changed, or the agent no longer knows the copy), <code>incompatible</code> (your MemCastle or agent is outside the
+supported range) or <code>unavailable</code> (the shipped files are incomplete).
+It ends with the assets root it used and how it was chosen.
+<code>install</code> copies the integration and the skills its manifest names to <code>~/.local/share/memcastle/agents/&lt;AGENT&gt;/</code>,
+registers it with the agent, checks the result and reports every change.
+<code>list --json</code> carries the skills each integration exposes, by name, in <code>skills</code>.
+It changes nothing, and says so, when the integration is already installed and current.
+<code>update</code> is <code>install</code> for an integration that is already installed, and refuses one that is not.
+<code>remove</code> unregisters the integration and deletes the copy; it needs no assets, so it works after the package is gone.</p>
+<p><code>--assets-dir</code> names the directory that holds <code>integrations/</code> and <code>skills/</code>, overriding <code>assets.dir</code> and
+<code>MEMCASTLE_ASSETS_DIR</code>: a checkout of the repository, or an unpacked package (see
+<a href="../integrations/#where-integrations-come-from">Where integrations come from</a>).
+A terminal gets the report or the outcome as text, and a pipe (or <code>--json</code>) gets it as JSON, with the same fields in both.
+An error exits non-zero and names a <code>memcastle::integration::*</code> code, listed in
+<a href="../integrations/#troubleshooting">Troubleshooting</a>.</p>
+<h3 id="checkpoint"><code>checkpoint</code><a class="headerlink" href="#checkpoint" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>memcastle<span class="w"> </span>checkpoint<span class="w"> </span><span class="o">[</span>--payload<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--emergency<span class="o">]</span>
+</span></code></pre></div>
+<p>Submits a checkpoint job that durably persists an already-classified batch of memory writes.
+The payload is JSON read from <code>--payload</code>, or from standard input when omitted;
+its shape is described in <a href="../mcp-and-api/#checkpoint-payload">MCP tools and REST API</a>.
+<code>--emergency</code> raises the job to the highest priority, for save-before-crash situations only.</p>
+<h3 id="fact-history"><code>fact history</code><a class="headerlink" href="#fact-history" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>memcastle<span class="w"> </span>fact<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;RELATIONSHIP_UUID&gt;<span class="w"> </span><span class="o">[</span>--as-of<span class="w"> </span>&lt;RFC3339-OR-DATE&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Reads a graph assertion and its linked confirmations, contradictions and explicit corrections from the daemon.
+The result includes the validity interval, evidence, lifecycle state, decision reasons and any ranking preference among
+unresolved claims; both sides of a conflict remain visible.
+<code>--as-of</code> evaluates that state at the given instant, while history still preserves the supporting assertions.
+Output is readable at a terminal and JSON when piped or when <code>--json</code> is set.
+See <a href="../mcp-and-api/#the-knowledge-graph">the knowledge graph</a> for the shared REST and MCP contract.</p>
+<h2 id="wings-rooms-and-drawers">Wings, rooms and drawers<a class="headerlink" href="#wings-rooms-and-drawers" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>list
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;<span class="w"> </span><span class="o">[</span>--description<span class="w"> </span>&lt;TEXT&gt;<span class="o">]</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>memcastle<span class="w"> </span>room<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>memcastle<span class="w"> </span>room<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>memcastle<span class="w"> </span>room<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--description<span class="w"> </span>&lt;TEXT&gt;<span class="o">]</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>memcastle<span class="w"> </span>room<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>list<span class="w"> </span>--room<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--limit<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--content<span class="w"> </span>&lt;TEXT&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--file<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>supersede<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span><span class="o">(</span>--content<span class="w"> </span>&lt;TEXT&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--file<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--invalidate<span class="o">)</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>mention<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span>--name<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span>--kind<span class="w"> </span>&lt;KIND&gt;
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span></code></pre></div>
+<p>These manage the palace hierarchy, see <a href="../storage/#the-data-model">Storage and data</a> for what the three levels are.
+<code>wings</code>, <code>rooms</code> and <code>drawers</code> are aliases of the singular groups.</p>
+<p>A wing or room is addressed by its name or its UUID.
+A drawer is addressed by its name or its UUID within its room, so <code>work/project-x/context</code> and
+<code>work/project-x/&lt;uuid&gt;</code> are the same drawer when it is named <code>context</code>.
+A drawer's name may itself contain <code>/</code> (a mined file is named after its path, as in <code>files/src/main.rs</code>),
+which is why everything after the second <code>/</code> is the drawer.
+A name cannot be empty, cannot have leading or trailing whitespace, cannot contain control characters
+and cannot look like a UUID.
+A wing or room name cannot contain <code>/</code>, and no <code>/</code>-separated segment of a drawer name can be empty, <code>.</code> or <code>..</code>.
+A path that breaks these rules is refused locally, before the daemon is contacted, with <code>memcastle::palace::path_invalid</code>.
+The same rules apply to a new wing named by <code>mine --wing</code>, a checkpoint item or a diary write,
+which the daemon refuses at submission with the same code.
+A wing that already exists is always accepted, whatever its name.</p>
+<p>The <code>list</code>, <code>show</code>, <code>create</code> and <code>delete</code> commands of <code>wing</code>, <code>room</code> and <code>drawer</code>, and <code>drawer history</code>, print a table
+or a readable view in a terminal, and JSON when standard output is a pipe or a file.
+<code>drawer supersede</code> and <code>drawer mention</code> also print a readable view in a terminal, and JSON when output is redirected.
+<code>wing show</code> prints the wing's totals and its rooms.
+<code>drawer list</code> shows the newest drawers first with a preview of each, never the whole content,
+and <code>drawer show</code> prints the content verbatim after a few lines of metadata.
+<code>room list</code> without <code>--wing</code> lists the rooms of every wing.</p>
+<p><code>create</code> is idempotent for wings and rooms: creating one that exists succeeds and changes nothing,
+and the JSON answer (what a pipe gets) says <code>"created": false</code>.
+<code>room create</code> and <code>drawer create</code> also create the wing, and the room, when they do not exist yet,
+as mining, checkpoint and diary writes do.
+Content is immutable, so <code>drawer create</code> can only conflict on the name:
+writing a name again with the same content is a no-op, and with other content it is refused with
+<code>memcastle::palace::drawer_name_taken</code>.
+The content comes from <code>--content</code>, from <code>--file</code> (<code>-</code> is standard input), or from standard input when neither is given.</p>
+<p><code>delete</code> removes the record and everything under it, permanently:
+a wing takes its rooms and their drawers, a room takes its drawers.
+In a terminal it first prints what is about to go, then asks:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>Wing: work
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>Rooms: 12
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>Drawers: 37
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>Delete this wing and all contained data? [y/N]
+</span></code></pre></div>
+<p><code>--yes</code> skips the question, see <a href="#output-colour-and-prompts">Output, colour and prompts</a>.
+Without a terminal it proceeds without asking, like every other command that confirms.
+Deleting a wing or room is refused with <code>memcastle::palace::busy</code> while a mining job, a checkpoint job or a repair job
+that applies is queued, running or paused, because such a job files into wings and rooms by name and would bring the
+wing back.
+Cancel the job or wait for it, then try again.
+The check is coarse on purpose and is not atomic with the delete:
+a job submitted in the instant between the two is not caught.</p>
+<p><code>drawer supersede</code> is how a drawer is corrected without rewriting history.
+It ends the drawer's validity now and files a replacement with the new content (from <code>--content</code>, <code>--file</code> or standard
+input) in the same room, taking over the old drawer's name; with <code>--invalidate</code> it only ends it.
+The old drawer keeps its content and stays reachable by id and by <code>--as-of</code> or <code>--from</code>/<code>--until</code> searches, but no longer
+appears in a current search, diary read or wake-up, and the two drawers are linked so <code>drawer history</code> can follow the change.
+<code>drawer history &lt;wing&gt;/&lt;room&gt;/&lt;name or UUID&gt;</code> shows how a piece of knowledge evolved:
+every version of the drawer's supersession chain, oldest first, each with its validity period, provenance and content.
+Any version works as the starting point, and a superseded version has no name left, so give its UUID
+(a search hit carries it).
+It is a table of versions in a terminal and JSON when standard output is piped, and a read, see
+<a href="../mcp-and-api/#history">History</a>.
+<code>drawer mention</code> records that a drawer mentions an entity, creating the entity if needed, so <code>search --expand</code> can reach
+related drawers through it.
+A name that is only a different spelling of an entity the graph already knows (another case, other punctuation, a recorded
+alias or a unique typo) links to that entity instead of creating a second one, see <a href="../deduplication/">Deduplication</a>.
+Both are writes.</p>
+<p>There is no MCP tool for any of this, see <a href="../mcp-and-api/#wings-rooms-and-drawers">MCP tools and REST API</a>.
+Looking is gated as a read and changing as a write, see <a href="../memory-modes/">Memory modes</a>.</p>
+<h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
+<h3 id="embed"><code>embed</code><a class="headerlink" href="#embed" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>memcastle<span class="w"> </span>embed<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Submits a job that computes the embedding of every drawer that has none, so semantic search covers it.
+It needs an <a href="../configuration/#embeddings"><code>[embeddings]</code> provider</a> and is refused with <code>memcastle::embed::not_configured</code>
+without one.
+You rarely run it: the daemon queues the same job after anything that writes drawers, and once at startup, so this is for
+backfilling after you configure a provider and for forcing a sweep.
+It only fills each drawer's embedding and never changes its content, and running it again does nothing.
+It is a write, so it is refused in <code>read_only</code> and <code>disabled</code> modes.</p>
+<h3 id="extract"><code>extract</code><a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>memcastle<span class="w"> </span>extract<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Submits a job that reads every mined drawer and note not yet read and adds the entities and relationships it names to the
+knowledge graph, see <a href="../configuration/#extraction">Extraction</a>.
+It needs an <code>[extraction]</code> provider and is refused with <code>memcastle::extract::not_configured</code> without one.
+You rarely run it: the daemon queues the same job after a mining job completes, after a note is written and once at
+startup, so this is for backfilling after you configure a provider and for forcing a sweep.
+It only adds graph records and never changes a drawer, and running it again does nothing.
+It is a write, so it is refused in <code>read_only</code> and <code>disabled</code> modes.
+Read the result with <code>GET /api/entities</code>, see <a href="../mcp-and-api/#the-knowledge-graph">the knowledge graph</a>.</p>
+<h3 id="audit"><code>audit</code><a class="headerlink" href="#audit" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>memcastle<span class="w"> </span>audit<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Submits a read-only consistency report job.
+<code>--wing</code> restricts only the embedding counts to one wing; orphan and dangling-reference findings are always palace-wide.
+Read the report with <code>memcastle job show &lt;id&gt;</code>.</p>
+<h3 id="repair"><code>repair</code><a class="headerlink" href="#repair" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>memcastle<span class="w"> </span>repair<span class="w"> </span><span class="o">[</span>--apply<span class="w"> </span><span class="o">[</span>--yes<span class="o">]]</span><span class="w"> </span><span class="o">[</span>--based-on-job<span class="w"> </span>&lt;JOB_ID&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p>Submits a repair job.
+Without <code>--apply</code> it is a dry run that only reports what it would remove.
+With <code>--apply</code> it deletes orphan drawers, which is a write and is refused in <code>read_only</code> and <code>disabled</code> modes.
+In a terminal <code>--apply</code> asks for confirmation first, unless <code>--yes</code> is given.
+<code>--based-on-job</code> narrows the repair to what a previous audit found; a live scan still decides what is removed.</p>
+<h2 id="jobs">Jobs<a class="headerlink" href="#jobs" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>memcastle<span class="w"> </span>job<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--status<span class="w"> </span>&lt;STATUS&gt;<span class="o">]</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>memcastle<span class="w"> </span>job<span class="w"> </span>show<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a>memcastle<span class="w"> </span>job<span class="w"> </span>pause<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a>memcastle<span class="w"> </span>job<span class="w"> </span>resume<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>memcastle<span class="w"> </span>job<span class="w"> </span>cancel<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>memcastle<span class="w"> </span>job<span class="w"> </span>retry<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>memcastle<span class="w"> </span>job<span class="w"> </span>demo<span class="w"> </span><span class="o">[</span>--steps<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
+</span></code></pre></div>
+<p><code>jobs</code> is an alias of the <code>job</code> group, like <code>wings</code>, <code>rooms</code> and <code>drawers</code> for the hierarchy commands.</p>
+<p><code>--status</code> is one of <code>queued</code>, <code>running</code>, <code>paused</code>, <code>completed</code>, <code>failed</code> or <code>cancelled</code>.
+<code>job list</code> prints a table in a terminal, with the full id (copy it into <code>job show</code>), the kind, the coloured status,
+the progress, when it was created and the detail: the error of a failed job, otherwise the latest progress message.
+The detail column is only as wide as its text needs, and wraps onto further lines, never cut, when the terminal is narrower.
+The other columns are never wrapped, so on a very narrow terminal the table overflows instead.
+When standard output is a pipe or a file it prints the same jobs as a JSON array, so <code>memcastle job list | jq</code> works
+without a flag.
+<code>job show</code> prints one job as a card in a terminal (its parameters, progress, timestamps, and its error or result when it
+has one) and as JSON otherwise.
+<code>pause</code>, <code>resume</code>, <code>cancel</code> and <code>retry</code> print one sentence in a terminal and the daemon's answer as JSON otherwise.
+<code>job cancel</code> asks for confirmation in a terminal, see <a href="#output-colour-and-prompts">Output, colour and prompts</a>.
+Pausing and cancelling are requests: a running job stops at its next unit of work, not instantly.
+<code>retry</code> only applies to a failed job, and <code>resume</code> only to a paused one.
+<code>demo</code> submits a synthetic job (5 steps by default) that touches no palace content,
+which is a quick way to check the daemon end to end.
+The states a job moves through are in <a href="../architecture/#job-lifecycle">Architecture</a>.</p>
+<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>generate<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>revoke<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span></code></pre></div>
+<p><code>auth generate</code> asks the daemon to make a high-entropy token, and prints it on standard output, once, and nothing else,
+so it pipes straight into a secret manager.
+The daemon keeps only a digest, so the token cannot be shown again.
+The instructions for enabling authentication go to standard error.
+Running it again replaces the previous token, which is how you rotate.
+In a terminal both commands ask for confirmation first, on standard error so the token on standard output is unaffected,
+and <code>--yes</code> skips it.
+<code>auth revoke</code> removes the stored token, which stops working at once, and prints <code>{"revoked": true}</code>.</p>
+<p>Both are administrative REST and CLI operations, and neither is available to MCP clients.
+While the daemon has authentication disabled they need nothing, which is how the first token is made.
+Once it is enabled they need a valid token like every other command.</p>
+<p>With authentication enabled, every client command presents the token in <code>MEMCASTLE_AUTH_TOKEN</code> (or <code>auth.token</code>);
+there is deliberately no flag for it, so it stays out of your shell history and the process list.
+A daemon that refuses it answers <code>401</code> with <code>memcastle::auth::unauthorized</code>,
+reported as <code>memcastle::client::remote_rejected</code>.
+<a href="../authentication/">Authentication</a> covers provisioning, rotation and revocation.</p>
+<h2 id="not-implemented-yet">Not implemented yet<a class="headerlink" href="#not-implemented-yet" title="Permanent link">&para;</a></h2>
+<p><code>maintenance</code> is a reserved name.
+It exists so the command surface is stable, and it returns a <code>not_implemented</code> error today.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

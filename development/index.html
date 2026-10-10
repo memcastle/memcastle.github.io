@@ -1,0 +1,2239 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/development/">
+      
+      
+        <link rel="prev" href="../architecture/">
+      
+      
+        <link rel="next" href="../retrieval-evaluation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Development - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Development
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Prerequisites
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#everyday-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Everyday tasks
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-daemon-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Running the daemon locally
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Testing
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-ci-time-goes" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Where the CI time goes
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the CI time goes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-components-in-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Building components in tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-architecture-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The architecture guard
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Documentation
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#this-repository-is-generated-from-a-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        This repository is generated from a template
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Prerequisites
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#everyday-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Everyday tasks
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-daemon-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Running the daemon locally
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Testing
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-ci-time-goes" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Where the CI time goes
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the CI time goes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-components-in-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Building components in tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-architecture-guard" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The architecture guard
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Documentation
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#this-repository-is-generated-from-a-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        This repository is generated from a template
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/development.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="development">Development<a class="headerlink" href="#development" title="Permanent link">&para;</a></h1>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Node and bun, only for <code>web/</code> and <code>integrations/</code> (<code>mise run web:check</code> and <code>integrations:check</code> install them for the
+  task; the Rust build needs neither).</li>
+<li>Rust, via <code>rustup</code>, which installs the channel pinned in <code>rust-toolchain.toml</code> (mise does not manage Rust itself).</li>
+<li>The remaining tools (nextest, prek, typos, ...) via <code>mise</code> — run <code>mise install</code> once.</li>
+</ul>
+<p>That's it — SurrealKV, the embedded storage engine, is pure Rust,
+so the storage engine itself needs no C/C++ toolchain.
+(A transitive TLS dependency, <code>aws-lc-sys</code>, may use <code>cmake</code> on some targets; that is unrelated to storage.)</p>
+<h2 id="everyday-tasks">Everyday tasks<a class="headerlink" href="#everyday-tasks" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mise<span class="w"> </span>run<span class="w"> </span>build<span class="w">      </span><span class="c1"># cargo build</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w">       </span><span class="c1"># the basic suite: cargo nextest run, without the WebAssembly tests (accepts nextest selectors)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mise<span class="w"> </span>run<span class="w"> </span>test:wasm<span class="w">  </span><span class="c1"># the WebAssembly suite: every tests/wasm_*.rs binary (slow; needs the wasm32-wasip2 target)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:check<span class="w">      </span><span class="c1"># build and conformance-test every source under sources/</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:test<span class="w"> </span>--<span class="w"> </span>directory<span class="w">   </span><span class="c1"># the same for one source, which is what each CI leg runs</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard hooks, described below</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:check<span class="w"> </span><span class="c1"># typecheck and test each package under integrations/, and install the bundles (needs bun)</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:build<span class="w"> </span><span class="c1"># bundle integrations/*/src into integrations/*/dist, for `--assets-dir "$PWD"`</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:package<span class="w"> </span><span class="c1"># lay out what a release ships in target/bundled-integrations</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mise<span class="w"> </span>run<span class="w"> </span>web:check<span class="w">  </span><span class="c1"># typecheck, test, build and package the web UI, then serve it from a real daemon (needs bun and node)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>mise<span class="w"> </span>run<span class="w"> </span>web:build<span class="w">  </span><span class="c1"># build web/ into web/dist, for `--assets-dir "$PWD"` with `web.enable`</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>mise<span class="w"> </span>run<span class="w"> </span>web:dev<span class="w">    </span><span class="c1"># the dashboard's dev server, proxying /api to the running daemon</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>mise<span class="w"> </span>run<span class="w"> </span>web:package<span class="w"> </span><span class="c1"># lay out what a release ships in target/bundled-web</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w">       </span><span class="c1"># measure retrieval quality and latency on the bundled dataset (docs/retrieval-evaluation.md)</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:baseline<span class="w"> </span><span class="c1"># rewrite the committed retrieval baseline, after a change meant to move quality</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>a.json<span class="w"> </span>b.json<span class="w"> </span><span class="c1"># what changed between two retrieval reports</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>file.json<span class="w"> </span><span class="c1"># session retrieval on a downloaded LongMemEval file</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>mise<span class="w"> </span>run<span class="w"> </span>check<span class="w">      </span><span class="c1"># every lint, the guards, both test suites, the sources, the integrations and the dashboard, without modifying the tree</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>mise<span class="w"> </span>run<span class="w"> </span>ci<span class="w">         </span><span class="c1"># check plus the docs build: the local equivalent of CI's lint,</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">                    </span><span class="c1"># test and docs steps</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>mise<span class="w"> </span>cli<span class="w"> </span>&lt;args&gt;<span class="w">      </span><span class="c1"># run memcastle from source, e.g. `mise cli status`</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>mise<span class="w"> </span>run<span class="w"> </span>docs<span class="w">       </span><span class="c1"># serve this documentation locally</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>mise<span class="w"> </span>run<span class="w"> </span>docs:build<span class="w"> </span><span class="c1"># build it into site/</span>
+</span></code></pre></div>
+<p><code>prek install</code> (once) wires the same checks into <code>git commit</code> as pre-commit hooks —
+formatting, Clippy, spelling, actionlint, markdownlint, commitlint, basic file hygiene,
+and the architecture guard described below.</p>
+<h2 id="running-the-daemon-locally">Running the daemon locally<a class="headerlink" href="#running-the-daemon-locally" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mise<span class="w"> </span>cli<span class="w"> </span>serve
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># in another terminal:</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>mise<span class="w"> </span>cli<span class="w"> </span>status
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>mise<span class="w"> </span>cli<span class="w"> </span>mine<span class="w"> </span>./src
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>mise<span class="w"> </span>cli<span class="w"> </span>job<span class="w"> </span>list
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>mise<span class="w"> </span>cli<span class="w"> </span>job<span class="w"> </span>demo<span class="w"> </span>--steps<span class="w"> </span><span class="m">5</span><span class="w">   </span><span class="c1"># exercise the scheduler without mining anything</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>mise<span class="w"> </span>cli<span class="w"> </span>search<span class="w"> </span><span class="s2">"job scheduler"</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>mise<span class="w"> </span>cli<span class="w"> </span>daemon<span class="w"> </span>stop
+</span></code></pre></div>
+<p>In this repository <code>mise.toml</code> sets development defaults in its <code>[env]</code> table:
+<code>MEMCASTLE_ASSETS_DIR</code> is the checkout and <code>MEMCASTLE_WEB_ENABLE</code> is <code>true</code>.
+They apply to <code>mise run</code>, to <code>mise cli</code> and to any shell with <a href="https://mise.jdx.dev/dev-tools/shims.html">mise activated</a>
+once you are in the project directory, so <code>mise cli serve</code> already serves the dashboard from <code>web/dist</code> (after
+<code>mise run web:build</code>) and finds the integrations and sources of the checkout, with no flag.
+Because the variables follow the shell, <strong>any <code>memcastle</code> you run from the project directory uses them, including an
+installed one</strong>: <code>memcastle integration install pi</code> there installs the bundle built in the checkout
+(<code>mise run integrations:build</code>) and not the package's.
+Run it from another directory, or <code>env -u MEMCASTLE_ASSETS_DIR memcastle ...</code>, to use the installed assets.
+A flag still wins over the variable (<code>--assets-dir</code>), and your own <code>mise.local.toml</code> can override or drop either.</p>
+<p>The suites that start a daemon or run the installer are not affected:
+<code>mise run integrations:check</code> and <code>mise run web:check</code> unset every <code>MEMCASTLE_*</code> variable before they start,
+and the Rust and bun harnesses build their own environment, so a test never depends on where it was run from.</p>
+<p>By default the palace lives under <code>~/.local/share/memcastle/default</code> and the daemon listens on <code>127.0.0.1</code> port <code>8420</code>.
+Every path, environment variable, flag and the precedence between them is in <a href="../configuration/">Configuration</a>.
+<code>config::Config</code> is the source of truth if that page ever drifts.</p>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Unit tests</strong> live next to the code they test (<code>domain::job</code>'s state machine, <code>config</code>'s validation,
+  <code>store</code>'s migrations/persistence — the storage tests use SurrealDB's in-memory engine for speed, plus one test
+  against a real SurrealKV directory; survival across a restart is proven at the process boundary in
+  <code>tests/persistence.rs</code>, because SurrealKV's file lock is not released within one process).</li>
+<li><strong>Two suites.</strong> A test binary that builds or runs a WebAssembly component is named <code>tests/wasm_*.rs</code>,
+  and that prefix is the whole definition of the WebAssembly suite: <code>.config/nextest.toml</code> selects it with
+  <code>binary(/^wasm_/)</code>, and <code>mise run test:wasm</code> and CI's <code>wasm</code> job pass the same prefix to Cargo as <code>--test 'wasm_*'</code>,
+  so that the other test binaries are not compiled for nothing.
+  A new <code>wasm_</code> file therefore joins the suite with no configuration.
+  Everything else is the basic suite, which is what <code>mise run test</code> and the <code>default</code> and <code>ci</code> nextest profiles run;
+  the <code>wasm</code> and <code>ci-wasm</code> profiles run the other one.
+  The basic suite runs in CI on Linux, macOS and Windows and needs no WebAssembly target.
+  The WebAssembly suite runs in CI on Linux only, in its own <code>wasm</code> job with its own Codecov flag,
+  and each directory under <code>sources/</code> also gets a CI leg of its own (<code>mise run sources:test -- &lt;name&gt;</code>), found automatically.
+  A test that only reads files, such as <code>tests/source_docs.rs</code>, builds nothing and stays in the basic suite.</li>
+<li><strong>Integration tests</strong> (<code>tests/</code>) run against a tempdir palace and an OS-assigned port.
+  Those that start the daemon inside the test process are modules of one binary, <code>tests/in_process/main.rs</code>:
+  each <code>tests/</code> binary links the whole server, about 600 MB with debug info, so sixteen of them were most of what
+  compiling the tests took, and one links it once.
+  To add one, create <code>tests/in_process/&lt;name&gt;.rs</code> and list it in <code>main.rs</code>.
+  nextest still runs every test in a process of its own, and a test is named <code>in_process &lt;module&gt;::&lt;test&gt;</code>,
+  so <code>mise run test -- -E 'binary(in_process) &amp; test(auth::)'</code> selects one file's tests.
+  A test that needs a process boundary (a daemon that is killed, a CLI with no daemon) stays a binary of its own.
+  Most start the daemon in-process (<code>tests/common</code>'s <code>TestDaemon</code>); the ones that need a real process boundary
+  (SurrealKV's file lock is not released within one process) spawn the <code>memcastle</code> binary instead:</li>
+<li><code>tests/in_process/server.rs</code> — health, status, graceful shutdown, retry (in-process).</li>
+<li><code>tests/in_process/concurrency.rs</code> — many simulated clients submitting jobs and reading status at once,
+    proving the shared store stays consistent (in-process).</li>
+<li><code>tests/in_process/memory_mode.rs</code>, <code>tests/in_process/mcp_memory_mode.rs</code> — per-request and per-MCP-session
+    memory modes (in-process).</li>
+<li><code>tests/in_process/audit.rs</code>, <code>tests/in_process/repair.rs</code> — the audit and repair job kinds end to end (in-process).</li>
+<li><code>tests/persistence.rs</code> — data and job state survive a daemon restart, including a SIGKILL mid-job
+    and a pause or cancel requested just before it, <code>memcastle daemon start</code>
+    and <code>memcastle daemon restart --bind --port</code> (subprocess).</li>
+<li><code>tests/mcp_smoke.rs</code> — the MCP surface end to end: a real MCP client over streamable HTTP against a
+    <code>memcastle serve</code> subprocess, covering read and write tools, migrations before serving, a second session,
+    and persistence across a restart with a reconnecting session (subprocess).</li>
+<li><code>tests/in_process/auth.rs</code> — optional bearer-token authentication over real HTTP: every route guarded,
+    the open health probe, a configured secret, generate, rotate and revoke,
+    and MCP with a token and with no credential-management tool
+    (in-process).</li>
+<li><code>tests/auth_lifecycle.rs</code> — the authentication lifecycle through the real CLI: generate, restart, enable, a
+    rotated and a revoked token, the daemon refusing to start with nothing to check against, and no token ever reaching
+    the log, the database or any file (subprocess).</li>
+<li><code>tests/credential_isolation.rs</code> — OAuth credentials stay in one module that reaches no palace, no jobs and no
+    WebAssembly runtime, that only <code>app</code> and the daemon's root name, and that never logs or reads a token outside
+    where it is stored or sent to its provider.</li>
+<li><code>tests/wasm_oauth.rs</code> — a source that signs in with OAuth against a real daemon and the real CLI, with a fake
+    provider: consent to the sign-in, <code>source auth</code> through the device flow, the token a run is given, renewal, a revoked
+    credential, a miner that needs the sign-in, and no refresh token anywhere but the credentials file (needs the
+    <code>wasm32-wasip2</code> target).</li>
+<li><code>tests/config_assets.rs</code> — the assets override is honoured and checked, and a standalone binary starts with no assets
+    (subprocess).</li>
+<li><code>tests/dependencies.rs</code> — the lockfile never pulls a second storage engine into the binary (ADR-001), nor a
+    source-specific SDK or native database binding (ADR-026), and the WebAssembly runtime stays built without the
+    features a source host never uses.</li>
+<li><code>tests/config_bind.rs</code> — the listener itself: bind address and port precedence, and real bind failures
+    (subprocess).</li>
+<li><code>tests/config_paths.rs</code> — the XDG config, data and state locations, resolved through the real binary
+    (subprocess).</li>
+<li><code>tests/migrate.rs</code> — <code>memcastle migrate</code> and its <code>--check</code>/<code>--status</code> modes (subprocess).</li>
+<li><code>tests/cli.rs</code> — the binary's argument parsing and its behaviour with no daemon reachable (subprocess),
+    including colour, <code>completions</code> and the absence of a <code>help</code> subcommand.</li>
+<li><code>tests/in_process/retrieval_eval/</code> — the retrieval evaluation harness (<a href="../retrieval-evaluation/">Retrieval evaluation</a>):
+    the bundled dataset against its committed baseline, no result outside its scope or time, and the metric, report and
+    LongMemEval converter units (in-process). Its explicit runs (<code>mise run eval*</code>) are <code>#[ignore]</code>d.</li>
+<li><code>tests/in_process/palace.rs</code> — the <code>/api/wings/...</code> hierarchy routes: lifecycle, error contract and memory-mode gates
+    (in-process).</li>
+<li><code>tests/shutdown.rs</code> — a stopping process lets the embedded datastore finish stopping before it exits (subprocess).</li>
+<li><code>tests/in_process/db_endpoint.rs</code> — the database admin endpoint: opt-in, loopback by default, refused origins,
+    and sharing the daemon's data (in-process).</li>
+<li><code>tests/in_process/miners.rs</code> — persistent miner configuration end to end: several miners with their own options, creation
+    and changes validated before anything is written, a change never broadening silently, hand edits noticed and an invalid
+    one keeping the last good miners, a cursor surviving every change that keeps the source, a credential never shown, and
+    REST, the CLI and MCP agreeing (in-process, with the CLI as a subprocess client).</li>
+<li><code>tests/in_process/triggers.rs</code> — source triggers end to end: disabled by default and nothing started by defining a
+    trigger, a miner or a webhook; enabling refused with what is missing; poll, watch and webhook firing; a webhook's
+    listener opening only while one is enabled and refusing every unauthentic delivery alike; repeated deliveries running
+    once; a burst of firings and deliveries becoming one waiting run; a restart keeping the user's choice and the
+    remembered timetable; a vanished watch path reported and recovered; hand edits; and REST and the CLI agreeing
+    (in-process, with the CLI as a subprocess client).</li>
+<li><code>tests/in_process/cli_daemon.rs</code> — CLI flags that change what the daemon is asked: <code>--mode</code>, and relative <code>mine</code> paths
+    against an in-process daemon (subprocess client).</li>
+<li><code>tests/in_process/integration_contract.rs</code> — the daemon half of the <a href="../integration-contract/">integration contract</a>:
+    a real MCP session replays the language-neutral fixtures in <code>tests/fixtures/integration/</code>
+    (modes, checkpoint payloads, failure classes), and fails when the contract page, the capability manifest
+    and the test names disagree (in-process).</li>
+<li><code>src/project.rs</code> — the project file and the <code>MEMCASTLE_WING</code>/<code>MEMCASTLE_ROOM</code> overrides, replaying the cases in
+    <code>tests/fixtures/project-config/</code> (unit tests): discovery, nesting, the git and home boundaries, the environment,
+    and what is refused.
+    The integrations replay the same cases in TypeScript, see <a href="../project-config/">Project configuration</a>.</li>
+<li><code>integrations/&lt;name&gt;/test/</code> — the client half of the same contract, one bun suite per integration:
+    each starts a real <code>memcastle serve</code>, finds it through its registry file and replays the same fixtures through
+    the integration's own client.
+    Run them with <code>mise run integrations:check</code>, see <a href="../adr/022-integrations-are-bun-packages-tested-against-a-real-daemon/">ADR-022</a>.</li>
+<li><code>tests/integration_cli.rs</code> — <code>memcastle integration list|install|update|remove</code> through the real binary, with fake
+    <code>pi</code> and <code>opencode</code> programs and a throwaway home: the lifecycle, idempotence, compatibility refusals,
+    preservation of the user's other plugins and settings,
+    and resolution from <code>--assets-dir</code>, the environment and the binary's own prefix.
+    The installer's unit tests are in <code>src/integration/</code> (manifest, discovery, adapters, install, update, remove, rollback).</li>
+<li><code>tests/integration_bundle.rs</code> — builds the bundles with <code>packaging/integrations/build.sh</code>, checks the package tree
+    (manifests accepted by this MemCastle, no sources or <code>node_modules</code>, the skills) and runs the same lifecycle from the
+    packaged tree and from the checkout.
+    It needs bun, so it is <code>#[ignore]</code>d in the basic suite and <code>mise run integrations:check</code> runs it.</li>
+<li><code>integrations/common/test/</code> — what needs two integrations at once: sessions in every memory mode against one
+    daemon, and the proof, from the requests on the wire, that an <code>off</code> session receives nothing.
+    It is test-only and imports the integrations' sources, see
+    <a href="../adr/027-cross-integration-tests-live-in-a-common-package/">ADR-027</a>.</li>
+<li><code>tests/in_process/events.rs</code> — <code>GET /api/events</code> against a real daemon: a note, a wing and a job's progress arrive as
+    identifiers and never as content, a <code>disabled</code> session is refused and a <code>read_only</code> one served, the token is
+    required, and an open stream does not keep the daemon from shutting down.</li>
+<li><code>tests/in_process/web.rs</code> — the dashboard's routes against a real daemon: opt-in, the static files and their headers,
+    the refusal of any path that leaves <code>web/dist</code>, the page for a build that is missing, the public shell with
+    authentication on, <code>/api/config</code>, and the jobs listing's <code>kind</code> and <code>limit</code> (in-process).
+    <code>src/assets</code> unit-tests that a packaged layout and a worktree resolve <code>web/dist/index.html</code> through the same lookup.</li>
+<li><code>tests/web_bundle.rs</code> — builds the dashboard with <code>packaging/web/build.sh</code>, checks the package tree (no sources, maps
+    or <code>node_modules</code>) and serves it from an installed prefix and from the checkout.
+    It needs bun and node, so it is <code>#[ignore]</code>d in the basic suite and <code>mise run web:check</code> runs it.</li>
+<li><code>web/test/</code> — the dashboard's client, login, route guard, event-stream parser and live loader
+    (vitest, no daemon), and the same client, login and event stream
+    against a real <code>memcastle serve</code> (<code>web/test/daemon</code>, bun), see <a href="../web/#developing-the-dashboard">Web UI</a>.</li>
+<li><code>tests/wasm_conformance.rs</code> — the same conformance cases run against the built-in <code>directory</code> source and against the
+    reference WebAssembly source built from <code>sources/directory/</code> (in-process, WebAssembly suite).</li>
+<li><code>tests/wasm_pi.rs</code> — the Pi history source (<code>sources/pi/</code>) built and run as a component: what it files and leaves out,
+    discovery and the credentials file it must never open, provenance, and an install, mine and re-mine against a real
+    daemon (in-process, WebAssembly suite).</li>
+<li><code>tests/wasm_opencode.rs</code> — the OpenCode history source (<code>sources/opencode/</code>) built and run as a component against a
+    stand-in <code>opencode</code> command: what it files and leaves out, the discovery cursor and the query it never lets a
+    cursor change, provenance, a machine without OpenCode, and an install, mine, re-mine and grow against a real daemon
+    (in-process, WebAssembly suite, Unix only).</li>
+<li><code>tests/source_docs.rs</code> — the guide's list of conformance cases and of diagnostic codes against what ships
+    (no build, basic suite).</li>
+<li><code>tests/wasm_registry.rs</code> — registries against a real daemon (a directory registry written with the same calls
+    <code>source index</code> makes): search, install by name with consent, an archive that is not the one published, a package that
+    is not the one the index says, version choice, the trust policy, update with and without new permissions, a bundled
+    source that a registry never installs, updates or replaces, a source registered by GitHub repository (against a
+    stand-in for the API, with a digest that does not match and a repository that cannot be read), an unreadable
+    registry, and the CLI publishing, signing, searching, installing and updating (in-process and subprocess,
+    WebAssembly suite).</li>
+<li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code>, the script a release runs, packaging <code>pi</code> and <code>opencode</code> as an
+    unpacked bundle and as <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code> archives, and a daemon that lists both as installed and enables them
+    with no consent (WebAssembly suite, Unix only).</li>
+<li><code>tests/wasm_runtime.rs</code> — installable sources against a real daemon: consent, the lifecycle, mining through the
+    shared pipeline, and refusing a component altered on disk (in-process, WebAssembly suite).</li>
+<li><code>tests/wasm_projects.rs</code> — <code>memcastle source init</code>, <code>build</code>, <code>test</code> and <code>package</code> for real, the sandbox
+    (a source cannot read outside its grant, see the environment, outrun its time limit or exceed its memory, or run an
+    unlisted program) and installing through the CLI.
+    It builds components with Cargo for <code>wasm32-wasip2</code> (subprocess, WebAssembly suite);
+    see <a href="#building-components-in-tests">Building components in tests</a>.</li>
+<li><code>tests/in_process/skills.rs</code> — the shared <a href="../skills/">agent skills</a>: every skill is discoverable,
+    and every tool, CLI command and REST route it names exists in this release
+    (in-process daemon, plus the real binary's help).</li>
+</ul>
+<p>Run a subset with nextest's filter syntax, e.g.:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--<span class="w"> </span>--filter-expr<span class="w"> </span><span class="s1">'test(job)'</span>
+</span></code></pre></div>
+<p>A filter on <code>mise run test</code> still excludes the <code>wasm_</code> binaries; use <code>mise run test:wasm -- &lt;filter&gt;</code> for those.
+<code>mise run cover</code> runs the basic suite with coverage.
+The TypeScript suites report coverage too: with <code>COVERAGE=1</code>, <code>mise run web:check</code> and <code>mise run integrations:check</code>
+run each package's <code>test:cover</code> script, which writes lcov under <code>web/coverage/</code> and <code>integrations/*/coverage/</code>.
+CI uploads them to Codecov under the <code>web</code> and <code>integrations</code> flags.
+<code>.github/codecov.yml</code> also groups every report into components (core, surfaces, app, memory, sources, web, integrations)
+by path, so the Codecov page shows each area whatever flag covered it.
+Each component reflects the merged execution coverage from every reporting suite.
+Its required status permits the same 0.5% fluctuation as the project status,
+so platform and timing variation does not fail a build.</p>
+<h3 id="where-the-ci-time-goes">Where the CI time goes<a class="headerlink" href="#where-the-ci-time-goes" title="Permanent link">&para;</a></h3>
+<p>Measured on GitHub's runners after the suites were split, so that a change aimed at speed has a baseline to beat.
+Compiling is the test binaries built instrumented for coverage; running is nextest's own summary line.
+The figures are from runs that restored their caches; the first run of a new job, or one whose cache was evicted,
+compiles <code>wasmtime</code> and Cranelift from scratch and takes several minutes longer.</p>
+<table>
+<thead>
+<tr>
+<th>Job</th>
+<th>Compiling</th>
+<th>Running</th>
+<th>Whole job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tests, Linux (basic, 1119 tests)</td>
+<td>46 s</td>
+<td>224 s</td>
+<td>5.4 min</td>
+</tr>
+<tr>
+<td>Tests, macOS (basic)</td>
+<td>25 s</td>
+<td>67 s</td>
+<td>2.5 min</td>
+</tr>
+<tr>
+<td>Tests, Windows (basic)</td>
+<td>75 s</td>
+<td>215 s</td>
+<td>7.3 min</td>
+</tr>
+<tr>
+<td>WebAssembly tests, Linux (38 tests)</td>
+<td>10 s with warm caches, 2.8 min cold</td>
+<td>38 s</td>
+<td>1.5 to 4.3 min</td>
+</tr>
+<tr>
+<td>Source, one leg per <code>sources/&lt;name&gt;/</code></td>
+<td>10 s</td>
+<td>seconds</td>
+<td>about 1 min</td>
+</tr>
+</tbody>
+</table>
+<p>The WebAssembly tests run in under a minute in CI, and their job finishes well before the basic Linux one.
+Both suites build only the test binaries they run: the wasm job passes <code>--test 'wasm_*'</code> to Cargo,
+and the daemon tests that start a server in the test process are one binary, <code>tests/in_process</code>, rather than sixteen.
+The time left in the basic suite is its roughly 1100 tests, not compiling or WebAssembly.</p>
+<h4 id="building-components-in-tests">Building components in tests<a class="headerlink" href="#building-components-in-tests" title="Permanent link">&para;</a></h4>
+<p>Under nextest every test is its own process, so a component built by one test is invisible to the next, and the cost
+is how many times Cargo has to compile what.
+The helpers in <code>tests/common/wasm.rs</code> keep that to one small crate per build:</p>
+<ul>
+<li>Every <code>wasm_*</code> test builds into one shared debug target directory, so <code>wit-bindgen</code> and <code>serde_json</code> compile once.</li>
+<li>Every scaffolded project is seeded with the reference source's <code>Cargo.lock</code>.
+  A scaffold ships none, and without it each build updated the crates.io index and re-resolved 35 packages while holding
+  Cargo's package-cache lock, which every other build then waited for.</li>
+<li>The reference source is built in place, in debug, into that shared directory, so a test never waits for the
+  release build with LTO that <code>mise run sources:check</code> and CI's per-source job make.</li>
+<li>A test that drives <code>memcastle source init</code> must call <code>share_target_of</code> afterwards.
+  Without it the project builds in release into a <code>target/</code> of its own and recompiles every dependency, which used to be
+  the two slowest tests in the suite.</li>
+</ul>
+<p>Locally this took the WebAssembly suite from about 225 s to 95 s on a cold target directory and from about 92 s to 38 s
+on a warm one; in CI, on a warm cache, the tests went from 49 s to 31 s and the slowest from 25 s to 14 s.
+What is left of the job is compiling the instrumented test binaries.</p>
+<h2 id="the-architecture-guard">The architecture guard<a class="headerlink" href="#the-architecture-guard" title="Permanent link">&para;</a></h2>
+<p>The non-negotiable invariant in <code>AGENTS.md</code> — "the CLI has no business logic MCP/HTTP can't reuse" —
+is enforced by the <code>store-isolation</code> <code>prek</code> hook.
+It greps <code>src/main.rs</code>, <code>src/cli.rs</code>, <code>src/client/</code>, <code>src/mcp/</code> and <code>src/api/</code>
+for a direct <code>store</code> or <code>jobs</code> import (including grouped <code>use crate::{store::..}</code> imports,
+even when rustfmt spreads them over several lines).
+The one allowed exception is <code>main.rs</code>'s <code>SurrealStore</code> import, which <code>memcastle migrate</code> needs.
+The pattern matches text, not syntax,
+so a diagnostic-code string such as <code>memcastle::jobs::not_found</code> trips it too, even inside a comment:
+tests should read a code from the error (<code>Error::body().code</code>) rather than spell it out in these directories.
+If you find yourself wanting to import <code>store</code> from one of those,
+the fix is almost always to add a method to <code>app::AppServices</code> instead,
+so the same capability becomes available to every interface at once.</p>
+<p>The <code>single-writer</code> hook enforces the companion invariant, one daemon and one writer per embedded palace:
+<code>SurrealStore::connect</code> may only be called from <code>src/server/</code>, <code>src/store/</code> and <code>src/main.rs</code> (for <code>migrate</code>).</p>
+<p>The <code>integrations-http-only</code> hook keeps an integration to MCP and HTTP:
+it fails on <code>surrealdb</code>, <code>surrealkv</code>, <code>SurrealStore</code>, a <code>store</code> or <code>jobs</code> path, or <code>/api/db</code> anywhere under <code>integrations/</code>
+(Markdown and <code>node_modules</code> are skipped), see <a href="../adr/019-shared-integration-contract/">ADR-019</a>.
+Like the others it is a text match, so a comment that names one of them trips it too.</p>
+<p>The authentication invariant has no hook, because a route or an MCP tool is not something a grep can recognise.
+It is enforced by tests instead: <code>tests/in_process/auth.rs</code> walks a list of the REST routes
+(and a route that does not exist) without a token, and fails if an MCP tool's name mentions credentials.</p>
+<p>The database admin endpoint (<a href="../adr/015-database-admin-endpoint/">ADR-015</a>) is guarded the same way:
+a daemon that was only started has no second listener, a non-loopback bind needs the opt-in and authentication,
+a page from another origin is refused, and no MCP tool mentions the database.
+Those are <code>tests/in_process/db_endpoint.rs</code>, the <code>/api/db</code> entries in <code>tests/in_process/auth.rs</code>
+and a unit test that <code>serve</code> has no flag that starts it.
+<code>surrealdb-core</code> and <code>surrealdb-rpc</code> are pinned to the exact <code>surrealdb</code> version: they are SurrealDB internal API,
+so bump all three together.</p>
+<p>Invariant 9 (source-specific code stays out of the pipeline) and invariant 10 (a source package has no ambient authority)
+have no hook, because what they forbid is not something a grep over the whole tree can recognise.
+<code>tests/source_isolation.rs</code> reads the source text instead: the pipeline, the chunker and the adapter contract name no
+adapter, no file access and no WebAssembly runtime; adapters, the WebAssembly host and <code>src/source/</code> never reach the store
+or the jobs (at any depth); only <code>src/mining/wasm/</code> names the engine; and the host calls nothing that hands a guest the
+daemon's environment, standard streams, arguments or a writable directory.
+Building the reference WebAssembly sources needs the <code>wasm32-wasip2</code> target (<code>rustup target add wasm32-wasip2</code>, which
+<code>rust-toolchain.toml</code> requests); <code>mise run sources:check</code> builds and tests every source under <code>sources/</code>.
+<code>tests/source_isolation.rs</code> builds nothing and runs in the basic suite on every OS.</p>
+<p>Invariant 6 and 10's rule that MCP never touches credentials covers OAuth sign-ins too (<a href="../adr/039-oauth-credentials-for-mining-sources/">ADR-039</a>):
+<code>tests/in_process/auth.rs</code> guards both <code>/api/source-packages/{name}/auth</code> routes and fails on any MCP tool that mentions
+<code>auth</code>, <code>credential</code>, <code>oauth</code> or <code>sign</code>, and <code>tests/credential_isolation.rs</code> reads the source text so that the credential
+module reaches neither the palace nor the WebAssembly runtime,
+and nothing outside <code>app</code> and the daemon's root can name it.</p>
+<p>Invariant 12 (changing a miner is administrative, and the daemon is the only writer of the <code>[[miners]]</code> section) has no
+hook either.
+<code>tests/in_process/auth.rs</code> guards every <code>/api/miners</code> route and fails when any MCP tool other than <code>memcastle_miner_list</code>
+and <code>memcastle_miner_get</code> mentions miners; <code>tests/in_process/miners.rs</code> holds the rest, and <code>config::miners_file</code>'s unit
+tests hold that an edit keeps the file's comments and other tables (<a href="../adr/037-persistent-miner-configuration/">ADR-037</a>).</p>
+<p>Invariant 13 (triggers are opt-in, administrative, and only ask for a run) has no hook either.
+<code>tests/trigger_isolation.rs</code> reads the source text so that <code>src/trigger</code> reaches neither the palace, the jobs nor any
+source, only <code>app</code> and the daemon's root can name it, MCP calls nothing that defines, enables or fires a trigger, the
+main router serves no <code>/hooks</code> route, the webhook listener never logs or passes on a body or a secret, and a trigger
+queues work only through the request <code>miner run</code> makes.
+<code>tests/in_process/auth.rs</code> guards every <code>/api/triggers</code> route and fails when any MCP tool other than
+<code>memcastle_trigger_list</code> and <code>memcastle_trigger_get</code> mentions triggers
+(<a href="../adr/043-source-triggers/">ADR-043</a>).</p>
+<p>The integration installer is local tooling like the source tooling, and is held to the same rule in the same way.
+<code>tests/integration_isolation.rs</code> fails when <code>src/integration/</code> mentions the store, the jobs, the daemon client, the
+network or an agent's settings file or a credential, and when anything under <code>src/mcp</code>, <code>src/api</code>, <code>src/app</code> or
+<code>src/server</code> (or any module but the binary) calls it.
+<code>tests/integration_docs.rs</code> holds <a href="../integrations/">Agent integrations</a> to the manifest parser and the error codes.</p>
+<p>The web UI is held to HTTP as an integration is: the <code>web-http-only</code> hook fails on <code>surrealdb</code>, <code>surrealkv</code>,
+<code>SurrealStore</code>, a <code>store</code> or <code>jobs</code> path, or <code>/api/db</code> anywhere under <code>web/</code> (Markdown, <code>node_modules</code> and <code>dist</code> are
+skipped), see <a href="../adr/035-web-ui/">ADR-035</a>.
+That the dashboard's static files are the only thing besides the liveness probe that needs no token is held by
+<code>tests/in_process/auth.rs</code> and <code>tests/in_process/web.rs</code>, which walk the routes with the dashboard off and on.</p>
+<p>Two more hooks guard the remaining invariants.
+<code>job-status-only-via-apply</code> fails on any <code>.status =</code> assignment outside <code>src/domain/job.rs</code>,
+so a job's status only ever changes through <code>Job::apply</code>.
+<code>no-hand-rolled-ddl</code> fails on schema DDL in Rust code, because the schema is SurrealKit's (<code>database/schema/*.surql</code>).</p>
+<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
+<p>The documentation site is built by <a href="https://zensical.org/">Zensical</a> from <code>docs/</code>, configured in <code>zensical.toml</code>.
+<code>mise run docs</code> serves it with live reload, and <code>mise run docs:build</code> (part of <code>mise run ci</code>) builds it.
+The documentation workflow builds pull requests without deployment and publishes merged <code>main</code> builds into the root of
+<code>memcastle/memcastle.github.io</code>'s <code>gh-pages</code> branch, where Pages serves <code>https://memcastle.github.io/</code>.
+After the first publish creates the branch (if the repository is empty), configure the destination repository's Pages
+source as Deploy from a branch (<code>gh-pages</code>, <code>/</code>).
+The source repository's <code>github-pages</code> environment needs <code>APP_CLIENT_ID</code> (variable) and <code>APP_PRIVATE_KEY</code> (secret) for a
+GitHub App installed on <code>memcastle/memcastle.github.io</code> with Contents: write; its token is scoped to that repository.
+The first publish creates the branch when the destination is empty, and subsequent identical builds make no commit.
+Documentation is part of a change, not a follow-up: a pull request that changes a flag, a setting, a tool
+or a user-visible behaviour updates the page that describes it, in the same commit series.</p>
+<ul>
+<li><strong>Where things go.</strong> Task-oriented pages (installation, quickstart, guides) and references (configuration, CLI, MCP and
+  REST) are for users; <code>architecture.md</code>, this page and <code>adr/</code> are for contributors.
+  Say a thing once and link to it from elsewhere instead of repeating it.</li>
+<li><strong>New pages</strong> must be added to the <code>nav</code> in <code>zensical.toml</code>, or they are built but not reachable.</li>
+<li><strong>Describe what exists.</strong> Document the implementation as it is, and put anything not built yet under a "not
+  implemented" or "non-goals" heading rather than describing it as available.
+  Run the command and paste real output when a page shows some.</li>
+<li><strong>Diagrams</strong> use <a href="https://mermaid.js.org/">Mermaid</a> in fenced <code>mermaid</code> blocks, next to the text they explain.
+  GitHub and the site both render them; stick to flowcharts, sequence, state, class and entity-relationship diagrams,
+  and keep them small enough to read on a phone.</li>
+<li><strong>Prose style.</strong> One sentence per line, wrapped at a clause boundary if a sentence would pass 120 columns
+  (<code>mise run lint:md</code> enforces the width on <code>AGENTS.md</code>, <code>CONTRIBUTING.md</code>, <code>README.md</code>, <code>docs/</code> and <code>skills/*/SKILL.md</code>).
+  <code>mise run spell</code> runs <code>typos</code>; a legitimate new term goes into <code>typos.toml</code>'s <code>extend-words</code>.</li>
+</ul>
+<h2 id="this-repository-is-generated-from-a-template">This repository is generated from a template<a class="headerlink" href="#this-repository-is-generated-from-a-template" title="Permanent link">&para;</a></h2>
+<p>See <code>CONTRIBUTING.md</code> for the <code>git tpl</code> workflow (<code>mise run tpl:diff</code>, <code>mise run tpl:update</code>),
+and <code>AGENTS.md</code> for where project-specific content goes so template updates keep merging cleanly.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3439 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/troubleshooting/">
+      
+      
+        <link rel="prev" href="../migrations/">
+      
+      
+        <link rel="next" href="../configuration/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Troubleshooting - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Troubleshooting
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The daemon
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The daemon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastleclientnot_running" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::client::not_running</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleserverbind_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::server::bind_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlestorebackend_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::store::backend_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleauthunauthorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::auth::unauthorized</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleauthnot_configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::auth::not_configured</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleauthentropy_unavailable" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::auth::entropy_unavailable</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#everything-is-refused-after-memcastle-auth-revoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Everything is refused after <code>memcastle auth revoke</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastledbunsafe_bind" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::db::unsafe_bind</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastledbalready_running-or-bind_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::db::already_running</code> or <code>bind_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastledbunavailable" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::db::unavailable</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surrealdb-studio-cannot-connect-to-the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SurrealDB Studio cannot connect to the database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-reports-the-registry-as-stale" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>status</code> reports the registry as <code>stale</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-exits-1-and-says-degraded" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>status</code> exits 1 and says <code>DEGRADED</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-daemon-exits-at-start-with-memcastlemigratefailed-or-locked" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The daemon exits at start with <code>memcastle::migrate::failed</code> or <code>locked</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs-are-noisy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Logs are noisy
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-did-not-shut-down-cleanly-lines-appear-when-the-daemon-stops" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>ERROR ... did not shut down cleanly</code> lines appear when the daemon stops
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wings-rooms-and-drawers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wings, rooms and drawers
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wings, rooms and drawers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacewing_not_found-room_not_found-and-drawer_not_found" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::wing_not_found</code>, <code>room_not_found</code> and <code>drawer_not_found</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacepath_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::path_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacedrawer_name_taken" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::drawer_name_taken</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-memory-i-wrote-is-missing-or-a-drawer-is-duplicated" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        A memory I wrote is missing, or a drawer is "duplicated"
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-entity-was-not-merged-with-another-or-was" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        An entity was not merged with another, or was
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacebusy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::busy</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobscontended" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::contended</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-command-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The command line
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The command line">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlecliaborted" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::cli::aborted</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlecliprompt_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::cli::prompt_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleprojectinvalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::project::invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colours-look-wrong-or-escape-codes-show-up-in-a-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Colours look wrong, or escape codes show up in a file
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Configuration
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastleconfiginvalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::config::invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleiofailed-on-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::io::failed</code> on <code>--config</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Using memory
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlemodeforbidden" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::mode::forbidden</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleinputinvalid-with-x-memcastle-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::input::invalid</code> with <code>x-memcastle-mode</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastle_set_mode-fails-with-a-missing-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle_set_mode</code> fails with a missing session
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobsid_invalid-or-not_found" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::id_invalid</code> or <code>not_found</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobstransition_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::transition_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mine-finds-nothing-or-stops-early" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>mine</code> finds nothing or stops early
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlesourcecursor_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::source::cursor_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::source::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlecredential" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::credential::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleminer" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::miner::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastletrigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::trigger::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleintegration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::integration::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search-returns-nothing-for-a-query-that-should-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Search returns nothing for a query that should match
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semantic-search-finds-nothing-or-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Semantic search finds nothing, or fails
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Other diagnostics
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Other diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobsorphaned-and-memcastlejobslease_lost" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::orphaned</code> and <code>memcastle::jobs::lease_lost</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlerepairbased_on_job_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::repair::based_on_job_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlegraphrelationship_not_found-and-memcastlegraphempty_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::graph::relationship_not_found</code> and <code>memcastle::graph::empty_label</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleextractnot_configured-and-memcastleextractfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::extract::not_configured</code> and <code>memcastle::extract::failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlegraphentity_not_found" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::graph::entity_not_found</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleclientrequest_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::client::request_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleserverfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::server::failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlestoremalformed-and-memcastlestoreschema_sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::store::malformed</code> and <code>memcastle::store::schema_sync</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleserializationfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::serialization::failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP clients
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCP clients">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-client-cannot-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The client cannot connect
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tools-do-not-appear" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The tools do not appear
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#still-stuck" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Still stuck
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-daemon" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The daemon
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The daemon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastleclientnot_running" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::client::not_running</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleserverbind_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::server::bind_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlestorebackend_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::store::backend_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleauthunauthorized" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::auth::unauthorized</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleauthnot_configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::auth::not_configured</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleauthentropy_unavailable" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::auth::entropy_unavailable</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#everything-is-refused-after-memcastle-auth-revoke" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Everything is refused after <code>memcastle auth revoke</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastledbunsafe_bind" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::db::unsafe_bind</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastledbalready_running-or-bind_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::db::already_running</code> or <code>bind_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastledbunavailable" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::db::unavailable</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surrealdb-studio-cannot-connect-to-the-database-admin-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        SurrealDB Studio cannot connect to the database admin endpoint
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-reports-the-registry-as-stale" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>status</code> reports the registry as <code>stale</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-exits-1-and-says-degraded" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>status</code> exits 1 and says <code>DEGRADED</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-daemon-exits-at-start-with-memcastlemigratefailed-or-locked" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The daemon exits at start with <code>memcastle::migrate::failed</code> or <code>locked</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs-are-noisy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Logs are noisy
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-did-not-shut-down-cleanly-lines-appear-when-the-daemon-stops" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>ERROR ... did not shut down cleanly</code> lines appear when the daemon stops
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wings-rooms-and-drawers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Wings, rooms and drawers
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wings, rooms and drawers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacewing_not_found-room_not_found-and-drawer_not_found" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::wing_not_found</code>, <code>room_not_found</code> and <code>drawer_not_found</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacepath_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::path_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacedrawer_name_taken" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::drawer_name_taken</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-memory-i-wrote-is-missing-or-a-drawer-is-duplicated" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        A memory I wrote is missing, or a drawer is "duplicated"
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-entity-was-not-merged-with-another-or-was" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        An entity was not merged with another, or was
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlepalacebusy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::palace::busy</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobscontended" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::contended</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-command-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The command line
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The command line">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlecliaborted" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::cli::aborted</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlecliprompt_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::cli::prompt_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleprojectinvalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::project::invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#colours-look-wrong-or-escape-codes-show-up-in-a-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Colours look wrong, or escape codes show up in a file
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Configuration
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastleconfiginvalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::config::invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleiofailed-on-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::io::failed</code> on <code>--config</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Using memory
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlemodeforbidden" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::mode::forbidden</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleinputinvalid-with-x-memcastle-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::input::invalid</code> with <code>x-memcastle-mode</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastle_set_mode-fails-with-a-missing-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle_set_mode</code> fails with a missing session
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobsid_invalid-or-not_found" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::id_invalid</code> or <code>not_found</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobstransition_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::transition_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mine-finds-nothing-or-stops-early" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>mine</code> finds nothing or stops early
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlesourcecursor_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::source::cursor_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlesource" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::source::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlecredential" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::credential::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleminer" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::miner::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastletrigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::trigger::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleintegration" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::integration::*</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search-returns-nothing-for-a-query-that-should-match" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Search returns nothing for a query that should match
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semantic-search-finds-nothing-or-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Semantic search finds nothing, or fails
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Other diagnostics
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Other diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memcastlejobsorphaned-and-memcastlejobslease_lost" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::jobs::orphaned</code> and <code>memcastle::jobs::lease_lost</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlerepairbased_on_job_invalid" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::repair::based_on_job_invalid</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlegraphrelationship_not_found-and-memcastlegraphempty_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::graph::relationship_not_found</code> and <code>memcastle::graph::empty_label</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleextractnot_configured-and-memcastleextractfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::extract::not_configured</code> and <code>memcastle::extract::failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlegraphentity_not_found" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::graph::entity_not_found</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleclientrequest_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::client::request_failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleserverfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::server::failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastlestoremalformed-and-memcastlestoreschema_sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::store::malformed</code> and <code>memcastle::store::schema_sync</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memcastleserializationfailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>memcastle::serialization::failed</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MCP clients
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MCP clients">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-client-cannot-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The client cannot connect
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tools-do-not-appear" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The tools do not appear
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#still-stuck" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Still stuck
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/troubleshooting.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h1>
+<p>Start with <code>memcastle doctor</code> to inspect configuration and local prerequisites without changing the palace.
+When the daemon is running, it also checks storage, migrations and configured source/miner/trigger readiness over HTTP.
+See the <a href="../cli/#doctor">doctor command</a> for statuses, offline behavior and exit codes.</p>
+<p>Every MemCastle failure carries a diagnostic code of the form <code>memcastle::&lt;module&gt;::&lt;kind&gt;</code> and a <code>help:</code> line saying
+what to do.
+Codes are stable, so it is safe to search for or match on them.
+When the daemon rejects a CLI request, the CLI reports it as <code>memcastle::client::remote_rejected</code>
+and shows the daemon's own code in parentheses, such as <code>(403, memcastle::mode::forbidden)</code>;
+that inner code is the one to look up below.
+Add <code>-v</code> for the full cause chain of an error, and see <a href="../daemon/#logging">Logging</a> for the daemon's own log.</p>
+<p>For daemon-specific details, <code>memcastle status</code> says whether it is running, where, and whether its datastore is healthy.</p>
+<h2 id="the-daemon">The daemon<a class="headerlink" href="#the-daemon" title="Permanent link">&para;</a></h2>
+<h3 id="memcastleclientnot_running"><code>memcastle::client::not_running</code><a class="headerlink" href="#memcastleclientnot_running" title="Permanent link">&para;</a></h3>
+<p>No daemon answered.
+Start one with <code>memcastle daemon start</code>, or <code>memcastle serve</code> to run it in the foreground.
+If you believe one is running, it may serve a different palace or port:
+client commands look it up by palace, so pass the same <code>--palace</code> (or set the same <code>XDG_DATA_HOME</code>) you started it with,
+and check <code>memcastle status</code>, which prints the endpoint it tried and the registry file's state.</p>
+<h3 id="memcastleserverbind_failed"><code>memcastle::server::bind_failed</code><a class="headerlink" href="#memcastleserverbind_failed" title="Permanent link">&para;</a></h3>
+<p>The daemon could not listen on its address, usually because something already uses the port
+(possibly another MemCastle).
+Nothing was created or migrated.
+Stop the other process, or choose a free port with <code>--port</code>, <code>MEMCASTLE_PORT</code> or <code>server.port</code>.
+A non-loopback <code>--bind</code> may also need privileges or an address that exists on this machine.</p>
+<h3 id="memcastlestorebackend_failed"><code>memcastle::store::backend_failed</code><a class="headerlink" href="#memcastlestorebackend_failed" title="Permanent link">&para;</a></h3>
+<p>The palace could not be opened.
+For an embedded palace this almost always means another process holds it:
+<code>memcastle migrate</code> while the daemon runs, or a second <code>serve</code> on the same palace and a different port
+(on the same port it fails earlier, with <code>memcastle::server::bind_failed</code>).
+Check <code>memcastle status</code>, stop that process, and try again.
+For a remote palace, check the URL and credentials in <code>[store]</code>.</p>
+<h3 id="memcastleauthunauthorized"><code>memcastle::auth::unauthorized</code><a class="headerlink" href="#memcastleauthunauthorized" title="Permanent link">&para;</a></h3>
+<p>The daemon has <a href="../authentication/">authentication</a> enabled and did not accept the token.
+The CLI shows it as <code>memcastle::client::remote_rejected</code> with <code>(401, memcastle::auth::unauthorized)</code>,
+and <code>memcastle status</code> exits <code>1</code>, which is how it differs from a daemon that is not running (<code>3</code>).
+Export the token as <code>MEMCASTLE_AUTH_TOKEN</code> (or set <code>auth.token</code>) in the environment of the command;
+an MCP client needs an <code>Authorization: Bearer</code> header.
+A token that was rotated or revoked stops working at once, and the message does not say which case it is.</p>
+<h3 id="memcastleauthnot_configured"><code>memcastle::auth::not_configured</code><a class="headerlink" href="#memcastleauthnot_configured" title="Permanent link">&para;</a></h3>
+<p>Authentication is enabled, but the daemon has no token to check: none in <code>MEMCASTLE_AUTH_TOKEN</code> or <code>auth.token</code>,
+and none generated.
+The palace was opened and migrated, but no job ran and nothing was served.
+Either set a secret, or start once with authentication disabled, run <code>memcastle auth generate</code>, store the token,
+and enable authentication.</p>
+<h3 id="memcastleauthentropy_unavailable"><code>memcastle::auth::entropy_unavailable</code><a class="headerlink" href="#memcastleauthentropy_unavailable" title="Permanent link">&para;</a></h3>
+<p><code>memcastle auth generate</code> could not read the operating system's random source.
+MemCastle never falls back to a weaker one, so no token was generated and nothing was stored.
+Check that the process can use <code>getrandom</code> (a restricted container or sandbox is the usual cause), and run it again.</p>
+<h3 id="everything-is-refused-after-memcastle-auth-revoke">Everything is refused after <code>memcastle auth revoke</code><a class="headerlink" href="#everything-is-refused-after-memcastle-auth-revoke" title="Permanent link">&para;</a></h3>
+<p>Revoking the only credential leaves nothing that can authenticate, so even <code>memcastle daemon stop</code> is refused.
+Stop the process with your supervisor (or <code>kill</code>), and start it again with authentication disabled
+(unset <code>MEMCASTLE_AUTH_ENABLED</code>) or with a new <code>MEMCASTLE_AUTH_TOKEN</code>.
+Nothing is lost, because authentication guards access and does not encrypt the palace.</p>
+<h3 id="memcastledbunsafe_bind"><code>memcastle::db::unsafe_bind</code><a class="headerlink" href="#memcastledbunsafe_bind" title="Permanent link">&para;</a></h3>
+<p><code>memcastle db start</code> was asked to listen beyond loopback and the daemon refused.
+The <a href="../database-access/">database admin endpoint</a> is a console onto the whole database,
+so a non-loopback <code>--bind</code> needs <code>--allow-remote</code> <em>and</em> a daemon started with <code>auth.enabled</code>.
+Nothing was opened.
+Leave <code>--bind</code> off to listen on <code>127.0.0.1</code>, which needs neither.</p>
+<h3 id="memcastledbalready_running-or-bind_failed"><code>memcastle::db::already_running</code> or <code>bind_failed</code><a class="headerlink" href="#memcastledbalready_running-or-bind_failed" title="Permanent link">&para;</a></h3>
+<p><code>already_running</code> means the endpoint is already open with different settings than the ones you passed
+(another <code>--bind</code>, another <code>--port</code> or an <code>--allow-origin</code> it does not allow).
+<code>memcastle db start</code> without flags just reports the open endpoint, <code>memcastle db status</code> says where it is,
+and <code>memcastle db stop</code> closes it so you can start it again with the new settings.
+<code>bind_failed</code> means the address is taken.
+Port <code>8000</code> is also SurrealDB's own default, so a <code>surreal start</code> on the same machine is the usual cause.
+Pick another with <code>--port</code>, <code>MEMCASTLE_DB_PORT</code> or <code>db.port</code>, or use <code>--port 0</code> to let the OS choose
+(the answer prints the port).</p>
+<h3 id="memcastledbunavailable"><code>memcastle::db::unavailable</code><a class="headerlink" href="#memcastledbunavailable" title="Permanent link">&para;</a></h3>
+<p>The palace uses a remote SurrealDB, which already has a server.
+Point SurrealDB Studio at that server directly.</p>
+<h3 id="surrealdb-studio-cannot-connect-to-the-database-admin-endpoint">SurrealDB Studio cannot connect to the database admin endpoint<a class="headerlink" href="#surrealdb-studio-cannot-connect-to-the-database-admin-endpoint" title="Permanent link">&para;</a></h3>
+<p>Check <code>memcastle db status</code> first: the endpoint only exists after <code>memcastle db start</code>.
+A refusal with <code>403</code> means the client's origin is not allowed, and the daemon's log names it
+(<code>database admin request from a disallowed origin refused</code>).
+The hosted Surrealist needs <code>--allow-origin https://app.surrealdb.com</code>;
+the SurrealDB Studio desktop app and pages served from this machine are always allowed.
+Studio may report that refusal as a failed login.
+A refused sign-in needs the user <code>memcastle</code>, and as the password the MemCastle token on an authenticated daemon
+or <code>memcastle</code> when authentication is disabled.
+See <a href="../database-access/">Database access</a>.</p>
+<h3 id="status-reports-the-registry-as-stale"><code>status</code> reports the registry as <code>stale</code><a class="headerlink" href="#status-reports-the-registry-as-stale" title="Permanent link">&para;</a></h3>
+<p>The registry file names a process that no longer exists, because the daemon was killed or crashed.
+It is ignored and the next daemon overwrites it; you can also delete it, see
+<a href="../storage/#the-registry-file">the registry file</a>.
+Jobs the crashed daemon was running are recovered on the next start.</p>
+<h3 id="status-exits-1-and-says-degraded"><code>status</code> exits 1 and says <code>DEGRADED</code><a class="headerlink" href="#status-exits-1-and-says-degraded" title="Permanent link">&para;</a></h3>
+<p>The daemon answers, but its datastore is unreachable or migrations are pending.
+The line below the summary says which.
+For pending migrations, see <a href="../migrations/">Migrations and upgrades</a>.</p>
+<h3 id="the-daemon-exits-at-start-with-memcastlemigratefailed-or-locked">The daemon exits at start with <code>memcastle::migrate::failed</code> or <code>locked</code><a class="headerlink" href="#the-daemon-exits-at-start-with-memcastlemigratefailed-or-locked" title="Permanent link">&para;</a></h3>
+<p>A migration failed, or another migration holds the lock.
+The daemon refuses to serve a palace it cannot vouch for.
+Read the message and the log (<code>memcastle serve -v</code>), fix the cause and start again;
+the palace resumes from the last step that succeeded.
+A lock left by a crashed run expires on its own.</p>
+<h3 id="logs-are-noisy">Logs are noisy<a class="headerlink" href="#logs-are-noisy" title="Permanent link">&para;</a></h3>
+<p>The embedded database logs its own startup at the default <code>info</code> level.
+Set <code>MEMCASTLE_LOG=warn</code> to quieten the daemon.</p>
+<h3 id="error-did-not-shut-down-cleanly-lines-appear-when-the-daemon-stops"><code>ERROR ... did not shut down cleanly</code> lines appear when the daemon stops<a class="headerlink" href="#error-did-not-shut-down-cleanly-lines-appear-when-the-daemon-stops" title="Permanent link">&para;</a></h3>
+<p><code>serve</code> and <code>migrate</code> wait for the embedded database to finish stopping before they exit, so these lines are not expected.
+If you see them, or a warning that the database did not finish shutting down within ten seconds, please report it
+with the log.</p>
+<h2 id="wings-rooms-and-drawers">Wings, rooms and drawers<a class="headerlink" href="#wings-rooms-and-drawers" title="Permanent link">&para;</a></h2>
+<h3 id="memcastlepalacewing_not_found-room_not_found-and-drawer_not_found"><code>memcastle::palace::wing_not_found</code>, <code>room_not_found</code> and <code>drawer_not_found</code><a class="headerlink" href="#memcastlepalacewing_not_found-room_not_found-and-drawer_not_found" title="Permanent link">&para;</a></h3>
+<p>Nothing answers to that name or UUID.
+<code>memcastle wing list</code>, <code>memcastle room list --wing &lt;wing&gt;</code> and <code>memcastle drawer list --room &lt;wing&gt;/&lt;room&gt;</code> show what
+exists.
+A room is looked up inside the wing you named, so a room's UUID from another wing is not found there.</p>
+<h3 id="memcastlepalacepath_invalid"><code>memcastle::palace::path_invalid</code><a class="headerlink" href="#memcastlepalacepath_invalid" title="Permanent link">&para;</a></h3>
+<p>The path or a name in it cannot be used: a part is empty, a wing or room name contains <code>/</code>,
+a drawer name has an empty, <code>.</code> or <code>..</code> segment,
+or a name is blank, has leading or trailing whitespace, contains a control character
+or looks like a UUID (UUIDs are how records are addressed by id, so they cannot also be names).
+The command line checks this before contacting the daemon.
+A wing from before these rules may have a <code>/</code> in its name: address it by its UUID.</p>
+<h3 id="memcastlepalacedrawer_name_taken"><code>memcastle::palace::drawer_name_taken</code><a class="headerlink" href="#memcastlepalacedrawer_name_taken" title="Permanent link">&para;</a></h3>
+<p>A drawer with that name already exists in the room, and holds other content.
+Drawer content is immutable, so the name cannot be pointed at new content.
+Pick another name, or delete the old drawer first.
+Writing the same name with the <em>same</em> content succeeds and changes nothing.
+In a mined room, only the first copy of a file keeps its name, see <a href="../storage/#what-mining-reads">Storage and data</a>.</p>
+<h3 id="a-memory-i-wrote-is-missing-or-a-drawer-is-duplicated">A memory I wrote is missing, or a drawer is "duplicated"<a class="headerlink" href="#a-memory-i-wrote-is-missing-or-a-drawer-is-duplicated" title="Permanent link">&para;</a></h3>
+<p>Writing the same text twice into one room stores one drawer.
+An unnamed <code>POST /api/wings/{wing}/rooms/{room}/drawers</code> answers <code>200</code> with <code>created: false</code> and the drawer that already
+holds it, a diary write returns the agent's existing entry, and a checkpoint item that was an exact copy is counted in the
+job result's <code>duplicates</code>.
+The same text in another room, or from another agent's diary, is a different memory and is stored.</p>
+<p>A drawer that differs by a typo, or only in case and punctuation, is stored and linked instead.
+<code>GET /api/drawers/{id}/duplicates</code> shows what it was linked to and why, and nothing is merged.
+To store every write without any of this, set <code>dedup.enabled = false</code>, see
+<a href="../configuration/#deduplication">Deduplication</a>.</p>
+<h3 id="an-entity-was-not-merged-with-another-or-was">An entity was not merged with another, or was<a class="headerlink" href="#an-entity-was-not-merged-with-another-or-was" title="Permanent link">&para;</a></h3>
+<p>Names converge on an entity only when they differ in case, punctuation or spacing, are a recorded alias, or are a unique
+one-character typo in a name of six characters or more.
+Anything else stays a separate entity, and <code>GET /api/entities/{id}/candidates</code> lists the ones it resembles.
+To settle one by hand, <code>POST /api/entities/{id}/aliases</code> records the spelling, and later mentions converge.
+Entities that existed before deduplication are never merged retroactively.
+Turn the typo rule off with <code>dedup.entity_fuzzy = false</code>.</p>
+<h3 id="memcastlepalacebusy"><code>memcastle::palace::busy</code><a class="headerlink" href="#memcastlepalacebusy" title="Permanent link">&para;</a></h3>
+<p>A wing or room delete was refused because a mining job, a checkpoint job, or a repair that applies is queued, running
+or paused: it files into wings and rooms by name, so it could quietly bring back what you removed.
+<code>memcastle job list</code> shows which, and <code>memcastle job cancel &lt;id&gt;</code> stops one.
+Nothing was deleted.</p>
+<h3 id="memcastlejobscontended"><code>memcastle::jobs::contended</code><a class="headerlink" href="#memcastlejobscontended" title="Permanent link">&para;</a></h3>
+<p>A job pause, resume, cancel or retry could not be applied because the job kept changing state underneath it.
+Nothing was changed: run the command again.
+The REST API answers <code>409</code>.</p>
+<h2 id="the-command-line">The command line<a class="headerlink" href="#the-command-line" title="Permanent link">&para;</a></h2>
+<h3 id="memcastlecliaborted"><code>memcastle::cli::aborted</code><a class="headerlink" href="#memcastlecliaborted" title="Permanent link">&para;</a></h3>
+<p>You answered "no" (or just pressed Enter, which means no) to a confirmation, and nothing was changed.
+<code>repair --apply</code>, <code>auth generate</code>, <code>auth revoke</code>, <code>job cancel</code>, <code>source remove</code>, the <code>delete</code> commands of <code>wing</code>, <code>room</code>
+and <code>drawer</code>, and <code>source install</code> and <code>source update</code> when a package asks for permissions,
+ask before they act when run in a terminal.
+Run the command again and answer <code>y</code>, or pass <code>--yes</code> to skip the question.
+In a script, CI job or pipe the first group never asks, so this error only appears at a keyboard.
+<code>source install</code> and <code>source update</code> do not proceed there either: they refuse with <code>memcastle::source::consent_required</code>
+(<code>update</code> exits <code>1</code>) until you pass <code>--yes</code> or <code>--consent &lt;digest&gt;</code>.</p>
+<h3 id="memcastlecliprompt_failed"><code>memcastle::cli::prompt_failed</code><a class="headerlink" href="#memcastlecliprompt_failed" title="Permanent link">&para;</a></h3>
+<p>A confirmation could not be shown or read, for example because you pressed Ctrl-C at the prompt.
+Pass <code>--yes</code> to skip it, or run the command from an interactive terminal.</p>
+<h3 id="memcastleprojectinvalid"><code>memcastle::project::invalid</code><a class="headerlink" href="#memcastleprojectinvalid" title="Permanent link">&para;</a></h3>
+<p>A command that files memory under the current project (<code>note</code>) could not read the project's scope.
+The message names the file or the variable at fault: a <code>.config/memcastle.toml</code> that is not valid TOML,
+holds an unknown key, or names a wing or room MemCastle refuses, or a <code>MEMCASTLE_WING</code> or <code>MEMCASTLE_ROOM</code> that is not a
+valid name.
+Fix it, or pass <code>--wing</code> and <code>--room</code> explicitly, see <a href="../project-config/">Project configuration</a>.</p>
+<h3 id="colours-look-wrong-or-escape-codes-show-up-in-a-file">Colours look wrong, or escape codes show up in a file<a class="headerlink" href="#colours-look-wrong-or-escape-codes-show-up-in-a-file" title="Permanent link">&para;</a></h3>
+<p>Colour follows the output stream: it is on for a terminal and off for a pipe or a file.
+Set <code>NO_COLOR=1</code> to turn it off everywhere, or <code>FORCE_COLOR=1</code> to turn it on for the text that reaches a pipe
+(<code>--help</code>, diagnostics, the progress of <code>source build</code>), see <a href="../cli/#output-colour-and-prompts">Output, colour and prompts</a>.
+Command results are JSON in a pipe and never carry colour; terminal JSON with <code>--json</code> is syntax-highlighted.
+<code>NO_COLOR</code> wins over <code>FORCE_COLOR</code> when both are set.
+A <code>FORCE_COLOR</code> left in your environment is the usual reason escape codes reach a log.</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="memcastleconfiginvalid"><code>memcastle::config::invalid</code><a class="headerlink" href="#memcastleconfiginvalid" title="Permanent link">&para;</a></h3>
+<p>A setting is malformed.
+The message names the variable, key or flag and what is wrong.
+The usual ones:</p>
+<ul>
+<li><code>palace.path ... is not an absolute path</code>: give an absolute path to <code>--palace</code>, <code>MEMCASTLE_PALACE_PATH</code> or
+  <code>palace.path</code>.
+  A relative path is refused because a daemon and a client started from different directories would disagree
+  about which palace they mean.</li>
+<li><code>MEMCASTLE_BIND ... includes a port</code>: the bind address is an IP address alone; use <code>--port</code>, <code>MEMCASTLE_PORT</code> or
+  <code>server.port</code> for the port.</li>
+<li>A <code>XDG_*_HOME</code> that seems to be ignored: XDG variables that are unset, empty or relative are ignored by design.</li>
+</ul>
+<h3 id="memcastleiofailed-on-config"><code>memcastle::io::failed</code> on <code>--config</code><a class="headerlink" href="#memcastleiofailed-on-config" title="Permanent link">&para;</a></h3>
+<p>A config file named explicitly must exist, so a typo does not silently fall back to defaults.
+The default file, <code>~/.config/memcastle/config.toml</code>, is optional.</p>
+<h2 id="using-memory">Using memory<a class="headerlink" href="#using-memory" title="Permanent link">&para;</a></h2>
+<h3 id="memcastlemodeforbidden"><code>memcastle::mode::forbidden</code><a class="headerlink" href="#memcastlemodeforbidden" title="Permanent link">&para;</a></h3>
+<p>The session or request is in a <a href="../memory-modes/">memory mode</a> that forbids the operation:
+<code>read_only</code> rejects writes, and <code>disabled</code> rejects reads too.
+Switch the session back to <code>full</code>.
+Over MCP, call <code>memcastle_set_mode</code>; over REST, fix or drop the <code>X-MemCastle-Mode</code> header;
+for the CLI, check <code>--mode</code> and <code>MEMCASTLE_MODE</code>.</p>
+<h3 id="memcastleinputinvalid-with-x-memcastle-mode"><code>memcastle::input::invalid</code> with <code>x-memcastle-mode</code><a class="headerlink" href="#memcastleinputinvalid-with-x-memcastle-mode" title="Permanent link">&para;</a></h3>
+<p>The <code>X-MemCastle-Mode</code> header holds an unknown mode.
+Use <code>full</code>, <code>read_only</code> or <code>disabled</code>.</p>
+<h3 id="memcastle_set_mode-fails-with-a-missing-session"><code>memcastle_set_mode</code> fails with a missing session<a class="headerlink" href="#memcastle_set_mode-fails-with-a-missing-session" title="Permanent link">&para;</a></h3>
+<p>The request did not belong to an MCP session, so a mode cannot be remembered for later calls.
+Use a client that keeps an MCP session open, or send <code>X-MemCastle-Mode</code> over REST.</p>
+<h3 id="memcastlejobsid_invalid-or-not_found"><code>memcastle::jobs::id_invalid</code> or <code>not_found</code><a class="headerlink" href="#memcastlejobsid_invalid-or-not_found" title="Permanent link">&para;</a></h3>
+<p>Job ids are UUIDs, as printed by <code>memcastle job list</code>.
+A well-formed id the daemon does not know may belong to a different palace.</p>
+<h3 id="memcastlejobstransition_invalid"><code>memcastle::jobs::transition_invalid</code><a class="headerlink" href="#memcastlejobstransition_invalid" title="Permanent link">&para;</a></h3>
+<p>The job is not in a state the action applies to:
+only a failed job can be retried, only a paused one resumed, and only a queued, paused or running one cancelled.
+<code>memcastle job show &lt;id&gt;</code> prints its status.</p>
+<h3 id="mine-finds-nothing-or-stops-early"><code>mine</code> finds nothing or stops early<a class="headerlink" href="#mine-finds-nothing-or-stops-early" title="Permanent link">&para;</a></h3>
+<p>Check the job's <code>result</code>:
+<code>memcastle job show &lt;id&gt;</code> reports how many <code>documents</code> were handled, how many were <code>unchanged</code> (already filed, so
+skipped), <code>skipped</code> (not readable) and whether the run was <code>truncated</code> at the document limit, in which case run it again.
+A source that was mined before remembers where it stopped, so a second <code>mine</code> that reports <code>"documents": 0</code> has nothing
+new to read; <code>memcastle mine &lt;source&gt; --full</code> reads it from the beginning.
+Skipped directories, large files and non-UTF-8 files are listed in <a href="../storage/#what-mining-reads">What mining reads</a>.
+The path given to <code>mine</code>, and the sessions directory of <code>pi</code>, are read by the daemon, so they must exist on the
+daemon's machine.
+Over MCP and REST it must be absolute; the CLI makes it absolute for you.</p>
+<h3 id="memcastlesourcecursor_invalid"><code>memcastle::source::cursor_invalid</code><a class="headerlink" href="#memcastlesourcecursor_invalid" title="Permanent link">&para;</a></h3>
+<p>A source's stored cursor is not one its adapter can continue from, for example after a change to how that adapter keeps
+its place.
+Mine it again from the beginning with <code>memcastle mine &lt;name&gt; --full</code>: unchanged documents are recognised and
+skipped, so nothing is duplicated.</p>
+<h3 id="memcastlesource"><code>memcastle::source::*</code><a class="headerlink" href="#memcastlesource" title="Permanent link">&para;</a></h3>
+<p>These come from <a href="../writing-sources/">installed mining sources</a>.
+<code>consent_required</code> means the package asks for permissions you have not agreed to: review what the error lists, then
+install with <code>--yes</code>, or with <code>--consent &lt;digest&gt;</code> in a script.
+<code>not_enabled</code> means the source is installed but turned off or cannot run here: <code>memcastle source list</code> says which and why,
+and <code>memcastle source enable &lt;name&gt;</code> turns on a disabled one.
+A source that is <code>unavailable</code> because its component is missing or no longer matches what was installed needs the package
+installed again; one that is incompatible needs rebuilding against this MemCastle's contract.
+<code>failed</code>, <code>timeout</code> and <code>permission_denied</code> come from a running source: the message is the source's own, and a source that
+cannot read a file it expects probably lacks a <code>filesystem.read</code> permission.
+The full list is in <a href="../writing-sources/#troubleshooting">Writing a mining source</a>.</p>
+<h3 id="memcastlecredential"><code>memcastle::credential::*</code><a class="headerlink" href="#memcastlecredential" title="Permanent link">&para;</a></h3>
+<p>These come from <a href="../writing-sources/#signing-in-with-oauth">sources that sign in with OAuth</a>.
+<code>required</code> means a run, or a miner, needs the source signed in: run <code>memcastle source auth &lt;source&gt;</code>.
+It also follows a provider that revoked the credential, and an update that changed what the source asks for
+(its client, endpoints or scopes), because a credential is never used under terms it was not given under.
+<code>refresh_failed</code> means the stored credential could not be renewed just now, almost always the provider or the network;
+the credential is kept, so running again later is the fix, and <code>source auth</code> again if it keeps happening.
+<code>flow_failed</code> ends a sign-in that was declined, whose code expired, or that the provider refused;
+<code>source auth</code> starts a new one.
+The browser flow redirects to a port on the machine the <em>daemon</em> runs on, so with a daemon on another machine
+use a source that offers the device flow, or run the browser on the daemon's machine.
+<code>store_failed</code> means neither the platform keyring nor the fallback file could be used.
+On a Linux server with no desktop session there is no keyring, which <code>auto</code> handles by using the file,
+so look at the permissions of <code>credentials.dir</code>; <code>credentials.backend = "file"</code> makes the choice explicit.
+See <a href="../configuration/#credentials">Credentials</a>.</p>
+<h3 id="memcastleminer"><code>memcastle::miner::*</code><a class="headerlink" href="#memcastleminer" title="Permanent link">&para;</a></h3>
+<p>These come from <a href="../configuration/#miners">configured miners</a>.
+<code>invalid</code> means a definition was refused before anything was written: the message names the setting.
+For an enabled miner the usual causes are a source that is not installed or enabled (<code>memcastle source list</code>),
+a credential whose environment variable is not set in the <em>daemon's</em> environment or whose file does not exist,
+a relative <code>locator</code> for <code>directory</code>, and a key in <code>options</code> that reads like a secret
+(put the secret in an environment variable and point <code>credential</code> at it).
+<code>scope_broadened</code> means the option change may make the miner read more than before; if that is meant, repeat it with
+<code>--allow-broaden</code>.
+<code>config_file</code> means the configuration file cannot be read, or changed while the daemon was editing it.
+The daemon keeps the last miners that were valid (<code>memcastle miner list</code> shows the error beside them) and will not
+write until the file is fixed: correct the entry it names, then <code>memcastle miner reload</code>.
+<code>not_runnable</code> and <code>disabled</code> come from <code>memcastle miner run</code>: <code>memcastle miner get &lt;name&gt;</code> says why the miner is not
+<code>ready</code>, and a miner whose <code>options</code> names a key its source does not declare is refused.
+A miner that never shows up in <code>memcastle miner list</code> after you edited the file by hand is in a file the daemon was not
+started from; <code>miner list</code> prints the path it reads.</p>
+<h3 id="memcastletrigger"><code>memcastle::trigger::*</code><a class="headerlink" href="#memcastletrigger" title="Permanent link">&para;</a></h3>
+<p>These come from <a href="../triggers/">triggers</a>.
+<code>not_activatable</code> is the daemon refusing to switch a trigger on, and its message is the list of what to set up first:
+the miner (it must exist, be enabled and be able to run), a source that supports the trigger's type
+(<code>memcastle sources</code>), for a webhook the <code>[webhook]</code> listener and the shared secret's variable or file, for a watch an
+existing path.
+Nothing was started and nothing was written; fix the cause and enable it again.
+<code>memcastle trigger get &lt;name&gt;</code> shows the same list under <code>to enable:</code> for a disabled trigger.
+<code>invalid</code> names the setting that is wrong (a typo in a key, an <code>every</code> without a unit, a relative <code>path</code>).
+<code>disabled</code> comes from <code>memcastle trigger fire</code>: a disabled trigger is not fired; <code>memcastle miner run</code> mines without one.</p>
+<p>A trigger that is enabled and does nothing is <code>unavailable</code> or <code>failing</code> in <code>memcastle trigger list</code>, with the reason.
+A webhook that gets no deliveries: is <code>[webhook] enable</code> set, is the listener up (<code>trigger list</code> prints where it is
+listening), is the port reachable through your proxy or firewall, and does the sender sign with the same secret?
+The listener answers an empty <code>401</code> to everything it will not accept, deliberately; the daemon's log says which webhook
+could not be read at <code>warn</code>.
+A watch that stops reporting changes is usually the system's limit on file watches (on Linux,
+<code>fs.inotify.max_user_watches</code>); the trigger shows it as failing and sets the watcher up again, and a <code>poll</code> is the
+fallback.</p>
+<h3 id="memcastleintegration"><code>memcastle::integration::*</code><a class="headerlink" href="#memcastleintegration" title="Permanent link">&para;</a></h3>
+<p>These come from <code>memcastle integration</code> and its installation of the <a href="../integrations/">Pi and OpenCode integrations</a>.
+Every one is raised before anything is changed on your machine, except <code>validation_failed</code>, which means the copy was
+made but does not check out.
+<code>incompatible</code> names the version it found of MemCastle or the agent and the range the integration supports;
+<code>agent_not_found</code> means the agent's command is not on the <code>PATH</code> of this shell; <code>conflict</code> means a plugin file of your own
+is in the way and was left alone; and <code>assets_missing</code> means this MemCastle has no assets root with integrations in it.
+The full table, with what to do about each, is in <a href="../integrations/#troubleshooting">Agent integrations</a>.</p>
+<h3 id="search-returns-nothing-for-a-query-that-should-match">Search returns nothing for a query that should match<a class="headerlink" href="#search-returns-nothing-for-a-query-that-should-match" title="Permanent link">&para;</a></h3>
+<p>Without an <a href="../configuration/#embeddings">embedding provider</a> search is lexical: it matches words in the stored text, not
+their meaning.
+Words are stemmed and case is ignored, so <code>languages</code> matches <code>language</code>, but a synonym such as <code>tongue</code> does not.
+A query returns the drawers containing every word first.
+Only when there are none does it fall back to drawers containing any of the words, best match first.
+Short keyword queries therefore work best, and a drawer matching one word of a long question ranks low.
+Check the scope too: <code>--wing</code>, <code>--room</code>, <code>--tag</code> and <code>--source-kind</code> narrow the result, and a wrong one gives an empty result.
+A drawer that was corrected with <code>drawer supersede</code> is only found by <code>--as-of</code>, <code>--from</code> with <code>--until</code>, or <code>--include-historical</code>,
+and <code>memcastle drawer history</code> shows how it changed.
+A date such as <code>2026-01-01</code> means midnight UTC at the start of that day,
+so a fact that became true later that day is not there yet.</p>
+<h3 id="semantic-search-finds-nothing-or-fails">Semantic search finds nothing, or fails<a class="headerlink" href="#semantic-search-finds-nothing-or-fails" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>memcastle::search::semantic_unavailable</code>: you asked for <code>--ranking semantic</code> or <code>hybrid</code> but the query could not be
+  embedded.
+  Configure an <code>[embeddings]</code> provider, or search with <code>--ranking lexical</code> (the default <code>auto</code> falls back by itself).</li>
+<li><code>memcastle::embed::not_configured</code>: <code>memcastle embed</code> or an embedding request needs a provider, and none is set.</li>
+<li><code>memcastle::embed::failed</code>: the provider answered with an error or not at all.
+  The message carries what it said; for a <code>command</code> provider that is its exit status and the start of its standard error.
+  Searches with <code>auto</code> ranking keep working lexically meanwhile.</li>
+<li><code>memcastle::embed::dimension_mismatch</code>: the model returns another vector length than the 768 the palace stores.
+  Ask it for 768 (<code>dimensions</code>), or choose a model that produces it.</li>
+<li>Semantic search only finds drawers that already have a vector.
+  <code>memcastle job list</code> shows the <code>embed</code> job that fills them; <code>memcastle audit</code> reports how many drawers still have none.</li>
+</ul>
+<h2 id="other-diagnostics">Other diagnostics<a class="headerlink" href="#other-diagnostics" title="Permanent link">&para;</a></h2>
+<p>These are rarer, and each one's <code>help:</code> line names the fix.</p>
+<h3 id="memcastlejobsorphaned-and-memcastlejobslease_lost"><code>memcastle::jobs::orphaned</code> and <code>memcastle::jobs::lease_lost</code><a class="headerlink" href="#memcastlejobsorphaned-and-memcastlejobslease_lost" title="Permanent link">&para;</a></h3>
+<p><code>orphaned</code> (REST <code>409</code>): a job is recorded as running, but nothing in this daemon is running it.
+<code>memcastle daemon restart</code> re-queues it, because startup recovery picks up jobs left running.
+<code>lease_lost</code>: another daemon took a job over after this one's lease expired, which can only happen on a remote palace
+shared by several daemons.
+If the first daemon was merely slow, raise <code>jobs.lease_ttl_secs</code>.</p>
+<h3 id="memcastlerepairbased_on_job_invalid"><code>memcastle::repair::based_on_job_invalid</code><a class="headerlink" href="#memcastlerepairbased_on_job_invalid" title="Permanent link">&para;</a></h3>
+<p><code>repair</code> needs the id of a completed <code>audit</code> job to plan from.
+Give it one that exists, is an audit, and has finished.</p>
+<h3 id="memcastlegraphrelationship_not_found-and-memcastlegraphempty_label"><code>memcastle::graph::relationship_not_found</code> and <code>memcastle::graph::empty_label</code><a class="headerlink" href="#memcastlegraphrelationship_not_found-and-memcastlegraphempty_label" title="Permanent link">&para;</a></h3>
+<p>A checkpoint item's <code>fact</code> named a relationship the palace does not hold (<code>relationship_not_found</code>),
+or gave a blank entity kind or predicate (<code>empty_label</code>).
+Correct the item and submit it again.</p>
+<h3 id="memcastleextractnot_configured-and-memcastleextractfailed"><code>memcastle::extract::not_configured</code> and <code>memcastle::extract::failed</code><a class="headerlink" href="#memcastleextractnot_configured-and-memcastleextractfailed" title="Permanent link">&para;</a></h3>
+<p><code>not_configured</code>: an <code>extract</code> job was asked for and the daemon has no <code>[extraction]</code> provider.
+Set <code>provider</code> to <code>heuristic</code>, <code>command</code> or <code>http</code>, see <a href="../configuration/#extraction">Extraction</a>, and restart the daemon.
+Without one, nothing is extracted and mining is unaffected.</p>
+<p><code>failed</code>: the provider is configured but the call did not work, and the message says how.
+For a <code>command</code>, the program's exit status and stderr are in it; for <code>http</code>, the endpoint's status and answer.
+The job fails and the drawers it did not reach are read by the next sweep, so retry it with <code>memcastle job retry</code> once the
+provider is back.</p>
+<h3 id="memcastlegraphentity_not_found"><code>memcastle::graph::entity_not_found</code><a class="headerlink" href="#memcastlegraphentity_not_found" title="Permanent link">&para;</a></h3>
+<p>A graph read named an entity the palace does not hold.
+List entities with <code>GET /api/entities</code> to find the id you mean.</p>
+<h3 id="memcastleclientrequest_failed"><code>memcastle::client::request_failed</code><a class="headerlink" href="#memcastleclientrequest_failed" title="Permanent link">&para;</a></h3>
+<p>A request reached the daemon, or tried to, and failed in transport:
+a timeout, a dropped connection or an unreadable reply.
+The daemon may be busy or restarting; retry, and check <code>memcastle status</code> and the daemon's log.
+A refused connection is <code>memcastle::client::not_running</code> instead.</p>
+<h3 id="memcastleserverfailed"><code>memcastle::server::failed</code><a class="headerlink" href="#memcastleserverfailed" title="Permanent link">&para;</a></h3>
+<p>The HTTP server failed while starting or serving, other than a failed bind.
+Run <code>memcastle serve -v</code> in the foreground to see what it was doing.</p>
+<h3 id="memcastlestoremalformed-and-memcastlestoreschema_sync"><code>memcastle::store::malformed</code> and <code>memcastle::store::schema_sync</code><a class="headerlink" href="#memcastlestoremalformed-and-memcastlestoreschema_sync" title="Permanent link">&para;</a></h3>
+<p><code>malformed</code>: a stored row did not have the expected shape,
+usually because a different MemCastle version wrote the palace.
+Run <code>memcastle migrate --status</code>, and <code>memcastle audit</code> to look for damage.
+<code>schema_sync</code>: applying the bundled schema failed, which points at a defect in a build rather than in your palace.</p>
+<h3 id="memcastleserializationfailed"><code>memcastle::serialization::failed</code><a class="headerlink" href="#memcastleserializationfailed" title="Permanent link">&para;</a></h3>
+<p>A value could not be turned into JSON, or read back from it.
+This is a bug in MemCastle: please report it with the command that triggered it.</p>
+<h2 id="mcp-clients">MCP clients<a class="headerlink" href="#mcp-clients" title="Permanent link">&para;</a></h2>
+<h3 id="the-client-cannot-connect">The client cannot connect<a class="headerlink" href="#the-client-cannot-connect" title="Permanent link">&para;</a></h3>
+<p>Make sure the daemon is running and that the client uses the URL printed by <code>memcastle status</code> on its <code>mcp</code> line,
+<code>http://127.0.0.1:8420/mcp</code> by default.
+The endpoint speaks streamable HTTP, so a browser or a plain <code>GET</code> returns <code>406 Not Acceptable</code>; that is expected.
+If the daemon was started on another port, the client's URL must match it.
+See <a href="../mcp-clients/">Connect an MCP client</a>.</p>
+<h3 id="the-tools-do-not-appear">The tools do not appear<a class="headerlink" href="#the-tools-do-not-appear" title="Permanent link">&para;</a></h3>
+<p>Most clients read their MCP configuration at startup, so restart the client after adding the server.
+The daemon must be up at that moment; some clients do not retry.</p>
+<h2 id="still-stuck">Still stuck<a class="headerlink" href="#still-stuck" title="Permanent link">&para;</a></h2>
+<p>Run the failing command with <code>-vv</code>, run <code>memcastle serve -vv</code> in the foreground,
+and set <code>RUST_BACKTRACE=1</code> if an error looks like a bug.
+Then open an issue at <a href="https://github.com/memcastle/memcastle/issues">https://github.com/memcastle/memcastle/issues</a> with the diagnostic code,
+the output of <code>memcastle status --json</code>, and your MemCastle version (<code>memcastle --version</code>).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2283 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+      
+      
+        <meta name="author" content="noirbizarre">
+      
+      
+        <link rel="canonical" href="https://memcastle.github.io/publishing-sources/">
+      
+      
+        <link rel="prev" href="../writing-sources/">
+      
+      
+        <link rel="next" href="../database-access/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../images/icon.svg">
+      <meta name="generator" content="zensical-0.0.69">
+    
+    
+      
+        <title>Publishing and installing sources - memcastle</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
+    <div data-md-component="skip">
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="memcastle" class="md-header__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            memcastle
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Publishing and installing sources
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Following your system — switch to light"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Following your system — switch to light" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to following your system"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to following your system" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="memcastle" class="md-nav__button md-logo" aria-label="memcastle" data-md-component="logo">
+      
+  <img src="../images/icon.svg" alt="memcastle">
+
+    </a>
+    memcastle
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/memcastle/memcastle" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    memcastle/memcastle
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Getting started
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_2">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Getting started
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Installation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Quickstart
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Connect an MCP client
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../skills/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent skills
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integrations
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Integrations
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Agent integrations
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-pi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Pi
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-opencode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  OpenCode
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-claude-code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Claude Code
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrations-codex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Codex
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Integration contract
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Guides
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Guides
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../daemon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Running the daemon
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Authentication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Web UI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Terminal operations console
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory modes
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Storage and data
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mining-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Mining sources
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Triggers
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deduplication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Deduplication
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Writing a mining source
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Publishing and installing sources
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-a-source-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Where a source comes from
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-package-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The package format
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-registry-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The registry index
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Publishing
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-searching-and-updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Installing, searching and updating
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trust" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Trust
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bundled-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Bundled sources
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-official-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The official registry
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The official registry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registering-a-github-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Registering a GitHub repository
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-something-goes-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        When something goes wrong
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Database access
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Migrations and upgrades
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Troubleshooting
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Reference
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Reference
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Configuration
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  CLI
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-and-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  MCP tools and REST API
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Project
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+              
+  
+  Project
+
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Development
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../retrieval-evaluation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Retrieval evaluation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Architecture Decisions
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+            </ul>
+          </nav>
+        
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-a-source-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Where a source comes from
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-package-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The package format
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-registry-index" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The registry index
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Publishing
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-searching-and-updating" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Installing, searching and updating
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trust" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Trust
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bundled-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Bundled sources
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-official-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The official registry
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The official registry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registering-a-github-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Registering a GitHub repository
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-something-goes-wrong" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        When something goes wrong
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
+                
+                  
+
+  
+    <a href="https://github.com/memcastle/memcastle/edit/main/docs/publishing-sources.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-file-pen" viewBox="0 0 24 24"><path d="M12.659 22H18a2 2 0 0 0 2-2V8a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 14 2H6a2 2 0 0 0-2 2v9.34"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10.378 12.622a1 1 0 0 1 3 3.003L8.36 20.637a2 2 0 0 1-.854.506l-2.867.837a.5.5 0 0 1-.62-.62l.836-2.869a2 2 0 0 1 .506-.853z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="publishing-and-installing-sources">Publishing and installing sources<a class="headerlink" href="#publishing-and-installing-sources" title="Permanent link">&para;</a></h1>
+<p>A mining source is a <a href="../writing-sources/">WebAssembly package</a>, and this page is how one gets from its author to a user:
+the package format, the registry index that lists packages, how to publish to one, and how users find, install, update
+and trust sources.
+The decisions behind it are in <a href="../adr/033-source-distribution/">ADR-033</a>
+and <a href="../adr/040-bundled-sources-are-installed-from-the-start-and-the-official-registry-is-published/">ADR-040</a>.</p>
+<p>Nobody installing a published source needs Rust, Python, Node or an SDK: a package is a component and a manifest, and the
+daemon runs it.</p>
+<h2 id="where-a-source-comes-from">Where a source comes from<a class="headerlink" href="#where-a-source-comes-from" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Origin</th>
+<th>What it is</th>
+<th>Installed by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Built in</td>
+<td>Compiled into MemCastle (<code>directory</code>).</td>
+<td>Nothing: it is always there and cannot be removed.</td>
+</tr>
+<tr>
+<td>Bundled</td>
+<td>An ordinary package unpacked beside the binary (<code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code>, <code>github</code>).</td>
+<td>Nothing: it is installed from the start, and <code>memcastle source enable &lt;name&gt;</code> turns it on.</td>
+</tr>
+<tr>
+<td>Registry</td>
+<td>A package listed in an index you configured.</td>
+<td><code>memcastle source install &lt;name&gt;</code>.</td>
+</tr>
+<tr>
+<td>Local</td>
+<td>A package file or a project directory on your disk.</td>
+<td><code>memcastle source install &lt;file or directory&gt;</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>They are listed together and share one lifecycle, but <code>install</code> accepts registry and local packages while <code>update</code>
+follows only registry sources: a local install has no upstream.
+A bundled source is already installed and is updated with MemCastle, and a built-in one is MemCastle.</p>
+<h2 id="the-package-format">The package format<a class="headerlink" href="#the-package-format" title="Permanent link">&para;</a></h2>
+<p>A package is a gzip-compressed tar archive named <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code>, written by <code>memcastle source package</code>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Required</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle-source.toml</code></td>
+<td>yes</td>
+<td>The <a href="../writing-sources/#the-manifest">manifest</a>, exactly as written.</td>
+</tr>
+<tr>
+<td><code>source.wasm</code></td>
+<td>yes</td>
+<td>The WebAssembly component. A plain core module is refused.</td>
+</tr>
+<tr>
+<td><code>README.md</code>, <code>LICENSE</code>, <code>LICENSE.md</code></td>
+<td>no</td>
+<td>Kept beside the component for whoever installed it.</td>
+</tr>
+</tbody>
+</table>
+<p>Only those top-level files are ever read, whatever else an archive holds, and one may expand to at most 256 MiB.
+The archive is deterministic: packaging the same source twice gives the same bytes, so its SHA-256 can be published.</p>
+<p>What the manifest says about the package itself:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>The manifest format, 1 when absent. A manifest in a format this MemCastle does not know is <code>incompatible</code>, so a field that means something new is never half-understood.</td>
+</tr>
+<tr>
+<td><code>source.name</code>, <code>source.version</code></td>
+<td>The identity: the name users install by and the semantic version.</td>
+</tr>
+<tr>
+<td><code>source.description</code>, <code>source.license</code>, <code>source.homepage</code>, <code>source.repository</code></td>
+<td>What it reads, and the provenance people choose by. The last three are optional.</td>
+</tr>
+<tr>
+<td><code>compatibility.contract</code></td>
+<td>The WIT contract version it was built against.</td>
+</tr>
+<tr>
+<td><code>compatibility.memcastle</code></td>
+<td>The MemCastle versions it runs on, as a semver requirement.</td>
+</tr>
+<tr>
+<td><code>capabilities</code>, <code>permissions</code>, <code>limits</code></td>
+<td>What it can do and what it asks the host for.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Compatibility</strong> is checked at install, every time the source is loaded, and for every version an index offers,
+always by the same rule: the contract must be one this MemCastle implements, and the requirement must match this MemCastle's
+release (a pre-release is held to its release's requirement).
+A source that stops fitting after an upgrade is <code>unavailable</code> with the reason, never a mysterious failure.</p>
+<p><strong>Integrity</strong> has two parts.
+The component's SHA-256 is recorded at install and checked every time it is loaded, so an altered file is never run.
+The archive's SHA-256, which a registry index pins, is checked before anything is read from the archive.</p>
+<h2 id="the-registry-index">The registry index<a class="headerlink" href="#the-registry-index" title="Permanent link">&para;</a></h2>
+<p>A registry is one JSON file, <code>memcastle-index.json</code>, served from anywhere that serves files.</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My registry"</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">"sources"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"claude"</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Claude Code session history"</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span><span class="nt">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MIT"</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">"homepage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.org/claude"</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="nt">"versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">          </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.2.0"</span><span class="p">,</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">          </span><span class="nt">"contract"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.4"</span><span class="p">,</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">          </span><span class="nt">"memcastle"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&gt;=0.2, &lt;0.4"</span><span class="p">,</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">          </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"claude-1.2.0.tar.gz"</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">          </span><span class="nt">"sha256"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;64 lowercase hex characters&gt;"</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">          </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mi">123456</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">          </span><span class="nt">"signature"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;key id&gt;"</span><span class="p">,</span><span class="w"> </span><span class="nt">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;base64&gt;"</span><span class="w"> </span><span class="p">},</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">          </span><span class="nt">"yanked"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="p">]</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="p">}</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>format</code></td>
+<td>The index format, 1. A higher number is refused.</td>
+</tr>
+<tr>
+<td><code>sources[].name</code></td>
+<td>A <a href="../writing-sources/#the-manifest">source name</a>, unique in the index.</td>
+</tr>
+<tr>
+<td><code>versions[].version</code></td>
+<td>A semantic version, unique for the source.</td>
+</tr>
+<tr>
+<td><code>repository</code></td>
+<td>Instead of <code>versions</code>: a GitHub repository, <code>owner/name</code>, whose <a href="#registering-a-github-repository">releases</a> publish the source.</td>
+</tr>
+<tr>
+<td><code>versions[].contract</code>, <code>memcastle</code></td>
+<td>Optional. Copied from the package's manifest, so a version that cannot run here is skipped without downloading it.</td>
+</tr>
+<tr>
+<td><code>versions[].url</code></td>
+<td>Where the archive is: absolute, or relative to the index's own location. A relative URL may not climb out of the index's directory.</td>
+</tr>
+<tr>
+<td><code>versions[].sha256</code></td>
+<td>SHA-256 of the archive. Always checked.</td>
+</tr>
+<tr>
+<td><code>versions[].size</code></td>
+<td>Optional, informational.</td>
+</tr>
+<tr>
+<td><code>versions[].signature</code></td>
+<td>Optional: an ed25519 signature over the archive's bytes, and the id of the key.</td>
+</tr>
+<tr>
+<td><code>versions[].yanked</code></td>
+<td>Withdrawn: never chosen as the newest, but still installable by asking for exactly that version.</td>
+</tr>
+</tbody>
+</table>
+<p>An index is at most 4 MiB and an archive at most 64 MiB.</p>
+<p><strong>Where an index can be</strong> is the same for a public registry, a mirror and an offline copy:</p>
+<table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>https://</code> URL</td>
+<td><code>https://example.org/memcastle/memcastle-index.json</code> (a URL ending in <code>/</code> means the index file inside it)</td>
+</tr>
+<tr>
+<td><code>http://</code> URL, to this machine only</td>
+<td><code>http://localhost:8000/memcastle-index.json</code></td>
+</tr>
+<tr>
+<td><code>file://</code> URL</td>
+<td><code>file:///srv/sources/memcastle-index.json</code></td>
+</tr>
+<tr>
+<td>An absolute path</td>
+<td><code>/srv/sources</code> (a directory means the index file inside it)</td>
+</tr>
+</tbody>
+</table>
+<p>Plain <code>http://</code> to anything beyond this machine is refused, and so is a redirect that leaves the allowed places, because
+the index has no digest of its own to catch tampering in transit.</p>
+<p><strong>Choosing a version</strong> is the same for <code>install</code>, <code>search</code> and <code>update</code>: the highest semantic version that is not yanked
+and runs on this MemCastle.
+A name pinned as <code>claude@1.1.0</code> takes exactly that version, or says why it cannot.
+The first index that offers a name decides, in the order of <code>mining.registries</code>.</p>
+<h2 id="publishing">Publishing<a class="headerlink" href="#publishing" title="Permanent link">&para;</a></h2>
+<p>Nothing here needs a service or an account: a registry is a directory of archives and one index file.</p>
+<ol>
+<li><strong>Scaffold, build and test</strong>: <code>memcastle source init</code>, <code>memcastle source build</code>, <code>memcastle source test</code>.</li>
+<li><strong>Bump <code>source.version</code></strong> in <code>memcastle-source.toml</code> for a new release.
+   A version never changes once published.</li>
+<li><strong>Package</strong>: <code>memcastle source package</code> writes <code>dist/&lt;name&gt;-&lt;version&gt;.tar.gz</code> and <code>dist/&lt;name&gt;-&lt;version&gt;.tar.gz.sha256</code>
+   (the format <code>sha256sum -c</code> reads), and prints the archive's digest and the permissions it asks for.</li>
+<li><strong>Sign</strong> (optional, once): <code>memcastle source keygen publisher.key</code> writes a private key, readable by you alone, and
+   prints its id and the public key.
+   Keep the file private, and publish the public key where your users can find it.</li>
+<li><strong>Add to the index</strong>:</li>
+</ol>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>index<span class="w"> </span>dist/claude-1.2.0.tar.gz<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span>--output<span class="w"> </span>registry/memcastle-index.json<span class="w"> </span>--base-url<span class="w"> </span>https://example.org/memcastle<span class="w"> </span>--sign<span class="w"> </span>publisher.key
+</span></code></pre></div>
+<p>The index is created or extended, versions are listed newest first, and sources by name.
+   Without <code>--base-url</code> the package URLs are relative, so the archives must sit beside the index.
+   Publishing the same archive again refreshes its entry and keeps a withdrawal; a different archive under a version that
+   is already listed is refused.
+6. <strong>Upload</strong> the archive and the index anywhere that serves files.
+   To withdraw a bad release, set <code>"yanked": true</code> on its entry.</p>
+<p>Users then add the registry to their configuration:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">[mining]</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">registries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"https://example.org/memcastle/memcastle-index.json"</span><span class="p">]</span>
+</span></code></pre></div>
+<h2 id="installing-searching-and-updating">Installing, searching and updating<a class="headerlink" href="#installing-searching-and-updating" title="Permanent link">&para;</a></h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w"> </span>claude<span class="w">                  </span><span class="c1"># what the registries offer</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w">                 </span><span class="c1"># newest version that runs here, after you agree to its permissions</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude@1.1.0<span class="w"> </span>--enable
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./claude-1.2.0.tar.gz<span class="w">  </span><span class="c1"># a file: no registry involved</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./my-source<span class="w">            </span><span class="c1"># a project directory: built, packaged, then installed</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>update<span class="w"> </span>--check<span class="w">                 </span><span class="c1"># which installed sources have a newer version</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>update<span class="w">                         </span><span class="c1"># update them</span>
+</span></code></pre></div>
+<p>The daemon does the fetching, so <code>mining.registries</code> and the trust settings are the daemon's configuration, and
+<code>--registry &lt;LOCATION&gt;</code> consults one place only for a single command.
+Before anything is installed the daemon has downloaded and verified the package, and the CLI shows what that package
+asks for: you agree to the permissions of what was actually fetched.
+<code>source show</code> afterwards says where it came from, which registry and, when there is one, which key vouched for it.</p>
+<p><strong>Updating</strong> installs the newest version from the index a registry source was installed from.
+A source you installed from a file has no upstream and is left alone, and a bundled source is updated with MemCastle:
+<code>update</code> leaves it out, and <code>update pi</code> says so (<code>memcastle::source::bundled</code>).
+An update keeps the source's state.
+The consent you gave is to a set of permissions, not to a version, so an update that asks for the same permissions needs
+no new agreement, and one that asks for anything else is not installed until you agree to exactly those: the command says
+what is waiting and exits non-zero, and <code>--yes</code> (or the prompt) agrees.
+A source cannot widen its own reach by being updated.</p>
+<p><strong>Offline.</strong> A registry that is a directory needs no network, and a package file installs with none either:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./claude-1.2.0.tar.gz<span class="w"> </span>--yes
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w"> </span>--registry<span class="w"> </span>/mnt/usb/sources
+</span></code></pre></div>
+<p><strong>Removing</strong> a source deletes its files and its record; what it mined stays in the palace.
+A bundled source cannot be removed, since it comes with MemCastle: disable it instead.</p>
+<h2 id="trust">Trust<a class="headerlink" href="#trust" title="Permanent link">&para;</a></h2>
+<p>Two layers, and only the second is optional.</p>
+<ol>
+<li><strong>Integrity</strong>: the archive's SHA-256 must equal the one the index published, and the package inside must carry the name
+   and version the index lists.
+   This catches a corrupted download and an archive swapped for another.
+   It cannot catch a compromised host, because the index and the archives usually live in the same place.</li>
+<li><strong>Trust</strong>: an ed25519 signature, made with the publisher's key, over the archive, checked against the public keys you
+   list.</li>
+</ol>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[mining]</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">trust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"optional"</span><span class="w">    </span><span class="c1"># or "required"</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">trusted_keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"&lt;the base64 public key `memcastle source keygen` printed&gt;"</span><span class="p">]</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>trust</code></th>
+<th>An unsigned package</th>
+<th>Signed by a key you list</th>
+<th>Signed by a key you do not list</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optional</code> (default)</td>
+<td>installs</td>
+<td>installs if the signature is valid, refused if it is not</td>
+<td>installs, as if unsigned</td>
+</tr>
+<tr>
+<td><code>required</code></td>
+<td>refused</td>
+<td>installs if the signature is valid, refused if it is not</td>
+<td>refused</td>
+</tr>
+</tbody>
+</table>
+<p>A bad signature from a key you trust is refused even under <code>optional</code>: it is evidence of tampering, not an absence of a
+signature.
+<code>required</code> needs at least one key listed, and the configuration is refused at load otherwise.
+The sources bundled with MemCastle are not subject to the signature policy: their provenance is the release that carries
+them, and their SHA-256 is checked like any other.</p>
+<p>Whatever the policy, nothing runs without your agreement to the permissions of the exact package, and a package altered
+on disk after install is never run.</p>
+<h2 id="bundled-sources">Bundled sources<a class="headerlink" href="#bundled-sources" title="Permanent link">&para;</a></h2>
+<p>Releases ship <code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> unpacked,
+one directory each (<code>&lt;name&gt;/memcastle-source.toml</code>,
+<code>&lt;name&gt;/source.wasm</code>), under
+<code>share/memcastle/sources/</code>:
+in the release tarballs, as <code>/usr/share/memcastle/sources/</code> in the <code>.deb</code>, <code>.rpm</code> and AUR package, and under the formula's
+<code>share/memcastle/sources/</code> with Homebrew.
+The release also publishes them alone as <code>memcastle_&lt;version&gt;_sources.tar.gz</code>, which is what the AUR and Homebrew recipes
+fetch, since they install the raw binary asset and not a tarball.
+The daemon finds them beside the binary (the same search as other <a href="../configuration/#runtime-assets">runtime assets</a>),
+or in <code>mining.bundled_dir</code>.</p>
+<p>They are installed from the start, and run from where the release put them:
+<code>memcastle source list</code> shows them as <code>bundled</code> and <code>installed</code>, and <code>memcastle source enable pi</code> is all they need.
+Enabling is the consent: a bundled source is as trusted as the MemCastle that carries it, so it is not asked to be
+agreed to as an installed package is, and <code>memcastle source show pi</code> prints what it may read and run.
+They are not linked into the binary, and they cannot be installed again, updated or removed;
+only whether one is enabled is yours, and it survives an upgrade, which brings the new version of the source with it.
+A package file you install under the same name (<code>memcastle source install ./pi</code>) is read instead, and removing it brings
+the bundled one back.
+A standalone binary or a checkout carries none: install the official ones from the registry below.</p>
+<p>The set is a line in <code>packaging/sources/build.sh</code>, which a release and <code>mise run sources:package</code> both run,
+and it does not constrain the runtime: any directory under <code>sources/</code> could be added.
+<code>directory</code> is the worked example of the built-in source and is not bundled.</p>
+<p>The bundle shares its root with the agent integrations and the skills: <code>assets.dir</code> is the one directory a package
+installs into, and <code>sources/</code> is one of the directories under it (see <a href="../configuration/#runtime-assets">Runtime assets</a>
+and <a href="../integrations/">Agent integrations</a>).
+The <code>pi</code>, <code>opencode</code> and <code>claude</code> sources here mine those agents' session history; they are not integrations that run
+inside an agent.</p>
+<h2 id="the-official-registry">The official registry<a class="headerlink" href="#the-official-registry" title="Permanent link">&para;</a></h2>
+<p>The official registry is a static file in this repository, <a href="https://github.com/memcastle/memcastle/blob/main/docs/registry.json"><code>docs/registry.json</code></a>,
+published at <code>https://memcastle.github.io/registry.json</code> from the root of the documentation site's <code>gh-pages</code> branch.
+It lists no versions: it names the GitHub repositories that publish sources (<code>pi</code>, <code>opencode</code> and <code>claude</code> are published
+by this one), and the daemon reads their releases.
+Registering a source, or changing where it comes from, is therefore a pull request to that file, merged and deployed like
+any documentation change, and publishing a new version is a release of the source's own repository: no new release of
+MemCastle and no change to the registry.
+It is the default value of <code>mining.registries</code>, so on any installation:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w">          </span><span class="c1"># lists pi, opencode and claude, and says which are already installed</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>pi<span class="w">      </span><span class="c1"># on a build with no bundle: after you agree to its permissions</span>
+</span></code></pre></div>
+<p>Nothing is fetched until you run one of those commands, and a package from it is checked against its SHA-256 and your
+<code>mining.trust</code> policy like any other registry's.
+The official packages are not signed yet, so <code>trust = "required"</code> refuses them.
+Set <code>mining.registries</code> to use other registries instead of it, or to <code>[]</code> to use none.
+For the 0.4.0-to-0.4.1 move from the old Pages URL, see <a href="../migrations/#the-041-registry-move">Upgrading MemCastle</a>.</p>
+<h3 id="registering-a-github-repository">Registering a GitHub repository<a class="headerlink" href="#registering-a-github-repository" title="Permanent link">&para;</a></h3>
+<p>An entry names the repository instead of listing versions:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"claude"</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Claude Code session history"</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">"license"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MIT"</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">"repository"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example/memcastle-claude"</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>The daemon lists the repository's releases (<code>GET /repos/example/memcastle-claude/releases</code>, one request for each
+repository however many sources it publishes) and takes from them:</p>
+<ul>
+<li>every release that is neither a draft nor a prerelease;</li>
+<li>the assets named <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code>, which is what <code>memcastle source package</code> writes, where <code>&lt;version&gt;</code> is a
+  semantic version and <code>&lt;name&gt;</code> is the entry's name;</li>
+<li>for each, the SHA-256 that GitHub computed when the asset was uploaded (the asset's <code>digest</code>), which the download is
+  then checked against like any other archive.
+  An asset with no digest, which GitHub only computes for uploads made since it started, is passed over with a warning:
+  upload it again.</li>
+</ul>
+<p>The newest release wins when several attach the same version.
+What GitHub reports is not a signature, so these packages count as unsigned, and a MemCastle whose <code>mining.trust</code> is
+<code>required</code> refuses them.
+The compatibility a package declares is checked when it is downloaded, so <code>search</code> may show a version that <code>install</code>
+then refuses with <code>memcastle::source::incompatible</code>.</p>
+<p>A repository that cannot be read (it does not exist, or GitHub's unauthenticated limit of 60 requests an hour for an
+address is spent) is a warning that names it, its sources are left out, and every other source in the registry still
+answers.</p>
+<p>Set <code>GH_TOKEN</code> or <code>GITHUB_TOKEN</code> in the daemon's environment (<code>GH_TOKEN</code> wins, as it does for <code>gh</code>) to lift that limit.
+The token is sent as a bearer token to the releases request and to nothing else: not to the archive downloads, not to a
+registry that is not GitHub, and not across a redirect to another host.
+A token with no scopes is enough, since the releases of a public repository are public, and a token for a private
+repository lets the daemon read its releases.
+It is read from the environment only, never from the configuration file, and it is not logged, reported or stored.
+<code>mining.github_api_url</code> points the daemon at another API, such as a GitHub Enterprise server, and the token is then
+presented to that server.</p>
+<h2 id="when-something-goes-wrong">When something goes wrong<a class="headerlink" href="#when-something-goes-wrong" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memcastle::source::registry_unavailable</code></td>
+<td>An index could not be read. The error names the location.</td>
+</tr>
+<tr>
+<td><code>memcastle::source::not_in_registry</code></td>
+<td>No index offers the name, or none of its versions runs here; the error lists what exists.</td>
+</tr>
+<tr>
+<td><code>memcastle::source::integrity</code></td>
+<td>The download is not what was published. Nothing was installed.</td>
+</tr>
+<tr>
+<td><code>memcastle::source::untrusted</code></td>
+<td>The trust policy refuses the package.</td>
+</tr>
+<tr>
+<td><code>memcastle::source::consent_required</code></td>
+<td>The package asks for permissions you have not agreed to.</td>
+</tr>
+</tbody>
+</table>
+<p>The full list is in <a href="../writing-sources/#troubleshooting">Writing a mining source</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-circle-arrow-up" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Axel H. — MIT licensed
+
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      
+    
+  </body>
+</html>
