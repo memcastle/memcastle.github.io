@@ -1045,6 +1045,23 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Plugin packages
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="././" class="md-nav__link md-nav__link--active">
         
   
@@ -1060,6 +1077,37 @@
   
 
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#standalone-development-and-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Standalone development and compatibility
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1506,6 +1554,11 @@
                       
                     
                     
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
                   
                   <div class="md-sidebar__inner">
                     
@@ -1517,6 +1570,25 @@
   
     
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#standalone-development-and-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Standalone development and compatibility
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1640,13 +1712,15 @@ to allow the child-template clones.</p>
 <p>To scaffold only a module, invoke <code>memcastle-source.tpl</code> or <code>memcastle-integration.tpl</code> directly.
 For an existing provider project, edit its recorded <code>sources</code> or <code>integrations</code> array in
 <code>.config/git.tpl.toml</code>, then run <code>git tpl update --defaults --trust</code>, review <code>git tpl diff</code>, and run <code>git tpl merge</code>.
-The parent follows each child's <code>main</code> branch; <code>.config/git.tpl.toml</code> and the rendered ref record the exact commits for
-each rendering, so the current project stays reproducible even as the branch advances.
-Updating records a branch move even when the child files have not changed; the generated worktree changes only after
-<code>git tpl merge</code>.
-Changing the parent to a fixed child commit instead of <code>main</code> stops automatic child updates.</p>
+The parent pins each child to a reviewed full commit in its <code>template.toml</code>; the corresponding template CI checks out
+those same commits, and <code>.config/git.tpl.toml</code> records the revisions used by each provider rendering.
+Update the child template and its tests first, advance both pins together with the parent composition test, then have
+provider authors review <code>git tpl diff --json</code> before <code>git tpl merge --json</code> to adopt the new scaffold.
+Changing a template does not change an existing plugin until its owner explicitly updates and merges its rendered ref.</p>
 <p>An in-tree provider project may live under <code>plugins/&lt;provider&gt;/</code> and publish its own <code>&lt;id&gt;-&lt;version&gt;.tar.gz</code> release
 without changing Core's version.
+The checked-in <code>plugins/example</code> project is an in-tree contract fixture run by Core's provider workflow;
+standalone providers use the workflows produced by the pinned parent template rather than copied example workflows.
 While several providers share the Core repository, each uses its own <code>plugin/&lt;provider&gt;/v&lt;version&gt;</code> tag;
 its reviewed catalogue entry lists the artifact URL and digest explicitly.
 A direct GitHub repository URL is for a standalone repository whose releases publish exactly one plugin ID;
@@ -1659,6 +1733,25 @@ Provider release workflows validate the selected manifest, locked source depende
 before publishing a versioned tag; standalone tags must point to reviewed commits on <code>main</code>.
 Moving the same project into a standalone repository keeps <code>plugin.id</code> and module IDs stable;
 update <code>plugin.repository</code> and the discovery catalogue through review before releasing from the new repository.</p>
+<h2 id="standalone-development-and-compatibility">Standalone development and compatibility<a class="headerlink" href="#standalone-development-and-compatibility" title="Permanent link">&para;</a></h2>
+<p>A provider repository has one <code>plugin.toml</code>, independent <code>modules/&lt;id&gt;/</code> implementations and fixtures, local packaging
+and tests under <code>scripts/</code> and <code>tests/</code>, and its own validation and release workflows in <code>.github/workflows/</code>.
+The parent manifest's <code>memcastle</code> semver range must match the source and integration manifests' Core requirements;
+source <code>contract</code> must also match its module manifest's versioned WIT contract.
+Module IDs stay stable across repository moves; module versions and the parent release version are separate.
+Keep the lower bound at the oldest Core actually supported and narrow the upper bound when a breaking Core contract
+requires it. Review contract and WIT changes against both generated modules before advertising a new range.</p>
+<p>From a generated provider checkout, run <code>python3 scripts/package.py</code>, <code>python3 scripts/check_modules.py</code>, and
+<code>python3 -m unittest discover -s tests</code>; commit the source <code>Cargo.lock</code> files and reviewed artifact hashes.
+Set <code>MEMCASTLE_BIN</code> to a Core binary with plugin support and run <code>python3 scripts/smoke_install.py</code> to preview and install
+the archive into a disposable palace, check installed-but-disabled sources, enable them and register integrations with an
+isolated test agent. The script does not use the user's palace or agent files.
+The provider's CI runs source fixture conformance against the latest stable released Core and also tests plugin install
+when that release supports it; Core's plugin-contract CI builds a generated project against the current Core binary.
+The latest stable Core 0.4.1 predates plugin installation, so source conformance and the current-Core install check are
+separate until a plugin-capable Core is released.
+For cross-repository development, set <code>MEMCASTLE_BIN</code> to a binary built in the Core worktree and run the same smoke check;
+neither normal provider CI nor its release workflow builds unrelated providers or Core from source.</p>
 
 
 
