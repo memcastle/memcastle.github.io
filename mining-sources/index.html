@@ -1299,6 +1299,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../plugins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Plugin packages
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../database-access/" class="md-nav__link">
         
   
@@ -1997,6 +2024,9 @@
 
 
 <h1 id="mining-sources">Mining sources<a class="headerlink" href="#mining-sources" title="Permanent link">&para;</a></h1>
+<p>A source module inside an installed <a href="../plugins/">provider plugin</a> appears in this list with origin <code>plugin</code>.
+Installing the parent plugin leaves that source in <code>installed</code> state until <code>memcastle source enable &lt;name&gt;</code> is requested.
+Different modules in one provider still keep separate source identities, miner configuration and ingestion cursors.</p>
 <p>MemCastle can fill the palace itself, without an agent writing anything and without spending a model's tokens.
 Mining reads a <strong>source</strong>, such as a directory or an agent's session history, and files what it finds as drawers.
 This page is the model behind it and the reference for the sources MemCastle ships.

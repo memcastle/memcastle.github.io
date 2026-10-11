@@ -1034,6 +1034,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../plugins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Plugin packages
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../database-access/" class="md-nav__link">
         
   
@@ -2643,6 +2670,46 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <td><code>DELETE /api/auth/token</code></td>
 <td>Revoke the generated token: <code>{"revoked": true}</code>.</td>
 <td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/plugins</code></td>
+<td>Installed plugin versions and module inventories.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/plugins</code></td>
+<td>Install or update an entire validated plugin archive without activating its modules.</td>
+<td>archive bytes (at most 64 MiB); <code>X-MemCastle-Consents</code> JSON map of source IDs to reviewed permission digests; <code>X-MemCastle-Adopt-Sources</code> JSON list of explicitly adopted legacy source IDs</td>
+</tr>
+<tr>
+<td><code>GET /api/plugins/{id}</code></td>
+<td>Show one installed plugin, including its module inventory.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>DELETE /api/plugins/{id}</code></td>
+<td>Uninstall a plugin only after its sources, integrations, miners, jobs and dependents are no longer active. Mined data stays.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/plugin-registry/search</code></td>
+<td>Search the configured plugin catalogues without installing code.</td>
+<td>query string: <code>q</code></td>
+</tr>
+<tr>
+<td><code>GET /api/plugin-registry/plugins/{id}</code></td>
+<td>Fetch and verify a release, returning module-specific permission digests without installing it.</td>
+<td>query string: <code>version?</code>, <code>registry?</code></td>
+</tr>
+<tr>
+<td><code>POST /api/plugin-registry/install</code></td>
+<td>Fetch, verify and install the selected plugin; modules remain inactive.</td>
+<td>JSON body: <code>id</code>, <code>version?</code>, <code>registry?</code>, <code>consents?</code> (module ID to digest), <code>adopt_sources?</code> (explicit legacy IDs), <code>archive_digest?</code> (from preview)</td>
+</tr>
+<tr>
+<td><code>POST /api/plugins/preview</code></td>
+<td>Validate a plugin <code>.tar.gz</code> and show per-source consent digests and legacy source IDs needing explicit adoption, without installing it.</td>
+<td>archive bytes (at most 64 MiB)</td>
 </tr>
 <tr>
 <td><code>POST /api/source-packages</code></td>

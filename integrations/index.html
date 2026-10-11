@@ -1232,6 +1232,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../plugins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Plugin packages
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../database-access/" class="md-nav__link">
         
   
@@ -1872,7 +1899,10 @@ This page is about getting one onto your machine.</p>
 <p>MemCastle ships integrations for <strong>Pi</strong>, <strong>OpenCode</strong>, <strong>Claude Code</strong> and <strong>Codex</strong>.
 <code>memcastle integration</code> installs them.
 Nothing is downloaded and no npm package is involved:
-the integrations are part of the MemCastle release, built and versioned with it.</p>
+the integrations are part of the MemCastle release, built and versioned with it.
+An installed <a href="../plugins/">provider plugin</a> can also supply an integration module.
+<code>plugin install</code> only makes it selectable; <code>integration install &lt;module-id&gt;</code> still copies and registers the selected
+agent-side files locally, and <code>integration remove</code> undoes that registration without uninstalling its parent plugin.</p>
 <pre class="mermaid"><code>flowchart LR
     subgraph machine[Your machine]
         A[Agent: Pi, OpenCode, Claude Code or Codex] --&gt;|loads| I[Installed integration]

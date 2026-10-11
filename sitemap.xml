@@ -151,6 +151,9 @@
         <loc>https://memcastle.github.io/adr/048-source-preferences/</loc>
       </url>
       <url>
+        <loc>https://memcastle.github.io/adr/049-provider-plugins-are-distributed-as-multi-module-releases/</loc>
+      </url>
+      <url>
         <loc>https://memcastle.github.io/architecture/</loc>
       </url>
       <url>
@@ -212,6 +215,9 @@
       </url>
       <url>
         <loc>https://memcastle.github.io/mining-sources/</loc>
+      </url>
+      <url>
+        <loc>https://memcastle.github.io/plugins/</loc>
       </url>
       <url>
         <loc>https://memcastle.github.io/project-config/</loc>

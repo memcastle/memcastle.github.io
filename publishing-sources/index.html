@@ -18,7 +18,7 @@
         <link rel="prev" href="../writing-sources/">
       
       
-        <link rel="next" href="../database-access/">
+        <link rel="next" href="../plugins/">
       
       
         
@@ -1199,6 +1199,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../plugins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Plugin packages
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../database-access/" class="md-nav__link">
         
   
@@ -1797,6 +1824,9 @@
 
 
 <h1 id="publishing-and-installing-sources">Publishing and installing sources<a class="headerlink" href="#publishing-and-installing-sources" title="Permanent link">&para;</a></h1>
+<p>This page describes the format-1 single-source registry, <code>registry.json</code>, and the corresponding legacy commands.
+Provider <a href="../plugins/">plugins</a> use the separate <code>plugins.json</code> discovery catalogue and install complete multi-module
+archives through <code>memcastle plugin install</code>; a module cannot be fetched on its own.</p>
 <p>A mining source is a <a href="../writing-sources/">WebAssembly package</a>, and this page is how one gets from its author to a user:
 the package format, the registry index that lists packages, how to publish to one, and how users find, install, update
 and trust sources.
