@@ -1616,6 +1616,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../memory-investigation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Memory investigation
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../retrieval-evaluation/" class="md-nav__link">
         
   
@@ -2323,7 +2350,8 @@ A handler (<code>jobs::demo</code>, <code>mining::run</code>) is a loop over dis
 that checks <code>JobContext::should_pause</code> and <code>is_cancelled</code> between units,
 persists a <code>checkpoint</code> before stopping, and returns; the scheduler transitions the status afterwards.
 Resuming re-reads the checkpoint and continues from there, not from zero.
-<code>Audit</code> and <code>Repair</code> honour both too (audit checks between wings, after the job scan and every 500 drawers;
+<code>Audit</code> and <code>Repair</code> honour both too (audit reads only IDs, room, provenance and embedding presence in
+256-drawer pages, checking between wings, after the job scan and between pages;
 an applied repair checks before each delete).
 Neither keeps a checkpoint, so a paused or shutdown-interrupted one restarts from scratch when resumed.
 That is safe: an audit only reads, and a repair recomputes the live orphan set.
