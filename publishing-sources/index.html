@@ -1852,7 +1852,7 @@ daemon runs it.</p>
 </tr>
 <tr>
 <td>Bundled</td>
-<td>An ordinary package unpacked beside the binary (<code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code>, <code>github</code>).</td>
+<td>An ordinary package unpacked beside the binary (<code>claude</code>, <code>codex</code>, <code>chatgpt</code>, <code>github</code>).</td>
 <td>Nothing: it is installed from the start, and <code>memcastle source enable &lt;name&gt;</code> turns it on.</td>
 </tr>
 <tr>
@@ -2158,7 +2158,7 @@ them, and their SHA-256 is checked like any other.</p>
 <p>Whatever the policy, nothing runs without your agreement to the permissions of the exact package, and a package altered
 on disk after install is never run.</p>
 <h2 id="bundled-sources">Bundled sources<a class="headerlink" href="#bundled-sources" title="Permanent link">&para;</a></h2>
-<p>Releases ship <code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> unpacked,
+<p>Releases ship <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> unpacked,
 one directory each (<code>&lt;name&gt;/memcastle-source.toml</code>,
 <code>&lt;name&gt;/source.wasm</code>), under
 <code>share/memcastle/sources/</code>:
@@ -2169,12 +2169,12 @@ fetch, since they install the raw binary asset and not a tarball.
 The daemon finds them beside the binary (the same search as other <a href="../configuration/#runtime-assets">runtime assets</a>),
 or in <code>mining.bundled_dir</code>.</p>
 <p>They are installed from the start, and run from where the release put them:
-<code>memcastle source list</code> shows them as <code>bundled</code> and <code>installed</code>, and <code>memcastle source enable pi</code> is all they need.
+<code>memcastle source list</code> shows them as <code>bundled</code> and <code>installed</code>, and <code>memcastle source enable claude</code> is all they need.
 Enabling is the consent: a bundled source is as trusted as the MemCastle that carries it, so it is not asked to be
-agreed to as an installed package is, and <code>memcastle source show pi</code> prints what it may read and run.
+agreed to as an installed package is, and <code>memcastle source show claude</code> prints what it may read and run.
 They are not linked into the binary, and they cannot be installed again, updated or removed;
 only whether one is enabled is yours, and it survives an upgrade, which brings the new version of the source with it.
-A package file you install under the same name (<code>memcastle source install ./pi</code>) is read instead, and removing it brings
+A package file you install under the same name (<code>memcastle source install ./claude</code>) is read instead, and removing it brings
 the bundled one back.
 A standalone binary or a checkout carries none: install the official ones from the registry below.</p>
 <p>The set is a line in <code>packaging/sources/build.sh</code>, which a release and <code>mise run sources:package</code> both run,
@@ -2183,19 +2183,20 @@ and it does not constrain the runtime: any directory under <code>sources/</code>
 <p>The bundle shares its root with the agent integrations and the skills: <code>assets.dir</code> is the one directory a package
 installs into, and <code>sources/</code> is one of the directories under it (see <a href="../configuration/#runtime-assets">Runtime assets</a>
 and <a href="../integrations/">Agent integrations</a>).
-The <code>pi</code>, <code>opencode</code> and <code>claude</code> sources here mine those agents' session history; they are not integrations that run
-inside an agent.</p>
+The <code>claude</code> source here mines agent session history; it is not an integration that runs
+inside an agent.
+The Pi and OpenCode sources live in the external <code>memcastle-pi</code> and <code>memcastle-opencode</code> plugins.</p>
 <h2 id="the-official-registry">The official registry<a class="headerlink" href="#the-official-registry" title="Permanent link">&para;</a></h2>
 <p>The official registry is a static file in this repository, <a href="https://github.com/memcastle/memcastle/blob/main/docs/registry.json"><code>docs/registry.json</code></a>,
 published at <code>https://memcastle.github.io/registry.json</code> from the root of the documentation site's <code>gh-pages</code> branch.
-It lists no versions: it names the GitHub repositories that publish sources (<code>pi</code>, <code>opencode</code> and <code>claude</code> are published
-by this one), and the daemon reads their releases.
+It lists no versions: it names the GitHub repository that publishes each legacy source archive, and the daemon reads
+its releases. Pi and OpenCode are in the separate <a href="../plugins/"><code>plugins.json</code></a> catalogue.
 Registering a source, or changing where it comes from, is therefore a pull request to that file, merged and deployed like
 any documentation change, and publishing a new version is a release of the source's own repository: no new release of
 MemCastle and no change to the registry.
 It is the default value of <code>mining.registries</code>, so on any installation:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w">          </span><span class="c1"># lists pi, opencode and claude, and says which are already installed</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>pi<span class="w">      </span><span class="c1"># on a build with no bundle: after you agree to its permissions</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w">          </span><span class="c1"># lists claude and the other Core-shipped sources</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w">  </span><span class="c1"># on a build with no bundle: after you agree to its permissions</span>
 </span></code></pre></div>
 <p>Nothing is fetched until you run one of those commands, and a package from it is checked against its SHA-256 and your
 <code>mining.trust</code> policy like any other registry's.

@@ -1959,7 +1959,8 @@ One package asset is the set of sources that ship with MemCastle, under <code>sh
 <code>.rpm</code>, the AUR package and the Homebrew formula carry them, unpacked and installed from the start, and a standalone binary
 does not, so it installs a source from a file or from the official registry instead.
 The other package assets are the agent integrations and the skills they expose, under <code>share/memcastle/integrations/</code> and
-<code>share/memcastle/skills/</code>; <code>memcastle integration install opencode</code> copies one to your home and registers it with the agent
+<code>share/memcastle/skills/</code>.
+<code>memcastle integration install claude-code</code> copies one to your home and registers it with the agent
 (see <a href="../integrations/">Agent integrations</a>).
 The same release packages carry them, and a standalone binary does not.
 The last package asset is the <a href="../web/">web UI</a>, under <code>share/memcastle/web/dist/</code>, which the daemon serves only when
@@ -1969,8 +1970,9 @@ you set <code>web.enable</code>.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>brew<span class="w"> </span>install<span class="w"> </span>noirbizarre/homebrew-tap/memcastle
 </span></code></pre></div>
 <p>The formula ships macOS builds only (Apple silicon and Intel), the sources bundled with MemCastle under its
-<code>share/memcastle/sources/</code>, so <code>memcastle source enable opencode</code> works with no registry, and the agent integrations under
-<code>share/memcastle/integrations/</code>, so <code>memcastle integration install opencode</code> works without any other download.
+<code>share/memcastle/sources/</code>, so <code>memcastle source enable claude</code> works with no registry, and the agent integrations under
+<code>share/memcastle/integrations/</code>, so <code>memcastle integration install claude-code</code> works without any other download.
+Install the <a href="../integrations-opencode/#install-update-remove">OpenCode provider plugin</a> separately.
 On Linux, use one of the other methods, including under Linuxbrew.</p>
 <h3 id="arch-linux-aur">Arch Linux (AUR)<a class="headerlink" href="#arch-linux-aur" title="Permanent link">&para;</a></h3>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>paru<span class="w"> </span>-S<span class="w"> </span>memcastle-bin<span class="w">   </span><span class="c1"># or your AUR helper of choice</span>
@@ -1978,7 +1980,7 @@ On Linux, use one of the other methods, including under Linuxbrew.</p>
 <p>The <code>memcastle-bin</code> package installs the release binary for x86_64 and aarch64,
 a systemd user unit, <code>/usr/lib/systemd/user/memcastle.service</code>,
 the bash, zsh and fish completion scripts,
-the sources bundled with MemCastle under <code>/usr/share/memcastle/sources/</code>, so <code>memcastle source enable opencode</code> works
+the sources bundled with MemCastle under <code>/usr/share/memcastle/sources/</code>, so <code>memcastle source enable claude</code> works
 with no registry,
 and the agent integrations and skills under <code>/usr/share/memcastle/integrations/</code> and <code>/usr/share/memcastle/skills/</code>.</p>
 <p>The package owns only those files and its licence under <code>/usr</code>.

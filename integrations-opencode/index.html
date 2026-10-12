@@ -1733,17 +1733,23 @@ It is installed with <a href="../integrations/"><code>memcastle integration</cod
 <ul>
 <li>OpenCode 1.18.29 or later (2.x included), with the <code>opencode</code> command on your <code>PATH</code>.
   The installer runs <code>opencode --version</code> and refuses an older release, naming the version it found.</li>
-<li>MemCastle 0.2 or later.</li>
+<li>MemCastle 0.4 or later with plugin installation support.</li>
 <li>A running daemon when you use OpenCode, not when you install: the plugin connects lazily and OpenCode starts normally
   without one.</li>
 </ul>
 <h2 id="install-update-remove">Install, update, remove<a class="headerlink" href="#install-update-remove" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>opencode
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>opencode
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>opencode
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>/path/to/opencode-0.1.0.tar.gz<span class="w"> </span>--consent<span class="w"> </span><span class="nv">opencode</span><span class="o">=</span>SHA256_FROM_PREVIEW
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>opencode
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>opencode
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>opencode
 </span></code></pre></div>
+<p>Build the archive from <a href="https://github.com/memcastle/memcastle-opencode">memcastle-opencode</a> until an independent release
+is available. If the preview reports previously mined legacy OpenCode history, also pass <code>--adopt-source opencode</code> after
+reviewing the source identity; <code>--consent</code> must match the digest shown for this release's permissions.</p>
 <p>Restart OpenCode after each, because it loads plugins when it starts.
-<a href="../integrations/">Integrations</a> describes what each command does and checks.</p>
+<a href="../integrations/">Integrations</a> describes what each command does and checks.
+The source and integration have separate lifecycles under one plugin archive; the installed integration ID and agent
+configuration remain <code>opencode</code>.</p>
 <h2 id="what-it-changes">What it changes<a class="headerlink" href="#what-it-changes" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1755,7 +1761,7 @@ It is installed with <a href="../integrations/"><code>memcastle integration</cod
 <tbody>
 <tr>
 <td><code>~/.local/share/memcastle/agents/opencode/</code></td>
-<td><code>index.js</code> (the bundled plugin), <code>skills/</code> and the install receipt</td>
+<td><code>index.js</code> (the installed integration), <code>skills/</code> and the install receipt</td>
 </tr>
 <tr>
 <td><code>~/.config/opencode/plugins/memcastle.ts</code></td>
@@ -1827,7 +1833,7 @@ The ones you are most likely to set:</p>
 <p><code>MEMCASTLE_MODE</code> takes this integration's labels (<code>full</code>, <code>read-only</code>, <code>off</code>), which are not the daemon's
 (<code>full</code>, <code>read_only</code>, <code>disabled</code>).
 The complete list is in the
-<a href="https://github.com/memcastle/memcastle/blob/main/integrations/opencode/README.md#configuration">plugin's README</a>.</p>
+<a href="https://github.com/memcastle/memcastle-opencode/blob/main/modules/opencode/docs/integration.md#configuration">plugin's integration guide</a>.</p>
 <p>The plugin also accepts options, which win over the environment, but only when it is listed in <code>opencode.json</code>'s
 <code>plugin</code> (OpenCode 1) or <code>plugins</code> (OpenCode 2) list, and MemCastle does not edit that file.
 To use options, point that entry at <code>~/.local/share/memcastle/agents/opencode/index.js</code>,

@@ -1728,8 +1728,9 @@ The history is the value.</p>
   only to choose a mined directory's wing (and the CLI only for <code>note</code>, per ADR-031),
   and a project file cannot pick a palace</li>
 <li><a href="030-opencode-history-is-an-installed-webassembly-source/">ADR-030</a> — OpenCode's conversation history is an
-  installed WebAssembly source built from <code>sources/opencode/</code> that acquires sessions by running the <code>opencode</code> command,
-  a wider permission than a file grant, so no OpenCode or SQLite code enters the core</li>
+  installed WebAssembly source that acquires sessions by running the <code>opencode</code> command,
+  a wider permission than a file grant, so no OpenCode or SQLite code enters the core;
+  its implementation moved to <code>memcastle-opencode</code> in #289</li>
 <li><a href="031-note-capture/">ADR-031</a> — <code>memcastle note</code> captures a thought as an unnamed drawer of source kind <code>note</code>, written
   through a synchronous service like the diary and read for entities like mined content; the CLI resolves the project
   scope itself with the reader the mining adapter shares, and there is no MCP tool
@@ -1742,7 +1743,8 @@ The history is the value.</p>
 <li><a href="033-source-distribution/">ADR-033</a> — sources are distributed as versioned packages through static JSON registry
   indexes (a URL, a <code>file://</code> URL or a directory, so offline needs no separate mechanism), pinned by SHA-256 and optionally
   signed with ed25519 under a <code>mining.trust</code> policy; bundled, registry and local sources share one lifecycle, <code>update</code>
-  never widens a source's permissions without consent, and releases bundle <code>pi</code>, <code>opencode</code> and <code>claude</code> as ordinary packages
+  never widens a source's permissions without consent; Core bundles <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> as ordinary
+  packages while Pi and OpenCode ship as provider plugins
   (completes ADR-026)</li>
 <li><a href="034-agent-integration-distribution/">ADR-034</a> — integrations ship with MemCastle as bundles (no npm package, no
   <code>bun install</code>) under the one assets root beside <code>sources/</code> and <code>skills/</code>, a checkout being a valid root;

@@ -2437,9 +2437,10 @@ The Pi coding agent's session-history source now lives in
 <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a> and retains its original <code>pi</code> ID.
 <code>sources/chatgpt/</code> imports ChatGPT export ZIPs or standalone JSON, with an experimental private-web backend described in
 <a href="../mining-sources/#chatgpt">ChatGPT</a>.
-<code>sources/opencode/</code> is the OpenCode coding agent's session history, and the worked example of a source that wraps a
-program through <code>run-process</code> and is tested against a stand-in for it (<code>docs/mining-sources.md#opencode</code>).
-The sources that ship with MemCastle's releases (<code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code>)
+The OpenCode coding agent's session-history source lives in
+<a href="https://github.com/memcastle/memcastle-opencode"><code>memcastle-opencode</code></a>; it wraps <code>run-process</code> and is tested against a
+stand-in for the agent's CLI (<a href="../mining-sources/#opencode">OpenCode</a>).
+The sources that ship with MemCastle's releases (<code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code>)
 are built from here.
 They are bundled without being compiled into the binary.
 They use exactly the package contract a user installs; a release carries them unpacked, so they are installed from the

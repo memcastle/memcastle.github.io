@@ -2942,7 +2942,7 @@ take and what is installed already, bundled sources included; a registry that ca
 hide the others.
 <code>install</code> takes a package file, a source project directory (it is built and packaged first), or a name,
 optionally pinned as <code>name@1.2.0</code>, resolved from the configured registries in order.
-A name the release already ships (such as <code>opencode</code>) is installed from the start: <code>install</code> refuses it with
+A name the release already ships (such as <code>claude</code>) is installed from the start: <code>install</code> refuses it with
 <code>memcastle::source::bundled</code>, and <code>memcastle source enable &lt;NAME&gt;</code> is what it needs.
 Write <code>./name</code> for a path that looks like a name.
 <code>--registry</code> consults only that location (a URL, or an absolute path) instead of the usual ones, and the trust policy
@@ -3088,8 +3088,9 @@ Output is the trigger as it is now in a terminal, and JSON when standard output 
 </span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
 </span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>&lt;AGENT&gt;
 </span></code></pre></div>
-<p>Install, update and remove integrations for coding agents: Core ships <code>opencode</code>, <code>claude-code</code> and <code>codex</code>;
-the <code>pi</code> integration is available after installing the external <a href="../integrations-pi/"><code>memcastle-pi</code></a> plugin.
+<p>Install, update and remove integrations for coding agents: Core ships <code>claude-code</code> and <code>codex</code>;
+<code>pi</code> and <code>opencode</code> are available after installing their external
+<a href="../integrations-pi/"><code>memcastle-pi</code></a> and <a href="../integrations-opencode/"><code>memcastle-opencode</code></a> plugins.
 <a href="../integrations/">Integrations</a> is the guide; this is the reference.</p>
 <p>All four are <strong>local</strong>: they read files and run the agent's own command, need no daemon, no palace and no network, and are
 not available to MCP clients.

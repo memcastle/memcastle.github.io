@@ -2467,7 +2467,7 @@ Two fields mean "where do I read progress from" and "where do I read what it fou
   <a href="../adr/023-unified-source-model-for-mining/">ADR-023</a>: a <code>SourceAdapter</code> discovers and reads documents past the
   source's stored cursor, and one shared pipeline chunks them, files drawers idempotently and advances the cursor.
   A directory is the one built-in adapter, and sources such as the Pi and OpenCode session histories
-  (the external <code>memcastle-pi</code> plugin and <code>sources/opencode</code>) are installed as WebAssembly components behind the same
+  (the external <code>memcastle-pi</code> and <code>memcastle-opencode</code> plugins) are installed as WebAssembly components behind the same
   trait (<a href="../adr/026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a>).
   It stops at a bounded number of documents, recording <code>truncated: true</code> when it does, and a later job continues from
   the cursor.

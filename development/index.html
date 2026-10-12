@@ -1909,7 +1909,7 @@ They apply to <code>mise run</code>, to <code>mise cli</code> and to any shell w
 once you are in the project directory, so <code>mise cli serve</code> already serves the dashboard from <code>web/dist</code> (after
 <code>mise run web:build</code>) and finds the integrations and sources of the checkout, with no flag.
 Because the variables follow the shell, <strong>any <code>memcastle</code> you run from the project directory uses them, including an
-installed one</strong>: <code>memcastle integration install opencode</code> there installs the bundle built in the checkout
+installed one</strong>: <code>memcastle integration install claude-code</code> there installs the assets prepared in the checkout
 (<code>mise run integrations:build</code>) and not the package's.
 Run it from another directory, or <code>env -u MEMCASTLE_ASSETS_DIR memcastle ...</code>, to use the installed assets.
 A flag still wins over the variable (<code>--assets-dir</code>), and your own <code>mise.local.toml</code> can override or drop either.</p>
@@ -2012,19 +2012,18 @@ Every path, environment variable, flag and the precedence between them is in <a 
     <code>tests/fixtures/project-config/</code> (unit tests): discovery, nesting, the git and home boundaries, the environment,
     and what is refused.
     The integrations replay the same cases in TypeScript, see <a href="../project-config/">Project configuration</a>.</li>
-<li><code>integrations/&lt;name&gt;/test/</code> — the client half of the same contract, one bun suite per integration:
-    each starts a real <code>memcastle serve</code>, finds it through its registry file and replays the same fixtures through
-    the integration's own client.
-    Run them with <code>mise run integrations:check</code>, see <a href="../adr/022-integrations-are-bun-packages-tested-against-a-real-daemon/">ADR-022</a>.</li>
+<li>The external Pi and OpenCode plugins run their own agent-client suites against a real daemon in their provider
+    repositories, replaying the integration contract's language-neutral fixtures.</li>
 <li><code>tests/integration_cli.rs</code> — <code>memcastle integration list|install|update|remove</code> through the real binary, with fake
-    <code>pi</code> and <code>opencode</code> programs and a throwaway home: the lifecycle, idempotence, compatibility refusals,
+    fake <code>pi</code> and <code>opencode</code> programs and a throwaway home: the lifecycle, idempotence, compatibility refusals,
     preservation of the user's other plugins and settings,
     and resolution from <code>--assets-dir</code>, the environment and the binary's own prefix.
     The installer's unit tests are in <code>src/integration/</code> (manifest, discovery, adapters, install, update, remove, rollback).</li>
 <li><code>tests/integration_bundle.rs</code> — builds the bundles with <code>packaging/integrations/build.sh</code>, checks the package tree
     (manifests accepted by this MemCastle, no sources or <code>node_modules</code>, the skills) and runs the same lifecycle from the
     packaged tree and from the checkout.
-    It needs bun, so it is <code>#[ignore]</code>d in the basic suite and <code>mise run integrations:check</code> runs it.</li>
+    It is <code>#[ignore]</code>d in the basic suite so that <code>mise run integrations:check</code> can build the checkout assets without a
+    second suite racing it.</li>
 <li><code>tests/in_process/events.rs</code> — <code>GET /api/events</code> against a real daemon: a note, a wing and a job's progress arrive as
     identifiers and never as content, a <code>disabled</code> session is refused and a <code>read_only</code> one served, the token is
     required, and an open stream does not keep the daemon from shutting down.</li>
@@ -2042,10 +2041,8 @@ Every path, environment variable, flag and the precedence between them is in <a 
     reference WebAssembly source built from <code>sources/directory/</code> (in-process, WebAssembly suite).</li>
 <li>The Pi history source and lifecycle extension have their own tests and fixtures in
     <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a>, run against a released or locally built Core binary.</li>
-<li><code>tests/wasm_opencode.rs</code> — the OpenCode history source (<code>sources/opencode/</code>) built and run as a component against a
-    stand-in <code>opencode</code> command: what it files and leaves out, the discovery cursor and the query it never lets a
-    cursor change, provenance, a machine without OpenCode, and an install, mine, re-mine and grow against a real daemon
-    (in-process, WebAssembly suite, Unix only).</li>
+<li>The OpenCode history source's fixtures, conformance and installation/mining smoke checks live in
+    <a href="https://github.com/memcastle/memcastle-opencode"><code>memcastle-opencode</code></a>.</li>
 <li><code>tests/source_docs.rs</code> — the guide's list of conformance cases and of diagnostic codes against what ships
     (no build, basic suite).</li>
 <li><code>tests/wasm_registry.rs</code> — registries against a real daemon (a directory registry written with the same calls
@@ -2055,7 +2052,7 @@ Every path, environment variable, flag and the precedence between them is in <a 
     stand-in for the API, with a digest that does not match and a repository that cannot be read), an unreadable
     registry, and the CLI publishing, signing, searching, installing and updating (in-process and subprocess,
     WebAssembly suite).</li>
-<li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code>, the script a release runs, packaging <code>opencode</code> as an
+<li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code>, the release script, packaging Core-shipped sources as an
     unpacked bundle and as <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code> archives, and a daemon that lists it as installed and enables it
     with no consent (WebAssembly suite, Unix only).</li>
 <li><code>tests/wasm_runtime.rs</code> — installable sources against a real daemon: consent, the lifecycle, mining through the
@@ -2074,9 +2071,9 @@ Every path, environment variable, flag and the precedence between them is in <a 
 </span></code></pre></div>
 <p>A filter on <code>mise run test</code> still excludes the <code>wasm_</code> binaries; use <code>mise run test:wasm -- &lt;filter&gt;</code> for those.
 <code>mise run cover</code> runs the basic suite with coverage.
-The TypeScript suites report coverage too: with <code>COVERAGE=1</code>, <code>mise run web:check</code> and <code>mise run integrations:check</code>
-run each package's <code>test:cover</code> script, which writes lcov under <code>web/coverage/</code> and <code>integrations/*/coverage/</code>.
-CI uploads them to Codecov under the <code>web</code> and <code>integrations</code> flags.
+The web TypeScript suite reports coverage too: with <code>COVERAGE=1</code>, <code>mise run web:check</code> runs its <code>test:cover</code> script,
+which writes lcov under <code>web/coverage/</code>; CI uploads it to Codecov under the <code>web</code> flag.
+Standalone agent plugins run their own client suites in their provider repositories.
 <code>.github/codecov.yml</code> also groups every report into components (core, surfaces, app, memory, sources, web, integrations)
 by path, so the Codecov page shows each area whatever flag covered it.
 Each component reflects the merged execution coverage from every reporting suite.

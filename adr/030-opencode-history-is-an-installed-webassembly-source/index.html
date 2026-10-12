@@ -1587,7 +1587,10 @@
 <h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
 <p>Accepted, builds on <a href="../023-unified-source-model-for-mining/">ADR-023</a> (the source model),
 <a href="../026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a> (sources as WebAssembly components) and
-<a href="../028-pi-history-is-an-installed-webassembly-source/">ADR-028</a> (Pi's history as an installed source), issue #90.</p>
+<a href="../028-pi-history-is-an-installed-webassembly-source/">ADR-028</a> (Pi's history as an installed source), issue #90.
+The source implementation, fixtures and tests moved to the standalone
+<a href="https://github.com/memcastle/memcastle-opencode"><code>memcastle-opencode</code></a> plugin in #289;
+the historical Core paths and bundling decision below describe the original rollout, not current packaging.</p>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p>Mining OpenCode's history must work on sessions that ended long ago, with no OpenCode running and no model called, and
 must put no OpenCode or SQLite code in the core.

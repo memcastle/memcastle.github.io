@@ -2217,7 +2217,7 @@ The trigger only decides when; the source still decides how to read.</p>
 </tr>
 <tr>
 <td><code>opencode</code></td>
-<td>bundled package, <code>sources/opencode/</code></td>
+<td>external <code>memcastle-opencode</code> plugin</td>
 <td>OpenCode coding-agent session history</td>
 <td><code>time_updated</code> of the session</td>
 <td>yes</td>
@@ -2263,7 +2263,7 @@ The in-tree ones are built from their directories in the repository and shipped 
 (release archives and the <code>.deb</code> and <code>.rpm</code> carry them, unpacked, under
 <code>share/memcastle/sources/</code>), so they are installed from the start.
 <code>memcastle source enable &lt;name&gt;</code> is all one needs for a bundled source, with no registry and no network.
-Install the external Pi plugin before enabling its source.
+Install the external Pi or OpenCode plugin before enabling its source.
 No Pi, OpenCode, Claude Code, Codex, ChatGPT or GitHub acquisition code is part of the core.
 They run under the same sandbox and pipeline as any source a user writes.
 Other sources are found in <a href="../publishing-sources/">registries</a>.
@@ -2388,25 +2388,27 @@ Without a trigger, <code>memcastle miner run claude-history</code> is the manual
 OpenCode keeps every session in one SQLite database that it writes while it runs, so this source does not open that
 file: it runs the <code>opencode</code> command, which owns the database, and turns its answers into documents.
 It works on sessions of any age and with no OpenCode session running, calls no model and replays nothing.
-This is how OpenCode's <em>history</em> gets into MemCastle; the live integration (<code>integrations/opencode/</code>) is a separate
-thing that talks to the daemon over MCP and decides <em>when</em> to ask for mining.</p>
+This is how OpenCode's <em>history</em> gets into MemCastle; its agent integration is a separate module in the same plugin.
+It talks to the daemon over MCP and decides <em>when</em> to ask for mining.
+The <a href="https://github.com/memcastle/memcastle-opencode">memcastle-opencode</a> repository owns both modules.</p>
 <p>It needs OpenCode 1.2 or later (the version that moved history into the database) installed so that <code>opencode</code> is on the
 daemon's <code>PATH</code>; it was written against 1.18.
-It ships with MemCastle like <code>pi</code> (or install it from a checkout with <code>memcastle source install sources/opencode</code>):</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>opencode
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>opencode
+Build the archive from that repository until an independent release is available, then install it with the permission
+digest reported by its preview; previously mined legacy history also needs <code>--adopt-source opencode</code>:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>/path/to/opencode-0.1.0.tar.gz<span class="w"> </span>--consent<span class="w"> </span><span class="nv">opencode</span><span class="o">=</span>SHA256_FROM_PREVIEW
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>opencode
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>opencode
 </span></code></pre></div>
-<p>Installing it from a registry or a directory lists what the source asks for and needs your consent to exactly that;
-<code>memcastle source show opencode</code> lists the same for the bundled one.
+<p>The plugin preview lists what the source asks for and needs your consent to exactly that;
+<code>memcastle source show opencode</code> lists the same after installation.
 It asks for running the program <code>opencode</code>, and the environment variable <code>XDG_DATA_HOME</code>
 (OpenCode reads it to find its data when you have moved it; <code>PATH</code> and <code>HOME</code> are always passed to a program).
 It asks for no file access, no network, and needs no credentials.
 A program is a wider grant than a file: <code>opencode</code> runs with the daemon's own authority over the machine,
 and the sandbox only decides <em>which program</em>, not what that program does.
 That is the reason the grant is one named program, with no shell, and the reason installing asks you to agree to it.
-<code>memcastle source test sources/opencode</code> runs its conformance cases against a stand-in <code>opencode</code> that
-<code>sources/opencode/fixtures/bin/</code> ships, which has to be first on the <code>PATH</code> (<code>mise run sources:test -- opencode</code> does
-that), and CI does the same on every change.</p>
+The provider's conformance suite runs against a stand-in <code>opencode</code> in
+<code>memcastle-opencode/modules/opencode/fixtures/bin/</code>, first on the <code>PATH</code>.</p>
 <p>Each session is one document, identified by its OpenCode session id (<code>ses_...</code>), filed in the wing <code>opencode</code>
 (or the one you give), in a room named after the session's working directory, and named by its id,
 so it can be addressed as <code>opencode/&lt;project&gt;/&lt;session id&gt;</code>.

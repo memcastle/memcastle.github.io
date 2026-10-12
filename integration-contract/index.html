@@ -1967,7 +1967,7 @@ There is no shared runtime, no abstract base class and no code that hides how Pi
 <pre class="mermaid"><code>flowchart LR
     subgraph client["One per agent: lifecycle"]
         pi["memcastle-pi/modules/pi"]
-        oc["integrations/opencode"]
+        oc["memcastle-opencode/modules/opencode"]
         cc["integrations/claude-code"]
     end
     skills["skills/: reusable agent instructions"]
@@ -2005,7 +2005,7 @@ There is no shared runtime, no abstract base class and no code that hides how Pi
 <td>Lifecycle hooks</td>
 </tr>
 <tr>
-<td><code>integrations/&lt;client&gt;/</code></td>
+<td>Agent integrations, in Core or a provider plugin</td>
 <td>When to call MemCastle: session start, compaction, timers, commands</td>
 <td>How memory works</td>
 </tr>
@@ -2141,7 +2141,7 @@ A disabled session must behave as if MemCastle does not exist, and context isola
 <p>Daemon-side (tested): three sessions in three modes share one daemon and each reads back its own mode,
 every wire value outcome in the fixture holds for every gated tool, and a refused mode leaves the session unchanged.
 Client-side (tested): each integration tests <code>off</code> and <code>full</code> against the same versioned conformance fixtures and a
-real Core daemon; the Pi implementation does so in <code>memcastle-pi</code>, and Core's OpenCode integration does so here.
+real Core daemon; the Pi and OpenCode implementations do so in <code>memcastle-pi</code> and <code>memcastle-opencode</code>.
 Daemon-side session isolation is tested in Core independently of which provider supplies an agent client.</p>
 <h3 id="wake-up">Wake-up<a class="headerlink" href="#wake-up" title="Permanent link">&para;</a></h3>
 <p>Operation: <code>memcastle_wake_up</code> with <code>agent_identity</code>, and optionally <code>wing</code>, <code>max_items</code> and <code>max_bytes</code>.</p>
