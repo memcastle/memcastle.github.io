@@ -15,6 +15,7 @@
         <link rel="canonical" href="https://memcastle.github.io/cli/">
       
       
+      
         <link rel="prev" href="../configuration/">
       
       
@@ -25,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.69">
+      <meta name="generator" content="zensical-0.0.70">
     
     
       
@@ -36,12 +37,12 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e442bf79.min.css">
       
         
           
         
-        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
       
       
 
@@ -2941,7 +2942,7 @@ take and what is installed already, bundled sources included; a registry that ca
 hide the others.
 <code>install</code> takes a package file, a source project directory (it is built and packaged first), or a name,
 optionally pinned as <code>name@1.2.0</code>, resolved from the configured registries in order.
-A name the release already ships (<code>pi</code>, <code>opencode</code>) is installed from the start: <code>install</code> refuses it with
+A name the release already ships (such as <code>opencode</code>) is installed from the start: <code>install</code> refuses it with
 <code>memcastle::source::bundled</code>, and <code>memcastle source enable &lt;NAME&gt;</code> is what it needs.
 Write <code>./name</code> for a path that looks like a name.
 <code>--registry</code> consults only that location (a URL, or an absolute path) instead of the usual ones, and the trust policy
@@ -3087,7 +3088,8 @@ Output is the trigger as it is now in a terminal, and JSON when standard output 
 </span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
 </span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>&lt;AGENT&gt;
 </span></code></pre></div>
-<p>Install, update and remove the integrations MemCastle ships for coding agents: <code>pi</code>, <code>opencode</code>, <code>claude-code</code> and <code>codex</code>.
+<p>Install, update and remove integrations for coding agents: Core ships <code>opencode</code>, <code>claude-code</code> and <code>codex</code>;
+the <code>pi</code> integration is available after installing the external <a href="../integrations-pi/"><code>memcastle-pi</code></a> plugin.
 <a href="../integrations/">Integrations</a> is the guide; this is the reference.</p>
 <p>All four are <strong>local</strong>: they read files and run the agent's own command, need no daemon, no palace and no network, and are
 not available to MCP clients.
@@ -3359,10 +3361,10 @@ It exists so the command surface is stable, and it returns a <code>not_implement
       
         
         
-      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      <script src="../assets/javascripts/bundle.a2388154.min.js"></script>
       
     
   </body>

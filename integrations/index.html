@@ -15,6 +15,7 @@
         <link rel="canonical" href="https://memcastle.github.io/integrations/">
       
       
+      
         <link rel="prev" href="../skills/">
       
       
@@ -25,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.69">
+      <meta name="generator" content="zensical-0.0.70">
     
     
       
@@ -36,12 +37,12 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e442bf79.min.css">
       
         
           
         
-        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
       
       
 
@@ -1896,11 +1897,11 @@ and writes checkpoints as the conversation goes.
 It decides <em>when</em> to call MemCastle and does nothing else; every call goes to the daemon over MCP and HTTP.
 What each integration must do is the <a href="../integration-contract/">Integration contract</a>.
 This page is about getting one onto your machine.</p>
-<p>MemCastle ships integrations for <strong>Pi</strong>, <strong>OpenCode</strong>, <strong>Claude Code</strong> and <strong>Codex</strong>.
-<code>memcastle integration</code> installs them.
-Nothing is downloaded and no npm package is involved:
-the integrations are part of the MemCastle release, built and versioned with it.
-An installed <a href="../plugins/">provider plugin</a> can also supply an integration module.
+<p>MemCastle ships integrations for <strong>OpenCode</strong>, <strong>Claude Code</strong> and <strong>Codex</strong>.
+The <strong>Pi</strong> integration comes from the independently released <a href="../integrations-pi/">memcastle-pi provider plugin</a>.
+<code>memcastle integration</code> installs either locally, after its plugin is available.
+Core's integrations are part of its release; neither they nor an installed Pi plugin need an npm download on the
+user's machine.
 <code>plugin install</code> only makes it selectable; <code>integration install &lt;module-id&gt;</code> still copies and registers the selected
 agent-side files locally, and <code>integration remove</code> undoes that registration without uninstalling its parent plugin.</p>
 <pre class="mermaid"><code>flowchart LR
@@ -1909,7 +1910,7 @@ agent-side files locally, and <code>integration remove</code> undoes that regist
         I --&gt;|MCP and HTTP| D[memcastle daemon]
         I -.-&gt;|exposes| S[Skills it names]
     end
-    P[Package or checkout&lt;br/&gt;integrations/ and skills/] --&gt;|memcastle integration install| I</code></pre>
+    P[Core assets or installed plugin] --&gt;|memcastle integration install| I</code></pre>
 <h2 id="what-an-integration-packages">What an integration packages<a class="headerlink" href="#what-an-integration-packages" title="Permanent link">&para;</a></h2>
 <p>An integration is the complete agent-facing MemCastle package for one agent.
 MCP and skills stay usable on their own, with no integration installed:</p>
@@ -1927,7 +1928,7 @@ MCP and skills stay usable on their own, with no integration installed:</p>
 <li><strong>Skills</strong> need no integration either: <a href="../skills/#install-the-skills">Install the skills</a> copies them into the
   directory a client scans.</li>
 <li><strong>An integration</strong> adds the lifecycle glue, and carries the skills the agent should have, so
-  <code>memcastle integration install pi</code> is the whole setup and no separate skill installation follows.
+  <code>memcastle integration install pi</code> installs both Pi's extension and its skills after the plugin is installed.
   Its manifest lists them, each either a <a href="../skills/">shared skill</a> referenced by name or a skill of its own.</li>
 </ul>
 <h2 id="supported-integrations">Supported integrations<a class="headerlink" href="#supported-integrations" title="Permanent link">&para;</a></h2>
@@ -1943,10 +1944,10 @@ MCP and skills stay usable on their own, with no integration installed:</p>
 </thead>
 <tbody>
 <tr>
-<td><code>pi</code></td>
+<td><code>pi</code> (external plugin)</td>
 <td>Pi (<code>@earendil-works/pi-coding-agent</code>)</td>
 <td>1.0 and later</td>
-<td>0.2 and later</td>
+<td>0.4 and later</td>
 <td><a href="../integrations-pi/">Pi</a></td>
 </tr>
 <tr>
@@ -1972,12 +1973,12 @@ MCP and skills stay usable on their own, with no integration installed:</p>
 </tr>
 </tbody>
 </table>
-<p><code>memcastle integration list</code> shows the same ranges for the MemCastle you run, since they come from the integrations it ships.</p>
+<p><code>memcastle integration list</code> shows installed plugin integrations alongside those Core ships, with their own version ranges.</p>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The agent is installed and its command (<code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>) is on your <code>PATH</code>.
   The installer runs it to read its version and, for Pi, to register the integration with it.</li>
-<li>The MemCastle you run ships integrations: a native package, a release tarball or a checkout (see
+<li>The MemCastle you run ships an integration, or you have installed its provider plugin (see
   <a href="#where-integrations-come-from">Where integrations come from</a>).
   A standalone binary downloaded on its own ships none, and says so.</li>
 <li>The agent and MemCastle versions are inside the ranges the integration declares.
@@ -1987,14 +1988,15 @@ MCP and skills stay usable on their own, with no integration installed:</p>
 The daemon does not have to be running to install one; it has to be running when the agent uses it.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>pi
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>opencode
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>claude-code
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>codex
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>opencode
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>claude-code
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>codex
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># For Pi, first install its provider archive (see the Pi guide), then:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>pi
 </span></code></pre></div>
 <p><code>install</code> does five things, in this order, and stops at the first one that fails:</p>
 <ol>
-<li>Finds the integration among the shipped ones and checks it against your MemCastle and your agent.</li>
+<li>Finds the integration among the shipped ones or installed plugins and checks it against your MemCastle and agent.</li>
 <li>Copies its files, and the <a href="../skills/">skills</a> its manifest names, to <code>~/.local/share/memcastle/agents/&lt;id&gt;/</code>.</li>
 <li>Records what it copied, with a SHA-256 for each file, in a receipt beside them.</li>
 <li>Tells the agent about the copy: <code>pi install</code> for Pi, one plugin file for OpenCode, or the agent's
@@ -2098,23 +2100,18 @@ Removing something that is not installed succeeds and says so.</p>
 in a package and in a checkout alike:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>&lt;assets root&gt;/
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── integrations/
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   ├── pi/
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   ├── opencode/
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│   │   ├── memcastle-integration.toml
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│   │   ├── dist/
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│   │   └── skills/                (only for skills this integration alone needs)
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│   │       └── &lt;name&gt;/SKILL.md
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│   ├── opencode/
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│   │   ├── memcastle-integration.toml
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>│   │   └── dist/
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>│   ├── claude-code/
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>│   │   ├── memcastle-integration.toml
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>│   │   └── dist/
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>│   └── codex/
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>│       ├── memcastle-integration.toml
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>│       └── dist/
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>├── skills/                        (the shared skills, referenced by name)
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>│   └── &lt;name&gt;/SKILL.md
-</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>└── sources/                       (the bundled mining sources, see below)
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│   │   └── dist/
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│   ├── claude-code/
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│   │   ├── memcastle-integration.toml
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│   │   └── dist/
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│   └── codex/
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>│       ├── memcastle-integration.toml
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>│       └── dist/
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>├── skills/                        (the shared skills, referenced by name)
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>│   └── &lt;name&gt;/SKILL.md
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>└── sources/                       (the bundled mining sources, see below)
 </span></code></pre></div>
 <p>The assets root is the one <a href="../configuration/#runtime-assets">runtime assets</a> directory, chosen in this order:</p>
 <ol>
@@ -2134,13 +2131,13 @@ are looking at.</p>
 MemCastle:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:build<span class="w">                                  </span><span class="c1"># bundle integrations/*/src into integrations/*/dist</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span><span class="w">               </span><span class="c1"># the checkout is the assets root</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>pi<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>opencode<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
 </span></code></pre></div>
 <p>The checkout already has the layout above (<code>integrations/&lt;id&gt;/</code>, <code>skills/</code>), and <code>integrations:build</code> is the step that
 creates the <code>dist/</code> directories.
 Installing from a checkout goes through exactly the code a package install does, so what you test is what ships.
 Because a development build never changes the integration's version, the installer compares file contents as well:
-rebuild, run <code>memcastle integration update pi --assets-dir "$PWD"</code>, and the new bundle replaces the old one.
+rebuild, run <code>memcastle integration update opencode --assets-dir "$PWD"</code>, and the new bundle replaces the old one.
 <code>MEMCASTLE_ASSETS_DIR</code> does the same as the flag for a whole shell session.
 In this repository <code>mise.toml</code> sets it to the checkout for you: with mise active (<code>mise run</code>, <code>mise cli</code>, or an activated
 shell), any <code>memcastle integration ...</code> run from the project directory, even an installed <code>memcastle</code>, reads the
@@ -2263,7 +2260,7 @@ Adding an agent is a new adapter and a new <code>kind</code>; the manifest forma
   MemCastle version and no separate skill installation is needed.
   Both shipped integrations expose all five, and the agent lists them itself.</li>
 <li><strong>Mining sources.</strong>
-  <code>sources/pi</code> and <code>sources/opencode</code> are different things: WebAssembly sources that mine an agent's session history
+  <code>memcastle-pi</code>'s source module and <code>sources/opencode</code> are WebAssembly sources that mine an agent's session history
   (<a href="../mining-sources/">Mining sources</a>).
   The lifecycle integrations on this page are what run inside the agent.</li>
 </ul>
@@ -2397,10 +2394,10 @@ for why integrations are distributed this way.</p>
       
         
         
-      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      <script src="../assets/javascripts/bundle.a2388154.min.js"></script>
       
     
   </body>

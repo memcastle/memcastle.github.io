@@ -15,6 +15,7 @@
         <link rel="canonical" href="https://memcastle.github.io/development/">
       
       
+      
         <link rel="prev" href="../architecture/">
       
       
@@ -25,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.69">
+      <meta name="generator" content="zensical-0.0.70">
     
     
       
@@ -36,12 +37,12 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e442bf79.min.css">
       
         
           
         
-        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
       
       
 
@@ -1908,7 +1909,7 @@ They apply to <code>mise run</code>, to <code>mise cli</code> and to any shell w
 once you are in the project directory, so <code>mise cli serve</code> already serves the dashboard from <code>web/dist</code> (after
 <code>mise run web:build</code>) and finds the integrations and sources of the checkout, with no flag.
 Because the variables follow the shell, <strong>any <code>memcastle</code> you run from the project directory uses them, including an
-installed one</strong>: <code>memcastle integration install pi</code> there installs the bundle built in the checkout
+installed one</strong>: <code>memcastle integration install opencode</code> there installs the bundle built in the checkout
 (<code>mise run integrations:build</code>) and not the package's.
 Run it from another directory, or <code>env -u MEMCASTLE_ASSETS_DIR memcastle ...</code>, to use the installed assets.
 A flag still wins over the variable (<code>--assets-dir</code>), and your own <code>mise.local.toml</code> can override or drop either.</p>
@@ -2024,10 +2025,6 @@ Every path, environment variable, flag and the precedence between them is in <a 
     (manifests accepted by this MemCastle, no sources or <code>node_modules</code>, the skills) and runs the same lifecycle from the
     packaged tree and from the checkout.
     It needs bun, so it is <code>#[ignore]</code>d in the basic suite and <code>mise run integrations:check</code> runs it.</li>
-<li><code>integrations/common/test/</code> — what needs two integrations at once: sessions in every memory mode against one
-    daemon, and the proof, from the requests on the wire, that an <code>off</code> session receives nothing.
-    It is test-only and imports the integrations' sources, see
-    <a href="../adr/027-cross-integration-tests-live-in-a-common-package/">ADR-027</a>.</li>
 <li><code>tests/in_process/events.rs</code> — <code>GET /api/events</code> against a real daemon: a note, a wing and a job's progress arrive as
     identifiers and never as content, a <code>disabled</code> session is refused and a <code>read_only</code> one served, the token is
     required, and an open stream does not keep the daemon from shutting down.</li>
@@ -2043,9 +2040,8 @@ Every path, environment variable, flag and the precedence between them is in <a 
     against a real <code>memcastle serve</code> (<code>web/test/daemon</code>, bun), see <a href="../web/#developing-the-dashboard">Web UI</a>.</li>
 <li><code>tests/wasm_conformance.rs</code> — the same conformance cases run against the built-in <code>directory</code> source and against the
     reference WebAssembly source built from <code>sources/directory/</code> (in-process, WebAssembly suite).</li>
-<li><code>tests/wasm_pi.rs</code> — the Pi history source (<code>sources/pi/</code>) built and run as a component: what it files and leaves out,
-    discovery and the credentials file it must never open, provenance, and an install, mine and re-mine against a real
-    daemon (in-process, WebAssembly suite).</li>
+<li>The Pi history source and lifecycle extension have their own tests and fixtures in
+    <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a>, run against a released or locally built Core binary.</li>
 <li><code>tests/wasm_opencode.rs</code> — the OpenCode history source (<code>sources/opencode/</code>) built and run as a component against a
     stand-in <code>opencode</code> command: what it files and leaves out, the discovery cursor and the query it never lets a
     cursor change, provenance, a machine without OpenCode, and an install, mine, re-mine and grow against a real daemon
@@ -2059,8 +2055,8 @@ Every path, environment variable, flag and the precedence between them is in <a 
     stand-in for the API, with a digest that does not match and a repository that cannot be read), an unreadable
     registry, and the CLI publishing, signing, searching, installing and updating (in-process and subprocess,
     WebAssembly suite).</li>
-<li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code>, the script a release runs, packaging <code>pi</code> and <code>opencode</code> as an
-    unpacked bundle and as <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code> archives, and a daemon that lists both as installed and enables them
+<li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code>, the script a release runs, packaging <code>opencode</code> as an
+    unpacked bundle and as <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code> archives, and a daemon that lists it as installed and enables it
     with no consent (WebAssembly suite, Unix only).</li>
 <li><code>tests/wasm_runtime.rs</code> — installable sources against a real daemon: consent, the lifecycle, mining through the
     shared pipeline, and refusing a component altered on disk (in-process, WebAssembly suite).</li>
@@ -2321,10 +2317,10 @@ and <code>AGENTS.md</code> for where project-specific content goes so template u
       
         
         
-      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      <script src="../assets/javascripts/bundle.a2388154.min.js"></script>
       
     
   </body>

@@ -15,6 +15,7 @@
         <link rel="canonical" href="https://memcastle.github.io/integrations-pi/">
       
       
+      
         <link rel="prev" href="../integrations/">
       
       
@@ -25,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.69">
+      <meta name="generator" content="zensical-0.0.70">
     
     
       
@@ -36,12 +37,12 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e442bf79.min.css">
       
         
           
         
-        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
       
       
 
@@ -1731,15 +1732,19 @@ It is installed with <a href="../integrations/"><code>memcastle integration</cod
 <ul>
 <li>Pi 1.0 or later, with the <code>pi</code> command on your <code>PATH</code>.
   The installer runs <code>pi --version</code> and refuses an older Pi, naming the version it found.</li>
-<li>MemCastle 0.2 or later.</li>
+<li>MemCastle 0.4 or later with plugin installation support.</li>
 <li>A running daemon when you use Pi, not when you install:
   the extension loads without one and tells you once how to start it.</li>
 </ul>
 <h2 id="install-update-remove">Install, update, remove<a class="headerlink" href="#install-update-remove" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>pi
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>pi
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>pi
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>/path/to/pi-0.1.0.tar.gz<span class="w"> </span>--consent<span class="w"> </span><span class="nv">pi</span><span class="o">=</span>SHA256_FROM_PREVIEW
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>pi
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>pi
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>pi
 </span></code></pre></div>
+<p>Build the archive from the <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code> repository</a> until an independent
+release is available. Add <code>--adopt-source pi</code> only when the preview reports previously mined legacy Pi history;
+follow the install preview's instructions for the exact source consent.</p>
 <p>Restart Pi after each, because it loads extensions when it starts.
 <a href="../integrations/">Integrations</a> describes what each command does and checks.</p>
 <h2 id="what-it-changes">What it changes<a class="headerlink" href="#what-it-changes" title="Permanent link">&para;</a></h2>
@@ -1821,7 +1826,7 @@ The ones you are most likely to set:</p>
 <p><code>MEMCASTLE_MODE</code> takes this integration's labels (<code>full</code>, <code>read-only</code>, <code>off</code>), which are not the daemon's
 (<code>full</code>, <code>read_only</code>, <code>disabled</code>).
 The complete list, and what each <a href="../memory-modes/">memory mode</a> does to a session, is in the
-<a href="https://github.com/memcastle/memcastle/blob/main/integrations/pi/README.md#configuration">extension's README</a>.</p>
+<a href="https://github.com/memcastle/memcastle-pi/blob/main/modules/pi/README.md">extension's README</a>.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Nothing happens in Pi.</strong>
@@ -1903,10 +1908,10 @@ The complete list, and what each <a href="../memory-modes/">memory mode</a> does
       
         
         
-      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      <script src="../assets/javascripts/bundle.a2388154.min.js"></script>
       
     
   </body>

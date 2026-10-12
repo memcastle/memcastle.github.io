@@ -15,6 +15,7 @@
         <link rel="canonical" href="https://memcastle.github.io/mining-sources/">
       
       
+      
         <link rel="prev" href="../storage/">
       
       
@@ -25,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.69">
+      <meta name="generator" content="zensical-0.0.70">
     
     
       
@@ -36,12 +37,12 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e15858d4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e442bf79.min.css">
       
         
           
         
-        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b27955a4.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
       
       
 
@@ -1071,15 +1072,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-sources-memcastle-ships" class="md-nav__link">
+  <a href="#available-sources" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The sources MemCastle ships
+        Available sources
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="The sources MemCastle ships">
+    <nav class="md-nav" aria-label="Available sources">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1894,15 +1895,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-sources-memcastle-ships" class="md-nav__link">
+  <a href="#available-sources" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        The sources MemCastle ships
+        Available sources
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="The sources MemCastle ships">
+    <nav class="md-nav" aria-label="Available sources">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2185,7 +2186,7 @@ To have it run on its own (daily, when files change, when a service calls a webh
 <a href="../triggers/">trigger</a> for it, which starts disabled and which no source, install or miner ever enables.
 The trigger only decides when; the source still decides how to read.</p>
 <p>The job's <code>result</code> reports <code>documents</code>, <code>created</code>, <code>superseded</code>, <code>retired</code>, <code>unchanged</code>, <code>skipped</code>, <code>similar</code> and <code>truncated</code>.</p>
-<h2 id="the-sources-memcastle-ships">The sources MemCastle ships<a class="headerlink" href="#the-sources-memcastle-ships" title="Permanent link">&para;</a></h2>
+<h2 id="available-sources">Available sources<a class="headerlink" href="#available-sources" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2208,7 +2209,7 @@ The trigger only decides when; the source still decides how to read.</p>
 </tr>
 <tr>
 <td><code>pi</code></td>
-<td>bundled package, <code>sources/pi/</code></td>
+<td>external <code>memcastle-pi</code> plugin</td>
 <td>Pi coding-agent session history</td>
 <td>modification time</td>
 <td>yes</td>
@@ -2258,10 +2259,11 @@ The trigger only decides when; the source still decides how to read.</p>
 </table>
 <p>Only <code>directory</code> is compiled into MemCastle.
 <code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> are <a href="../writing-sources/">WebAssembly sources</a>.
-They are built from their directories in the repository and shipped alongside each release
+The in-tree ones are built from their directories in the repository and shipped alongside each release
 (release archives and the <code>.deb</code> and <code>.rpm</code> carry them, unpacked, under
 <code>share/memcastle/sources/</code>), so they are installed from the start.
-<code>memcastle source enable &lt;name&gt;</code> is all one needs, with no registry and no network.
+<code>memcastle source enable &lt;name&gt;</code> is all one needs for a bundled source, with no registry and no network.
+Install the external Pi plugin before enabling its source.
 No Pi, OpenCode, Claude Code, Codex, ChatGPT or GitHub acquisition code is part of the core.
 They run under the same sandbox and pipeline as any source a user writes.
 Other sources are found in <a href="../publishing-sources/">registries</a>.
@@ -2284,24 +2286,24 @@ and named by that path, so <code>wing/files/src/lib.rs</code> addresses it.</p>
 files: <code>~/.pi/agent/sessions/&lt;working directory&gt;/&lt;session&gt;.jsonl</code>,
 or the folder you name as the place to read (<code>memcastle mine pi &lt;folder&gt;</code>).
 It works on sessions of any age and with no Pi process running.
-This is how Pi's <em>history</em> gets into MemCastle; the live integration (<code>integrations/pi/</code>) is a separate thing that talks
-to the daemon over MCP and decides <em>when</em> to ask for mining, and never reads these files itself.</p>
-<p>It ships with your MemCastle and is installed already: turn it on, and mine it:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pi
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>pi
+This is how Pi's <em>history</em> gets into MemCastle.
+The live integration (also in <code>memcastle-pi</code>) is a separate module that talks to the daemon over MCP, decides <em>when</em> to
+ask for mining and never reads these files itself.</p>
+<p>Install the standalone plugin first, then turn on the source and mine it:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>/path/to/pi-0.1.0.tar.gz<span class="w"> </span>--consent<span class="w"> </span><span class="nv">pi</span><span class="o">=</span>SHA256_FROM_PREVIEW
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pi
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>pi
 </span></code></pre></div>
-<p>A build that was not installed from a release (a checkout, <code>cargo install</code>) has no bundle.
-Install it from the <a href="../publishing-sources/#the-official-registry">official registry</a> (<code>memcastle source install pi --enable</code>),
-or from the project directory, which builds and packages it first, or write the two steps out:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>sources/pi<span class="w"> </span>--enable
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># or: memcastle source package sources/pi &amp;&amp; memcastle source install sources/pi/dist/pi-0.1.0.tar.gz --enable</span>
-</span></code></pre></div>
-<p>Installing it from a registry or a directory lists what the source asks for and needs your consent to exactly that;
-<code>memcastle source show pi</code> lists the same for the bundled one, which is enabled without it.
+<p>Add <code>--adopt-source pi</code> only if the preview reports previously mined <code>pi</code> history from a Core-bundled or legacy source.
+Remove a separately installed legacy <code>pi</code> package first (<code>memcastle source remove pi</code>); its mined data stays in the palace.
+The installation preview shows the exact permissions and consent digest to provide with the install command.
+Until an independent release exists, build the archive in the <code>memcastle-pi</code> checkout with <code>mise run package</code>.</p>
+<p>Installing the plugin lists what the source asks for and needs your consent to exactly that;
+<code>memcastle source show pi</code> lists the installed source's permissions afterward.
 It asks for read-only access to the folder it is asked to mine and to <code>~/.pi/agent/sessions</code>,
 and the one environment variable <code>HOME</code> (to find that folder when no place is given).
 It asks for no network, runs no program, writes no file and needs no credentials.
-<code>memcastle source test sources/pi</code> runs its conformance cases, and CI does the same on every change.</p>
+<code>memcastle source test modules/pi</code> runs its conformance cases from the external checkout.</p>
 <p>Two options narrow what is read.
 <code>since=2026-09</code> keeps the sessions whose file was modified at or after the date,
 and <code>dir=/work/app</code> keeps the sessions that
@@ -2340,12 +2342,12 @@ It works on sessions of any age and with no Claude Code process running.
 It is history mining only: it does not read Claude Code settings, credentials, prompt history or debug logs, and it is not
 the live Claude Code MCP client.</p>
 <p>It ships with your MemCastle and is installed already:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>claude
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>claude
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>claude
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>claude
 </span></code></pre></div>
 <p>A checkout has no unpacked bundle, so install from the official registry or the project directory:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w"> </span>--enable
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># or: memcastle source install sources/claude --enable</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w"> </span>--enable
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># or: memcastle source install sources/claude --enable</span>
 </span></code></pre></div>
 <p>It asks for read-only access to the locator and <code>~/.claude/projects</code>, and <code>HOME</code> only to find the latter when no locator
 is given.
@@ -2366,18 +2368,18 @@ Files are ordered by modification time and path, so an appended transcript is di
 Earlier message segments stay byte-identical when a session gains a tail.</p>
 <p>The source declares <code>watch</code>, but that is only a capability.
 It never creates a miner or enables a trigger:</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude"</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="k">[[triggers]]</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history-watch"</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"watch"</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">debounce</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"5s"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude"</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="k">[[triggers]]</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history-watch"</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"watch"</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="n">debounce</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"5s"</span>
 </span></code></pre></div>
 <p>Enable the trigger only after reviewing the locator and source permissions.
 Without a trigger, <code>memcastle miner run claude-history</code> is the manual fallback.</p>
@@ -2391,8 +2393,8 @@ thing that talks to the daemon over MCP and decides <em>when</em> to ask for min
 <p>It needs OpenCode 1.2 or later (the version that moved history into the database) installed so that <code>opencode</code> is on the
 daemon's <code>PATH</code>; it was written against 1.18.
 It ships with MemCastle like <code>pi</code> (or install it from a checkout with <code>memcastle source install sources/opencode</code>):</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>opencode
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>opencode
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>opencode
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>opencode
 </span></code></pre></div>
 <p>Installing it from a registry or a directory lists what the source asks for and needs your consent to exactly that;
 <code>memcastle source show opencode</code> lists the same for the bundled one.
@@ -2462,8 +2464,8 @@ so it is part of the source's identity and every directory has a cursor of its o
 It is separate from the Codex integration: this source acquires old and inactive transcripts, while the integration only
 decides when a live Codex session uses MCP.</p>
 <p>It ships with MemCastle and is installed already:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>codex
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>codex
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>codex
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>codex
 </span></code></pre></div>
 <p>The source reads only files named <code>rollout-*.jsonl</code> at the documented date depth, never <code>history.jsonl</code> or another file
 under <code>~/.codex</code>.
@@ -2479,8 +2481,8 @@ does not understand.</p>
 <p>ChatGPT conversation history is imported from an official export ZIP with a top-level <code>conversations.json</code>.
 A standalone <code>conversations.json</code> extracted from it is accepted too.
 The source ships disabled like the other bundled packages; enable it, then provide the path on the <strong>daemon's</strong> machine:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>chatgpt
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span>/path/to/chatgpt-export.zip
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>chatgpt
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span>/path/to/chatgpt-export.zip
 </span></code></pre></div>
 <p>The export path is the source's identity.
 Replacing the file at that path with a newer export and mining again revisits each conversation without duplicating
@@ -2494,7 +2496,7 @@ the raw document and is not searchable.
 The source permits up to 128 MiB of JSON and 16 MiB per conversation; split larger exports before importing.
 Exports and raw retained documents contain private conversations.</p>
 <p>An <strong>experimental</strong> alternative uses the undocumented ChatGPT web API:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span><span class="nv">mode</span><span class="o">=</span>web<span class="w"> </span><span class="nv">account</span><span class="o">=</span>personal
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span><span class="nv">mode</span><span class="o">=</span>web<span class="w"> </span><span class="nv">account</span><span class="o">=</span>personal
 </span></code></pre></div>
 <p><code>account</code> is a non-secret label that keeps different accounts' cursors separate.
 Without a project filter, the web backend combines ordinary conversations and the full paginated history of each
@@ -2666,10 +2668,10 @@ the revision is its <code>updated_at</code> or etag, and <code>needs_credentials
       
         
         
-      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.8b1c90bd.min.js"></script>
+      <script src="../assets/javascripts/bundle.a2388154.min.js"></script>
       
     
   </body>
