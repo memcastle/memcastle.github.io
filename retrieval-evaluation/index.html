@@ -1980,10 +1980,11 @@ Read <a href="#what-the-numbers-do-and-do-not-establish">What the numbers do and
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>a.json<span class="w"> </span>b.json<span class="w">   </span><span class="c1"># what changed between two reports, failing on a drop</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:baseline<span class="w">              </span><span class="c1"># re-measure and rewrite the committed baseline (a deliberate act)</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>longmemeval_s.json<span class="w">   </span><span class="c1"># session retrieval on a downloaded LongMemEval file</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--<span class="w"> </span>retrieval_eval<span class="w">     </span><span class="c1"># the everyday check: the bundled dataset against the committed baseline</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span>test:slow<span class="w">                   </span><span class="c1"># Linux CI gate: the bundled dataset against the committed baseline</span>
 </span></code></pre></div>
 <p>The <code>eval*</code> tasks are explicit and are never part of <code>mise run check</code> or <code>mise run ci</code>.
-<code>mise run test -- retrieval_eval</code> is the part that runs in the everyday suite, in about half a minute.</p>
+The baseline comparison runs in Linux CI's slow suite (<code>mise run test:slow</code> locally), rather than every OS's basic suite;
+the dataset and report unit tests still run in the basic suite.</p>
 <p>A typical before-and-after of a change looks like this:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>stash<span class="w">                  </span><span class="c1"># or check out the commit before the change</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cp<span class="w"> </span>target/eval/report.json<span class="w"> </span>/tmp/before.json
@@ -2010,7 +2011,7 @@ The code is under <code>tests/in_process/retrieval_eval/</code>, which keeps it 
 <h2 id="the-bundled-dataset">The bundled dataset<a class="headerlink" href="#the-bundled-dataset" title="Permanent link">&para;</a></h2>
 <p><code>tests/fixtures/retrieval/core.json</code> is a small household-and-team knowledge base:
 59 drawers in four wings, four of them corrections of an earlier drawer, fifteen entity links, and 39 judged queries.
-It is small on purpose, so it is deterministic and cheap enough for the everyday suite.</p>
+It is small enough to produce a reproducible baseline in the Linux slow suite.</p>
 <p>Each query belongs to one category, and a report breaks the numbers down by category:</p>
 <table>
 <thead>
@@ -2192,7 +2193,7 @@ The harness starts the daemon of the checkout it runs from, so it measures the r
 <h3 id="the-committed-baseline-and-the-floor">The committed baseline and the floor<a class="headerlink" href="#the-committed-baseline-and-the-floor" title="Permanent link">&para;</a></h3>
 <p><code>tests/fixtures/retrieval/baseline.json</code> holds the quality metrics of the bundled dataset, with no timings,
 since those belong to a machine.
-The everyday suite (<code>mise run test</code>) runs the dataset against it,
+The Linux slow suite (<code>mise run test:slow</code>) runs the dataset against it,
 and fails when any metric of any configuration falls by more than 0.02.
 That margin is not a target.
 It absorbs an approximate vector index and the arbitrary order of equal scores without hiding a real regression.</p>
@@ -2343,7 +2344,7 @@ Changing it invalidates the baseline, which the comparison reports instead of co
 It is large, and its licence and where to obtain it are the benchmark's own.
 Download it from the project, check its terms for your use, and pass the path.
 A tiny synthetic file in the same format (<code>tests/fixtures/retrieval/longmemeval-synthetic.json</code>)
-is what the everyday suite uses to prove the path works, and it says nothing about the real data.</p>
+is what the basic suite uses to prove the path works, and it says nothing about the real data.</p>
 <p>The mapping is:</p>
 <ul>
 <li>Each question has its own haystack of chat sessions.
@@ -2417,7 +2418,7 @@ It does not answer the questions, so it says nothing about end-to-end accuracy a
 <h2 id="not-goals">Not goals<a class="headerlink" href="#not-goals" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Making benchmark performance a release gate.
-  The floor in the everyday suite protects against regressing what the dataset covers; it is not a quality bar for a release.</li>
+  The floor in the Linux slow suite protects against regressing what the dataset covers; it is not a quality bar for a release.</li>
 <li>Embedding a large dataset in the binary or in a release artifact.</li>
 <li>Claiming equivalence with another memory system without a directly comparable evaluation.</li>
 </ul>

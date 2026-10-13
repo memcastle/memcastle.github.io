@@ -1925,17 +1925,22 @@ Every path, environment variable, flag and the precedence between them is in <a 
   <code>store</code>'s migrations/persistence — the storage tests use SurrealDB's in-memory engine for speed, plus one test
   against a real SurrealKV directory; survival across a restart is proven at the process boundary in
   <code>tests/persistence.rs</code>, because SurrealKV's file lock is not released within one process).</li>
-<li><strong>Two suites.</strong> A test binary that builds or runs a WebAssembly component is named <code>tests/wasm_*.rs</code>,
+<li><strong>Three suites.</strong> Core test binaries that build or run a WebAssembly component are named <code>tests/wasm_*.rs</code>,
   and that prefix is the whole definition of the WebAssembly suite: <code>.config/nextest.toml</code> selects it with
   <code>binary(/^wasm_/)</code>, and <code>mise run test:wasm</code> and CI's <code>wasm</code> job pass the same prefix to Cargo as <code>--test 'wasm_*'</code>,
   so that the other test binaries are not compiled for nothing.
   A new <code>wasm_</code> file therefore joins the suite with no configuration.
-  Everything else is the basic suite, which is what <code>mise run test</code> and the <code>default</code> and <code>ci</code> nextest profiles run;
-  the <code>wasm</code> and <code>ci-wasm</code> profiles run the other one.
+  Most other tests are the basic suite, which is what <code>mise run test:fast</code> and the <code>default</code> and <code>ci</code> nextest profiles run;
+  the <code>wasm</code> and <code>ci-wasm</code> profiles run Core's component tests.
+  <code>mise run test</code> uses the same execution filter but may still compile excluded component test binaries;
+  use <code>test:fast</code> to avoid linking them.
+  Process-boundary durability, MCP and auth tests and the committed retrieval baseline form the Linux-only slow suite,
+  selected with the <code>slow-tests</code> Cargo feature by <code>mise run test:slow</code> and CI's <code>ci-slow</code> profile.
+  <code>mise run check:all</code> combines the template's <code>check</code> task with this project-specific slow gate.
   The basic suite runs in CI on Linux, macOS and Windows and needs no WebAssembly target.
   The WebAssembly suite runs in CI on Linux only, in its own <code>wasm</code> job with its own Codecov flag,
   and each directory under <code>sources/</code> also gets a CI leg of its own (<code>mise run sources:test -- &lt;name&gt;</code>), found automatically.
-  A test that only reads files, such as <code>tests/source_docs.rs</code>, builds nothing and stays in the basic suite.</li>
+  Each source's own CI leg runs conformance, plus any source-owned <code>core-tests.rs</code> cases not expressible as conformance.</li>
 <li><strong>Integration tests</strong> (<code>tests/</code>) run against a tempdir palace and an OS-assigned port.
   Those that start the daemon inside the test process are modules of one binary, <code>tests/in_process/main.rs</code>:
   each <code>tests/</code> binary links the whole server, about 600 MB with debug info, so sixteen of them were most of what
@@ -2019,8 +2024,9 @@ Every path, environment variable, flag and the precedence between them is in <a 
     preservation of the user's other plugins and settings,
     and resolution from <code>--assets-dir</code>, the environment and the binary's own prefix.
     The installer's unit tests are in <code>src/integration/</code> (manifest, discovery, adapters, install, update, remove, rollback).</li>
-<li><code>tests/integration_bundle.rs</code> — builds the bundles with <code>packaging/integrations/build.sh</code>, checks the package tree
-    (manifests accepted by this MemCastle, no sources or <code>node_modules</code>, the skills) and runs the same lifecycle from the
+<li><code>tests/integration_bundle.rs</code> — checks the bundles built by <code>integrations:check</code> with
+    <code>packaging/integrations/build.sh</code>: the package tree (manifests accepted by this MemCastle, no sources or
+    <code>node_modules</code>, the skills) and the same lifecycle from the
     packaged tree and from the checkout.
     It is <code>#[ignore]</code>d in the basic suite so that <code>mise run integrations:check</code> can build the checkout assets without a
     second suite racing it.</li>
@@ -2037,14 +2043,15 @@ Every path, environment variable, flag and the precedence between them is in <a 
 <li><code>web/test/</code> — the dashboard's client, login, route guard, event-stream parser and live loader
     (vitest, no daemon), and the same client, login and event stream
     against a real <code>memcastle serve</code> (<code>web/test/daemon</code>, bun), see <a href="../web/#developing-the-dashboard">Web UI</a>.</li>
-<li><code>tests/wasm_conformance.rs</code> — the same conformance cases run against the built-in <code>directory</code> source and against the
-    reference WebAssembly source built from <code>sources/directory/</code> (in-process, WebAssembly suite).</li>
+<li><code>tests/in_process/native_conformance.rs</code> and <code>tests/wasm_conformance.rs</code> — the same conformance cases run against
+    the built-in <code>directory</code> source in the basic suite and the reference WebAssembly source built from
+    <code>sources/directory/</code> in the Linux WebAssembly suite.</li>
 <li>The Pi history source and lifecycle extension have their own tests and fixtures in
     <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a>, run against a released or locally built Core binary.</li>
 <li>The OpenCode history source's fixtures, conformance and installation/mining smoke checks live in
     <a href="https://github.com/memcastle/memcastle-opencode"><code>memcastle-opencode</code></a>.</li>
-<li><code>tests/source_docs.rs</code> — the guide's list of conformance cases and of diagnostic codes against what ships
-    (no build, basic suite).</li>
+<li><code>sources/{claude,chatgpt,github}/core-tests.rs</code> — source-owned behavior beyond conformance, run in each source's
+    Linux CI leg; Codex's behavior is covered by its conformance fixture.</li>
 <li><code>tests/wasm_registry.rs</code> — registries against a real daemon (a directory registry written with the same calls
     <code>source index</code> makes): search, install by name with consent, an archive that is not the one published, a package that
     is not the one the index says, version choice, the trust policy, update with and without new permissions, a bundled
@@ -2208,7 +2215,8 @@ queues work only through the request <code>miner run</code> makes.
 <code>tests/integration_isolation.rs</code> fails when <code>src/integration/</code> mentions the store, the jobs, the daemon client, the
 network or an agent's settings file or a credential, and when anything under <code>src/mcp</code>, <code>src/api</code>, <code>src/app</code> or
 <code>src/server</code> (or any module but the binary) calls it.
-<code>tests/integration_docs.rs</code> holds <a href="../integrations/">Agent integrations</a> to the manifest parser and the error codes.</p>
+<code>tests/integration_cli.rs</code> exercises the installer with synthetic integrations;
+<code>tests/integration_bundle.rs</code> checks the Core-shipped package tree on Linux.</p>
 <p>The web UI is held to HTTP as an integration is: the <code>web-http-only</code> hook fails on <code>surrealdb</code>, <code>surrealkv</code>,
 <code>SurrealStore</code>, a <code>store</code> or <code>jobs</code> path, or <code>/api/db</code> anywhere under <code>web/</code> (Markdown, <code>node_modules</code> and <code>dist</code> are
 skipped), see <a href="../adr/035-web-ui/">ADR-035</a>.
