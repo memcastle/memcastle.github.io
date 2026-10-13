@@ -1798,12 +1798,11 @@ For cross-repository development, set <code>MEMCASTLE_BIN</code> to a binary bui
 neither normal provider CI nor its release workflow builds unrelated providers or Core from source.</p>
 <h3 id="shared-ci-and-development-core">Shared CI and development Core<a class="headerlink" href="#shared-ci-and-development-core" title="Permanent link">&para;</a></h3>
 <p>Every successful Core CI run on <code>main</code> that passes the basic, slow, WebAssembly and other required Core jobs
-publishes five development binaries to the fixed
+publishes a Linux amd64 development binary to the fixed
 <a href="https://github.com/memcastle/memcastle/releases/tag/development"><code>development</code> prerelease</a>.
-The release body contains <code>Core main SHA: &lt;40-character SHA&gt;</code>; assets are named
-<code>memcastle_&lt;SHA&gt;_{linux-amd64,linux-arm64,darwin-amd64,darwin-arm64}</code> and
-<code>memcastle_&lt;SHA&gt;_windows-amd64.exe</code>, with <code>SHA256SUMS_&lt;SHA&gt;</code> covering all five.
-Only after all assets are uploaded does the publisher change the body to the new SHA.
+The release body contains <code>Core main SHA: &lt;40-character SHA&gt;</code>; the binary is named
+<code>memcastle_&lt;SHA&gt;_linux-amd64</code>, with <code>SHA256SUMS_&lt;SHA&gt;</code> covering it.
+Only after the binary and checksum are uploaded does the publisher change the body to the new SHA.
 If CI, a build, or an upload fails, the previously advertised SHA stays in place;
 a superseded commit is not published.
 The <code>development</code> tag is a fixed discovery address, <strong>not</strong> a pointer to the newest source commit:
