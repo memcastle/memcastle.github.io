@@ -1486,6 +1486,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#core-and-provider-test-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Core and provider test boundaries
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#where-the-ci-time-goes" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1744,6 +1755,17 @@
   
     <nav class="md-nav" aria-label="Testing">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-and-provider-test-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Core and provider test boundaries
+      </span>
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#where-the-ci-time-goes" class="md-nav__link">
@@ -2045,9 +2067,8 @@ Every path, environment variable, flag and the precedence between them is in <a 
 <li><code>web/test/</code> — the dashboard's client, login, route guard, event-stream parser and live loader
     (vitest, no daemon), and the same client, login and event stream
     against a real <code>memcastle serve</code> (<code>web/test/daemon</code>, bun), see <a href="../web/#developing-the-dashboard">Web UI</a>.</li>
-<li><code>tests/in_process/native_conformance.rs</code> and <code>tests/wasm_conformance.rs</code> — the same conformance cases run against
-    the built-in <code>directory</code> source in the basic suite and the reference WebAssembly source built from
-    <code>sources/directory/</code> in the Linux WebAssembly suite.</li>
+<li><code>tests/in_process/native_conformance.rs</code> — conformance for Core's built-in <code>directory</code> adapter in the basic suite.
+    WebAssembly provider conformance runs in each source's own CI leg, including <code>sources/directory/</code>.</li>
 <li>The Pi history source and lifecycle extension have their own tests and fixtures in
     <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a>, run against a released or locally built Core binary.</li>
 <li>The OpenCode history source's fixtures, conformance and installation/mining smoke checks live in
@@ -2060,12 +2081,13 @@ Every path, environment variable, flag and the precedence between them is in <a 
     source that a registry never installs, updates or replaces, a source registered by GitHub repository (against a
     stand-in for the API, with a digest that does not match and a repository that cannot be read), an unreadable
     registry, and the CLI publishing, signing, searching, installing and updating (in-process and subprocess,
-    WebAssembly suite).</li>
+    WebAssembly suite, using the synthetic Core mock source).</li>
 <li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code>, the release script, packaging Core-shipped sources as an
     unpacked bundle and as <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code> archives, and a daemon that lists it as installed and enables it
     with no consent (WebAssembly suite, Unix only).</li>
-<li><code>tests/wasm_runtime.rs</code> — installable sources against a real daemon: consent, the lifecycle, mining through the
-    shared pipeline, and refusing a component altered on disk (in-process, WebAssembly suite).</li>
+<li><code>tests/wasm_runtime.rs</code>, <code>tests/wasm_plugin.rs</code> — installable mock sources against a real daemon: consent, independent
+    module lifecycles, mining through the shared pipeline, retained data, and refusing a component altered on disk
+    (in-process, WebAssembly suite).</li>
 <li><code>tests/wasm_projects.rs</code> — <code>memcastle source init</code>, <code>build</code>, <code>test</code> and <code>package</code> for real, the sandbox
     (a source cannot read outside its grant, see the environment, outrun its time limit or exceed its memory, or run an
     unlisted program) and installing through the CLI.
@@ -2088,6 +2110,17 @@ by path, so the Codecov page shows each area whatever flag covered it.
 Each component reflects the merged execution coverage from every reporting suite.
 Its required status permits the same 0.5% fluctuation as the project status,
 so platform and timing variation does not fail a build.</p>
+<h3 id="core-and-provider-test-boundaries">Core and provider test boundaries<a class="headerlink" href="#core-and-provider-test-boundaries" title="Permanent link">&para;</a></h3>
+<p>Generic Core WebAssembly lifecycle and contract tests use <code>tests/fixtures/mock-source/</code>, a synthetic WIT component.
+Its two fixed candidates and locator-derived text exercise installation, consent, cursors, mining, registry updates and
+independent plugin modules without testing any provider's discovery rules or calling an external service.
+The mock is a test fixture, not a releasable source: it lives outside <code>sources/</code> and is built only by the generic tests.
+<code>tests/source_isolation.rs</code> guards against reintroducing a concrete provider fixture into those tests.</p>
+<p>Each real WebAssembly source's own <code>mise run sources:test -- &lt;name&gt;</code> CI leg runs its conformance fixtures and source-owned
+behavior tests; <code>sources/directory/</code> retains the directory conformance cases.
+Core's built-in directory adapter has its separate native conformance test.
+Scaffolding and sandbox tests (<code>tests/wasm_projects.rs</code>), OAuth tests (<code>tests/wasm_oauth.rs</code>) and the release bundle test
+use purpose-built components because their behavior is what those tests verify.</p>
 <h3 id="where-the-ci-time-goes">Where the CI time goes<a class="headerlink" href="#where-the-ci-time-goes" title="Permanent link">&para;</a></h3>
 <p>Measured on GitHub's runners after the suites were split, so that a change aimed at speed has a baseline to beat.
 Compiling is the test binaries built instrumented for coverage; running is nextest's own summary line.
@@ -2145,11 +2178,11 @@ is how many times Cargo has to compile what.
 The helpers in <code>tests/common/wasm.rs</code> keep that to one small crate per build:</p>
 <ul>
 <li>Every <code>wasm_*</code> test builds into one shared debug target directory, so <code>wit-bindgen</code> and <code>serde_json</code> compile once.</li>
-<li>Every scaffolded project is seeded with the reference source's <code>Cargo.lock</code>.
+<li>Every scaffolded project is seeded with the mock source's <code>Cargo.lock</code>.
   A scaffold ships none, and without it each build updated the crates.io index and re-resolved 35 packages while holding
   Cargo's package-cache lock, which every other build then waited for.</li>
-<li>The reference source is built in place, in debug, into that shared directory, so a test never waits for the
-  release build with LTO that <code>mise run sources:check</code> and CI's per-source job make.</li>
+<li>The mock source is built in place, in debug, into that shared directory, so generic tests never need a provider build
+  or wait for the release build with LTO that source-owned CI legs make.</li>
 <li>A test that drives <code>memcastle source init</code> must call <code>share_target_of</code> afterwards.
   Without it the project builds in release into a <code>target/</code> of its own and recompiles every dependency, which used to be
   the two slowest tests in the suite.</li>
