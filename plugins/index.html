@@ -1793,9 +1793,9 @@ The shared plugin validation workflow always tests source conformance and archiv
 tested Core <code>main</code> prerelease.
 Callers may additionally name exact plugin-capable stable versions; each gets the same required integration checks.
 Stable Core 0.4.1 does not support plugin installation, so it cannot be added to this matrix.
-Core's separate plugin-contract CI builds a generated project against the Core checkout under test.
+Core's provider workflow builds and tests every in-tree provider on each pull request and main push.
 For cross-repository development, set <code>MEMCASTLE_BIN</code> to a binary built in the Core worktree and run the same smoke check;
-neither normal provider CI nor its release workflow builds unrelated providers or Core from source.</p>
+standalone provider CI and its release workflow build neither unrelated providers nor Core from source.</p>
 <h3 id="shared-ci-and-development-core">Shared CI and development Core<a class="headerlink" href="#shared-ci-and-development-core" title="Permanent link">&para;</a></h3>
 <p>Every successful Core CI run on <code>main</code> that passes the basic, slow, WebAssembly and other required Core jobs
 publishes a Linux amd64 development binary to the fixed
