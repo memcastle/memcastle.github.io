@@ -1104,6 +1104,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Standalone development and compatibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shared-ci-and-development-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shared CI and development Core
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1587,6 +1604,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Standalone development and compatibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shared-ci-and-development-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Shared CI and development Core
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1755,12 +1789,61 @@ requires it. Review contract and WIT changes against both generated modules befo
 Set <code>MEMCASTLE_BIN</code> to a Core binary with plugin support and run <code>python3 scripts/smoke_install.py</code> to preview and install
 the archive into a disposable palace, check installed-but-disabled sources, enable them and register integrations with an
 isolated test agent. The script does not use the user's palace or agent files.
-The provider's CI runs source fixture conformance against the latest stable released Core and also tests plugin install
-when that release supports it; Core's plugin-contract CI builds a generated project against the current Core binary.
-The latest stable Core 0.4.1 predates plugin installation, so source conformance and the current-Core install check are
-separate until a plugin-capable Core is released.
+The shared plugin validation workflow always tests source conformance and archive installation/activation against the
+tested Core <code>main</code> prerelease.
+Callers may additionally name exact plugin-capable stable versions; each gets the same required integration checks.
+Stable Core 0.4.1 does not support plugin installation, so it cannot be added to this matrix.
+Core's separate plugin-contract CI builds a generated project against the Core checkout under test.
 For cross-repository development, set <code>MEMCASTLE_BIN</code> to a binary built in the Core worktree and run the same smoke check;
 neither normal provider CI nor its release workflow builds unrelated providers or Core from source.</p>
+<h3 id="shared-ci-and-development-core">Shared CI and development Core<a class="headerlink" href="#shared-ci-and-development-core" title="Permanent link">&para;</a></h3>
+<p>Every successful Core CI run on <code>main</code> that passes the basic, slow, WebAssembly and other required Core jobs
+publishes five development binaries to the fixed
+<a href="https://github.com/memcastle/memcastle/releases/tag/development"><code>development</code> prerelease</a>.
+The release body contains <code>Core main SHA: &lt;40-character SHA&gt;</code>; assets are named
+<code>memcastle_&lt;SHA&gt;_{linux-amd64,linux-arm64,darwin-amd64,darwin-arm64}</code> and
+<code>memcastle_&lt;SHA&gt;_windows-amd64.exe</code>, with <code>SHA256SUMS_&lt;SHA&gt;</code> covering all five.
+Only after all assets are uploaded does the publisher change the body to the new SHA.
+If CI, a build, or an upload fails, the previously advertised SHA stays in place;
+a superseded commit is not published.
+The <code>development</code> tag is a fixed discovery address, <strong>not</strong> a pointer to the newest source commit:
+read the release body.
+Stable tags, versioning, Homebrew and AUR publication remain independent of this prerelease.
+Core's publishing job uses the existing GitHub App credentials in its <code>release</code> environment;
+binary build jobs need only <code>contents: read</code>.</p>
+<p>Standalone plugins own their build, packaging, versioning and release workflow.
+They keep local <code>scripts/package.py</code>, <code>scripts/check_modules.py</code>, tests and smoke scripts, then upload a built archive
+and source components as an Actions artifact before calling Core's shared validation workflow.
+The shared workflow downloads that artifact; it never builds or packages a plugin.
+Caller jobs grant <code>contents: read</code> for validation and <code>contents: write</code> only where the provider publishes its release.
+For example, after a provider's <code>package</code> job uploads the archive and exposes its relative path:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">permissions</span><span class="p">:</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">jobs</span><span class="p">:</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">validate</span><span class="p">:</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">package</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memcastle/memcastle/.github/workflows/plugin-validation.yaml@&lt;reviewed Core commit&gt;</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">artifact-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugin-package</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">archive-path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ needs.package.outputs.archive }}</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="nt">core-versions</span><span class="p">:</span><span class="w"> </span><span class="s">'[]'</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="nt">extra-smoke-command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python3 scripts/smoke_adoption.py</span>
+</span></code></pre></div>
+<p><code>core-versions</code> is a JSON array of exact stable version tags and defaults to <code>[]</code>,
+yielding the required <code>[main]</code> matrix.
+Add a version such as <code>"0.5.0"</code> only after its released Core binary supports the plugin install contract;
+there is no conditional integration-test skip.
+The required <code>artifact-name</code> and <code>archive-path</code> identify the exact uploaded, already-built plugin;
+include <code>modules/*/source.wasm</code> in that artifact so <code>source test --no-build</code> exercises those bytes.
+The <code>smoke-command</code>, <code>extra-smoke-command</code> and <code>fixture-bin</code> inputs allow provider-owned installation checks and fixtures.
+The provider's release workflow decides when to validate, requires its own reviewed version tag,
+and publishes the archive only after the shared validation succeeds.
+The Core binary action accepts <code>version: main</code> or an exact stable tag and returns <code>binary</code> and <code>core_sha</code> outputs;
+<code>main</code> is verified against the SHA-qualified development checksums and stable binaries against their release checksums.
+Each compatibility matrix leg reports its exact Core revision in the job summary.
+To add another provider, supply its own package/check and archive install scripts,
+select compatible stable tags explicitly, and keep provider-specific fixture setup or legacy migration smokes
+in the caller's inputs.</p>
 
 
 
