@@ -2232,22 +2232,6 @@ The trigger only decides when; the source still decides how to read.</p>
 <td>no</td>
 </tr>
 <tr>
-<td><code>codex</code></td>
-<td>bundled package, <code>sources/codex/</code></td>
-<td>Codex rollout history</td>
-<td>modification time</td>
-<td>yes</td>
-<td>no</td>
-</tr>
-<tr>
-<td><code>chatgpt</code></td>
-<td>bundled package, <code>sources/chatgpt/</code></td>
-<td>ChatGPT export or experimental web history</td>
-<td>repeated sweep</td>
-<td>yes</td>
-<td>OAuth for web, optional manual fallback</td>
-</tr>
-<tr>
 <td><code>github</code></td>
 <td>external <code>memcastle-github</code> plugin</td>
 <td>selected repositories, issues, PRs and wiki revisions</td>
@@ -2255,15 +2239,28 @@ The trigger only decides when; the source still decides how to read.</p>
 <td>yes</td>
 <td>optional <code>GH_TOKEN</code> or <code>GITHUB_TOKEN</code></td>
 </tr>
+<tr>
+<td><code>codex</code></td>
+<td>external <code>memcastle-openai</code> plugin</td>
+<td>Codex rollout history</td>
+<td>modification time</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>chatgpt</code></td>
+<td>external <code>memcastle-openai</code> plugin</td>
+<td>ChatGPT export or experimental web history</td>
+<td>repeated sweep</td>
+<td>yes</td>
+<td>OAuth for web, optional manual fallback</td>
+</tr>
 </tbody>
 </table>
 <p>Only <code>directory</code> is compiled into MemCastle.
 <code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> are <a href="../writing-sources/">WebAssembly sources</a>.
-The bundled ones are built from their directories in the repository and shipped alongside each release
-(release archives and the <code>.deb</code> and <code>.rpm</code> carry them, unpacked, under
-<code>share/memcastle/sources/</code>), so they are installed from the start.
-<code>memcastle source enable &lt;name&gt;</code> is all one needs for a bundled source, with no registry and no network.
-Install the external Pi, OpenCode, Anthropic or GitHub plugin before enabling its source.
+The <code>sources/</code> directory contains a reference WebAssembly implementation; Core currently bundles no WebAssembly sources.
+Install the external Pi, OpenCode, Anthropic, GitHub or OpenAI plugin before enabling its source.
 No Pi, OpenCode, Claude Code, Codex, ChatGPT or GitHub acquisition code is part of the core.
 They run under the same sandbox and pipeline as any source a user writes.
 Other sources are found in <a href="../publishing-sources/">registries</a>.
@@ -2470,10 +2467,18 @@ so it is part of the source's identity and every directory has a cursor of its o
 <code>~/.codex/sessions/YYYY/MM/DD/</code>, or a sessions directory named as its locator.
 It is separate from the Codex integration: this source acquires old and inactive transcripts, while the integration only
 decides when a live Codex session uses MCP.</p>
-<p>It ships with MemCastle and is installed already:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>codex
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>codex
+<p>The <a href="https://github.com/memcastle/memcastle-openai"><code>memcastle-openai</code></a> plugin supplies this source and the separate
+Codex integration.
+Build its archive from the provider checkout until a release is available, then review its two source consent digests:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>/path/to/openai-0.1.0.tar.gz<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--consent<span class="w"> </span><span class="nv">codex</span><span class="o">=</span>CODEX_DIGEST<span class="w"> </span>--consent<span class="w"> </span><span class="nv">chatgpt</span><span class="o">=</span>CHATGPT_DIGEST
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>codex
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>codex
 </span></code></pre></div>
+<p>After upgrading from a Core release that bundled <code>codex</code>, run <code>memcastle source remove codex</code> before plugin installation
+to clear the old enabled-state row; this does not erase mined history or miner definitions.
+If the preview reports historic mined <code>codex</code> data, pass <code>--adopt-source codex</code> after reviewing it.
+Keep the same locator and miner configuration so the existing cursor and documents remain associated with the source.</p>
 <p>The source reads only files named <code>rollout-*.jsonl</code> at the documented date depth, never <code>history.jsonl</code> or another file
 under <code>~/.codex</code>.
 It asks only for read access to that sessions directory and <code>HOME</code> to locate it when no locator is supplied.
@@ -2487,10 +2492,16 @@ does not understand.</p>
 <h3 id="chatgpt"><code>chatgpt</code><a class="headerlink" href="#chatgpt" title="Permanent link">&para;</a></h3>
 <p>ChatGPT conversation history is imported from an official export ZIP with a top-level <code>conversations.json</code>.
 A standalone <code>conversations.json</code> extracted from it is accepted too.
-The source ships disabled like the other bundled packages; enable it, then provide the path on the <strong>daemon's</strong> machine:</p>
+Install the <code>memcastle-openai</code> archive as above, then enable the source and provide the export path on the
+<strong>daemon's</strong> machine:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>chatgpt
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span>/path/to/chatgpt-export.zip
 </span></code></pre></div>
+<p>After upgrading from a Core release that bundled <code>chatgpt</code>, run <code>memcastle source remove chatgpt</code> before installing the
+plugin. This keeps mined history and cursors but removes the old enabled state and OAuth credential;
+sign in again with <code>memcastle source auth chatgpt</code> before web mining.
+Add <code>--adopt-source chatgpt</code> to the plugin install command if the preview reports previously mined ChatGPT data;
+keep the export locator, account label and project filters unchanged to continue from its existing identity.</p>
 <p>The export path is the source's identity.
 Replacing the file at that path with a newer export and mining again revisits each conversation without duplicating
 unchanged drawers; a different file path starts a separate source.
@@ -2526,7 +2537,7 @@ environment; no session value belongs in a mine option or config setting.
 It revisits conversations on every run and fails on incomplete message pages rather than filing a partial transcript.
 This backend is tested against synthetic replies, not yet against a fresh live session; endpoints, login requirements and
 pagination may change.
-See <a href="https://github.com/memcastle/memcastle/tree/main/sources/chatgpt">the source README</a> for its session setup and
+See <a href="https://github.com/memcastle/memcastle-openai/tree/main/modules/chatgpt">the source README</a> for its session setup and
 limits.</p>
 <h3 id="github"><code>github</code><a class="headerlink" href="#github" title="Permanent link">&para;</a></h3>
 <p>Install the <code>memcastle-github</code> plugin with <code>memcastle plugin install github</code>, then enable its source explicitly with

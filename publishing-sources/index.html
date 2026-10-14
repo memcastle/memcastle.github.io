@@ -1851,11 +1851,6 @@ daemon runs it.</p>
 <td>Nothing: it is always there and cannot be removed.</td>
 </tr>
 <tr>
-<td>Bundled</td>
-<td>An ordinary package unpacked beside the binary (<code>codex</code>, <code>chatgpt</code>).</td>
-<td>Nothing: it is installed from the start, and <code>memcastle source enable &lt;name&gt;</code> turns it on.</td>
-</tr>
-<tr>
 <td>Provider plugin</td>
 <td>A separately released archive (for example, <code>memcastle-pi</code> or <code>memcastle-github</code>).</td>
 <td><code>memcastle plugin install &lt;id&gt;</code>; enable each source separately.</td>
@@ -2100,7 +2095,7 @@ asks for: you agree to the permissions of what was actually fetched.
 <code>source show</code> afterwards says where it came from, which registry and, when there is one, which key vouched for it.</p>
 <p><strong>Updating</strong> installs the newest version from the index a registry source was installed from.
 A source you installed from a file has no upstream and is left alone, and a bundled source is updated with MemCastle:
-<code>update</code> leaves it out, and <code>update codex</code> says so (<code>memcastle::source::bundled</code>).
+<code>update</code> leaves it out, and <code>update github</code> says so (<code>memcastle::source::bundled</code>).
 An update keeps the source's state.
 The consent you gave is to a set of permissions, not to a version, so an update that asks for the same permissions needs
 no new agreement, and one that asks for anything else is not installed until you agree to exactly those: the command says
@@ -2158,34 +2153,19 @@ them, and their SHA-256 is checked like any other.</p>
 <p>Whatever the policy, nothing runs without your agreement to the permissions of the exact package, and a package altered
 on disk after install is never run.</p>
 <h2 id="bundled-sources">Bundled sources<a class="headerlink" href="#bundled-sources" title="Permanent link">&para;</a></h2>
-<p>Releases ship <code>codex</code> and <code>chatgpt</code> unpacked,
-one directory each (<code>&lt;name&gt;/memcastle-source.toml</code>,
-<code>&lt;name&gt;/source.wasm</code>), under
-<code>share/memcastle/sources/</code>:
-in the release tarballs, as <code>/usr/share/memcastle/sources/</code> in the <code>.deb</code>, <code>.rpm</code> and AUR package, and under the formula's
-<code>share/memcastle/sources/</code> with Homebrew.
-The release also publishes them alone as <code>memcastle_&lt;version&gt;_sources.tar.gz</code>, which is what the AUR and Homebrew recipes
-fetch, since they install the raw binary asset and not a tarball.
-The daemon finds them beside the binary (the same search as other <a href="../configuration/#runtime-assets">runtime assets</a>),
-or in <code>mining.bundled_dir</code>.</p>
-<p>They are installed from the start, and run from where the release put them:
-<code>memcastle source list</code> shows bundled sources as <code>bundled</code> and <code>installed</code>; enable a bundled source by its own name.
-The Claude Code history source is distributed instead through the <code>anthropic</code> plugin.
-Enabling is the consent: a bundled source is as trusted as the MemCastle that carries it, so it is not asked to be
-agreed to as an installed package is, and <code>memcastle source show codex</code> prints what it may read and run.
-They are not linked into the binary, and they cannot be installed again, updated or removed;
-only whether one is enabled is yours, and it survives an upgrade, which brings the new version of the source with it.
-A package file you install under the same name (<code>memcastle source install ./codex</code>) is read instead, and removing it brings
-the bundled one back.
-A standalone binary or a checkout carries none: install the official ones from the registry below.</p>
+<p>Core currently ships no bundled WebAssembly sources; <code>share/memcastle/sources/</code> is empty.
+The runtime can still load a bundle supplied through <code>mining.bundled_dir</code>, and its sources appear as <code>bundled</code> and
+<code>installed</code> until enabled by the user. The release packaging script writes the empty directory to prevent older source
+archives from remaining in an upgraded installation.</p>
 <p>The set is a line in <code>packaging/sources/build.sh</code>, which a release and <code>mise run sources:package</code> both run,
 and it does not constrain the runtime: any directory under <code>sources/</code> could be added.
 <code>directory</code> is the worked example of the built-in source and is not bundled.</p>
 <p>The bundle shares its root with the agent integrations and the skills: <code>assets.dir</code> is the one directory a package
 installs into, and <code>sources/</code> is one of the directories under it (see <a href="../configuration/#runtime-assets">Runtime assets</a>
 and <a href="../integrations/">Agent integrations</a>).
-The Claude Code, Pi, OpenCode and GitHub sources live in external <code>memcastle-anthropic</code>, <code>memcastle-pi</code>,
-<code>memcastle-opencode</code> and <code>memcastle-github</code> plugins; a source is separate from an agent integration.</p>
+Claude Code, Pi, OpenCode, GitHub, Codex and ChatGPT sources live in the external <code>memcastle-anthropic</code>,
+<code>memcastle-pi</code>, <code>memcastle-opencode</code>, <code>memcastle-github</code> and <code>memcastle-openai</code> plugins;
+a source is separate from an agent integration.</p>
 <h2 id="the-official-registry">The official registry<a class="headerlink" href="#the-official-registry" title="Permanent link">&para;</a></h2>
 <p>The official registry is a static file in this repository, <a href="https://github.com/memcastle/memcastle/blob/main/docs/registry.json"><code>docs/registry.json</code></a>,
 published at <code>https://memcastle.github.io/registry.json</code> from the root of the documentation site's <code>gh-pages</code> branch.

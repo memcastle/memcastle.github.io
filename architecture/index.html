@@ -2115,7 +2115,9 @@ only that integration, with no daemon dependency or module download.</p>
     FS --&gt;|local integration install| C[Agent integration]
     W --&gt;|mining job| DB
     C -.-&gt;|HTTP and MCP| A</code></pre>
-<p><code>registry.json</code> continues to serve legacy single-source packages; it is never interpreted as a plugin catalogue.</p>
+<p><code>registry.json</code> continues to serve legacy single-source packages; it is never interpreted as a plugin catalogue.
+For example, <code>memcastle-openai</code> supplies the separate <code>codex</code> and <code>chatgpt</code> source modules plus a <code>codex</code> agent integration.
+The shared OpenAI-compatible embeddings HTTP protocol stays in Core and needs no OpenAI product plugin.</p>
 <h2 id="change-notices-a-bus-not-a-database-feature">Change notices: a bus, not a database feature<a class="headerlink" href="#change-notices-a-bus-not-a-database-feature" title="Permanent link">&para;</a></h2>
 <p>A client that wants to know "something changed" without polling reads <code>GET /api/events</code>, a server-sent events stream
 (<a href="../adr/041-server-sent-events-for-dashboard-updates/">ADR-041</a>).

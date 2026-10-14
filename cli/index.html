@@ -2878,11 +2878,13 @@ compatibility before any code becomes available.
 A local archive or already-built project is read by the CLI for a preview, then sent to that same daemon for validation.
 Each source module that asks for permissions needs its own reviewed consent digest; <code>--yes</code> explicitly approves the
 displayed permissions, while a non-interactive install without <code>--consent MODULE=DIGEST</code> is refused.
-Installing a plugin never enables its sources or installs its integrations.
+Installing a plugin never enables a new source or installs its integrations.
 <code>source enable</code> and <code>integration install</code> are separate module lifecycle operations.
 <code>update</code> preserves each source's state and its existing permissions agreement, asking again only for changed grants.
 If a source ID has mined data from a removed legacy package, <code>plugin install</code> refuses to attach it silently;
 repeat with <code>--adopt-source SOURCE</code> after reviewing the source identity and its existing history.
+If the source was bundled by an older Core, first upgrade Core, run <code>source remove SOURCE</code> to clear its former package
+row, then install with <code>--adopt-source SOURCE</code> and enable it again; removing the row also clears its credential.
 <code>--yes</code> approves permissions, but never substitutes for this explicit adoption.
 <code>uninstall</code> refuses configured miners, active sources or jobs, installed integrations and dependent plugins,
 and preserves everything already mined.
@@ -3088,10 +3090,10 @@ Output is the trigger as it is now in a terminal, and JSON when standard output 
 </span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
 </span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>&lt;AGENT&gt;
 </span></code></pre></div>
-<p>Install, update and remove integrations for coding agents: Core ships <code>codex</code>;
-<code>pi</code>, <code>opencode</code> and <code>claude-code</code> are available after installing their external
-<a href="../integrations-pi/"><code>memcastle-pi</code></a>, <a href="../integrations-opencode/"><code>memcastle-opencode</code></a> and
-<a href="../integrations-claude-code/"><code>memcastle-anthropic</code></a> plugins.
+<p>Install, update and remove integrations for coding agents after installing their provider plugins:
+<a href="../integrations-pi/"><code>memcastle-pi</code></a> for <code>pi</code>, <a href="../integrations-opencode/"><code>memcastle-opencode</code></a> for <code>opencode</code>,
+<a href="../integrations-claude-code/"><code>memcastle-anthropic</code></a> for <code>claude-code</code>, and
+<a href="../integrations-codex/"><code>memcastle-openai</code></a> for <code>codex</code>.
 <a href="../integrations/">Integrations</a> is the guide; this is the reference.</p>
 <p>All four are <strong>local</strong>: they read files and run the agent's own command, need no daemon, no palace and no network, and are
 not available to MCP clients.

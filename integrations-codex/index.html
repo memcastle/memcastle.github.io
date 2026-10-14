@@ -1543,7 +1543,11 @@
 
 
 <h1 id="codex-integration">Codex integration<a class="headerlink" href="#codex-integration" title="Permanent link">&para;</a></h1>
-<p><code>memcastle integration install codex</code> installs the bundled Codex plugin through a local marketplace.
+<p>Install the <a href="https://github.com/memcastle/memcastle-openai"><code>memcastle-openai</code></a> plugin first, after reviewing the
+<code>codex</code> and <code>chatgpt</code> source consent digests shown by its preview.
+<code>memcastle integration install codex</code> then registers its Codex integration through a local marketplace.
+Already installed Codex integrations retain their agent receipt; run <code>memcastle integration install codex</code> after installing
+the external plugin to refresh the installed copy when its assets differ.
 It uses Codex's native HTTP MCP transport at <code>http://127.0.0.1:8420/mcp</code>.
 When the daemon requires authentication, export <code>MEMCASTLE_AUTH_TOKEN</code> before starting Codex.
 The installer never edits <code>~/.codex/config.toml</code> and never writes a token.</p>

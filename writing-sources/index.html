@@ -2435,18 +2435,15 @@ Publishing one, finding one by name, updating it, signing it and trusting a publ
 <code>sources/directory/</code> is the built-in <code>directory</code> source as a Rust component, and is the worked example to read.
 The Pi coding agent's session-history source now lives in
 <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a> and retains its original <code>pi</code> ID.
-<code>sources/chatgpt/</code> imports ChatGPT export ZIPs or standalone JSON, with an experimental private-web backend described in
-<a href="../mining-sources/#chatgpt">ChatGPT</a>.
+The <a href="https://github.com/memcastle/memcastle-openai"><code>memcastle-openai</code></a> plugin owns the <code>codex</code> and <code>chatgpt</code> sources,
+including ChatGPT export ZIP and experimental web imports (<a href="../mining-sources/#chatgpt">ChatGPT</a>).
 The OpenCode coding agent's session-history source lives in
 <a href="https://github.com/memcastle/memcastle-opencode"><code>memcastle-opencode</code></a>; it wraps <code>run-process</code> and is tested against a
 stand-in for the agent's CLI (<a href="../mining-sources/#opencode">OpenCode</a>).
 The GitHub repository source lives in <a href="https://github.com/memcastle/memcastle-github"><code>memcastle-github</code></a> and retains
 its original <code>github</code> ID.
-The sources that ship with MemCastle's releases (<code>codex</code> and <code>chatgpt</code>)
-are built from here.
-They are bundled without being compiled into the binary.
-They use exactly the package contract a user installs; a release carries them unpacked, so they are installed from the
-start, and <code>memcastle source enable &lt;name&gt;</code> turns one on.</p>
+Core currently bundles no WebAssembly sources; <code>sources/directory/</code> remains as the reference implementation of the
+same package contract that provider plugins use.</p>
 <h2 id="testing-your-source-in-ci">Testing your source in CI<a class="headerlink" href="#testing-your-source-in-ci" title="Permanent link">&para;</a></h2>
 <p><code>memcastle source test</code> needs no daemon and builds the component first, so it is all a CI job has to run.
 In a project of your own, install the <code>wasm32-wasip2</code> target (or your template's toolchain), build <code>memcastle</code>,

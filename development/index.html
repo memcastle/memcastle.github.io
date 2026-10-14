@@ -1896,7 +1896,7 @@ so the storage engine itself needs no C/C++ toolchain.
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard hooks, described below</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:check<span class="w"> </span><span class="c1"># typecheck and test each package under integrations/, and install the bundles (needs bun)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:check<span class="w"> </span><span class="c1"># test the Core-shipped integration and install its bundle</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:build<span class="w"> </span><span class="c1"># bundle integrations/*/src into integrations/*/dist, for `--assets-dir "$PWD"`</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:package<span class="w"> </span><span class="c1"># lay out what a release ships in target/bundled-integrations</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mise<span class="w"> </span>run<span class="w"> </span>web:check<span class="w">  </span><span class="c1"># typecheck, test, build and package the web UI, then serve it from a real daemon (needs bun and node)</span>
@@ -2080,8 +2080,8 @@ Every path, environment variable, flag and the precedence between them is in <a 
     <a href="https://github.com/memcastle/memcastle-opencode"><code>memcastle-opencode</code></a>.</li>
 <li>The GitHub repository source's fixtures, conformance and installation/mining smoke checks live in
     <a href="https://github.com/memcastle/memcastle-github"><code>memcastle-github</code></a>.</li>
-<li><code>sources/chatgpt/core-tests.rs</code> — source-owned behavior beyond conformance, run in its Linux CI leg;
-    Codex's behavior is covered by its conformance fixture.</li>
+<li>The Codex and ChatGPT modules' fixtures, conformance and independent plugin-install/adoption smokes live in
+    <a href="https://github.com/memcastle/memcastle-openai"><code>memcastle-openai</code></a>.</li>
 <li><code>tests/wasm_registry.rs</code> — registries against a real daemon (a directory registry written with the same calls
     <code>source index</code> makes): search, install by name with consent, an archive that is not the one published, a package that
     is not the one the index says, version choice, the trust policy, update with and without new permissions, a bundled
@@ -2089,9 +2089,8 @@ Every path, environment variable, flag and the precedence between them is in <a 
     stand-in for the API, with a digest that does not match and a repository that cannot be read), an unreadable
     registry, and the CLI publishing, signing, searching, installing and updating (in-process and subprocess,
     WebAssembly suite, using the synthetic Core mock source).</li>
-<li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code>, the release script, packaging Core-shipped sources as an
-    unpacked bundle and as <code>&lt;name&gt;-&lt;version&gt;.tar.gz</code> archives, and a daemon that lists it as installed and enables it
-    with no consent (WebAssembly suite, Unix only).</li>
+<li><code>tests/wasm_bundle.rs</code> — <code>packaging/sources/build.sh</code> removes stale bundled components and archives from the
+    now-empty Core source package tree (WebAssembly suite, Unix only).</li>
 <li><code>tests/wasm_runtime.rs</code>, <code>tests/wasm_plugin.rs</code> — installable mock sources against a real daemon: consent, independent
     module lifecycles, mining through the shared pipeline, retained data, and refusing a component altered on disk
     (in-process, WebAssembly suite).</li>

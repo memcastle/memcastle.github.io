@@ -3283,11 +3283,6 @@ The schema and the data migrations are always built into the binary and are not 
 <td>the daemon, which lists them as installed and runs them in place (see <a href="../publishing-sources/#bundled-sources">Publishing and installing sources</a>)</td>
 </tr>
 <tr>
-<td><code>integrations/&lt;id&gt;/</code></td>
-<td>Core's Codex integration: a <code>memcastle-integration.toml</code> and a bundled <code>dist/</code></td>
-<td><code>memcastle integration</code> (see <a href="../integrations/">Integrations</a>); external provider modules live in plugin installations</td>
-</tr>
-<tr>
 <td><code>skills/</code></td>
 <td>the shared agent skills</td>
 <td><code>memcastle integration</code>, which copies the ones an integration's manifest names into its installed copy</td>
@@ -3300,8 +3295,7 @@ The schema and the data migrations are always built into the binary and are not 
 </tbody>
 </table>
 <p>A standalone binary has none (the dashboard is not built into it, so with <code>web.enable</code> it answers a page that says the
-files are missing), so you only need the setting to point at a package unpacked somewhere else, or at a
-checkout of the repository to install the integrations as built there.
+files are missing), so point the setting at a package or checkout only when it supplies assets you need.
 The bundled sources are taken from <code>&lt;root&gt;/sources</code> when a directory in it holds a <code>memcastle-source.toml</code> and a
 <code>source.wasm</code>, and <code>mining.bundled_dir</code> outranks that.
 A root with no such package, like a checkout (whose <code>sources/</code> holds projects, with their component under <code>dist/</code>),
@@ -3387,7 +3381,7 @@ Define a miner explicitly; no Claude Code client or source installation creates 
 <p><code>since</code> narrows by transcript modification time and <code>dir</code> matches the working directory recorded in each transcript.
 Use a separate miner or run <code>memcastle mine claude --full</code> when a restored transcript predates its cursor.</p>
 <h3 id="chatgpt-project-miner">ChatGPT project miner<a class="headerlink" href="#chatgpt-project-miner" title="Permanent link">&para;</a></h3>
-<p>The bundled <code>chatgpt</code> source can select projects on its experimental web backend using miner options.
+<p>The external <code>chatgpt</code> source can select projects on its experimental web backend using miner options.
 Sign the source in with <code>memcastle source auth chatgpt</code> on the daemon's machine before running web miners.
 This source's desktop-compatible OAuth bearer was verified to read history without cookies using a browser-style
 User-Agent; the old manually supplied web session remains a fallback (<a href="../mining-sources/#chatgpt">ChatGPT</a>).</p>

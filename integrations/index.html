@@ -1897,10 +1897,9 @@ and writes checkpoints as the conversation goes.
 It decides <em>when</em> to call MemCastle and does nothing else; every call goes to the daemon over MCP and HTTP.
 What each integration must do is the <a href="../integration-contract/">Integration contract</a>.
 This page is about getting one onto your machine.</p>
-<p>MemCastle ships the <strong>Codex</strong> integration; Pi, OpenCode and Claude Code are standalone provider plugins.
-The <strong>Pi</strong> integration comes from the independently released <a href="../integrations-pi/">memcastle-pi provider plugin</a>.
-<code>memcastle integration</code> installs any of them locally, after its plugin is available.
-Core's integrations are part of its release; neither they nor an installed provider plugin need an npm download on the
+<p>Pi, OpenCode, Claude Code and Codex integrations are independently distributed provider plugins.
+<code>memcastle integration</code> installs any of them locally, after its provider plugin is available.
+An installed provider plugin needs no npm download on the
 user's machine.
 <code>plugin install</code> only makes it selectable; <code>integration install &lt;module-id&gt;</code> still copies and registers the selected
 agent-side files locally, and <code>integration remove</code> undoes that registration without uninstalling its parent plugin.</p>
@@ -1965,10 +1964,10 @@ MCP and skills stay usable on their own, with no integration installed:</p>
 <td><a href="../integrations-claude-code/">Claude Code</a></td>
 </tr>
 <tr>
-<td><code>codex</code></td>
+<td><code>codex</code> (external plugin)</td>
 <td><a href="https://developers.openai.com/codex">Codex</a></td>
 <td>0.154.0 and later</td>
-<td>0.2 and later</td>
+<td>0.4 and later</td>
 <td><a href="../integrations-codex/">Codex</a></td>
 </tr>
 </tbody>
@@ -1978,23 +1977,23 @@ MCP and skills stay usable on their own, with no integration installed:</p>
 <ul>
 <li>The agent is installed and its command (<code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>) is on your <code>PATH</code>.
   The installer runs it to read its version and, for Pi, to register the integration with it.</li>
-<li>The MemCastle you run ships an integration, or you have installed its provider plugin (see
-  <a href="#where-integrations-come-from">Where integrations come from</a>).
-  A standalone binary downloaded on its own ships none, and says so.</li>
+<li>Install the integration's provider plugin first (see <a href="#where-integrations-come-from">Where integrations come from</a>).
+  Core ships no agent-specific integration assets.</li>
 <li>The agent and MemCastle versions are inside the ranges the integration declares.
   The installer refuses otherwise, before it writes anything, and tells you which version it found.</li>
 </ul>
-<p>You do not need bun, node or npm: shipped integrations already contain their runtime or declarative assets.
+<p>You do not need bun, node or npm: plugin integrations already contain their runtime or declarative assets.
 The daemon does not have to be running to install one; it has to be running when the agent uses it.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>anthropic
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>claude-code
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>codex
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># For Pi, first install its provider archive (see the Pi guide), then:</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>pi
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># For OpenCode, first install its provider archive (see the OpenCode guide), then:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>opencode
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># For Codex, first install memcastle-openai (see the Codex guide), then:</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>codex
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># For Pi, first install its provider archive (see the Pi guide), then:</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>pi
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># For OpenCode, first install its provider archive (see the OpenCode guide), then:</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>opencode
 </span></code></pre></div>
 <p><code>install</code> does five things, in this order, and stops at the first one that fails:</p>
 <ol>
@@ -2073,7 +2072,8 @@ working if the package that shipped it is gone.</p>
 </ul>
 <h2 id="configure">Configure<a class="headerlink" href="#configure" title="Permanent link">&para;</a></h2>
 <p>Pi and OpenCode read their settings from the environment (and OpenCode also reads plugin options).
-Codex uses its bundled MCP declaration at <code>http://127.0.0.1:8420/mcp</code> and reads a token from <code>MEMCASTLE_AUTH_TOKEN</code>.
+Codex uses the <code>memcastle-openai</code> plugin's MCP declaration at <code>http://127.0.0.1:8420/mcp</code> and reads a token from
+<code>MEMCASTLE_AUTH_TOKEN</code>.
 None of these integrations stores a token in files that <code>install</code> writes.
 The variables are listed in each guide: <a href="../integrations-pi/#configuration">Pi</a>,
 <a href="../integrations-opencode/#configuration">OpenCode</a>, and <a href="../integrations-codex/">Codex</a>.</p>
@@ -2098,16 +2098,14 @@ It needs neither the package nor the shipped files, so it still works after MemC
 and it works when the agent is gone too (the copy is deleted, and the report says the agent could not be asked).
 Removing something that is not installed succeeds and says so.</p>
 <h2 id="where-integrations-come-from">Where integrations come from<a class="headerlink" href="#where-integrations-come-from" title="Permanent link">&para;</a></h2>
-<p>Integrations and shared skills live under one <strong>assets root</strong>, in the same layout wherever the root is,
-in a package and in a checkout alike:</p>
+<p>Core's shared skills live under one <strong>assets root</strong>, in the same layout in a package and a checkout.
+Installed provider plugins supply their own integration assets separately:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>&lt;assets root&gt;/
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── integrations/
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   └── codex/
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│       ├── memcastle-integration.toml
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│       └── dist/
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>├── skills/                        (the shared skills, referenced by name)
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│   └── &lt;name&gt;/SKILL.md
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>└── sources/                       (the bundled mining sources, see below)
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   └── (no Core-shipped agent integration)
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── skills/                        (the shared skills, referenced by name)
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│   └── &lt;name&gt;/SKILL.md
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>└── sources/                       (the bundled mining sources, see below)
 </span></code></pre></div>
 <p>The assets root is the one <a href="../configuration/#runtime-assets">runtime assets</a> directory, chosen in this order:</p>
 <ol>
@@ -2115,35 +2113,25 @@ in a package and in a checkout alike:</p>
    An explicit choice never falls through: a directory that does not exist is an error.</li>
 <li>The package's <code>share/memcastle</code> next to the executable (<code>/usr/bin/memcastle</code> finds <code>/usr/share/memcastle</code>), then
    <code>/usr/local/share/memcastle</code> and <code>/usr/share/memcastle</code>.</li>
-<li>Nothing: a standalone binary has no integrations to install.</li>
+<li>Nothing: a standalone binary still finds integrations in installed provider plugins.</li>
 </ol>
 <p>Any of the MemCastle release packages carry the assets root: the tarballs, the <code>.deb</code> and <code>.rpm</code>, the AUR package and the
 Homebrew formula (see <a href="../installation/">Installation</a>).
-The standalone tarball <code>memcastle_&lt;version&gt;_integrations.tar.gz</code> holds just the <code>integrations/</code> and <code>skills/</code> trees.</p>
+The standalone tarball <code>memcastle_&lt;version&gt;_integrations.tar.gz</code> holds the empty <code>integrations/</code> tree and shared <code>skills/</code>.</p>
 <p><code>memcastle integration list</code> prints the assets root it used and how it was chosen, so you can see which of the two you
 are looking at.</p>
 <h3 id="developing-memcastle">Developing MemCastle<a class="headerlink" href="#developing-memcastle" title="Permanent link">&para;</a></h3>
-<p>The same commands work from a checkout of the repository, with no packaging step and without touching an installed
-MemCastle:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:build<span class="w">                                  </span><span class="c1"># prepare the Core-shipped declarative assets in dist/</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span><span class="w">               </span><span class="c1"># the checkout is the assets root</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>codex<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
+<p>To develop an integration, build the archive from its provider checkout and install that plugin into a disposable palace.
+Core's checkout still holds the shared skills and source-packaging assets:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:package<span class="w">  </span><span class="c1"># package the shared skills</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
 </span></code></pre></div>
-<p>The checkout already has the layout above (<code>integrations/&lt;id&gt;/</code>, <code>skills/</code>), and <code>integrations:build</code> creates the <code>dist/</code>
-directories for Core-shipped integrations.
-Installing from a checkout goes through exactly the code a package install does, so what you test is what ships.
-Because a development build never changes the integration's version, the installer compares file contents as well:
-rebuild, run <code>memcastle integration update codex --assets-dir "$PWD"</code>, and the new bundle replaces the old one.
-<code>MEMCASTLE_ASSETS_DIR</code> does the same as the flag for a whole shell session.
-In this repository <code>mise.toml</code> sets it to the checkout for you: with mise active (<code>mise run</code>, <code>mise cli</code>, or an activated
-shell), any <code>memcastle integration ...</code> run from the project directory, even an installed <code>memcastle</code>, reads the
-checkout's bundles and not the package's, so the flag is not needed.
-Run the command from another directory to use the installed assets, and see
+<p><code>MEMCASTLE_ASSETS_DIR</code> does the same as the flag for a whole shell session.
+In this repository <code>mise.toml</code> sets it to the Core checkout during development.
+Run the command from another directory to use installed assets, and see
 <a href="../development/#running-the-daemon-locally">Development</a> for what else it sets.
-<code>mise run integrations:check</code> unsets it, so the checks never depend on it.</p>
-<p><code>mise run integrations:package</code> lays out the tree a release carries in <code>target/bundled-integrations</code>,
-for installing the packaged layout with <code>--assets-dir target/bundled-integrations</code>.
-<code>mise run integrations:check</code> bundles the integrations and installs them from both layouts as part of the checks.</p>
+<code>mise run integrations:check</code> unsets it and checks that Core packages no agent integration.</p>
+<p><code>mise run integrations:package</code> lays out the shared skills under <code>target/bundled-integrations</code> for a release.</p>
 <p>The bundled mining sources use the same root: with <code>--assets-dir</code> pointing at a root whose <code>sources/</code> holds a
 <code>source.wasm</code> and a <code>memcastle-source.toml</code> in each directory, the daemon offers those as the
 <a href="../publishing-sources/#bundled-sources">bundled sources</a>.
