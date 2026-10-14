@@ -2249,7 +2249,7 @@ The trigger only decides when; the source still decides how to read.</p>
 </tr>
 <tr>
 <td><code>github</code></td>
-<td>bundled package, <code>sources/github/</code></td>
+<td>external <code>memcastle-github</code> plugin</td>
 <td>selected repositories, issues, PRs and wiki revisions</td>
 <td>API updates / Git history</td>
 <td>yes</td>
@@ -2259,11 +2259,11 @@ The trigger only decides when; the source still decides how to read.</p>
 </table>
 <p>Only <code>directory</code> is compiled into MemCastle.
 <code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> are <a href="../writing-sources/">WebAssembly sources</a>.
-The in-tree ones are built from their directories in the repository and shipped alongside each release
+The bundled ones are built from their directories in the repository and shipped alongside each release
 (release archives and the <code>.deb</code> and <code>.rpm</code> carry them, unpacked, under
 <code>share/memcastle/sources/</code>), so they are installed from the start.
 <code>memcastle source enable &lt;name&gt;</code> is all one needs for a bundled source, with no registry and no network.
-Install the external Pi, OpenCode or Anthropic plugin before enabling its source.
+Install the external Pi, OpenCode, Anthropic or GitHub plugin before enabling its source.
 No Pi, OpenCode, Claude Code, Codex, ChatGPT or GitHub acquisition code is part of the core.
 They run under the same sandbox and pipeline as any source a user writes.
 Other sources are found in <a href="../publishing-sources/">registries</a>.
@@ -2529,7 +2529,14 @@ pagination may change.
 See <a href="https://github.com/memcastle/memcastle/tree/main/sources/chatgpt">the source README</a> for its session setup and
 limits.</p>
 <h3 id="github"><code>github</code><a class="headerlink" href="#github" title="Permanent link">&para;</a></h3>
-<p>The <code>github</code> source is shipped with releases, but must be enabled explicitly with <code>memcastle source enable github</code>.
+<p>Install the <code>memcastle-github</code> plugin with <code>memcastle plugin install github</code>, then enable its source explicitly with
+<code>memcastle source enable github</code>.
+To upgrade an enabled bundled <code>github</code> source, first upgrade Core so it no longer ships that bundle, check whether the
+source was enabled, and run <code>memcastle source remove github --yes</code> to remove its old source-package record.
+Removal preserves mined history and cursors; the plugin installer refuses the old record until it is removed.
+Install with <code>memcastle plugin install github --adopt-source github</code> if the old source mined data, review the new
+permissions, and re-enable it if it was enabled before the upgrade.
+The adoption flag explicitly authorizes reuse of existing <code>github</code> data; it is unnecessary if the source never mined.
 It mines only repositories selected by the required <code>include</code> option, with <code>exclude</code> taking precedence.
 An exact <code>owner/repo</code> names one repository; <code>org/*</code> enumerates repositories owned by that organization, and
 <code>owner/repo-*</code> selects a subset of an owner's repositories.
@@ -2549,7 +2556,7 @@ rate limits; no token belongs in the miner options or <code>memcastle.toml</code
 Public repositories can be read without a token.
 The manifest grants the two variable names and the three programs, not a general filesystem or WASI network grant.
 For an opt-in <a href="../triggers/">poll or schedule trigger</a>, point it at a GitHub miner; the trigger only requests a normal run.
-See the <a href="https://github.com/memcastle/memcastle/tree/main/sources/github">GitHub source README</a> for full scope examples
+See the <a href="https://github.com/memcastle/memcastle-github/tree/main/modules/github">GitHub source README</a> for full scope examples
 and acquisition limits.</p>
 <h2 id="writing-a-source">Writing a source<a class="headerlink" href="#writing-a-source" title="Permanent link">&para;</a></h2>
 <p>There are two ways to add a source.</p>

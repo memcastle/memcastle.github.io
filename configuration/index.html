@@ -3368,7 +3368,8 @@ Likewise REST callers must replace <code>scope</code> and <code>config</code> wi
   approval whenever its value changes.
   <code>directory</code> declares <code>since</code>; <code>pi</code>, <code>opencode</code> and <code>claude</code> declare <code>since</code> and <code>dir</code>.
   <code>chatgpt</code> declares a web-only <code>projects</code> filter in addition to <code>mode</code> and <code>account</code> options.
-  <code>github</code> requires <code>include</code> repository patterns; <code>exclude</code> and separate wiki patterns can narrow them further.</li>
+  The external <code>memcastle-github</code> plugin's source requires <code>include</code> repository patterns; <code>exclude</code> and separate wiki
+  patterns can narrow them further.</li>
 </ul>
 <h3 id="claude-code-history-miner">Claude Code history miner<a class="headerlink" href="#claude-code-history-miner" title="Permanent link">&para;</a></h3>
 <p>The externally installed <code>claude</code> source reads only session transcripts under <code>~/.claude/projects</code>.
@@ -3406,7 +3407,7 @@ Without <code>projects</code>, a web miner includes ordinary conversations and e
 project selection.
 Changing or removing an option that broadens project selection still follows the <code>--allow-broaden</code> rule.</p>
 <h3 id="github-repository-and-wiki-miners">GitHub repository and wiki miners<a class="headerlink" href="#github-repository-and-wiki-miners" title="Permanent link">&para;</a></h3>
-<p>The bundled GitHub source requires an explicit repository <code>include</code> pattern.
+<p>The <code>memcastle-github</code> plugin's source requires an explicit repository <code>include</code> pattern.
 <code>org/*</code> selects repositories owned by an organization; an <code>exclude</code> pattern overrides inclusion.
 The wiki can be selected independently within those repositories with <code>wiki_include</code> and <code>wiki_exclude</code>.</p>
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[[miners]]</span>

@@ -1743,8 +1743,8 @@ The history is the value.</p>
 <li><a href="033-source-distribution/">ADR-033</a> — sources are distributed as versioned packages through static JSON registry
   indexes (a URL, a <code>file://</code> URL or a directory, so offline needs no separate mechanism), pinned by SHA-256 and optionally
   signed with ed25519 under a <code>mining.trust</code> policy; bundled, registry and local sources share one lifecycle, <code>update</code>
-  never widens a source's permissions without consent; Core bundles <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> as ordinary
-  packages while Pi and OpenCode ship as provider plugins
+  never widens a source's permissions without consent; Core bundles <code>codex</code> and <code>chatgpt</code> as ordinary
+  packages while Claude Code, Pi, OpenCode and GitHub ship as provider plugins
   (completes ADR-026)</li>
 <li><a href="034-agent-integration-distribution/">ADR-034</a> — integrations ship with MemCastle as bundles (no npm package, no
   <code>bun install</code>) under the one assets root beside <code>sources/</code> and <code>skills/</code>, a checkout being a valid root;

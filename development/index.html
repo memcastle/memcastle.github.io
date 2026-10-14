@@ -2078,8 +2078,10 @@ Every path, environment variable, flag and the precedence between them is in <a 
     <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a>, run against a released or locally built Core binary.</li>
 <li>The OpenCode history source's fixtures, conformance and installation/mining smoke checks live in
     <a href="https://github.com/memcastle/memcastle-opencode"><code>memcastle-opencode</code></a>.</li>
-<li><code>sources/{claude,chatgpt,github}/core-tests.rs</code> — source-owned behavior beyond conformance, run in each source's
-    Linux CI leg; Codex's behavior is covered by its conformance fixture.</li>
+<li>The GitHub repository source's fixtures, conformance and installation/mining smoke checks live in
+    <a href="https://github.com/memcastle/memcastle-github"><code>memcastle-github</code></a>.</li>
+<li><code>sources/chatgpt/core-tests.rs</code> — source-owned behavior beyond conformance, run in its Linux CI leg;
+    Codex's behavior is covered by its conformance fixture.</li>
 <li><code>tests/wasm_registry.rs</code> — registries against a real daemon (a directory registry written with the same calls
     <code>source index</code> makes): search, install by name with consent, an archive that is not the one published, a package that
     is not the one the index says, version choice, the trust policy, update with and without new permissions, a bundled

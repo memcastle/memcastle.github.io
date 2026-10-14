@@ -1665,6 +1665,8 @@ Its format-1 <code>plugins[]</code> entries name an <code>id</code>, <code>descr
 Entries may list signed versions with <code>version</code>, archive <code>url</code> and <code>sha256</code>, or omit <code>versions</code> to discover
 digest-bearing GitHub Release assets named <code>&lt;plugin-id&gt;-&lt;version&gt;.tar.gz</code>.
 An entry may appear before its first release; it is searchable, but cannot be installed until an archive is published.
+The source-only <code>memcastle-github</code> plugin is listed here rather than in the legacy source registry;
+its <code>github</code> module must be installed with <code>memcastle plugin install github</code> before it can be enabled.
 For a signed static entry, run <code>memcastle source keygen &lt;private-key&gt;</code> once, then
 <code>memcastle plugin sign &lt;archive&gt; --key &lt;private-key&gt;</code> and publish its reported <code>sha256</code> and <code>signature</code> fields.
 Users who require that publisher's signature set <code>plugins.trust = "required"</code> and list its public key under

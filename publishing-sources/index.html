@@ -1852,13 +1852,13 @@ daemon runs it.</p>
 </tr>
 <tr>
 <td>Bundled</td>
-<td>An ordinary package unpacked beside the binary (<code>codex</code>, <code>chatgpt</code>, <code>github</code>).</td>
+<td>An ordinary package unpacked beside the binary (<code>codex</code>, <code>chatgpt</code>).</td>
 <td>Nothing: it is installed from the start, and <code>memcastle source enable &lt;name&gt;</code> turns it on.</td>
 </tr>
 <tr>
 <td>Provider plugin</td>
-<td>A separately released multi-module archive (for example, <code>memcastle-pi</code>).</td>
-<td><code>memcastle plugin install &lt;archive&gt;</code>; enable each source separately.</td>
+<td>A separately released archive (for example, <code>memcastle-pi</code> or <code>memcastle-github</code>).</td>
+<td><code>memcastle plugin install &lt;id&gt;</code>; enable each source separately.</td>
 </tr>
 <tr>
 <td>Registry</td>
@@ -2158,7 +2158,7 @@ them, and their SHA-256 is checked like any other.</p>
 <p>Whatever the policy, nothing runs without your agreement to the permissions of the exact package, and a package altered
 on disk after install is never run.</p>
 <h2 id="bundled-sources">Bundled sources<a class="headerlink" href="#bundled-sources" title="Permanent link">&para;</a></h2>
-<p>Releases ship <code>codex</code>, <code>chatgpt</code> and <code>github</code> unpacked,
+<p>Releases ship <code>codex</code> and <code>chatgpt</code> unpacked,
 one directory each (<code>&lt;name&gt;/memcastle-source.toml</code>,
 <code>&lt;name&gt;/source.wasm</code>), under
 <code>share/memcastle/sources/</code>:
@@ -2184,13 +2184,13 @@ and it does not constrain the runtime: any directory under <code>sources/</code>
 <p>The bundle shares its root with the agent integrations and the skills: <code>assets.dir</code> is the one directory a package
 installs into, and <code>sources/</code> is one of the directories under it (see <a href="../configuration/#runtime-assets">Runtime assets</a>
 and <a href="../integrations/">Agent integrations</a>).
-The Claude Code, Pi and OpenCode sources live in external <code>memcastle-anthropic</code>, <code>memcastle-pi</code> and
-<code>memcastle-opencode</code> plugins; a source is separate from an agent integration.</p>
+The Claude Code, Pi, OpenCode and GitHub sources live in external <code>memcastle-anthropic</code>, <code>memcastle-pi</code>,
+<code>memcastle-opencode</code> and <code>memcastle-github</code> plugins; a source is separate from an agent integration.</p>
 <h2 id="the-official-registry">The official registry<a class="headerlink" href="#the-official-registry" title="Permanent link">&para;</a></h2>
 <p>The official registry is a static file in this repository, <a href="https://github.com/memcastle/memcastle/blob/main/docs/registry.json"><code>docs/registry.json</code></a>,
 published at <code>https://memcastle.github.io/registry.json</code> from the root of the documentation site's <code>gh-pages</code> branch.
 It lists no versions: it names the GitHub repository that publishes each legacy source archive, and the daemon reads
-its releases. Claude Code, Pi and OpenCode are in the separate <a href="../plugins/"><code>plugins.json</code></a> catalogue.
+its releases. Claude Code, Pi, OpenCode and GitHub are in the separate <a href="../plugins/"><code>plugins.json</code></a> catalogue.
 Registering a source, or changing where it comes from, is therefore a pull request to that file, merged and deployed like
 any documentation change, and publishing a new version is a release of the source's own repository: no new release of
 MemCastle and no change to the registry.
