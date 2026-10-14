@@ -3284,8 +3284,8 @@ The schema and the data migrations are always built into the binary and are not 
 </tr>
 <tr>
 <td><code>integrations/&lt;id&gt;/</code></td>
-<td>the Pi, OpenCode, Claude Code and Codex integrations: a <code>memcastle-integration.toml</code> and a bundled <code>dist/</code></td>
-<td><code>memcastle integration</code> (see <a href="../integrations/">Integrations</a>)</td>
+<td>Core's Codex integration: a <code>memcastle-integration.toml</code> and a bundled <code>dist/</code></td>
+<td><code>memcastle integration</code> (see <a href="../integrations/">Integrations</a>); external provider modules live in plugin installations</td>
 </tr>
 <tr>
 <td><code>skills/</code></td>
@@ -3371,7 +3371,7 @@ Likewise REST callers must replace <code>scope</code> and <code>config</code> wi
   <code>github</code> requires <code>include</code> repository patterns; <code>exclude</code> and separate wiki patterns can narrow them further.</li>
 </ul>
 <h3 id="claude-code-history-miner">Claude Code history miner<a class="headerlink" href="#claude-code-history-miner" title="Permanent link">&para;</a></h3>
-<p>The bundled <code>claude</code> source reads only session transcripts under <code>~/.claude/projects</code>.
+<p>The externally installed <code>claude</code> source reads only session transcripts under <code>~/.claude/projects</code>.
 Define a miner explicitly; no Claude Code client or source installation creates one:</p>
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">[[miners]]</span>
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>

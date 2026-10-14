@@ -1938,7 +1938,7 @@ They apply to <code>mise run</code>, to <code>mise cli</code> and to any shell w
 once you are in the project directory, so <code>mise cli serve</code> already serves the dashboard from <code>web/dist</code> (after
 <code>mise run web:build</code>) and finds the integrations and sources of the checkout, with no flag.
 Because the variables follow the shell, <strong>any <code>memcastle</code> you run from the project directory uses them, including an
-installed one</strong>: <code>memcastle integration install claude-code</code> there installs the assets prepared in the checkout
+installed one</strong>: <code>memcastle integration install codex</code> there installs the assets prepared in the checkout
 (<code>mise run integrations:build</code>) and not the package's.
 Run it from another directory, or <code>env -u MEMCASTLE_ASSETS_DIR memcastle ...</code>, to use the installed assets.
 A flag still wins over the variable (<code>--assets-dir</code>), and your own <code>mise.local.toml</code> can override or drop either.</p>

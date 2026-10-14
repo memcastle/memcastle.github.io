@@ -1960,9 +1960,10 @@ One package asset is the set of sources that ship with MemCastle, under <code>sh
 does not, so it installs a source from a file or from the official registry instead.
 The other package assets are the agent integrations and the skills they expose, under <code>share/memcastle/integrations/</code> and
 <code>share/memcastle/skills/</code>.
-<code>memcastle integration install claude-code</code> copies one to your home and registers it with the agent
+<code>memcastle plugin install anthropic</code> makes the Claude Code integration available;
+<code>memcastle integration install claude-code</code> copies it to your home and registers it with the agent
 (see <a href="../integrations/">Agent integrations</a>).
-The same release packages carry them, and a standalone binary does not.
+Core release packages carry the Codex integration and shared skills, while provider plugins are installed separately.
 The last package asset is the <a href="../web/">web UI</a>, under <code>share/memcastle/web/dist/</code>, which the daemon serves only when
 you set <code>web.enable</code>.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
@@ -1970,8 +1971,8 @@ you set <code>web.enable</code>.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>brew<span class="w"> </span>install<span class="w"> </span>noirbizarre/homebrew-tap/memcastle
 </span></code></pre></div>
 <p>The formula ships macOS builds only (Apple silicon and Intel), the sources bundled with MemCastle under its
-<code>share/memcastle/sources/</code>, so <code>memcastle source enable claude</code> works with no registry, and the agent integrations under
-<code>share/memcastle/integrations/</code>, so <code>memcastle integration install claude-code</code> works without any other download.
+<code>share/memcastle/sources/</code>, and the Codex integration under
+<code>share/memcastle/integrations/</code>; the Claude Code integration is independently released as the Anthropic plugin.
 Install the <a href="../integrations-opencode/#install-update-remove">OpenCode provider plugin</a> separately.
 On Linux, use one of the other methods, including under Linuxbrew.</p>
 <h3 id="arch-linux-aur">Arch Linux (AUR)<a class="headerlink" href="#arch-linux-aur" title="Permanent link">&para;</a></h3>
@@ -1980,8 +1981,7 @@ On Linux, use one of the other methods, including under Linuxbrew.</p>
 <p>The <code>memcastle-bin</code> package installs the release binary for x86_64 and aarch64,
 a systemd user unit, <code>/usr/lib/systemd/user/memcastle.service</code>,
 the bash, zsh and fish completion scripts,
-the sources bundled with MemCastle under <code>/usr/share/memcastle/sources/</code>, so <code>memcastle source enable claude</code> works
-with no registry,
+the sources bundled with MemCastle under <code>/usr/share/memcastle/sources/</code>,
 and the agent integrations and skills under <code>/usr/share/memcastle/integrations/</code> and <code>/usr/share/memcastle/skills/</code>.</p>
 <p>The package owns only those files and its licence under <code>/usr</code>.
 Your configuration (<code>~/.config/memcastle</code>), palace (<code>~/.local/share/memcastle</code>) and state (<code>~/.local/state/memcastle</code>)

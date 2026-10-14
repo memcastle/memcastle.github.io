@@ -1688,7 +1688,8 @@ Two modules of the same type cannot share an ID, and their artifact paths must r
 The parent may also declare <code>shared_config_schema</code> and <code>[authentication]</code> with a public <code>kind</code> and a credential reference;
 no login token or client secret is written into the manifest.
 The OpenCode plugin likewise declares an <code>opencode</code> source and an <code>opencode</code> integration under one plugin.
-The reviewed <a href="../plugins.json"><code>plugins.json</code></a> catalogue lists the standalone <code>memcastle-pi</code> and <code>memcastle-opencode</code>
+The reviewed <a href="../plugins.json"><code>plugins.json</code></a> catalogue lists the standalone <code>memcastle-pi</code>, <code>memcastle-opencode</code> and
+<code>memcastle-anthropic</code>
 repositories; until a provider publishes a release, build its archive locally before installing it.
 Source modules retain their <code>memcastle-source.toml</code> and <code>source.wasm</code> contract;
 integration modules retain their <code>memcastle-integration.toml</code> and agent assets.

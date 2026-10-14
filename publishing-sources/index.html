@@ -1852,7 +1852,7 @@ daemon runs it.</p>
 </tr>
 <tr>
 <td>Bundled</td>
-<td>An ordinary package unpacked beside the binary (<code>claude</code>, <code>codex</code>, <code>chatgpt</code>, <code>github</code>).</td>
+<td>An ordinary package unpacked beside the binary (<code>codex</code>, <code>chatgpt</code>, <code>github</code>).</td>
 <td>Nothing: it is installed from the start, and <code>memcastle source enable &lt;name&gt;</code> turns it on.</td>
 </tr>
 <tr>
@@ -2085,10 +2085,10 @@ The first index that offers a name decides, in the order of <code>mining.registr
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">registries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"https://example.org/memcastle/memcastle-index.json"</span><span class="p">]</span>
 </span></code></pre></div>
 <h2 id="installing-searching-and-updating">Installing, searching and updating<a class="headerlink" href="#installing-searching-and-updating" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w"> </span>claude<span class="w">                  </span><span class="c1"># what the registries offer</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w">                 </span><span class="c1"># newest version that runs here, after you agree to its permissions</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude@1.1.0<span class="w"> </span>--enable
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./claude-1.2.0.tar.gz<span class="w">  </span><span class="c1"># a file: no registry involved</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w"> </span>codex<span class="w">                   </span><span class="c1"># what the default registry offers</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>codex<span class="w">                  </span><span class="c1"># newest version that runs here, after you agree to its permissions</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>codex@1.1.0<span class="w"> </span>--enable<span class="w">   </span><span class="c1"># if that version is published</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./example-1.2.0.tar.gz<span class="w"> </span><span class="c1"># a file: no registry involved</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./my-source<span class="w">            </span><span class="c1"># a project directory: built, packaged, then installed</span>
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>update<span class="w"> </span>--check<span class="w">                 </span><span class="c1"># which installed sources have a newer version</span>
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>update<span class="w">                         </span><span class="c1"># update them</span>
@@ -2100,15 +2100,15 @@ asks for: you agree to the permissions of what was actually fetched.
 <code>source show</code> afterwards says where it came from, which registry and, when there is one, which key vouched for it.</p>
 <p><strong>Updating</strong> installs the newest version from the index a registry source was installed from.
 A source you installed from a file has no upstream and is left alone, and a bundled source is updated with MemCastle:
-<code>update</code> leaves it out, and <code>update pi</code> says so (<code>memcastle::source::bundled</code>).
+<code>update</code> leaves it out, and <code>update codex</code> says so (<code>memcastle::source::bundled</code>).
 An update keeps the source's state.
 The consent you gave is to a set of permissions, not to a version, so an update that asks for the same permissions needs
 no new agreement, and one that asks for anything else is not installed until you agree to exactly those: the command says
 what is waiting and exits non-zero, and <code>--yes</code> (or the prompt) agrees.
 A source cannot widen its own reach by being updated.</p>
 <p><strong>Offline.</strong> A registry that is a directory needs no network, and a package file installs with none either:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./claude-1.2.0.tar.gz<span class="w"> </span>--yes
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w"> </span>--registry<span class="w"> </span>/mnt/usb/sources
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>./example-1.2.0.tar.gz<span class="w"> </span>--yes
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>codex<span class="w"> </span>--registry<span class="w"> </span>/mnt/usb/sources
 </span></code></pre></div>
 <p><strong>Removing</strong> a source deletes its files and its record; what it mined stays in the palace.
 A bundled source cannot be removed, since it comes with MemCastle: disable it instead.</p>
@@ -2158,7 +2158,7 @@ them, and their SHA-256 is checked like any other.</p>
 <p>Whatever the policy, nothing runs without your agreement to the permissions of the exact package, and a package altered
 on disk after install is never run.</p>
 <h2 id="bundled-sources">Bundled sources<a class="headerlink" href="#bundled-sources" title="Permanent link">&para;</a></h2>
-<p>Releases ship <code>claude</code>, <code>codex</code>, <code>chatgpt</code> and <code>github</code> unpacked,
+<p>Releases ship <code>codex</code>, <code>chatgpt</code> and <code>github</code> unpacked,
 one directory each (<code>&lt;name&gt;/memcastle-source.toml</code>,
 <code>&lt;name&gt;/source.wasm</code>), under
 <code>share/memcastle/sources/</code>:
@@ -2169,12 +2169,13 @@ fetch, since they install the raw binary asset and not a tarball.
 The daemon finds them beside the binary (the same search as other <a href="../configuration/#runtime-assets">runtime assets</a>),
 or in <code>mining.bundled_dir</code>.</p>
 <p>They are installed from the start, and run from where the release put them:
-<code>memcastle source list</code> shows them as <code>bundled</code> and <code>installed</code>, and <code>memcastle source enable claude</code> is all they need.
+<code>memcastle source list</code> shows bundled sources as <code>bundled</code> and <code>installed</code>; enable a bundled source by its own name.
+The Claude Code history source is distributed instead through the <code>anthropic</code> plugin.
 Enabling is the consent: a bundled source is as trusted as the MemCastle that carries it, so it is not asked to be
-agreed to as an installed package is, and <code>memcastle source show claude</code> prints what it may read and run.
+agreed to as an installed package is, and <code>memcastle source show codex</code> prints what it may read and run.
 They are not linked into the binary, and they cannot be installed again, updated or removed;
 only whether one is enabled is yours, and it survives an upgrade, which brings the new version of the source with it.
-A package file you install under the same name (<code>memcastle source install ./claude</code>) is read instead, and removing it brings
+A package file you install under the same name (<code>memcastle source install ./codex</code>) is read instead, and removing it brings
 the bundled one back.
 A standalone binary or a checkout carries none: install the official ones from the registry below.</p>
 <p>The set is a line in <code>packaging/sources/build.sh</code>, which a release and <code>mise run sources:package</code> both run,
@@ -2183,20 +2184,19 @@ and it does not constrain the runtime: any directory under <code>sources/</code>
 <p>The bundle shares its root with the agent integrations and the skills: <code>assets.dir</code> is the one directory a package
 installs into, and <code>sources/</code> is one of the directories under it (see <a href="../configuration/#runtime-assets">Runtime assets</a>
 and <a href="../integrations/">Agent integrations</a>).
-The <code>claude</code> source here mines agent session history; it is not an integration that runs
-inside an agent.
-The Pi and OpenCode sources live in the external <code>memcastle-pi</code> and <code>memcastle-opencode</code> plugins.</p>
+The Claude Code, Pi and OpenCode sources live in external <code>memcastle-anthropic</code>, <code>memcastle-pi</code> and
+<code>memcastle-opencode</code> plugins; a source is separate from an agent integration.</p>
 <h2 id="the-official-registry">The official registry<a class="headerlink" href="#the-official-registry" title="Permanent link">&para;</a></h2>
 <p>The official registry is a static file in this repository, <a href="https://github.com/memcastle/memcastle/blob/main/docs/registry.json"><code>docs/registry.json</code></a>,
 published at <code>https://memcastle.github.io/registry.json</code> from the root of the documentation site's <code>gh-pages</code> branch.
 It lists no versions: it names the GitHub repository that publishes each legacy source archive, and the daemon reads
-its releases. Pi and OpenCode are in the separate <a href="../plugins/"><code>plugins.json</code></a> catalogue.
+its releases. Claude Code, Pi and OpenCode are in the separate <a href="../plugins/"><code>plugins.json</code></a> catalogue.
 Registering a source, or changing where it comes from, is therefore a pull request to that file, merged and deployed like
 any documentation change, and publishing a new version is a release of the source's own repository: no new release of
 MemCastle and no change to the registry.
 It is the default value of <code>mining.registries</code>, so on any installation:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w">          </span><span class="c1"># lists claude and the other Core-shipped sources</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w">  </span><span class="c1"># on a build with no bundle: after you agree to its permissions</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>search<span class="w">          </span><span class="c1"># lists the Core-shipped sources</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>codex<span class="w">   </span><span class="c1"># on a build with no bundle: after you agree to its permissions</span>
 </span></code></pre></div>
 <p>Nothing is fetched until you run one of those commands, and a package from it is checked against its SHA-256 and your
 <code>mining.trust</code> policy like any other registry's.

@@ -1543,8 +1543,10 @@
 
 
 <h1 id="claude-code-integration">Claude Code integration<a class="headerlink" href="#claude-code-integration" title="Permanent link">&para;</a></h1>
-<p><code>memcastle integration install claude-code</code> installs the shipped Claude Code plugin through a uniquely named local
-marketplace.
+<p>Install the <a href="../plugins/">standalone Anthropic plugin</a> with <code>memcastle plugin install anthropic</code> first.
+Then <code>memcastle integration install claude-code</code> registers its agent module through the existing <code>memcastle-local</code>
+marketplace. Existing agent installations retain the same plugin ID <code>memcastle@memcastle-local</code>;
+use <code>memcastle integration update claude-code</code> to refresh them from the external release.
 It uses Claude Code's plugin and native HTTP MCP mechanisms, not direct edits to Claude settings.</p>
 <p>The plugin exposes the shared MemCastle skills, native MCP tools, session-start and prompt reminders, and
 <code>/memcastle-checkpoint</code>, <code>/memcastle-audit</code>, and <code>/memcastle-repair</code> commands.

@@ -2225,7 +2225,7 @@ The trigger only decides when; the source still decides how to read.</p>
 </tr>
 <tr>
 <td><code>claude</code></td>
-<td>bundled package, <code>sources/claude/</code></td>
+<td>external <code>memcastle-anthropic</code> plugin</td>
 <td>Claude Code session history</td>
 <td>modification time</td>
 <td>yes</td>
@@ -2263,7 +2263,7 @@ The in-tree ones are built from their directories in the repository and shipped 
 (release archives and the <code>.deb</code> and <code>.rpm</code> carry them, unpacked, under
 <code>share/memcastle/sources/</code>), so they are installed from the start.
 <code>memcastle source enable &lt;name&gt;</code> is all one needs for a bundled source, with no registry and no network.
-Install the external Pi or OpenCode plugin before enabling its source.
+Install the external Pi, OpenCode or Anthropic plugin before enabling its source.
 No Pi, OpenCode, Claude Code, Codex, ChatGPT or GitHub acquisition code is part of the core.
 They run under the same sandbox and pipeline as any source a user writes.
 Other sources are found in <a href="../publishing-sources/">registries</a>.
@@ -2341,13 +2341,18 @@ locator.
 It works on sessions of any age and with no Claude Code process running.
 It is history mining only: it does not read Claude Code settings, credentials, prompt history or debug logs, and it is not
 the live Claude Code MCP client.</p>
-<p>It ships with your MemCastle and is installed already:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>claude
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>claude
+<p>Install the independently released Anthropic plugin, then enable the source:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>anthropic
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>claude
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>claude
 </span></code></pre></div>
-<p>A checkout has no unpacked bundle, so install from the official registry or the project directory:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>claude<span class="w"> </span>--enable
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># or: memcastle source install sources/claude --enable</span>
+<p>A previously mined <code>claude</code> source retains its cursor and drawers after removing its old package record.
+After moving off the old Core bundle, preview the Anthropic archive and use <code>memcastle plugin install</code> with
+<code>--adopt-source claude</code> and the requested consent digest before enabling it again.
+The source identity and the <code>since</code>/<code>dir</code> option names are unchanged.
+For local plugin development, install the built archive rather than a Core source directory:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>/path/to/memcastle-anthropic/dist/anthropic-0.1.0.tar.gz
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">enable</span><span class="w"> </span>claude
 </span></code></pre></div>
 <p>It asks for read-only access to the locator and <code>~/.claude/projects</code>, and <code>HOME</code> only to find the latter when no locator
 is given.
