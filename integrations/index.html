@@ -1891,11 +1891,11 @@
 
 
 <h1 id="agent-integrations">Agent integrations<a class="headerlink" href="#agent-integrations" title="Permanent link">&para;</a></h1>
-<p>An integration is the glue that makes a coding agent use MemCastle on its own:
-it loads the wake-up context when a session starts, reminds the model to search before it answers,
-and writes checkpoints as the conversation goes.
+<p>An integration is the glue that helps a coding agent use MemCastle at the lifecycle points the agent exposes.
+Pi and OpenCode can load wake-up context and write automatic checkpoints;
+Claude Code and Codex have <a href="../integration-contract/#documenting-a-gap">documented gaps</a> and manual fallbacks.
 It decides <em>when</em> to call MemCastle and does nothing else; every call goes to the daemon over MCP and HTTP.
-What each integration must do is the <a href="../integration-contract/">Integration contract</a>.
+The <a href="../integration-contract/">Integration contract</a> specifies full lifecycle conformance.
 This page is about getting one onto your machine.</p>
 <p>Pi, OpenCode, Claude Code and Codex integrations are independently distributed provider plugins.
 <code>memcastle integration</code> installs any of them locally, after its provider plugin is available.
@@ -2242,7 +2242,7 @@ Adding an agent is a new adapter and a new <code>kind</code>; the manifest forma
   The wake-up, search-before-answer and checkpoint instructions are the <a href="../skills/">skills</a> of the release.
   An integration names the ones it exposes, and they are installed inside its copy, so they are the ones written for this
   MemCastle version and no separate skill installation is needed.
-  Both shipped integrations expose all five, and the agent lists them itself.</li>
+  The Pi and OpenCode provider integrations expose all five, and their agents list them themselves.</li>
 <li><strong>Mining sources.</strong>
   <code>memcastle-pi</code> and <code>memcastle-opencode</code> have WebAssembly source modules that mine agent session history
   (<a href="../mining-sources/">Mining sources</a>).

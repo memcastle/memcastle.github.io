@@ -1860,7 +1860,7 @@ since the layout is the standard one and nothing needs to be built.</p>
 An integration names the skills it exposes in its manifest, and the shared ones are referenced by name:
 under <a href="https://github.com/memcastle/memcastle/tree/main/integrations"><code>integrations/</code></a> none carries its own copy of the
 text.
-Both shipped integrations expose all five, in every memory mode but <code>off</code>, which exposes none.
+The Pi and OpenCode provider integrations expose all five, in every memory mode but <code>off</code>, which exposes none.
 Pi lists them through its own skill discovery, so each has a <code>/skill:&lt;name&gt;</code> command, and appends
 <code>search-before-answer</code> to the system prompt on every turn.
 OpenCode lists the skills through its own <code>skill</code> tool, from <code>skills/</code> where they are, and re-states

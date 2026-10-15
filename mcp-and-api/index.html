@@ -2694,8 +2694,8 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>GET /api/plugin-registry/search</code></td>
-<td>Search the configured plugin catalogues without installing code.</td>
-<td>query string: <code>q</code></td>
+<td>Search plugin catalogues without installing code; <code>registry</code> selects only one and an unreadable selection returns an error, while failures among configured catalogues are warnings.</td>
+<td>query string: <code>q</code>, <code>registry?</code></td>
 </tr>
 <tr>
 <td><code>GET /api/plugin-registry/plugins/{id}</code></td>

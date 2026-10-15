@@ -1890,7 +1890,8 @@ stays in the database and is found by an <code>--as-of</code> or <code>--from</c
 The two drawers record each other (<code>superseded_by</code> and <code>supersedes</code>), which is what <code>drawer history</code> follows.</p>
 <h3 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Read commands return 10 results by default (20 for the diary, 50 for <code>drawer list</code>) and never more than 200.</li>
+<li>Bounded memory reads return 10 results by default (20 for the diary, 50 for <code>drawer list</code>) and cap a page at 200.
+  Job listing is different: without a <code>kind</code> or <code>limit</code>, <code>GET /api/jobs</code> returns every job.</li>
 <li>A <code>wake-up</code> returns at most 10 highlights and 8192 bytes unless told otherwise.</li>
 </ul>
 <h3 id="what-mining-reads">What mining reads<a class="headerlink" href="#what-mining-reads" title="Permanent link">&para;</a></h3>

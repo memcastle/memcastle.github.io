@@ -2872,7 +2872,9 @@ In a terminal this is two tables; piped, it is JSON with <code>adapters</code> a
 </span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>uninstall<span class="w"> </span>ID<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>sign<span class="w"> </span>&lt;ARCHIVE&gt;<span class="w"> </span>--key<span class="w"> </span>&lt;KEYFILE&gt;
 </span></code></pre></div>
-<p><code>--adopt-source SOURCE</code> is accepted by every <code>plugin install</code> form shown above.</p>
+<p><code>--adopt-source SOURCE</code> is accepted by every <code>plugin install</code> form shown above.
+<code>plugin search --registry LOCATION</code> searches only that catalogue and reports an error if it cannot be read;
+without <code>--registry</code>, an unavailable catalogue is a warning so the others can still be searched.</p>
 <p>The daemon resolves a named plugin from <code>plugins.registries</code> and checks its archive digest, module inventory and
 compatibility before any code becomes available.
 A local archive or already-built project is read by the CLI for a preview, then sent to that same daemon for validation.
@@ -2944,8 +2946,9 @@ take and what is installed already, bundled sources included; a registry that ca
 hide the others.
 <code>install</code> takes a package file, a source project directory (it is built and packaged first), or a name,
 optionally pinned as <code>name@1.2.0</code>, resolved from the configured registries in order.
-A name the release already ships (such as <code>claude</code>) is installed from the start: <code>install</code> refuses it with
+If a release bundles a source, it is installed from the start: <code>install</code> refuses it with
 <code>memcastle::source::bundled</code>, and <code>memcastle source enable &lt;NAME&gt;</code> is what it needs.
+Core currently bundles none; for Claude Code install the Anthropic plugin before enabling <code>claude</code>.
 Write <code>./name</code> for a path that looks like a name.
 <code>--registry</code> consults only that location (a URL, or an absolute path) instead of the usual ones, and the trust policy
 still applies to what it serves.
