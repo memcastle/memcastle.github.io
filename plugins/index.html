@@ -26,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.70">
+      <meta name="generator" content="zensical-0.0.71">
     
     
       
@@ -1674,7 +1674,7 @@ Users who require that publisher's signature set <code>plugins.trust = "required
 An older version with a different module inventory may give its own <code>modules</code> list in its version entry.
 The root inventory describes the newest release; a pinned older release without indexed module metadata is
 identified and checked against the digest of its own archive.</p>
-<p>The root <code>plugin.toml</code> has <code>format = 1</code> and a <code>[plugin]</code> table containing <code>id</code>, <code>version</code>, <code>provider</code>,
+<p>The immutable root <code>plugin.toml</code> has <code>format = 1</code> and a <code>[plugin]</code> table containing <code>id</code>, <code>provider</code>,
 <code>description</code>, <code>repository</code> and <code>license</code>.
 It also declares a top-level <code>memcastle</code> version requirement, optional <code>[[dependencies]]</code> with <code>id</code>, <code>version</code>
 and <code>optional</code>,
@@ -1683,8 +1683,9 @@ A required dependency must already be installed at a compatible version; MemCast
 plugin while installing this one.
 An optional dependency may be absent, but is version-checked when present.
 Removing a plugin blocks required dependents; optional dependents remain installed without it.
-Each module specifies a stable <code>id</code>, <code>type</code>, semantic <code>version</code>, paths <code>manifest</code> and <code>entry</code>,
-SHA-256 values <code>manifest_sha256</code> and <code>sha256</code>, and optionally <code>optional</code>, <code>config_schema</code> and a source <code>contract</code>.
+Each module specifies a stable <code>id</code>, <code>type</code>, paths <code>manifest</code> and <code>entry</code>,
+and optionally <code>optional</code>, <code>config_schema</code> and a source <code>contract</code>.
+<code>plugin.toml</code> is not rewritten by packaging; <code>manifest.toml</code> holds the parent and module versions and checksums.
 A source and an integration may share an ID (for example, Pi's two <code>pi</code> modules); identities are unique by <code>(type, id)</code>.
 Two modules of the same type cannot share an ID, and their artifact paths must remain distinct.
 The parent may also declare <code>shared_config_schema</code> and <code>[authentication]</code> with a public <code>kind</code> and a credential reference;
@@ -1696,8 +1697,10 @@ repositories; until a provider publishes a release, build its archive locally be
 Source modules retain their <code>memcastle-source.toml</code> and <code>source.wasm</code> contract;
 integration modules retain their <code>memcastle-integration.toml</code> and agent assets.
 An embedding-provider module may be declared for discovery, but its execution contract and selection belong to #256.</p>
-<p>The tar.gz release archive contains <code>plugin.toml</code> and the declared module files under their module directories.
-Its manifest and entry bytes must match their declared hashes.
+<p>The tar.gz release archive contains generated <code>manifest.toml</code> and the declared module files, <strong>not</strong> <code>plugin.toml</code>.
+The generated manifest combines the descriptor's metadata with release versions and SHA-256 for every other archive
+file, including agent assets; it is required for installation, and earlier archives without it are not accepted.
+<code>plugin package</code> also writes <code>dist/ID-VERSION.sha256sum</code> beside the archive for verifying the archive itself.
 The archive is limited to 1024 canonical-path regular files, 64 MiB compressed and 256 MiB expanded;
 symlinks, aliases, undeclared files and path escapes are refused before a generation is published.
 Source and integration module identities and versions must match their own manifests.
@@ -1746,8 +1749,8 @@ composes one module, overlays the other from its pinned child template, and reco
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s2">"source_template=</span><span class="nv">$PWD</span><span class="s2">/memcastle-source.tpl"</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s2">"integration_template=</span><span class="nv">$PWD</span><span class="s2">/memcastle-integration.tpl"</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--defaults<span class="w"> </span>--strict-answers<span class="w"> </span>--json
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Build every selected source and calculate artifact digests before installing the resulting archive.</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>python3<span class="w"> </span>example/scripts/package.py
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Build every selected source and integration first, then package their existing artifacts.</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>package<span class="w"> </span>example/plugin.toml
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>example/dist/example-0.1.0.tar.gz
 </span></code></pre></div>
 <p>This offline example records the machine-specific child paths in the generated project's configuration.
@@ -1782,18 +1785,26 @@ before publishing a versioned tag; standalone tags must point to reviewed commit
 Moving the same project into a standalone repository keeps <code>plugin.id</code> and module IDs stable;
 update <code>plugin.repository</code> and the discovery catalogue through review before releasing from the new repository.</p>
 <h2 id="standalone-development-and-compatibility">Standalone development and compatibility<a class="headerlink" href="#standalone-development-and-compatibility" title="Permanent link">&para;</a></h2>
-<p>A provider repository has one <code>plugin.toml</code>, independent <code>modules/&lt;id&gt;/</code> implementations and fixtures, local packaging
-and tests under <code>scripts/</code> and <code>tests/</code>, and its own validation and release workflows in <code>.github/workflows/</code>.
+<p>A provider repository has an immutable <code>plugin.toml</code> descriptor, a reviewed <code>manifest.toml</code> release manifest,
+independent <code>modules/&lt;id&gt;/</code> implementations and fixtures, and its own CI and release workflows.
 The parent manifest's <code>memcastle</code> semver range must match the source and integration manifests' Core requirements;
 source <code>contract</code> must also match its module manifest's versioned WIT contract.
 Module IDs stay stable across repository moves; module versions and the parent release version are separate.
 Keep the lower bound at the oldest Core actually supported and narrow the upper bound when a breaking Core contract
 requires it. Review contract and WIT changes against both generated modules before advertising a new range.</p>
-<p>From a generated provider checkout, run <code>python3 scripts/package.py</code>, <code>python3 scripts/check_modules.py</code>, and
-<code>python3 -m unittest discover -s tests</code>; commit the source <code>Cargo.lock</code> files and reviewed artifact hashes.
-Set <code>MEMCASTLE_BIN</code> to a Core binary with plugin support and run <code>python3 scripts/smoke_install.py</code> to preview and install
-the archive into a disposable palace, check installed-but-disabled sources, enable them and register integrations with an
-isolated test agent. The script does not use the user's palace or agent files.
+<p>Existing standalone providers still use their own build and test scripts until they adopt the new plugin template.
+For a newly generated checkout, build modules using its <code>ci.yaml</code> steps and run <code>memcastle plugin package plugin.toml</code>;
+commit source <code>Cargo.lock</code> files and the regenerated <code>manifest.toml</code>; packaging does not change <code>plugin.toml</code>.
+The new <code>memcastle plugin inspect plugin.toml --json</code>, <code>memcastle plugin package plugin.toml</code>, and
+<code>memcastle plugin test dist/ID-VERSION.tar.gz</code> authoring commands are provider-independent.
+<code>plugin package</code> regenerates the complete archive manifest and external archive checksum from built modules,
+refusing unsafe or unlisted files;
+it does not build source components or agent bundles. <code>plugin test</code> uses a disposable palace and does not register
+agent integrations; provider-specific agent and adoption tests remain in the standalone repository.
+Existing providers can keep their own authoring scripts until they migrate their CI and packaging to these commands.
+Existing providers may still use <code>MEMCASTLE_BIN=/path/to/memcastle python3 scripts/smoke_install.py</code> until migrated;
+that script tests additional agent registration using isolated configuration. Generic <code>plugin test</code> checks source
+activation without changing the user's palace or agent configuration.
 The shared plugin validation workflow always tests source conformance and archive installation/activation against the
 tested Core <code>main</code> prerelease.
 Callers may additionally name exact plugin-capable stable versions; each gets the same required integration checks.
@@ -1816,8 +1827,8 @@ Stable tags, versioning, Homebrew and AUR publication remain independent of this
 Core's publishing job uses the existing GitHub App credentials in its <code>release</code> environment;
 binary build jobs need only <code>contents: read</code>.</p>
 <p>Standalone plugins own their build, packaging, versioning and release workflow.
-They keep local <code>scripts/package.py</code>, <code>scripts/check_modules.py</code>, tests and smoke scripts, then upload a built archive
-and source components as an Actions artifact before calling Core's shared validation workflow.
+The current providers keep local scripts until migrated; the generated <code>ci.yaml</code> builds each source/integration and calls
+<code>plugin package</code>, then uploads the archive and source components before Core's shared validation workflow.
 The shared workflow downloads that artifact; it never builds or packages a plugin.
 Caller jobs grant <code>contents: read</code> for validation and <code>contents: write</code> only where the provider publishes its release.
 For example, after a provider's <code>package</code> job uploads the archive and exposes its relative path:</p>
@@ -1839,7 +1850,8 @@ Add a version such as <code>"0.5.0"</code> only after its released Core binary s
 there is no conditional integration-test skip.
 The required <code>artifact-name</code> and <code>archive-path</code> identify the exact uploaded, already-built plugin;
 include <code>modules/*/source.wasm</code> in that artifact so <code>source test --no-build</code> exercises those bytes.
-The <code>smoke-command</code>, <code>extra-smoke-command</code> and <code>fixture-bin</code> inputs allow provider-owned installation checks and fixtures.
+The <code>smoke-command</code>, <code>extra-smoke-command</code> and <code>fixture-bin</code> inputs allow additional provider-owned checks and fixtures;
+the generic <code>plugin test</code> always runs on the supplied archive before them.
 The provider's release workflow decides when to validate, requires its own reviewed version tag,
 and publishes the archive only after the shared validation succeeds.
 The Core binary action accepts <code>version: main</code> or an exact stable tag and returns <code>binary</code> and <code>core_sha</code> outputs;

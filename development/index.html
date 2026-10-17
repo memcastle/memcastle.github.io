@@ -26,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.70">
+      <meta name="generator" content="zensical-0.0.71">
     
     
       
@@ -1867,11 +1867,17 @@ Move that project to a standalone repository without changing the stable plugin 
 <h2 id="working-on-a-standalone-provider">Working on a standalone provider<a class="headerlink" href="#working-on-a-standalone-provider" title="Permanent link">&para;</a></h2>
 <p>Use the generated provider project's own <code>scripts/package.py</code> and <code>scripts/check_modules.py</code> to build and check only its
 declared modules; run its <code>python3 -m unittest discover -s tests</code> for parent and module manifest agreement.
-Package first, then review and commit the updated <code>plugin.toml</code> hashes and each source module's <code>Cargo.lock</code>.
+Package only after building; <code>plugin.toml</code> stays unchanged, and the generated <code>manifest.toml</code> records versions and
+checksums of every artifact. Review <code>dist/ID-VERSION.sha256sum</code> and commit <code>manifest.toml</code> and source <code>Cargo.lock</code> files.
 To test a Core change across repositories, build a Core binary in that checkout and run
 <code>MEMCASTLE_BIN=/absolute/path/to/memcastle python3 scripts/smoke_install.py</code> in the generated project.
 The smoke test uses a disposable palace and agent directory and validates preview, consent, install and separate module
 activation; it never uses a user's installed plugin or agent configuration.
+The Core publisher equivalents for generated plugins are <code>memcastle plugin inspect plugin.toml --json</code>,
+<code>memcastle plugin package plugin.toml</code> after building modules, and <code>memcastle plugin test dist/ID-VERSION.tar.gz</code>.
+The first regenerates <code>manifest.toml</code> for review and an external archive checksum; the second checks the exact
+archive in a disposable palace.
+Agent registration and legacy adoption remain provider-specific checks.
 Standalone provider CI checks source conformance and archive installation against the successful <code>main</code> CI prerelease
 and any explicitly selected plugin-capable stable releases; each matrix leg records its exact Core revision.
 Core's provider workflow checks every in-tree provider on each pull request and main push.
