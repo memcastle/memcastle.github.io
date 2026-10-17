@@ -1685,6 +1685,9 @@ An optional dependency may be absent, but is version-checked when present.
 Removing a plugin blocks required dependents; optional dependents remain installed without it.
 Each module specifies a stable <code>id</code>, <code>type</code>, paths <code>manifest</code> and <code>entry</code>,
 and optionally <code>optional</code>, <code>config_schema</code> and a source <code>contract</code>.
+Source artifacts normally live under <code>sources/&lt;id&gt;/</code>, and integration artifacts under <code>integrations/&lt;id&gt;/</code>;
+previously published packages using <code>modules/&lt;id&gt;/</code> remain installable. Both paths for one module must share that
+module's selected directory. The typed roots let a source and integration share an ID without sharing files.
 <code>plugin.toml</code> is not rewritten by packaging; <code>manifest.toml</code> holds the parent and module versions and checksums.
 An optional top-level <code>artifacts = ["shared/config.json", "modules/example/support"]</code> lists additional project-relative
 files or directories to include once for multiple modules; integration manifests continue to supply agent assets and
@@ -1788,7 +1791,7 @@ before publishing a versioned tag; standalone tags must point to reviewed commit
 Moving the same project into a standalone repository keeps <code>plugin.id</code> and module IDs stable;
 update <code>plugin.repository</code> and the discovery catalogue through review before releasing from the new repository.</p>
 <h2 id="standalone-development-and-compatibility">Standalone development and compatibility<a class="headerlink" href="#standalone-development-and-compatibility" title="Permanent link">&para;</a></h2>
-<p>A provider repository has an immutable <code>plugin.toml</code> descriptor, independent <code>modules/&lt;id&gt;/</code> implementations and
+<p>A provider repository has an immutable <code>plugin.toml</code> descriptor, independent typed source/integration implementations and
 fixtures, and its own CI and release workflows. The release <code>manifest.toml</code> exists inside the archive only;
 older providers may still retain a local manifest seed until they migrate.
 The parent manifest's <code>memcastle</code> semver range must match the source and integration manifests' Core requirements;
@@ -1834,7 +1837,8 @@ binary build jobs need only <code>contents: read</code>.</p>
 The generated <code>ci.yaml</code> builds each source/integration and calls <code>plugin package</code>, then uploads the archive and
 source components before Core's shared validation workflow.
 The shared workflow downloads that artifact; it never builds or packages a plugin.
-It reconstructs each source's <code>dist/source.wasm</code> fixture from the uploaded root component only after packaging.
+It reconstructs each source's <code>dist/source.wasm</code> fixture from the uploaded root component only after packaging,
+whether the plugin uses <code>sources/&lt;id&gt;</code> or the legacy <code>modules/&lt;id&gt;</code> layout.
 Caller jobs grant <code>contents: read</code> for validation and <code>contents: write</code> only where the provider publishes its release.
 For example, after a provider's <code>package</code> job uploads one archive and its source components:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">permissions</span><span class="p">:</span>
@@ -1856,7 +1860,7 @@ New callers supply one <code>core-version</code> per static matrix leg, includin
 Add <code>0.5</code> only after a plugin-capable Core release exists; there is no conditional integration-test skip.
 The required <code>artifact-name</code> identifies the already-built plugin; <code>archive-path</code> remains an optional legacy input.
 Without it Core demands exactly one archive below <code>dist/</code> and reports that path to the caller;
-include <code>modules/*/source.wasm</code> in that artifact so <code>source test --no-build</code> exercises those bytes.
+include <code>sources/*/source.wasm</code> (or legacy <code>modules/*/source.wasm</code>) so <code>source test --no-build</code> exercises those bytes.
 For a release dispatched on <code>main</code>, pass <code>plugin-ref</code> with the reviewed tag so the fixture checkout matches the
 exact tagged archive; normal PR/main validation defaults to the caller's commit.
 The <code>smoke-command</code>, <code>extra-smoke-command</code> and <code>fixture-bin</code> inputs allow additional provider-owned checks and fixtures;
