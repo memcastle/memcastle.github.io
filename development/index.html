@@ -1921,9 +1921,9 @@ when their inputs have not changed and their required outputs still exist.
 Changing a source or removing an output makes the corresponding task run again; use <code>mise run --force web:build</code>
 (or the other task name) to rebuild regardless of freshness.
 The test and check tasks still run on every invocation, including when used through <code>mise run check</code> or <code>mise run ci</code>.</p>
-<p><code>prek install</code> (once) wires the same checks into <code>git commit</code> as pre-commit hooks —
-formatting, Clippy, spelling, actionlint, markdownlint, commitlint, basic file hygiene,
-and the architecture guard described below.</p>
+<p><code>prek install</code> (once) wires formatting, spelling, actionlint, markdownlint, commitlint, basic file hygiene,
+and the architecture guard described below into <code>git commit</code> as hooks.
+Full-project Clippy runs in CI and with <code>mise run lint</code>, rather than on every local commit.</p>
 <h2 id="running-the-daemon-locally">Running the daemon locally<a class="headerlink" href="#running-the-daemon-locally" title="Permanent link">&para;</a></h2>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mise<span class="w"> </span>cli<span class="w"> </span>serve
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># in another terminal:</span>
