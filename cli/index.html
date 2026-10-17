@@ -2870,8 +2870,8 @@ In a terminal this is two tables; piped, it is JSON with <code>adapters</code> a
 </span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>https://github.com/OWNER/REPO<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--consent<span class="w"> </span><span class="nv">MODULE</span><span class="o">=</span>DIGEST<span class="o">]</span>...
 </span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>update<span class="w"> </span>ID<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span><span class="w"> </span><span class="o">[</span>--consent<span class="w"> </span><span class="nv">MODULE</span><span class="o">=</span>DIGEST<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--adopt-source<span class="w"> </span>SOURCE<span class="o">]</span>...
 </span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>uninstall<span class="w"> </span>ID<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>inspect<span class="w"> </span>&lt;plugin.toml&gt;<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>package<span class="w"> </span>&lt;plugin.toml&gt;<span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>inspect<span class="w"> </span><span class="o">[</span>plugin.toml<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>package<span class="w"> </span><span class="o">[</span>plugin.toml<span class="o">]</span><span class="w"> </span><span class="o">[</span>--version<span class="w"> </span>&lt;SEMVER&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--output<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span><span class="nb">test</span><span class="w"> </span>&lt;ARCHIVE&gt;
 </span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>sign<span class="w"> </span>&lt;ARCHIVE&gt;<span class="w"> </span>--key<span class="w"> </span>&lt;KEYFILE&gt;
 </span></code></pre></div>
@@ -2900,13 +2900,19 @@ use the GitTPL source and plugin repositories directly for new provider projects
 <code>plugin sign</code> is local authoring tooling with no daemon or registry request.
 It reads a validated plugin archive and a private key generated with <code>memcastle source keygen</code>, then prints the
 archive SHA-256 and an ed25519 <code>signature</code> entry for a static <code>plugins.json</code> version entry.
-<code>plugin inspect</code> reads the local descriptor and <code>manifest.toml</code> release version and returns its typed module inventory
-with <code>--json</code>; it does not need built artifacts, configuration or a daemon.
+<code>plugin inspect</code> and <code>plugin package</code> default to <code>./plugin.toml</code>; either also accepts an explicit descriptor path.
+<code>plugin inspect</code> reads the local descriptor and, for older projects, a local <code>manifest.toml</code> release seed;
+otherwise it derives the package version from the plugin's own Git tags. It returns a typed module inventory with
+<code>--json</code> and needs neither built artifacts nor a daemon.
 <code>plugin package</code> reads a project's already-built source and integration artifacts <strong>without modifying <code>plugin.toml</code></strong>.
-It regenerates a reviewable <code>manifest.toml</code> beside the descriptor, combining its static metadata with the package
-version, module versions and SHA-256 checksums, then archives <code>manifest.toml</code> with the declared artifacts.
+It builds <code>manifest.toml</code> only inside the archive, combining descriptor metadata, module versions and SHA-256 checksums.
+The descriptor may list extra support file/directory paths under <code>artifacts</code>; integration manifests also supply their
+own asset and skill paths. Symbolic links, missing entries and unlisted archive files are refused.
+An exact <code>ID/vVERSION</code> tag supplies the release version; an untagged checkout gets a SemVer development version based
+on the nearest matching release tag, commit distance, revision and dirty state (initial base <code>0.1.0</code>).
+Use <code>--version</code> to override Git inference or package from a checkout without Git metadata.
 The archive does not contain <code>plugin.toml</code>; an <code>ID-VERSION.sha256sum</code> beside it verifies the entire archive.
-It never builds a module; commit the generated <code>manifest.toml</code> and source locks before publishing.
+It never builds a module or writes <code>manifest.toml</code> beside the project; commit source locks before publishing.
 <code>plugin test</code> validates the exact archive and starts a disposable loopback daemon in an isolated temporary palace.
 It previews and installs with per-source consents, verifies integrations remain discoverable but uninstalled in agents,
 then enables each newly installed source. Neither the configured palace nor any agent installation is touched.</p>

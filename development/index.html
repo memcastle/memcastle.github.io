@@ -1860,26 +1860,22 @@
 
 <h1 id="development">Development<a class="headerlink" href="#development" title="Permanent link">&para;</a></h1>
 <p>Provider-plugin authoring uses the <a href="../plugins/">three GitTPL repositories</a> directly.
-The parent template composes commit-pinned source and integration module templates, including an initially empty plugin.
-Each generated provider has its own manifest, tests, packaging script and CI/release workflow;
-the in-tree <code>plugins/&lt;provider&gt;/</code> layout uses the same script and an all-provider workflow.
+The parent template composes reviewed source and integration modules, including an initially empty plugin.
+Each generated provider owns its descriptor, module builds, tests and CI/release workflows;
+the in-tree <code>plugins/&lt;provider&gt;/</code> layout also has an all-provider workflow.
 Move that project to a standalone repository without changing the stable plugin and module IDs.</p>
 <h2 id="working-on-a-standalone-provider">Working on a standalone provider<a class="headerlink" href="#working-on-a-standalone-provider" title="Permanent link">&para;</a></h2>
-<p>Use the generated provider project's own <code>scripts/package.py</code> and <code>scripts/check_modules.py</code> to build and check only its
-declared modules; run its <code>python3 -m unittest discover -s tests</code> for parent and module manifest agreement.
-Package only after building; <code>plugin.toml</code> stays unchanged, and the generated <code>manifest.toml</code> records versions and
-checksums of every artifact. Review <code>dist/ID-VERSION.sha256sum</code> and commit <code>manifest.toml</code> and source <code>Cargo.lock</code> files.
-To test a Core change across repositories, build a Core binary in that checkout and run
-<code>MEMCASTLE_BIN=/absolute/path/to/memcastle python3 scripts/smoke_install.py</code> in the generated project.
-The smoke test uses a disposable palace and agent directory and validates preview, consent, install and separate module
-activation; it never uses a user's installed plugin or agent configuration.
-The Core publisher equivalents for generated plugins are <code>memcastle plugin inspect plugin.toml --json</code>,
-<code>memcastle plugin package plugin.toml</code> after building modules, and <code>memcastle plugin test dist/ID-VERSION.tar.gz</code>.
-The first regenerates <code>manifest.toml</code> for review and an external archive checksum; the second checks the exact
-archive in a disposable palace.
+<p>Build the provider's own source and integration modules with Cargo and Bun before packaging their declared artifacts.
+From the provider root, run <code>memcastle plugin inspect --json</code>, <code>memcastle plugin package</code>, then
+<code>memcastle plugin test dist/ID-VERSION.tar.gz</code> against the exact resulting archive.
+The descriptor <code>plugin.toml</code> stays unchanged; the archive alone carries generated versioned <code>manifest.toml</code> metadata
+and an external <code>.sha256sum</code>. Use a tagged Git commit, an SCM development version, or an explicit <code>--version</code> override.
+Review the archive inventory and checksum and commit source <code>Cargo.lock</code> files with source changes.
+The smoke test uses a disposable palace and validates preview, consent, installation and source activation;
+it never uses the configured palace or agent installation.
 Agent registration and legacy adoption remain provider-specific checks.
 Standalone provider CI checks source conformance and archive installation against the successful <code>main</code> CI prerelease
-and any explicitly selected plugin-capable stable releases; each matrix leg records its exact Core revision.
+and selected plugin-capable release trees (latest stable patch), recording the exact Core revision or resolved tag.
 Core's provider workflow checks every in-tree provider on each pull request and main push.
 See <a href="../plugins/#shared-ci-and-development-core">Plugin packages</a> for the release assets, SHA verification, reusable
 workflow inputs and compatibility policy.</p>

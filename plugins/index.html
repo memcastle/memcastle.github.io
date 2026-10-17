@@ -1686,6 +1686,9 @@ Removing a plugin blocks required dependents; optional dependents remain install
 Each module specifies a stable <code>id</code>, <code>type</code>, paths <code>manifest</code> and <code>entry</code>,
 and optionally <code>optional</code>, <code>config_schema</code> and a source <code>contract</code>.
 <code>plugin.toml</code> is not rewritten by packaging; <code>manifest.toml</code> holds the parent and module versions and checksums.
+An optional top-level <code>artifacts = ["shared/config.json", "modules/example/support"]</code> lists additional project-relative
+files or directories to include once for multiple modules; integration manifests continue to supply agent assets and
+skills. Missing or symlinked declared artifacts are refused.
 A source and an integration may share an ID (for example, Pi's two <code>pi</code> modules); identities are unique by <code>(type, id)</code>.
 Two modules of the same type cannot share an ID, and their artifact paths must remain distinct.
 The parent may also declare <code>shared_config_schema</code> and <code>[authentication]</code> with a public <code>kind</code> and a credential reference;
@@ -1750,14 +1753,14 @@ composes one module, overlays the other from its pinned child template, and reco
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s2">"integration_template=</span><span class="nv">$PWD</span><span class="s2">/memcastle-integration.tpl"</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--defaults<span class="w"> </span>--strict-answers<span class="w"> </span>--json
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Build every selected source and integration first, then package their existing artifacts.</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>package<span class="w"> </span>example/plugin.toml
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>package<span class="w"> </span>example/plugin.toml<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.1.0
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>example/dist/example-0.1.0.tar.gz
 </span></code></pre></div>
 <p>This offline example records the machine-specific child paths in the generated project's configuration.
 For a shared provider repository, use the published GitTPL and all three published template URLs from the start;
 GitTPL records those URLs and the resolved child commits and does not rewrite local paths to remote URLs later.</p>
-<p>The packager remaps Rust and Cargo source paths and bypasses a local compiler wrapper so its reviewed component
-digests match the provider CI build.</p>
+<p>Build source components with the provider's reproducible Cargo flags before calling Core's packager;
+the packager only gathers validated, already-built artifacts.</p>
 <p>With the three published <code>https://github.com/memcastle/*.tpl</code> URLs, <code>git tpl init</code> needs <code>--trust</code>
 to allow the child-template clones.</p>
 <p>To scaffold only a module, invoke <code>memcastle-source.tpl</code> or <code>memcastle-integration.tpl</code> directly.
@@ -1785,32 +1788,33 @@ before publishing a versioned tag; standalone tags must point to reviewed commit
 Moving the same project into a standalone repository keeps <code>plugin.id</code> and module IDs stable;
 update <code>plugin.repository</code> and the discovery catalogue through review before releasing from the new repository.</p>
 <h2 id="standalone-development-and-compatibility">Standalone development and compatibility<a class="headerlink" href="#standalone-development-and-compatibility" title="Permanent link">&para;</a></h2>
-<p>A provider repository has an immutable <code>plugin.toml</code> descriptor, a reviewed <code>manifest.toml</code> release manifest,
-independent <code>modules/&lt;id&gt;/</code> implementations and fixtures, and its own CI and release workflows.
+<p>A provider repository has an immutable <code>plugin.toml</code> descriptor, independent <code>modules/&lt;id&gt;/</code> implementations and
+fixtures, and its own CI and release workflows. The release <code>manifest.toml</code> exists inside the archive only;
+older providers may still retain a local manifest seed until they migrate.
 The parent manifest's <code>memcastle</code> semver range must match the source and integration manifests' Core requirements;
 source <code>contract</code> must also match its module manifest's versioned WIT contract.
 Module IDs stay stable across repository moves; module versions and the parent release version are separate.
 Keep the lower bound at the oldest Core actually supported and narrow the upper bound when a breaking Core contract
 requires it. Review contract and WIT changes against both generated modules before advertising a new range.</p>
-<p>Existing standalone providers still use their own build and test scripts until they adopt the new plugin template.
-For a newly generated checkout, build modules using its <code>ci.yaml</code> steps and run <code>memcastle plugin package plugin.toml</code>;
-commit source <code>Cargo.lock</code> files and the regenerated <code>manifest.toml</code>; packaging does not change <code>plugin.toml</code>.
-The new <code>memcastle plugin inspect plugin.toml --json</code>, <code>memcastle plugin package plugin.toml</code>, and
+<p>For a generated checkout, build modules using its <code>ci.yaml</code> steps and run <code>memcastle plugin package</code> from its root;
+commit source <code>Cargo.lock</code> files, review the archive digest, and leave <code>plugin.toml</code> unchanged.
+The <code>memcastle plugin inspect --json</code>, <code>memcastle plugin package</code>, and
 <code>memcastle plugin test dist/ID-VERSION.tar.gz</code> authoring commands are provider-independent.
-<code>plugin package</code> regenerates the complete archive manifest and external archive checksum from built modules,
-refusing unsafe or unlisted files;
+<code>plugin package</code> generates the complete manifest <strong>only inside the archive</strong> and writes an external archive checksum
+from built modules, refusing unsafe or unlisted files. Both inspect and package default to <code>./plugin.toml</code>.
+An exact <code>ID/vVERSION</code> tag yields that version; untagged Git revisions use an identifiable development version,
+and <code>--version</code> overrides Git when packaging without a repository;
 it does not build source components or agent bundles. <code>plugin test</code> uses a disposable palace and does not register
 agent integrations; provider-specific agent and adoption tests remain in the standalone repository.
-Existing providers can keep their own authoring scripts until they migrate their CI and packaging to these commands.
-Existing providers may still use <code>MEMCASTLE_BIN=/path/to/memcastle python3 scripts/smoke_install.py</code> until migrated;
-that script tests additional agent registration using isolated configuration. Generic <code>plugin test</code> checks source
+Provider-owned JavaScript adoption and agent-installation checks remain separate; generic <code>plugin test</code> checks source
 activation without changing the user's palace or agent configuration.
 The shared plugin validation workflow always tests source conformance and archive installation/activation against the
 tested Core <code>main</code> prerelease.
-Callers may additionally name exact plugin-capable stable versions; each gets the same required integration checks.
+Callers may additionally name plugin-capable release trees such as <code>0.5</code> (the latest published patch), or an exact
+stable version; each gets the same required integration checks.
 Stable Core 0.4.1 does not support plugin installation, so it cannot be added to this matrix.
 Core's provider workflow builds and tests every in-tree provider on each pull request and main push.
-For cross-repository development, set <code>MEMCASTLE_BIN</code> to a binary built in the Core worktree and run the same smoke check;
+For cross-repository development, put a Core binary from its worktree on PATH and run the same smoke check;
 standalone provider CI and its release workflow build neither unrelated providers nor Core from source.</p>
 <h3 id="shared-ci-and-development-core">Shared CI and development Core<a class="headerlink" href="#shared-ci-and-development-core" title="Permanent link">&para;</a></h3>
 <p>Every successful Core CI run on <code>main</code> that passes the basic, slow, WebAssembly and other required Core jobs
@@ -1827,35 +1831,42 @@ Stable tags, versioning, Homebrew and AUR publication remain independent of this
 Core's publishing job uses the existing GitHub App credentials in its <code>release</code> environment;
 binary build jobs need only <code>contents: read</code>.</p>
 <p>Standalone plugins own their build, packaging, versioning and release workflow.
-The current providers keep local scripts until migrated; the generated <code>ci.yaml</code> builds each source/integration and calls
-<code>plugin package</code>, then uploads the archive and source components before Core's shared validation workflow.
+The generated <code>ci.yaml</code> builds each source/integration and calls <code>plugin package</code>, then uploads the archive and
+source components before Core's shared validation workflow.
 The shared workflow downloads that artifact; it never builds or packages a plugin.
+It reconstructs each source's <code>dist/source.wasm</code> fixture from the uploaded root component only after packaging.
 Caller jobs grant <code>contents: read</code> for validation and <code>contents: write</code> only where the provider publishes its release.
-For example, after a provider's <code>package</code> job uploads the archive and exposes its relative path:</p>
+For example, after a provider's <code>package</code> job uploads one archive and its source components:</p>
 <div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">permissions</span><span class="p">:</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">jobs</span><span class="p">:</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">validate</span><span class="p">:</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">package</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memcastle/memcastle/.github/workflows/plugin-validation.yaml@&lt;reviewed Core commit&gt;</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="nt">artifact-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugin-package</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">      </span><span class="nt">archive-path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ needs.package.outputs.archive }}</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">      </span><span class="nt">core-versions</span><span class="p">:</span><span class="w"> </span><span class="s">'[]'</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="nt">extra-smoke-command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python3 scripts/smoke_adoption.py</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memcastle/memcastle/.github/workflows/plugin-validation.yaml@main</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">      </span><span class="nt">artifact-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugin-package</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">      </span><span class="nt">core-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.core }}</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">      </span><span class="nt">extra-smoke-command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node scripts/smoke_adoption.mjs</span>
 </span></code></pre></div>
-<p><code>core-versions</code> is a JSON array of exact stable version tags and defaults to <code>[]</code>,
-yielding the required <code>[main]</code> matrix.
-Add a version such as <code>"0.5.0"</code> only after its released Core binary supports the plugin install contract;
-there is no conditional integration-test skip.
-The required <code>artifact-name</code> and <code>archive-path</code> identify the exact uploaded, already-built plugin;
+<p>The legacy <code>core-versions</code> JSON array still accepts exact tags and defaults to <code>[]</code>, yielding <code>[main]</code> for old callers.
+New callers supply one <code>core-version</code> per static matrix leg, including <code>main</code> or a published stable release tree.
+Add <code>0.5</code> only after a plugin-capable Core release exists; there is no conditional integration-test skip.
+The required <code>artifact-name</code> identifies the already-built plugin; <code>archive-path</code> remains an optional legacy input.
+Without it Core demands exactly one archive below <code>dist/</code> and reports that path to the caller;
 include <code>modules/*/source.wasm</code> in that artifact so <code>source test --no-build</code> exercises those bytes.
+For a release dispatched on <code>main</code>, pass <code>plugin-ref</code> with the reviewed tag so the fixture checkout matches the
+exact tagged archive; normal PR/main validation defaults to the caller's commit.
 The <code>smoke-command</code>, <code>extra-smoke-command</code> and <code>fixture-bin</code> inputs allow additional provider-owned checks and fixtures;
 the generic <code>plugin test</code> always runs on the supplied archive before them.
 The provider's release workflow decides when to validate, requires its own reviewed version tag,
 and publishes the archive only after the shared validation succeeds.
-The Core binary action accepts <code>version: main</code> or an exact stable tag and returns <code>binary</code> and <code>core_sha</code> outputs;
-<code>main</code> is verified against the SHA-qualified development checksums and stable binaries against their release checksums.
+The root <code>memcastle/memcastle@main</code> action places the verified binary on PATH and returns <code>binary</code>, <code>core_sha</code> and
+<code>resolved_version</code>. <code>main</code> is verified against SHA-qualified development checksums, while <code>0.5</code>/<code>1</code> choose the latest
+published patch in that minor/major tree before checking its exact stable release checksum.
+The nested <code>core-binary</code> action still supports exact versions and exports <code>MEMCASTLE_BIN</code> for older callers.
 Each compatibility matrix leg reports its exact Core revision in the job summary.
 To add another provider, supply its own package/check and archive install scripts,
 select compatible stable tags explicitly, and keep provider-specific fixture setup or legacy migration smokes
