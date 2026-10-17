@@ -1774,19 +1774,17 @@ those same commits, and <code>.config/git.tpl.toml</code> records the revisions 
 Update the child template and its tests first, advance both pins together with the parent composition test, then have
 provider authors review <code>git tpl diff --json</code> before <code>git tpl merge --json</code> to adopt the new scaffold.
 Changing a template does not change an existing plugin until its owner explicitly updates and merges its rendered ref.</p>
-<p>An in-tree provider project may live under <code>plugins/&lt;provider&gt;/</code> and publish its own <code>&lt;id&gt;-&lt;version&gt;.tar.gz</code> release
-without changing Core's version.
-The checked-in <code>plugins/example</code> project is an in-tree contract fixture run by Core's provider workflow;
+<p>The checked-in <code>plugins/example</code> project is a packaging-tooling fixture run by Core CI;
 standalone providers use the workflows produced by the pinned parent template rather than copied example workflows.
-While several providers share the Core repository, each uses its own <code>plugin/&lt;provider&gt;/v&lt;version&gt;</code> tag;
+A standalone provider publishes its own versioned artifact;
 its reviewed catalogue entry lists the artifact URL and digest explicitly.
 A direct GitHub repository URL is for a standalone repository whose releases publish exactly one plugin ID;
-the Core monorepo's mixed releases must be discovered through <code>plugins.json</code>.
+Core's releases are not provider releases; discover providers through <code>plugins.json</code>.
 GitHub's release-asset SHA-256 protects a direct download's integrity; it is not an ed25519 publisher signature.
 With <code>plugins.trust = "required"</code>, use a signed catalogue entry instead of an unsigned direct release.
 The signature attests the digest using a configured trusted public key; neither a matching digest nor inclusion in the
 curated catalogue independently proves that the publisher is trusted.
-Provider release workflows validate the selected manifest, locked source dependencies, conformance and exact artifact
+Standalone provider release workflows validate the manifest, locked source dependencies, conformance and exact artifact
 before publishing a versioned tag; standalone tags must point to reviewed commits on <code>main</code>.
 Moving the same project into a standalone repository keeps <code>plugin.id</code> and module IDs stable;
 update <code>plugin.repository</code> and the discovery catalogue through review before releasing from the new repository.</p>
@@ -1816,7 +1814,7 @@ tested Core <code>main</code> prerelease.
 Callers may additionally name plugin-capable release trees such as <code>0.5</code> (the latest published patch), or an exact
 stable version; each gets the same required integration checks.
 Stable Core 0.4.1 does not support plugin installation, so it cannot be added to this matrix.
-Core's provider workflow builds and tests every in-tree provider on each pull request and main push.
+Core CI builds and tests the <code>plugins/example</code> tooling fixture on each pull request and main push.
 For cross-repository development, put a Core binary from its worktree on PATH and run the same smoke check;
 standalone provider CI and its release workflow build neither unrelated providers nor Core from source.</p>
 <h3 id="shared-ci-and-development-core">Shared CI and development Core<a class="headerlink" href="#shared-ci-and-development-core" title="Permanent link">&para;</a></h3>

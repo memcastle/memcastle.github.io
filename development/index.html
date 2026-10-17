@@ -1861,8 +1861,8 @@
 <h1 id="development">Development<a class="headerlink" href="#development" title="Permanent link">&para;</a></h1>
 <p>Provider-plugin authoring uses the <a href="../plugins/">three GitTPL repositories</a> directly.
 The parent template composes reviewed source and integration modules, including an initially empty plugin.
-Each generated provider owns its descriptor, module builds, tests and CI/release workflows;
-the in-tree <code>plugins/&lt;provider&gt;/</code> layout also has an all-provider workflow.
+Each generated provider owns its descriptor, module builds, tests and CI/release workflows.
+Core CI uses <code>plugins/example</code> as a packaging-tooling fixture.
 Move that project to a standalone repository without changing the stable plugin and module IDs.</p>
 <h2 id="working-on-a-standalone-provider">Working on a standalone provider<a class="headerlink" href="#working-on-a-standalone-provider" title="Permanent link">&para;</a></h2>
 <p>Build the provider's own source and integration modules with Cargo and Bun before packaging their declared artifacts.
@@ -1876,7 +1876,7 @@ it never uses the configured palace or agent installation.
 Agent registration and legacy adoption remain provider-specific checks.
 Standalone provider CI checks source conformance and archive installation against the successful <code>main</code> CI prerelease
 and selected plugin-capable release trees (latest stable patch), recording the exact Core revision or resolved tag.
-Core's provider workflow checks every in-tree provider on each pull request and main push.
+Core CI builds and checks only the <code>plugins/example</code> fixture on each pull request and main push.
 See <a href="../plugins/#shared-ci-and-development-core">Plugin packages</a> for the release assets, SHA verification, reusable
 workflow inputs and compatibility policy.</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
@@ -1970,8 +1970,8 @@ Every path, environment variable, flag and the precedence between them is in <a 
   <code>mise run check:all</code> combines the template's <code>check</code> task with this project-specific slow gate.
   The basic suite runs in CI on Linux, macOS and Windows and needs no WebAssembly target.
   The WebAssembly suite runs in CI on Linux only, in its own <code>wasm</code> job with its own Codecov flag,
-  and each directory under <code>sources/</code> also gets a CI leg of its own (<code>mise run sources:test -- &lt;name&gt;</code>), found automatically.
-  Each source's own CI leg runs conformance, plus any source-owned <code>core-tests.rs</code> cases not expressible as conformance.</li>
+  and its <code>sources</code> job explicitly tests the <code>directory</code> reference source with <code>mise run sources:test -- directory</code>.
+  That job runs conformance, plus any source-owned <code>core-tests.rs</code> cases not expressible as conformance.</li>
 <li><strong>Integration tests</strong> (<code>tests/</code>) run against a tempdir palace and an OS-assigned port.
   Those that start the daemon inside the test process are modules of one binary, <code>tests/in_process/main.rs</code>:
   each <code>tests/</code> binary links the whole server, about 600 MB with debug info, so sixteen of them were most of what
