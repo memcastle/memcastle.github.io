@@ -2095,6 +2095,16 @@ A failure comes back as an MCP error result carrying the <a href="#errors">error
 <td>The configured <a href="../configuration/#miners">miners</a>: name, source, state, saved options and last run. Read-only.</td>
 </tr>
 <tr>
+<td><code>memcastle_source_config_list</code></td>
+<td>none</td>
+<td>Reusable source configurations and safe credential availability. Read-only.</td>
+</tr>
+<tr>
+<td><code>memcastle_source_config_get</code></td>
+<td><code>id</code></td>
+<td>One named source configuration, without a credential's location or contents. Read-only.</td>
+</tr>
+<tr>
 <td><code>memcastle_miner_get</code></td>
 <td><code>name</code></td>
 <td>One configured miner, and why it cannot run when it cannot. Read-only.</td>
@@ -2180,7 +2190,7 @@ and some directories reject a tool whose hint is missing.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>memcastle_status</code>, <code>memcastle_history</code>, <code>memcastle_fact_history</code>, <code>memcastle_wake_up</code>, <code>memcastle_diary_read</code>, <code>memcastle_job_list</code>, <code>memcastle_job_get</code>, <code>memcastle_miner_list</code>, <code>memcastle_miner_get</code>, <code>memcastle_trigger_list</code>, <code>memcastle_trigger_get</code></td>
+<td><code>memcastle_status</code>, <code>memcastle_history</code>, <code>memcastle_fact_history</code>, <code>memcastle_wake_up</code>, <code>memcastle_diary_read</code>, <code>memcastle_job_list</code>, <code>memcastle_job_get</code>, <code>memcastle_miner_list</code>, <code>memcastle_miner_get</code>, <code>memcastle_source_config_list</code>, <code>memcastle_source_config_get</code>, <code>memcastle_trigger_list</code>, <code>memcastle_trigger_get</code></td>
 <td>true</td>
 <td>false</td>
 <td>true</td>
@@ -2433,6 +2443,36 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <td>JSON body, all optional once the miner exists: <code>source</code>, <code>enabled</code>, <code>locator</code>, <code>wing</code>, <code>credential</code>, <code>options</code>, <code>unset_options</code>, <code>unset</code>, <code>allow_broaden</code></td>
 </tr>
 <tr>
+<td><code>GET /api/source-configs</code></td>
+<td>Explicit and implicit source configurations with token-free credential status.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/source-configs/{id}</code></td>
+<td>One configuration, or a source's implicit default.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>PUT /api/source-configs/{id}</code></td>
+<td>Save source-native defaults and a credential reference.</td>
+<td>JSON body: <code>source</code> (required for new IDs), <code>options</code>, <code>credential</code>, <code>unset_options</code>, <code>unset_credential</code></td>
+</tr>
+<tr>
+<td><code>DELETE /api/source-configs/{id}</code></td>
+<td>Remove an explicit configuration without deleting mined memories.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/source-configs/{id}/auth</code></td>
+<td>Start an OAuth sign-in using this configuration's credential key.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/source-configs/{id}/auth?flow=&lt;id&gt;</code></td>
+<td>Wait for its sign-in to finish.</td>
+<td>query: <code>flow</code>, optional <code>seconds</code> (max 30)</td>
+</tr>
+<tr>
 <td><code>POST /api/miners/{name}/enable</code></td>
 <td>Switch a miner on, after checking that it can run. Idempotent.</td>
 <td>none</td>
@@ -2443,13 +2483,23 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <td>none</td>
 </tr>
 <tr>
+<td><code>POST /api/miners/{name}/schedule/enable</code></td>
+<td>Opt into the miner's configured schedule after validating readiness.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>POST /api/miners/{name}/schedule/disable</code></td>
+<td>Stop the miner's timetable without removing it.</td>
+<td>none</td>
+</tr>
+<tr>
 <td><code>DELETE /api/miners/{name}</code></td>
 <td>Remove a miner's definition; what it mined stays: <code>{"removed": name}</code>.</td>
 <td>none</td>
 </tr>
 <tr>
 <td><code>POST /api/miners/reload</code></td>
-<td>Read the configuration file again now: <code>{miners, added, removed, changed, enabled, disabled, broadened}</code>.</td>
+<td>Read global and per-miner files again now: <code>{miners, added, removed, changed, enabled, disabled, broadened, error?}</code>; bad files leave their last good definitions.</td>
 <td>none</td>
 </tr>
 <tr>

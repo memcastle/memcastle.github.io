@@ -2144,7 +2144,8 @@ cut at a paragraph break, else a line break, else mid-line.
 Only the first drawer of a document carries its name.
 Sizes count characters, so a cut never lands inside a character.</p>
 <h3 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h3>
-<p>One job files at most <code>mining.max_documents</code> documents (2000 by default).
+<p>By default jobs are unlimited (<code>mining.max_documents = 0</code>) but discover in bounded pages and checkpoint every document.
+Set a positive <code>mining.max_documents</code> to limit every job, or a positive <code>max_documents</code> on one miner to override it.
 If the source has more, the job completes with <code>"truncated": true</code>, its progress message says to run it again, and the
 next job continues from the cursor.</p>
 <h2 id="using-it">Using it<a class="headerlink" href="#using-it" title="Permanent link">&para;</a></h2>
@@ -2159,7 +2160,8 @@ next job continues from the cursor.</p>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span>/path/to/chatgpt-export.zip<span class="w">            </span><span class="c1"># ChatGPT data export (once installed)</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>github<span class="w"> </span><span class="nv">include</span><span class="o">=</span>acme/docs<span class="w"> </span><span class="nv">wiki_include</span><span class="o">=</span>acme/docs<span class="w"> </span><span class="c1"># selected GitHub repository and wiki history</span>
 </span></code></pre></div>
-<p>The first word is a source, and what follows is that source's own: at most one place to read, then <code>key=value</code> options
+<p>An existing configured miner ID takes precedence over a same-named source; otherwise the first word is a source,
+and what follows is that source's own: at most one place to read, then <code>key=value</code> options
 that the source declares (<code>memcastle sources</code> lists them; an unknown key is refused before anything is queued).
 A word that is not shaped like a source name (<code>.</code>, <code>~/project</code>, <code>./pi</code>) is a directory.
 See <a href="../cli/#mine"><code>mine</code></a> for the whole grammar.</p>
@@ -2173,19 +2175,29 @@ place and options.
 Mining is a write, so a <a href="../memory-modes/">read-only or disabled session</a> cannot start it.</p>
 <h3 id="remembering-what-to-mine">Remembering what to mine<a class="headerlink" href="#remembering-what-to-mine" title="Permanent link">&para;</a></h3>
 <p><code>memcastle mine</code> names a source and where to read every time.
-A <strong>miner</strong> is a named definition of one, kept as <code>[[miners]]</code> in the configuration file:
-a source, a locator, saved options and a reference to a credential
+A <strong>miner</strong> is a named definition, kept as <code>[[miners]]</code> or a file under the miners directory:
+a source (or named source configuration), locator, saved options, destination, limit and optional schedule
 (<a href="../configuration/#miners">Configuration</a>, <a href="../cli/#miner"><code>memcastle miner</code></a>).
 <code>memcastle miner run &lt;name&gt;</code> submits the same job <code>mine</code> would, with the miner's saved options,
 so a miner continues from the cursor its source already has.
-The cursor belongs to the source, which is the <code>source</code> and <code>locator</code>, and not to the miner:
-renaming, disabling, re-scoping or removing a miner never loses it or what it mined.
+The cursor belongs to the effective source identity (adapter/account/locator and, when needed, source configuration and
+destination mapping), not the miner's name.
+Renaming, disabling or removing a miner never deletes what it mined; changing a mapping can select an independent cursor.
+Each durable mining job pins its resolved <code>kind.preset</code> (miner, source configuration, mapping and limit).
+Drawers retain their job ID and source item origin, so the producing preset can be recovered without storing credentials
+or rewriting historical drawers.
 An agent can read the miners (<code>memcastle_miner_list</code>, <code>memcastle_miner_get</code>) but only the user changes them.</p>
 <p>A miner runs when asked.
+Its optional timetable remains off until explicitly enabled with <code>miner schedule-enable</code>.
 To have it run on its own (daily, when files change, when a service calls a webhook) the user defines a
 <a href="../triggers/">trigger</a> for it, which starts disabled and which no source, install or miner ever enables.
 The trigger only decides when; the source still decides how to read.</p>
-<p>The job's <code>result</code> reports <code>documents</code>, <code>created</code>, <code>superseded</code>, <code>retired</code>, <code>unchanged</code>, <code>skipped</code>, <code>similar</code> and <code>truncated</code>.</p>
+<p>The job's <code>result</code> reports <code>documents</code>, <code>discovered</code>, <code>filtered</code>, <code>ingested</code>, <code>created</code>, <code>superseded</code>, <code>retired</code>,
+<code>unchanged</code>, <code>skipped</code>, <code>similar</code>, <code>truncated</code> and the effective <code>limit</code> (<code>null</code> when unlimited).
+A fatal discovery/read error fails the job before advancing past the failed item; adapter-filtered items are excluded from
+<code>discovered</code>, and the source reports a skipped candidate separately when it cannot read it.
+The directory adapter reports an exact <code>filtered</code> count for include/exclude/date exclusions;
+an installed source currently reports zero unless its contract offers such a count.</p>
 <h2 id="available-sources">Available sources<a class="headerlink" href="#available-sources" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2514,9 +2526,11 @@ the raw document and is not searchable.
 The source permits up to 128 MiB of JSON and 16 MiB per conversation; split larger exports before importing.
 Exports and raw retained documents contain private conversations.</p>
 <p>An <strong>experimental</strong> alternative uses the undocumented ChatGPT web API:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt<span class="w"> </span><span class="nv">mode</span><span class="o">=</span>web<span class="w"> </span><span class="nv">account</span><span class="o">=</span>personal
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>auth<span class="w"> </span>chatgpt
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>chatgpt
 </span></code></pre></div>
-<p><code>account</code> is a non-secret label that keeps different accounts' cursors separate.
+<p>The sole signed-in web account is selected automatically; named ChatGPT web accounts are not yet supported.
+An explicit legacy <code>account</code> label retains the corresponding cursor but is not needed for a new run.
 Without a project filter, the web backend combines ordinary conversations and the full paginated history of each
 project, including archived projects; the sidebar's preview alone is never treated as complete history.
 <code>projects=id:PROJECT_ID</code> or <code>projects=name:Exact Name</code> selects one project; comma-separated selectors choose several.

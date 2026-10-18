@@ -1552,6 +1552,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#source-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Source configurations
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#miner-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Miner definitions
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#claude-code-history-miner" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2239,6 +2261,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#source-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Source configurations
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#miner-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Miner definitions
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#claude-code-history-miner" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2526,7 +2570,7 @@ Every key is optional, and a file may set only some of them.</p>
 </span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a><span class="k">[mining]</span>
 </span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a><span class="n">chunk_chars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6000</span><span class="w">          </span><span class="c1"># characters per drawer; a longer document becomes several drawers</span>
 </span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a><span class="n">max_file_bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2097152</span><span class="w">    </span><span class="c1"># directory mining skips files larger than this</span>
-</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a><span class="n">max_documents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2000</span><span class="w">        </span><span class="c1"># documents one job files; the next job continues from the cursor</span>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a><span class="n">max_documents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w">           </span><span class="c1"># 0 means unlimited; a positive value caps one job, whose next run resumes the cursor</span>
 </span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a><span class="c1"># Installed WebAssembly sources (see "Writing a mining source"): where they live, and what each call may use.</span>
 </span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a><span class="c1"># sources_dir = "/home/alice/.local/share/memcastle/sources"</span>
 </span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a><span class="n">source_memory_mib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="w">     </span><span class="c1"># the most memory one call into an installed source may use</span>
@@ -2880,9 +2924,9 @@ Keep secrets out of version control: put this file outside any repository, and r
 <td><code>2097152</code></td>
 </tr>
 <tr>
-<td><code>mining.max_documents</code> (1 to 1000000)</td>
+<td><code>mining.max_documents</code> (0 or 1 to 1000000)</td>
 <td><code>MEMCASTLE_MINING_MAX_DOCUMENTS</code></td>
-<td><code>2000</code></td>
+<td><code>0</code> (unlimited)</td>
 </tr>
 <tr>
 <td><code>mining.sources_dir</code> (an absolute path)</td>
@@ -3396,22 +3440,84 @@ leaves the sources to the installed assets.
 <code>memcastle integration</code> reads the root from the same three places as the daemon; <code>--assets-dir</code> is accepted by its
 <code>list</code>, <code>install</code> and <code>update</code> commands.</p>
 <h2 id="miners">Miners<a class="headerlink" href="#miners" title="Permanent link">&para;</a></h2>
-<p>A miner is a named, persistent definition of what to mine and how: a source, where in it to read, saved options and a credential.
-They are the <code>[[miners]]</code> entries of the configuration file, so they are declarative and survive a restart,
-and they are managed from the file, from <a href="../cli/#miner"><code>memcastle miner</code></a> and, read-only, from MCP
-(<a href="../adr/037-persistent-miner-configuration/">ADR-037</a>).</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal-personal"</span><span class="w">          </span><span class="c1"># unique: lowercase letters, digits, `-` and `_`; `reload` is reserved</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                 </span><span class="c1"># the source adapter: `directory`, or an installed source's name</span>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">                    </span><span class="c1"># default true</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"+336..."</span><span class="w">               </span><span class="c1"># where in the source to read; the source decides what it means</span>
-</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">wing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                   </span><span class="c1"># the wing its drawers go to, when it should not be the source's default</span>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"SIGNAL_TOKEN"</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1"># or { type = "file", path = "/run/secrets/signal" }, or { type = "oauth" }</span>
+<h3 id="source-configurations">Source configurations<a class="headerlink" href="#source-configurations" title="Permanent link">&para;</a></h3>
+<p>A source configuration names reusable source-native defaults and a credential reference; it has no destination or schedule.
+The default ID is the source ID (<code>chatgpt</code> for <code>chatgpt</code>), even when nothing is written in TOML.
+Additional configurations live in the global file and have unique IDs:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">[[source_configs]]</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github-work"</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github"</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"GH_TOKEN"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="k">[source_configs.options]</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"my-team/*"</span><span class="p">]</span>
 </span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
-</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="k">[miners.options]</span><span class="w">                  </span><span class="c1"># source options: strings, numbers, booleans, lists of strings</span>
-</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="n">contacts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"+336..."</span><span class="p">]</span>
-</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"MemCastle"</span><span class="p">]</span>
-</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="n">window_days</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="k">[[miners]]</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"work-wiki"</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github"</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="n">source_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github-work"</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="n">wing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"work"</span>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="k">[miners.options]</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="n">wiki_include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"my-team/wiki"</span><span class="p">]</span>
+</span></code></pre></div>
+<p><code>memcastle source config list|get|set|remove</code> and authenticated <code>/api/source-configs</code> manage this section.
+MCP can list configuration summaries but cannot edit or authenticate them.
+A miner selects its source's default configuration when <code>source_config</code> is absent.
+Source configuration options are applied first and matching miner options replace them;
+one-off <code>miner run</code> options replace matching saved options without rewriting either definition.
+A change to shared source defaults that may read more material needs <code>--allow-broaden</code> in the CLI
+or <code>allow_broaden = true</code> in the REST body; the UI asks for the same explicit choice.
+The common <code>mining.max_documents</code> default (zero for unlimited) is overridden by a miner's positive <code>max_documents</code>.
+<code>embedding_profile</code> selects a runnable named embedding profile for drawers this miner files.
+The resolved vector space is pinned to its durable job; an explicit embedding-job profile outranks the miner override,
+which outranks the global default.
+Credentials and their paths are never returned by a configuration view; OAuth sign-ins for the default configuration
+retain the existing source-keyed credential so upgrades do not lose them.
+ChatGPT's current web authorization can select only the default account: an additional named ChatGPT web configuration
+cannot authenticate yet; export-import miners remain usable without an account.
+Legacy miner <code>credential</code> references still load, but put new reusable credentials on the source configuration.</p>
+<h3 id="miner-definitions">Miner definitions<a class="headerlink" href="#miner-definitions" title="Permanent link">&para;</a></h3>
+<p>A miner is a named, persistent definition of what to mine and how: a source or reusable source configuration,
+input locator, options, destination, per-job limit and optional schedule.
+Definitions live in global <code>[[miners]]</code> entries or one file per miner under <code>$XDG_CONFIG_HOME/memcastle/miners/</code>.
+An explicit <code>--config</code> in another directory keeps new miners in that global file and does not load unrelated XDG miners.
+Additional directories can be listed under <code>[mining]</code> as <code>miner_dirs = ["/path/to/team/miners"]</code>.
+Files are read in filename order, after the global section and default directory.
+A file contains the same fields as a <code>[[miners]]</code> entry, at its top level rather than inside a table.
+For example, <code>~/.config/memcastle/miners/ChatGPT Dev.toml</code> may contain:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt"</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/exports/latest.zip"</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">wing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"personal"</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">room</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"conversations"</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">max_documents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="k">[schedule]</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">every</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"1d"</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="n">at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"03:30"</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</span></code></pre></div>
+<p>When <code>name</code> is absent its filename stem is trimmed, lowercased and spaces become hyphens:
+<code>ChatGPT Dev.toml</code> defines <code>chatgpt-dev</code>, invoked with <code>memcastle mine chatgpt-dev</code>.
+An explicit <code>name</code> takes precedence, and duplicate IDs are reported with both paths rather than silently overridden.
+Existing definitions are edited at their originating file; files are checked for concurrent edits and replaced atomically.
+They are managed from the file, from <a href="../cli/#miner"><code>memcastle miner</code></a> and, read-only, from MCP
+(<a href="../adr/037-persistent-miner-configuration/">ADR-037</a>).</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal-personal"</span><span class="w">          </span><span class="c1"># unique: lowercase letters, digits, `-` and `_`; `reload` is reserved</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                 </span><span class="c1"># the source adapter: `directory`, or an installed source's name</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">                    </span><span class="c1"># default true</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"+336..."</span><span class="w">               </span><span class="c1"># where in the source to read; the source decides what it means</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">wing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                   </span><span class="c1"># the wing its drawers go to, when it should not be the source's default</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">room</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"conversations"</span><span class="w">            </span><span class="c1"># optional fixed room</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">max_documents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="w">               </span><span class="c1"># overrides the common per-job cap; omit to inherit it</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">wing_from</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"project_name"</span><span class="p">,</span><span class="w"> </span><span class="n">room_from</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"conversation_group"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1"># optional source-independent metadata routing</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"SIGNAL_TOKEN"</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1"># or { type = "file", path = "/run/secrets/signal" }, or { type = "oauth" }</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="k">[miners.options]</span><span class="w">                  </span><span class="c1"># source options: strings, numbers, booleans, lists of strings</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="n">contacts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"+336..."</span><span class="p">]</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"MemCastle"</span><span class="p">]</span>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="n">window_days</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span>
 </span></code></pre></div>
 <p>A key that is not listed is an error, not an ignored typo: <code>enable = false</code> must not leave a miner enabled.
 <code>options</code> is an open table, so a source can define keys of its own.
@@ -3421,10 +3527,17 @@ Likewise REST callers must replace <code>scope</code> and <code>config</code> wi
 <code>unset_options</code>.</p>
 <ul>
 <li><strong>Identity.</strong> A miner's cursor and documents belong to the <em>source</em> it points at, and not to its name.
-  Renaming, enabling, disabling or changing the wing or credential keeps its cursor.
+  Renaming, enabling, disabling or changing a credential keeps its cursor
+  when the acquisition scope and mapping stay the same.
   Pointing it at another source or locator creates a different source with its own cursor.
   A source such as <code>chatgpt</code> can also give different selected project scopes separate identities and cursors.
-  Removing a miner, or disabling it, never deletes what it mined.</li>
+  Removing a miner, or disabling it, never deletes what it mined.
+  A configured Wing, Room or named source configuration gives a different destination
+  an independent cursor and document set.
+  A <code>mapping.wing_from</code> or <code>mapping.room_from</code> key reads a string from each document's metadata.
+  Missing or invalid names fall back to the fixed <code>wing</code>/<code>room</code> or source defaults.
+  Different mapping definitions have independent cursor and document records, so two miners can reuse one sign-in
+  without treating a differently filed conversation as already ingested.</li>
 <li><strong>Secrets.</strong> A secret is never written in the file.
   <code>credential</code> names where it comes from: an environment variable of the daemon, a file,
   or <code>{ type = "oauth" }</code> for a source that signs in with OAuth (see <a href="#credentials">Credentials</a>), which names nothing
@@ -3443,8 +3556,11 @@ Likewise REST callers must replace <code>scope</code> and <code>config</code> wi
   installed and enabled, the credential resolves, every <code>options</code> key is one the source declares as an option,
   and for <code>directory</code> the <code>locator</code> is an absolute path.
   A disabled miner may name a source that is not installed yet, so a configuration can be written ahead of the install.</li>
-<li><strong>Trigger.</strong> A miner runs when asked: <code>memcastle miner run &lt;name&gt;</code>.
-  What asks on its own is a <a href="#triggers">trigger</a>, which is a separate <code>[[triggers]]</code> entry and starts disabled.</li>
+<li><strong>Schedule.</strong> A miner runs when asked with <code>memcastle miner run &lt;name&gt;</code> or <code>memcastle mine &lt;name&gt;</code>.
+  Add <code>[miners.schedule] every = "1d"</code> and optionally <code>at = "03:30"</code> (UTC), or <code>[schedule]</code> in a miner file.
+  The timetable remains disabled until <code>memcastle miner schedule-enable &lt;name&gt;</code> (or REST/UI) explicitly enables it.
+  The daemon reconciles it through the same trigger supervisor as <a href="#triggers">standalone triggers</a>;
+  removal, a disabled miner or a disabled schedule stops the task without discarding mined data.</li>
 <li><strong>Options.</strong> The <code>options</code> table holds saved source options: <code>miner run</code> passes them to the source
   exactly as <code>memcastle mine &lt;source&gt; key=value</code> would (<a href="../adr/042-mine-takes-a-source-and-its-options/">ADR-042</a>).
   A scalar is its text and a list of strings is comma-joined; an undeclared key or nested table makes the miner not
@@ -3453,7 +3569,8 @@ Likewise REST callers must replace <code>scope</code> and <code>config</code> wi
   A change that may include more material, whether persistent or temporary, requires <code>--allow-broaden</code>.
   Sources can declare include/exclude/date comparisons; an option without declared comparison semantics requires
   approval whenever its value changes.
-  <code>directory</code> declares <code>since</code>; <code>pi</code>, <code>opencode</code> and <code>claude</code> declare <code>since</code> and <code>dir</code>.
+  <code>directory</code> declares <code>since</code>, <code>include</code> and <code>exclude</code> (comma-separated relative-path globs);
+  <code>pi</code>, <code>opencode</code> and <code>claude</code> declare <code>since</code> and <code>dir</code>.
   <code>chatgpt</code> declares a web-only <code>projects</code> filter in addition to <code>mode</code> and <code>account</code> options.
   The external <code>memcastle-github</code> plugin's source requires <code>include</code> repository patterns; <code>exclude</code> and separate wiki
   patterns can narrow them further.</li>
@@ -3461,15 +3578,15 @@ Likewise REST callers must replace <code>scope</code> and <code>config</code> wi
 <h3 id="claude-code-history-miner">Claude Code history miner<a class="headerlink" href="#claude-code-history-miner" title="Permanent link">&para;</a></h3>
 <p>The externally installed <code>claude</code> source reads only session transcripts under <code>~/.claude/projects</code>.
 Define a miner explicitly; no Claude Code client or source installation creates one:</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude"</span>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
-</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
-</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="k">[miners.options]</span>
-</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-09"</span>
-</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/src/*"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude"</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="k">[miners.options]</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-09"</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/src/*"</span>
 </span></code></pre></div>
 <p><code>since</code> narrows by transcript modification time and <code>dir</code> matches the working directory recorded in each transcript.
 Use a separate miner or run <code>memcastle mine claude --full</code> when a restored transcript predates its cursor.</p>
@@ -3478,14 +3595,13 @@ Use a separate miner or run <code>memcastle mine claude --full</code> when a res
 Sign the source in with <code>memcastle source auth chatgpt</code> on the daemon's machine before running web miners.
 This source's desktop-compatible OAuth bearer was verified to read history without cookies using a browser-style
 User-Agent; the old manually supplied web session remains a fallback (<a href="../mining-sources/#chatgpt">ChatGPT</a>).</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt-work"</span>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt"</span>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="k">[miners.options]</span>
-</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">projects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"name:Work"</span><span class="p">,</span><span class="w"> </span><span class="s2">"id:g-p-example"</span><span class="p">]</span>
-</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"web"</span>
-</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"personal"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt-work"</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt"</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="k">[miners.options]</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="n">projects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"name:Work"</span><span class="p">,</span><span class="w"> </span><span class="s2">"id:g-p-example"</span><span class="p">]</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"web"</span>
 </span></code></pre></div>
 <p>The miner joins the <code>projects</code> list with commas and the source resolves names to unique project IDs.
 If a name no longer exists or names collide, the run fails rather than broadening its scope.
@@ -3497,18 +3613,18 @@ Changing or removing an option that broadens project selection still follows the
 <p>The <code>memcastle-github</code> plugin's source requires an explicit repository <code>include</code> pattern.
 <code>org/*</code> selects repositories owned by an organization; an <code>exclude</code> pattern overrides inclusion.
 The wiki can be selected independently within those repositories with <code>wiki_include</code> and <code>wiki_exclude</code>.</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"acme-github"</span>
-</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github"</span>
-</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"GH_TOKEN"</span><span class="w"> </span><span class="p">}</span>
-</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
-</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">[miners.options]</span>
-</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/*"</span><span class="p">]</span>
-</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/private-experiment"</span><span class="p">]</span>
-</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="n">wiki_include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/docs"</span><span class="p">]</span>
-</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="n">comments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="n">reviews</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-01-01"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"acme-github"</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github"</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"GH_TOKEN"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="k">[miners.options]</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/*"</span><span class="p">]</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/private-experiment"</span><span class="p">]</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">wiki_include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/docs"</span><span class="p">]</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="n">comments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="n">reviews</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-01-01"</span>
 </span></code></pre></div>
 <p>Set <code>GH_TOKEN</code> or <code>GITHUB_TOKEN</code> in the daemon's environment; when both are set, <code>GH_TOKEN</code> wins.
 The miner's env credential reference checks that variable exists, while the source's explicit manifest grant actually
@@ -3528,7 +3644,7 @@ An explicit <code>memcastle embed --profile NAME</code> selects its own profile 
 Set it through <code>memcastle miner set NAME --embedding-profile bulk --wing WING</code> or unset it with
 <code>memcastle miner set NAME --unset embedding_profile</code>.</p>
 <h3 id="changing-miners-while-the-daemon-runs">Changing miners while the daemon runs<a class="headerlink" href="#changing-miners-while-the-daemon-runs" title="Permanent link">&para;</a></h3>
-<p>The file is the one source of truth, and the daemon is the one tool that rewrites it.
+<p>The configured global file and individual miner files are the source of truth, and the daemon is their only writer.
 <code>miner set</code>, <code>enable</code>, <code>disable</code> and <code>remove</code> edit only the <code>[[miners]]</code> section, in place:
 comments, the other tables and every entry that did not change are left exactly as they were,
 and the file is replaced atomically with its permissions kept.
@@ -3542,8 +3658,8 @@ The environment and command-line overrides are not part of the file, so they are
   The daemon keeps the last miners that were valid, reports the error beside them (<code>miner list</code>, <code>GET /api/miners</code>),
   and refuses to change miners until the file is fixed, because writing would overwrite what is being repaired.
   A file that is invalid at startup stops the daemon, like the rest of the configuration.</li>
-<li><strong>Nothing runs because of a reload.</strong>
-  There is nothing to start or stop: a miner runs when <code>miner run</code> submits its job.
+<li><strong>Reload reconciles enabled schedules.</strong>
+  A miner with no explicitly enabled schedule remains manual; a configured timetable starts, changes or stops idempotently.
   A job that is already queued or running when a miner is disabled or removed finishes,
   because a job carries the source and locator and not the miner's name.</li>
 <li><strong>Option changes never broaden silently.</strong>

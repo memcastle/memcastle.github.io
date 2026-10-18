@@ -1812,6 +1812,12 @@ pipeline, which a trigger never touches (<a href="../adr/043-source-triggers/">A
 ask for by hand, and a manual firing, a timetable and a webhook all take one path.</p>
 <h2 id="defining-a-trigger">Defining a trigger<a class="headerlink" href="#defining-a-trigger" title="Permanent link">&para;</a></h2>
 <p>Triggers are the <code>[[triggers]]</code> entries of the configuration file, next to the <code>[[miners]]</code> they ask to run.
+For a miner's own timetable, use <code>[miners.schedule]</code> in the global file or <code>[schedule]</code> in its individual miner file.
+It accepts <code>every</code> and optional UTC <code>at</code> in the same syntax as a standalone schedule trigger.
+Writing it down does not start it: <code>memcastle miner schedule-enable &lt;name&gt;</code> opts in explicitly,
+and <code>schedule-disable</code> or removal stops it without changing any already mined data.
+The daemon reconciles enabled miner schedules through the same trigger supervisor and run path;
+standalone <code>[[triggers]]</code> continue to work independently.
 They are managed from the file or from <a href="../cli/#trigger"><code>memcastle trigger</code></a>, and read (never changed) over MCP.
 The daemon rewrites only that section, in place, so your comments and the rest of the file survive.</p>
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[[triggers]]</span>

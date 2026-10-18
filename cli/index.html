@@ -1512,6 +1512,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#source-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>source config</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#trigger" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2166,6 +2177,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#source-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        <code>source config</code>
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#trigger" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2763,8 +2785,9 @@ Writing the same note into the same room again stores nothing and reports the ex
 </span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>memcastle<span class="w"> </span>note<span class="w"> </span><span class="s2">"..."</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span>.id<span class="w">                              </span><span class="c1"># the stable identifier</span>
 </span></code></pre></div>
 <h3 id="mine"><code>mine</code><a class="headerlink" href="#mine" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>&lt;SOURCE&gt;<span class="w"> </span><span class="o">[</span>PLACE<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--full<span class="o">]</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--full<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>&lt;MINER&gt;<span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--full<span class="o">]</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>&lt;SOURCE&gt;<span class="w"> </span><span class="o">[</span>PLACE<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--full<span class="o">]</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--full<span class="o">]</span>
 </span></code></pre></div>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>directory<span class="w"> </span>/some/path
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>/some/path<span class="w">                                        </span><span class="c1"># the same: a path is the directory shorthand</span>
@@ -2774,7 +2797,11 @@ Writing the same note into the same room again stores nothing and reports the ex
 <p>Submits a job that reads a source into drawers: a directory (one drawer per file, or several for a long one), or a named
 source such as <code>pi</code> or <code>opencode</code>, a coding agent's session history (installed sources: see
 <a href="../mining-sources/#pi">Mining sources</a> and <a href="../mining-sources/#opencode"><code>opencode</code></a>).
-The first word says what to read.
+An exact configured miner ID wins over a source ID or same-named directory and uses its saved source,
+source configuration, locator, options and destination.
+It cannot take a second locator or <code>--wing</code>.
+<code>memcastle mine &lt;source&gt;</code> remains a temporary source run and never writes a miner definition.
+The first word otherwise says what to read.
 <code>directory</code> is the built-in source and takes the path to read as its one <code>PLACE</code>.
 Any other word is the name of a source (<code>memcastle sources</code> lists them with the options each accepts).
 A word that cannot be a source name is always a directory: one with a <code>/</code>, one that starts with <code>.</code> or <code>~</code>, or one with
@@ -2805,6 +2832,11 @@ naming the ones it accepts:</p>
 <td>Only files modified at or after <code>DATE</code>.</td>
 </tr>
 <tr>
+<td><code>directory</code></td>
+<td><code>include=GLOBS</code>, <code>exclude=GLOBS</code></td>
+<td>Comma-separated relative-path glob patterns; not applied to other sources.</td>
+</tr>
+<tr>
 <td><code>pi</code></td>
 <td><code>since=DATE</code></td>
 <td>Only sessions modified at or after <code>DATE</code>.</td>
@@ -2829,6 +2861,8 @@ naming the ones it accepts:</p>
 <p><code>DATE</code> is <code>2026-09</code> (the first of the month), <code>2026-09-14</code> or an RFC 3339 time, in UTC.
 A <code>dir</code> selects a different slice of the same history, so each directory has a cursor of its own;
 <code>since</code> only narrows, so it shares the source's cursor, and <code>--full</code> is how to read back past it.
+An omitted common <code>mining.max_documents</code> limit is unlimited (<code>0</code> in the configuration);
+an explicit miner limit caps that run.
 A <code>path</code> option is made absolute against the shell's working directory before the daemon sees it, like the path of <code>directory</code>.</p>
 <p>A <code>dir</code> is a directory or a pattern in which <code>*</code> matches any run of characters, <code>/</code> included:
 <code>dir=/work/app</code> is one project and <code>'dir=/work/*'</code> is every project under <code>/work</code>, however deeply nested.
@@ -3023,17 +3057,23 @@ Like installing a source, it is administrative: <code>--mode</code> is ignored a
 <h3 id="miner"><code>miner</code><a class="headerlink" href="#miner" title="Permanent link">&para;</a></h3>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>list
 </span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>get<span class="w"> </span>&lt;NAME&gt;
-</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--source<span class="w"> </span>&lt;SOURCE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--locator<span class="w"> </span>&lt;WHERE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--embedding-profile<span class="w"> </span>&lt;NAME&gt;<span class="o">]</span>
-</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">                           </span><span class="o">[</span>--credential-env<span class="w"> </span>&lt;VAR&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-file<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-oauth<span class="o">]</span>
-</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">                           </span><span class="o">[</span>--option<span class="w"> </span>&lt;<span class="nv">KEY</span><span class="o">=</span>VALUE&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--unset-option<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span>...
-</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">                           </span><span class="o">[</span>--unset<span class="w"> </span>locator<span class="p">|</span>wing<span class="p">|</span>credential<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--disabled<span class="o">]</span><span class="w"> </span><span class="o">[</span>--allow-broaden<span class="o">]</span>
-</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>&lt;NAME&gt;
-</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>disable<span class="w"> </span>&lt;NAME&gt;
-</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>remove<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>reload
-</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>run<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--full<span class="o">]</span><span class="w"> </span><span class="o">[</span>--allow-broaden<span class="o">]</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--source<span class="w"> </span>&lt;SOURCE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--locator<span class="w"> </span>&lt;WHERE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">                           </span><span class="o">[</span>--source-config<span class="w"> </span>&lt;ID&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--room<span class="w"> </span>&lt;ROOM&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--max-documents<span class="w"> </span>&lt;N&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--embedding-profile<span class="w"> </span>&lt;NAME&gt;<span class="o">]</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">                           </span><span class="o">[</span>--wing-from<span class="w"> </span>&lt;METADATA-KEY&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--room-from<span class="w"> </span>&lt;METADATA-KEY&gt;<span class="o">]</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">                           </span><span class="o">[</span>--schedule-every<span class="w"> </span>&lt;INTERVAL&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--schedule-at<span class="w"> </span>&lt;UTC-HH:MM&gt;<span class="o">]</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">                           </span><span class="o">[</span>--credential-env<span class="w"> </span>&lt;VAR&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-file<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-oauth<span class="o">]</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">                           </span><span class="o">[</span>--option<span class="w"> </span>&lt;<span class="nv">KEY</span><span class="o">=</span>VALUE&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--unset-option<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span>...
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">                           </span><span class="o">[</span>--unset<span class="w"> </span>locator<span class="p">|</span>wing<span class="p">|</span>credential<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--disabled<span class="o">]</span><span class="w"> </span><span class="o">[</span>--allow-broaden<span class="o">]</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>memcastle<span class="w"> </span>miner<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>disable<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>schedule-enable<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>schedule-disable<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>remove<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>reload
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>memcastle<span class="w"> </span>miner<span class="w"> </span>run<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--full<span class="o">]</span><span class="w"> </span><span class="o">[</span>--allow-broaden<span class="o">]</span>
 </span></code></pre></div>
-<p>Manages the <code>[[miners]]</code> of the configuration file: named, persistent definitions of what to mine,
+<p>Manages global <code>[[miners]]</code> and individual files under the XDG miners directory:
+named, persistent definitions of what to mine,
 described in <a href="../configuration/#miners">Configuration</a>.
 Every command is a call to the daemon's <code>/api/miners</code> routes, which are the rules MCP's read-only
 <code>memcastle_miner_list</code> and <code>memcastle_miner_get</code> follow too, so there is one model.</p>
@@ -3059,6 +3099,9 @@ The file is edited in place: its comments and the other tables are kept.
 <code>remove</code> deletes the definition and asks first in a terminal, <code>--yes</code> skips it; what the miner mined and its source's
 cursor stay.
 <code>reload</code> reads the file again now and says what changed; the daemon also notices an edited file on its own.
+<code>--schedule-every 1d</code> adds a disabled UTC timetable; <code>schedule-enable</code> opts into unattended execution,
+and <code>schedule-disable</code> stops it without removing its settings.
+For day-based intervals <code>--schedule-at 03:30</code> chooses the UTC time.
 <code>run</code> submits the miner's mining job and prints it, like <code>mine</code>, continuing from the cursor its source has;
 it refuses a disabled miner.
 The miner's saved options are passed to the source as the run's options,
@@ -3069,18 +3112,31 @@ a key the source does not declare makes the miner not runnable, and a nested tab
 the others are administrative: <code>--mode</code> is accepted (it is a global flag) but ignored by them,
 and no MCP tool exists for any of them.
 <code>miner set</code> and the rest print the miner as it is now when standard output is a terminal, and JSON when it is not.</p>
+<h3 id="source-config"><code>source config</code><a class="headerlink" href="#source-config" title="Permanent link">&para;</a></h3>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>config<span class="w"> </span>list
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>config<span class="w"> </span>get<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>config<span class="w"> </span>auth<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;ID&gt;<span class="w"> </span>--source<span class="w"> </span>&lt;SOURCE&gt;<span class="w"> </span><span class="o">[</span>--option<span class="w"> </span><span class="nv">KEY</span><span class="o">=</span>VALUE<span class="o">]</span>...
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">                                 </span><span class="o">[</span>--allow-broaden<span class="o">]</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>config<span class="w"> </span>remove<span class="w"> </span>&lt;ID&gt;
+</span></code></pre></div>
+<p>Stores reusable source-native defaults and credential references in <code>[[source_configs]]</code>, independently of miner
+destination and schedule settings.
+The source ID is always an implicit default configuration ID.
+<code>source show &lt;SOURCE&gt;</code> lists that source's configuration IDs and, when it signs in, its default sign-in status.
+Changes are administrative REST calls; MCP can inspect configurations but cannot change or sign them in.</p>
 <h3 id="trigger"><code>trigger</code><a class="headerlink" href="#trigger" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>list
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>get<span class="w"> </span>&lt;NAME&gt;
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--miner<span class="w"> </span>&lt;MINER&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--type<span class="w"> </span>schedule<span class="p">|</span>poll<span class="p">|</span>webhook<span class="p">|</span>watch<span class="o">]</span>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">                             </span><span class="o">[</span>--credential-env<span class="w"> </span>&lt;VAR&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-file<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span>
-</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">                             </span><span class="o">[</span>--setting<span class="w"> </span>&lt;<span class="nv">KEY</span><span class="o">=</span>VALUE&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--unset-setting<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span>...
-</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">                             </span><span class="o">[</span>--unset<span class="w"> </span>credential<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable<span class="o">]</span>
-</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>&lt;NAME&gt;
-</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>disable<span class="w"> </span>&lt;NAME&gt;
-</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>remove<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>reload
-</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>fire<span class="w"> </span>&lt;NAME&gt;
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>list
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>get<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--miner<span class="w"> </span>&lt;MINER&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--type<span class="w"> </span>schedule<span class="p">|</span>poll<span class="p">|</span>webhook<span class="p">|</span>watch<span class="o">]</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">                             </span><span class="o">[</span>--credential-env<span class="w"> </span>&lt;VAR&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--credential-file<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">                             </span><span class="o">[</span>--setting<span class="w"> </span>&lt;<span class="nv">KEY</span><span class="o">=</span>VALUE&gt;<span class="o">]</span>...<span class="w"> </span><span class="o">[</span>--unset-setting<span class="w"> </span>&lt;KEY&gt;<span class="o">]</span>...
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">                             </span><span class="o">[</span>--unset<span class="w"> </span>credential<span class="o">]</span><span class="w"> </span><span class="o">[</span>--enable<span class="o">]</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>disable<span class="w"> </span>&lt;NAME&gt;
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>remove<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>reload
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>memcastle<span class="w"> </span>trigger<span class="w"> </span>fire<span class="w"> </span>&lt;NAME&gt;
 </span></code></pre></div>
 <p>Manages the <code>[[triggers]]</code> of the configuration file: what asks for a mining run on its own, described on the
 <a href="../triggers/">Triggers</a> page (<a href="../adr/043-source-triggers/">ADR-043</a>).
@@ -3108,10 +3164,10 @@ refused while the trigger is disabled, and is a write, so <code>--mode read_only
 for any of them.
 Output is the trigger as it is now in a terminal, and JSON when standard output is not one.</p>
 <h3 id="integration"><code>integration</code><a class="headerlink" href="#integration" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
-</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
-</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
-</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>&lt;AGENT&gt;
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>install<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>update<span class="w"> </span>&lt;AGENT&gt;<span class="w"> </span><span class="o">[</span>--assets-dir<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>remove<span class="w"> </span>&lt;AGENT&gt;
 </span></code></pre></div>
 <p>Install, update and remove integrations for coding agents after installing their provider plugins:
 <a href="../integrations-pi/"><code>memcastle-pi</code></a> for <code>pi</code>, <a href="../integrations-opencode/"><code>memcastle-opencode</code></a> for <code>opencode</code>,
@@ -3139,14 +3195,14 @@ A terminal gets the report or the outcome as text, and a pipe (or <code>--json</
 An error exits non-zero and names a <code>memcastle::integration::*</code> code, listed in
 <a href="../integrations/#troubleshooting">Troubleshooting</a>.</p>
 <h3 id="checkpoint"><code>checkpoint</code><a class="headerlink" href="#checkpoint" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>memcastle<span class="w"> </span>checkpoint<span class="w"> </span><span class="o">[</span>--payload<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--emergency<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>memcastle<span class="w"> </span>checkpoint<span class="w"> </span><span class="o">[</span>--payload<span class="w"> </span>&lt;FILE&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--emergency<span class="o">]</span>
 </span></code></pre></div>
 <p>Submits a checkpoint job that durably persists an already-classified batch of memory writes.
 The payload is JSON read from <code>--payload</code>, or from standard input when omitted;
 its shape is described in <a href="../mcp-and-api/#checkpoint-payload">MCP tools and REST API</a>.
 <code>--emergency</code> raises the job to the highest priority, for save-before-crash situations only.</p>
 <h3 id="fact-history"><code>fact history</code><a class="headerlink" href="#fact-history" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>memcastle<span class="w"> </span>fact<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;RELATIONSHIP_UUID&gt;<span class="w"> </span><span class="o">[</span>--as-of<span class="w"> </span>&lt;RFC3339-OR-DATE&gt;<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>memcastle<span class="w"> </span>fact<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;RELATIONSHIP_UUID&gt;<span class="w"> </span><span class="o">[</span>--as-of<span class="w"> </span>&lt;RFC3339-OR-DATE&gt;<span class="o">]</span>
 </span></code></pre></div>
 <p>Reads a graph assertion and its linked confirmations, contradictions and explicit corrections from the daemon.
 The result includes the validity interval, evidence, lifecycle state, decision reasons and any ranking preference among
@@ -3155,23 +3211,23 @@ unresolved claims; both sides of a conflict remain visible.
 Output is readable at a terminal and JSON when piped or when <code>--json</code> is set.
 See <a href="../mcp-and-api/#the-knowledge-graph">the knowledge graph</a> for the shared REST and MCP contract.</p>
 <h2 id="wings-rooms-and-drawers">Wings, rooms and drawers<a class="headerlink" href="#wings-rooms-and-drawers" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>list
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;<span class="w"> </span><span class="o">[</span>--description<span class="w"> </span>&lt;TEXT&gt;<span class="o">]</span>
-</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>
-</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>memcastle<span class="w"> </span>room<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
-</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>memcastle<span class="w"> </span>room<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;
-</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>memcastle<span class="w"> </span>room<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--description<span class="w"> </span>&lt;TEXT&gt;<span class="o">]</span>
-</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>memcastle<span class="w"> </span>room<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>
-</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>list<span class="w"> </span>--room<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--limit<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
-</span><span id="__span-22-12"><a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;
-</span><span id="__span-22-13"><a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--content<span class="w"> </span>&lt;TEXT&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--file<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span>
-</span><span id="__span-22-14"><a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>supersede<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span><span class="o">(</span>--content<span class="w"> </span>&lt;TEXT&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--file<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--invalidate<span class="o">)</span>
-</span><span id="__span-22-15"><a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;
-</span><span id="__span-22-16"><a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>mention<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span>--name<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span>--kind<span class="w"> </span>&lt;KIND&gt;
-</span><span id="__span-22-17"><a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>list
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;<span class="w"> </span><span class="o">[</span>--description<span class="w"> </span>&lt;TEXT&gt;<span class="o">]</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>memcastle<span class="w"> </span>wing<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>memcastle<span class="w"> </span>room<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>memcastle<span class="w"> </span>room<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>memcastle<span class="w"> </span>room<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--description<span class="w"> </span>&lt;TEXT&gt;<span class="o">]</span>
+</span><span id="__span-23-9"><a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>memcastle<span class="w"> </span>room<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-23-10"><a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>
+</span><span id="__span-23-11"><a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>list<span class="w"> </span>--room<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;<span class="w"> </span><span class="o">[</span>--limit<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
+</span><span id="__span-23-12"><a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>show<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;
+</span><span id="__span-23-13"><a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>create<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--content<span class="w"> </span>&lt;TEXT&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--file<span class="w"> </span>&lt;PATH&gt;<span class="o">]</span>
+</span><span id="__span-23-14"><a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>supersede<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span><span class="o">(</span>--content<span class="w"> </span>&lt;TEXT&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--file<span class="w"> </span>&lt;PATH&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>--invalidate<span class="o">)</span>
+</span><span id="__span-23-15"><a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span><span class="nb">history</span><span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;
+</span><span id="__span-23-16"><a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>mention<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span>--name<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span>--kind<span class="w"> </span>&lt;KIND&gt;
+</span><span id="__span-23-17"><a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a>memcastle<span class="w"> </span>drawer<span class="w"> </span>delete<span class="w"> </span>&lt;WING&gt;/&lt;ROOM&gt;/&lt;DRAWER&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <p>These manage the palace hierarchy, see <a href="../storage/#the-data-model">Storage and data</a> for what the three levels are.
 <code>wings</code>, <code>rooms</code> and <code>drawers</code> are aliases of the singular groups.</p>
@@ -3205,11 +3261,11 @@ The content comes from <code>--content</code>, from <code>--file</code> (<code>-
 <p><code>delete</code> removes the record and everything under it, permanently:
 a wing takes its rooms and their drawers, a room takes its drawers.
 In a terminal it first prints what is about to go, then asks:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>Wing: work
-</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>Rooms: 12
-</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>Drawers: 37
-</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>
-</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>Delete this wing and all contained data? [y/N]
+<div class="language-text highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>Wing: work
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>Rooms: 12
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>Drawers: 37
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>Delete this wing and all contained data? [y/N]
 </span></code></pre></div>
 <p><code>--yes</code> skips the question, see <a href="#output-colour-and-prompts">Output, colour and prompts</a>.
 Without a terminal it proceeds without asking, like every other command that confirms.
@@ -3239,7 +3295,7 @@ Both are writes.</p>
 Looking is gated as a read and changing as a write, see <a href="../memory-modes/">Memory modes</a>.</p>
 <h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
 <h3 id="embed"><code>embed</code><a class="headerlink" href="#embed" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>memcastle<span class="w"> </span>embed<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--profile<span class="w"> </span>&lt;NAME&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--refresh<span class="w"> </span>missing<span class="p">|</span>stale<span class="p">|</span>all<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>memcastle<span class="w"> </span>embed<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--profile<span class="w"> </span>&lt;NAME&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--refresh<span class="w"> </span>missing<span class="p">|</span>stale<span class="p">|</span>all<span class="o">]</span>
 </span></code></pre></div>
 <p>Submits a job that computes vectors missing from the selected profile (the configured default unless <code>--profile</code> is set).
 <code>--refresh stale</code> also recomputes vectors whose input or canonical content changed; <code>--refresh all</code> recomputes the entire
@@ -3252,7 +3308,7 @@ It only changes derived vector records and never changes canonical content, grap
 The default missing-only job is safe to repeat and also recovers provenance-free legacy vectors into the chosen space.
 It is a write, so it is refused in <code>read_only</code> and <code>disabled</code> modes.</p>
 <h3 id="extract"><code>extract</code><a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>memcastle<span class="w"> </span>extract<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>memcastle<span class="w"> </span>extract<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
 </span></code></pre></div>
 <p>Submits a job that reads every mined drawer and note not yet read and adds the entities and relationships it names to the
 knowledge graph, see <a href="../configuration/#extraction">Extraction</a>.
@@ -3263,7 +3319,7 @@ It only adds graph records and never changes a drawer, and running it again does
 It is a write, so it is refused in <code>read_only</code> and <code>disabled</code> modes.
 Read the result with <code>GET /api/entities</code>, see <a href="../mcp-and-api/#the-knowledge-graph">the knowledge graph</a>.</p>
 <h3 id="audit"><code>audit</code><a class="headerlink" href="#audit" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>memcastle<span class="w"> </span>audit<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>memcastle<span class="w"> </span>audit<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span>
 </span></code></pre></div>
 <p>Submits a read-only consistency report job.
 <code>--wing</code> restricts only the embedding counts to one wing; orphan and dangling-reference findings are always palace-wide.
@@ -3271,7 +3327,7 @@ When a default embedding profile is configured, the missing count refers to that
 provenance-free legacy vectors do not count as embedded there until re-embedded.
 Read the report with <code>memcastle job show &lt;id&gt;</code>.</p>
 <h3 id="repair"><code>repair</code><a class="headerlink" href="#repair" title="Permanent link">&para;</a></h3>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>memcastle<span class="w"> </span>repair<span class="w"> </span><span class="o">[</span>--apply<span class="w"> </span><span class="o">[</span>--yes<span class="o">]]</span><span class="w"> </span><span class="o">[</span>--based-on-job<span class="w"> </span>&lt;JOB_ID&gt;<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>memcastle<span class="w"> </span>repair<span class="w"> </span><span class="o">[</span>--apply<span class="w"> </span><span class="o">[</span>--yes<span class="o">]]</span><span class="w"> </span><span class="o">[</span>--based-on-job<span class="w"> </span>&lt;JOB_ID&gt;<span class="o">]</span>
 </span></code></pre></div>
 <p>Submits a repair job.
 Without <code>--apply</code> it is a dry run that only reports what it would remove.
@@ -3279,13 +3335,13 @@ With <code>--apply</code> it deletes orphan drawers, which is a write and is ref
 In a terminal <code>--apply</code> asks for confirmation first, unless <code>--yes</code> is given.
 <code>--based-on-job</code> narrows the repair to what a previous audit found; a live scan still decides what is removed.</p>
 <h2 id="jobs">Jobs<a class="headerlink" href="#jobs" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>memcastle<span class="w"> </span>job<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--status<span class="w"> </span>&lt;STATUS&gt;<span class="o">]</span>
-</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>memcastle<span class="w"> </span>job<span class="w"> </span>show<span class="w"> </span>&lt;ID&gt;
-</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>memcastle<span class="w"> </span>job<span class="w"> </span>pause<span class="w"> </span>&lt;ID&gt;
-</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>memcastle<span class="w"> </span>job<span class="w"> </span>resume<span class="w"> </span>&lt;ID&gt;
-</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>memcastle<span class="w"> </span>job<span class="w"> </span>cancel<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>memcastle<span class="w"> </span>job<span class="w"> </span>retry<span class="w"> </span>&lt;ID&gt;
-</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>memcastle<span class="w"> </span>job<span class="w"> </span>demo<span class="w"> </span><span class="o">[</span>--steps<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>memcastle<span class="w"> </span>job<span class="w"> </span>list<span class="w"> </span><span class="o">[</span>--status<span class="w"> </span>&lt;STATUS&gt;<span class="o">]</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>memcastle<span class="w"> </span>job<span class="w"> </span>show<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>memcastle<span class="w"> </span>job<span class="w"> </span>pause<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>memcastle<span class="w"> </span>job<span class="w"> </span>resume<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>memcastle<span class="w"> </span>job<span class="w"> </span>cancel<span class="w"> </span>&lt;ID&gt;<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>memcastle<span class="w"> </span>job<span class="w"> </span>retry<span class="w"> </span>&lt;ID&gt;
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a>memcastle<span class="w"> </span>job<span class="w"> </span>demo<span class="w"> </span><span class="o">[</span>--steps<span class="w"> </span>&lt;N&gt;<span class="o">]</span>
 </span></code></pre></div>
 <p><code>jobs</code> is an alias of the <code>job</code> group, like <code>wings</code>, <code>rooms</code> and <code>drawers</code> for the hierarchy commands.</p>
 <p><code>--status</code> is one of <code>queued</code>, <code>running</code>, <code>paused</code>, <code>completed</code>, <code>failed</code> or <code>cancelled</code>.
@@ -3305,8 +3361,8 @@ Pausing and cancelling are requests: a running job stops at its next unit of wor
 which is a quick way to check the daemon end to end.
 The states a job moves through are in <a href="../architecture/#job-lifecycle">Architecture</a>.</p>
 <h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>generate<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>revoke<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>generate<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>memcastle<span class="w"> </span>auth<span class="w"> </span>revoke<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <p><code>auth generate</code> asks the daemon to make a high-entropy token, and prints it on standard output, once, and nothing else,
 so it pipes straight into a secret manager.

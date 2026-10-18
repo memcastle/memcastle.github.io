@@ -1628,6 +1628,15 @@
 
 
 <h1 id="adr-037-miners-are-miners-in-the-configuration-file-edited-in-place-by-the-daemon-read-only-over-mcp">ADR-037: Miners are <code>[[miners]]</code> in the configuration file, edited in place by the daemon, read-only over MCP<a class="headerlink" href="#adr-037-miners-are-miners-in-the-configuration-file-edited-in-place-by-the-daemon-read-only-over-mcp" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Amended by #268–#272 (2026-10-18).</strong>
+This ADR records the initial single-file decision.
+The current contract also permits one miner per TOML file, named source configurations with their own sign-ins,
+source-agnostic destination mappings, per-job document limits and miner-owned opt-in schedules.
+The cursor remains a source record, but distinct input/configuration/destination mappings may have separate source
+identities so filing into a different Wing or Room cannot be skipped as an unchanged document.
+See <a href="../../configuration/#miners">Configuration</a> and <a href="../../mining-sources/">Mining sources</a> for current behavior.</p>
+</blockquote>
 <h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
 <p>Accepted.
 Builds on <a href="../023-unified-source-model-for-mining/">ADR-023</a> (a source's cursor, which a miner points at and never owns)
