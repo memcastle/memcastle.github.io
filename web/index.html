@@ -1857,7 +1857,8 @@ The tests are in <code>web/test/</code>: the client, the login, the route guard 
 and <code>web/test/daemon</code> runs the same client and login against a real <code>memcastle serve</code>.
 The brand is <code>docs/images/icon.svg</code>, imported from there (alias <code>@brand</code>), so a new logo changes the documentation and the
 dashboard together.
-<code>web/</code> must stay a client of HTTP: the <code>web-http-only</code> hook fails on any path to the database, the store or the jobs.</p>
+<code>web/</code> must stay a client of HTTP: the <code>architecture</code> hook checks supported source files for paths to the database,
+the store or the jobs.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

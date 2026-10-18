@@ -2395,8 +2395,8 @@ An integration maps to the daemon's names and never renames anything in MemCastl
 <li>Make it installable: add a <code>memcastle-integration.toml</code>, an adapter for the agent in <code>src/integration/agent.rs</code>
    and its bundle to <code>packaging/integrations/build.sh</code>, as <a href="../integrations/#the-manifest">Agent integrations</a> describes.</li>
 </ol>
-<p>The <code>integrations-http-only</code> hook (see <a href="../development/#the-architecture-guard">Development</a>)
-fails the build if anything under <code>integrations/</code> reaches into MemCastle's storage or job code
+<p>The <code>architecture</code> hook's integration rules (see <a href="../development/#the-architecture-guard">Development</a>)
+fail the build if supported source files under <code>integrations/</code> reach into MemCastle's storage or job code
 instead of using the protocol.</p>
 <h2 id="the-fixtures">The fixtures<a class="headerlink" href="#the-fixtures" title="Permanent link">&para;</a></h2>
 <p>The fixtures are strict JSON in <code>tests/fixtures/integration/</code>, so any language can read them.</p>

@@ -1884,7 +1884,7 @@ workflow inputs and compatibility policy.</p>
 <li>Node and bun, only for <code>web/</code> and <code>integrations/</code> (<code>mise run web:check</code> and <code>integrations:check</code> install them for the
   task; the Rust build needs neither).</li>
 <li>Rust, via <code>rustup</code>, which installs the channel pinned in <code>rust-toolchain.toml</code> (mise does not manage Rust itself).</li>
-<li>The remaining tools (nextest, prek, typos, ...) via <code>mise</code> — run <code>mise install</code> once.</li>
+<li>The remaining tools (nextest, prek, ast-grep, typos, ...) via <code>mise</code> — run <code>mise install</code> once.</li>
 </ul>
 <p>That's it — SurrealKV, the embedded storage engine, is pure Rust,
 so the storage engine itself needs no C/C++ toolchain.
@@ -1897,7 +1897,7 @@ so the storage engine itself needs no C/C++ toolchain.
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:test<span class="w"> </span>--<span class="w"> </span>directory<span class="w">   </span><span class="c1"># the same for one source, which is what each CI leg runs</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard hooks, described below</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard, including its rule fixtures, described below</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:check<span class="w"> </span><span class="c1"># test the Core-shipped integration and install its bundle</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:build<span class="w"> </span><span class="c1"># bundle integrations/*/src into integrations/*/dist, for `--assets-dir "$PWD"`</span>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:package<span class="w"> </span><span class="c1"># lay out what a release ships in target/bundled-integrations</span>
@@ -2200,23 +2200,21 @@ on a warm one; in CI, on a warm cache, the tests went from 49 s to 31 s and the 
 What is left of the job is compiling the instrumented test binaries.</p>
 <h2 id="the-architecture-guard">The architecture guard<a class="headerlink" href="#the-architecture-guard" title="Permanent link">&para;</a></h2>
 <p>The non-negotiable invariant in <code>AGENTS.md</code> — "the CLI has no business logic MCP/HTTP can't reuse" —
-is enforced by the <code>store-isolation</code> <code>prek</code> hook.
-It greps <code>src/main.rs</code>, <code>src/cli.rs</code>, <code>src/client/</code>, <code>src/mcp/</code> and <code>src/api/</code>
-for a direct <code>store</code> or <code>jobs</code> import (including grouped <code>use crate::{store::..}</code> imports,
-even when rustfmt spreads them over several lines).
+is enforced by the <code>architecture</code> prek hook's ast-grep <code>store-isolation</code> rules.
+They inspect Rust paths in <code>src/main.rs</code>, <code>src/cli.rs</code>, <code>src/client/</code>, <code>src/mcp/</code> and <code>src/api/</code>
+for direct <code>store</code> or <code>jobs</code> use (including multiline grouped <code>use crate::{store::..}</code> imports).
 The one allowed exception is <code>main.rs</code>'s <code>SurrealStore</code> import, which <code>memcastle migrate</code> needs.
-The pattern matches text, not syntax,
-so a diagnostic-code string such as <code>memcastle::jobs::not_found</code> trips it too, even inside a comment:
+A diagnostic-code string such as <code>memcastle::jobs::not_found</code> still trips the rule, but a comment does not:
 tests should read a code from the error (<code>Error::body().code</code>) rather than spell it out in these directories.
 If you find yourself wanting to import <code>store</code> from one of those,
 the fix is almost always to add a method to <code>app::AppServices</code> instead,
 so the same capability becomes available to every interface at once.</p>
-<p>The <code>single-writer</code> hook enforces the companion invariant, one daemon and one writer per embedded palace:
+<p>The <code>single-writer</code> rule enforces the companion invariant, one daemon and one writer per embedded palace:
 <code>SurrealStore::connect</code> may only be called from <code>src/server/</code>, <code>src/store/</code> and <code>src/main.rs</code> (for <code>migrate</code>).</p>
-<p>The <code>integrations-http-only</code> hook keeps an integration to MCP and HTTP:
-it fails on <code>surrealdb</code>, <code>surrealkv</code>, <code>SurrealStore</code>, a <code>store</code> or <code>jobs</code> path, or <code>/api/db</code> anywhere under <code>integrations/</code>
-(Markdown and <code>node_modules</code> are skipped), see <a href="../adr/019-shared-integration-contract/">ADR-019</a>.
-Like the others it is a text match, so a comment that names one of them trips it too.</p>
+<p>The <code>integrations-http-only-*</code> and shared <code>clients-http-only-*</code> rules keep an integration to MCP and HTTP:
+they fail on <code>surrealdb</code>, <code>surrealkv</code>, <code>SurrealStore</code>, a <code>store</code> or <code>jobs</code> path, or <code>/api/db</code> in supported source files
+under <code>integrations/</code> (Markdown and <code>node_modules</code> are skipped), see <a href="../adr/019-shared-integration-contract/">ADR-019</a>.
+Comments and unsupported file types do not trip these rules.</p>
 <p>The authentication invariant has no hook, because a route or an MCP tool is not something a grep can recognise.
 It is enforced by tests instead: <code>tests/in_process/auth.rs</code> walks a list of the REST routes
 (and a route that does not exist) without a token, and fails if an MCP tool's name mentions credentials.</p>
@@ -2260,15 +2258,28 @@ network or an agent's settings file or a credential, and when anything under <co
 <code>src/server</code> (or any module but the binary) calls it.
 <code>tests/integration_cli.rs</code> exercises the installer with synthetic integrations;
 <code>tests/integration_bundle.rs</code> checks the Core-shipped package tree on Linux.</p>
-<p>The web UI is held to HTTP as an integration is: the <code>web-http-only</code> hook fails on <code>surrealdb</code>, <code>surrealkv</code>,
-<code>SurrealStore</code>, a <code>store</code> or <code>jobs</code> path, or <code>/api/db</code> anywhere under <code>web/</code> (Markdown, <code>node_modules</code> and <code>dist</code> are
-skipped), see <a href="../adr/035-web-ui/">ADR-035</a>.
+<p>The web UI is held to HTTP as an integration is: the <code>web-http-only-*</code> and shared <code>clients-http-only-*</code> rules fail on
+<code>surrealdb</code>, <code>surrealkv</code>,
+<code>SurrealStore</code>, a <code>store</code> or <code>jobs</code> path, or <code>/api/db</code> in supported source files under <code>web/</code>
+(Markdown, <code>node_modules</code>, <code>dist</code> and <code>bun.lock</code> are skipped), see <a href="../adr/035-web-ui/">ADR-035</a>.
 That the dashboard's static files are the only thing besides the liveness probe that needs no token is held by
 <code>tests/in_process/auth.rs</code> and <code>tests/in_process/web.rs</code>, which walk the routes with the dashboard off and on.</p>
-<p>Two more hooks guard the remaining invariants.
+<p>Two more rules guard the remaining invariants.
 <code>job-status-only-via-apply</code> fails on any <code>.status =</code> assignment outside <code>src/domain/job.rs</code>,
 so a job's status only ever changes through <code>Job::apply</code>.
 <code>no-hand-rolled-ddl</code> fails on schema DDL in Rust code, because the schema is SurrealKit's (<code>database/schema/*.surql</code>).</p>
+<p>The pinned ast-grep rules live under <code>ast-grep/rules/</code>, with discovery and Vue-as-HTML parsing in <code>sgconfig.yml</code>.
+The <code>architecture</code> hook scans the whole checkout even if only one relevant file was staged;
+<code>architecture-rule-tests</code> runs the native YAML rule fixtures, and <code>mise run guards</code> runs both prek hooks.
+To inspect diagnostics directly, run <code>ast-grep scan --report-style short</code>;
+to iterate on a rule, run <code>ast-grep test --skip-snapshot-tests</code>.
+Vue <code>&lt;script&gt;</code> blocks use HTML's built-in JavaScript injection, including imports from <code>lang="ts"</code> blocks;
+HTML rules check attributes and interpolations separately.
+The rules target Rust, TypeScript, TSX, JavaScript, Vue, HTML and JSON as specified by each rule's file globs;
+other file types are outside their scope.
+The web guard skips Markdown, <code>node_modules</code>, <code>dist</code> and <code>bun.lock</code>, and the integration guard skips Markdown and
+<code>node_modules</code>.
+These syntax rules cannot resolve renamed imports, computed strings or runtime behavior.</p>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <p>The documentation site is built by <a href="https://zensical.org/">Zensical</a> from <code>docs/</code>, configured in <code>zensical.toml</code>.
 <code>mise run docs</code> serves it with live reload, and <code>mise run docs:build</code> (part of <code>mise run ci</code>) builds it.

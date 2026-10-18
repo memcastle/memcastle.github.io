@@ -2095,7 +2095,8 @@ the same runner <code>serve</code> calls on every startup, because migration mus
 (see <a href="../adr/004-versioned-database-migrations/">ADR-004</a>).</p>
 <p><code>app::AppServices</code> is the one seam every interface (<code>api</code>, <code>mcp</code> and <code>server::run</code> itself) calls through.
 The invariants that keep this true are listed in <code>AGENTS.md</code>, and each is enforced by a <code>prek</code> hook or a test:
-<code>store-isolation</code> greps for forbidden imports, and <code>single-writer</code> limits who may construct a store.</p>
+The <code>architecture</code> prek hook runs ast-grep's <code>store-isolation</code> and <code>single-writer</code> rules over the checkout;
+the former checks forbidden Rust paths, and the latter limits who may construct a store.</p>
 <h2 id="provider-plugins-and-module-lifecycles">Provider plugins and module lifecycles<a class="headerlink" href="#provider-plugins-and-module-lifecycles" title="Permanent link">&para;</a></h2>
 <p>The <a href="../plugins/">plugin package</a> is the repository-level release and installation unit, not one source adapter.
 <code>distribution::plugin</code> discovers and verifies complete archives from the reviewed <code>plugins.json</code> catalogue,
