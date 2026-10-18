@@ -2379,7 +2379,7 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>GET /api/config</code></td>
-<td>The configuration in effect, for the <a href="../web/">dashboard's</a> settings page: listener, palace, datastore, whether authentication and the dashboard are on, where the runtime assets come from, scheduler limits, provider names and models, mining limits. It carries no token, key, provider URL or command line; a remote datastore location may be a URL with userinfo removed. This is daemon information like <code>status</code>, so no memory mode gates it. There is no MCP tool.</td>
+<td>The configuration in effect, for the <a href="../web/">dashboard's</a> settings page: listener, palace, datastore, authentication/dashboard state, assets, scheduler limits, provider names and models, provider account IDs/identities/auth kinds/availability and embedding connection-to-account links, and mining limits. It carries no token, credential reference name/path, key, provider URL or command line; a remote datastore location may be a URL with userinfo removed. This is daemon information like <code>status</code>, so no memory mode gates it. There is no MCP tool.</td>
 <td>none</td>
 </tr>
 <tr>

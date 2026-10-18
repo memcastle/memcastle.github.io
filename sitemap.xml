@@ -160,6 +160,9 @@
         <loc>https://memcastle.github.io/adr/051-embedding-provider-modules/</loc>
       </url>
       <url>
+        <loc>https://memcastle.github.io/adr/052-reusable-provider-accounts/</loc>
+      </url>
+      <url>
         <loc>https://memcastle.github.io/architecture/</loc>
       </url>
       <url>

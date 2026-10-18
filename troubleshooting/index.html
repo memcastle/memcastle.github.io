@@ -3354,7 +3354,9 @@ so a fact that became true later that day is not there yet.</p>
   Configure an <code>[embeddings]</code> provider, or search with <code>--ranking lexical</code> (the default <code>auto</code> falls back by itself).</li>
 <li><code>memcastle::embed::not_configured</code>: <code>memcastle embed</code> or an embedding request needs a provider, and none is set.</li>
 <li><code>memcastle::embed::failed</code>: the provider answered with an error or not at all.
-  The message carries what it said; for a <code>command</code> provider that is its exit status and the start of its standard error.
+  For an authenticated HTTP connection the message gives its status without repeating the remote response body,
+  which might contain your token; check the selected account's daemon environment variable or file and its endpoint.
+  For a <code>command</code> provider the message includes its exit status and the start of standard error.
   Searches with <code>auto</code> ranking keep working lexically meanwhile.</li>
 <li><code>memcastle::embed::dimension_mismatch</code>: the model returns another vector length than the 768 the palace stores.
   Ask it for 768 (<code>dimensions</code>), or choose a model that produces it.</li>
