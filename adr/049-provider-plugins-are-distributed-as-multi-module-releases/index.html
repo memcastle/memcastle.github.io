@@ -1617,7 +1617,8 @@ removes pointers whose plugin ledger entry is gone.</p>
 <p>Source modules continue through ADR-026's WASM host and the unchanged mining pipeline.
 Agent integrations continue to be installed locally by the CLI, from a selected installed plugin generation;
 there is no route or MCP tool that registers an integration in an agent.
-<code>embedding_provider</code> is a recognised manifest type whose selection/runtime contract is left to #256.</p>
+<code>embedding_provider</code> has a separate versioned Wasm runtime contract and profile selection in
+<a href="../051-embedding-provider-modules/">ADR-051</a>.</p>
 <p>GitTPL templates live in three independent repositories.
 The parent template composes source and integration templates repeatedly from recorded module IDs and locks resolved commits,
 allowing the same generated project to run under <code>plugins/&lt;provider&gt;/</code> or in a standalone repository.

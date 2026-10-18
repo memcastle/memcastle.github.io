@@ -2119,7 +2119,10 @@ only that integration, with no daemon dependency or module download.</p>
     C -.-&gt;|HTTP and MCP| A</code></pre>
 <p><code>registry.json</code> continues to serve legacy single-source packages; it is never interpreted as a plugin catalogue.
 For example, <code>memcastle-openai</code> supplies the separate <code>codex</code> and <code>chatgpt</code> source modules plus a <code>codex</code> agent integration.
-The shared OpenAI-compatible embeddings HTTP protocol stays in Core and needs no OpenAI product plugin.</p>
+The shared OpenAI-compatible embeddings HTTP protocol stays in Core and needs no OpenAI product plugin.
+Installed <code>embedding_provider</code> modules use a separate bounded Wasm contract behind the same <code>Embedder</code> interface.
+Named connections and profiles resolve their component generation through the installed plugin ledger, while miners
+and explicit embed jobs pin the resulting embedding space (see <a href="../adr/051-embedding-provider-modules/">ADR-051</a>).</p>
 <h2 id="change-notices-a-bus-not-a-database-feature">Change notices: a bus, not a database feature<a class="headerlink" href="#change-notices-a-bus-not-a-database-feature" title="Permanent link">&para;</a></h2>
 <p>A client that wants to know "something changed" without polling reads <code>GET /api/events</code>, a server-sent events stream
 (<a href="../adr/041-server-sent-events-for-dashboard-updates/">ADR-041</a>).

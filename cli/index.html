@@ -2591,6 +2591,8 @@ It prints no credential values or raw sensitive settings.</p>
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>  [SKIPPED] runtime prerequisites: Requires an authenticated running daemon.
 </span></code></pre></div>
 <p><code>memcastle doctor --json</code> (also the default when piped) returns an object with <code>findings</code> in presentation order.
+A plugin-backed default embedding profile is reported as configured;
+doctor does not verify the installed component or contact its model without a daemon.
 An excerpt showing one finding:</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="nt">"findings"</span><span class="p">:[{</span><span class="nt">"area"</span><span class="p">:</span><span class="s2">"Daemon and storage"</span><span class="p">,</span><span class="nt">"check"</span><span class="p">:</span><span class="s2">"daemon"</span><span class="p">,</span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"warning"</span><span class="p">,</span><span class="nt">"summary"</span><span class="p">:</span><span class="s2">"No daemon is reachable for this palace."</span><span class="p">,</span><span class="nt">"remediation"</span><span class="p">:</span><span class="s2">"Start it with `memcastle daemon start` to run online checks."</span><span class="p">}]}</span>
 </span></code></pre></div>
@@ -2918,15 +2920,20 @@ compatibility before any code becomes available.
 A local archive or already-built project is read by the CLI for a preview, then sent to that same daemon for validation.
 Each source module that asks for permissions needs its own reviewed consent digest; <code>--yes</code> explicitly approves the
 displayed permissions, while a non-interactive install without <code>--consent MODULE=DIGEST</code> is refused.
+An embedding module asking for network or host-scoped credential access has an independent digest, passed as
+<code>--consent embedding:MODULE=DIGEST</code> or confirmed interactively.
 Installing a plugin never enables a new source or installs its integrations.
 <code>source enable</code> and <code>integration install</code> are separate module lifecycle operations.
+Embedding modules are selected by named embedding connections/profiles, and a newly installed module can be used
+without restarting the daemon.
 <code>update</code> preserves each source's state and its existing permissions agreement, asking again only for changed grants.
 If a source ID has mined data from a removed legacy package, <code>plugin install</code> refuses to attach it silently;
 repeat with <code>--adopt-source SOURCE</code> after reviewing the source identity and its existing history.
 If the source was bundled by an older Core, first upgrade Core, run <code>source remove SOURCE</code> to clear its former package
 row, then install with <code>--adopt-source SOURCE</code> and enable it again; removing the row also clears its credential.
 <code>--yes</code> approves permissions, but never substitutes for this explicit adoption.
-<code>uninstall</code> refuses configured miners, active sources or jobs, installed integrations and dependent plugins,
+<code>uninstall</code> refuses configured miners or embedding profiles, active sources or jobs,
+installed integrations and dependent plugins,
 and preserves everything already mined.
 The existing <code>source install/search/update/remove</code> remain for format-1 source packages; they do not install a
 module out of a plugin package.
@@ -2949,7 +2956,7 @@ Use <code>--version</code> to override Git inference or package from a checkout 
 The archive does not contain <code>plugin.toml</code>; an <code>ID-VERSION.sha256sum</code> beside it verifies the entire archive.
 It never builds a module or writes <code>manifest.toml</code> beside the project; commit source locks before publishing.
 <code>plugin test</code> validates the exact archive and starts a disposable loopback daemon in an isolated temporary palace.
-It previews and installs with per-source consents, verifies integrations remain discoverable but uninstalled in agents,
+It previews and installs with per-module consents, verifies integrations remain discoverable but uninstalled in agents,
 then enables each newly installed source. Neither the configured palace nor any agent installation is touched.</p>
 <h3 id="source"><code>source</code><a class="headerlink" href="#source" title="Permanent link">&para;</a></h3>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>init<span class="w"> </span>&lt;NAME&gt;<span class="w"> </span><span class="o">[</span>--template<span class="w"> </span>rust<span class="p">|</span>typescript<span class="p">|</span>python<span class="p">|</span>cli<span class="o">]</span><span class="w"> </span><span class="o">[</span>--parent<span class="w"> </span>&lt;DIR&gt;<span class="o">]</span>
@@ -3302,6 +3309,8 @@ Looking is gated as a read and changing as a write, see <a href="../memory-modes
 selected scope, including vectors that were already up to date.
 It needs an <a href="../configuration/#embeddings"><code>[embeddings]</code> provider</a> and is refused with <code>memcastle::embed::not_configured</code>
 without one.
+If the selected profile references an uninstalled plugin module, it returns <code>memcastle::embed::profile_unavailable</code>
+until that module is installed; other configured profiles remain usable.
 You rarely run it: the daemon queues the same job after anything that writes drawers, and once at startup, so this is for
 backfilling after you configure a provider and for forcing a sweep.
 It only changes derived vector records and never changes canonical content, graph links or temporal history.

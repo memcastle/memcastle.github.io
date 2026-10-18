@@ -2748,18 +2748,23 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <td>query string: <code>q</code>, <code>registry?</code></td>
 </tr>
 <tr>
+<td><code>GET /api/embedding-providers</code></td>
+<td>List installed embedding modules, versions, contracts, supported models and dimensions, and their configured profile names independently of source/integration modules; never returns tokens.</td>
+<td>none</td>
+</tr>
+<tr>
 <td><code>GET /api/plugin-registry/plugins/{id}</code></td>
 <td>Fetch and verify a release, returning module-specific permission digests without installing it.</td>
 <td>query string: <code>version?</code>, <code>registry?</code></td>
 </tr>
 <tr>
 <td><code>POST /api/plugin-registry/install</code></td>
-<td>Fetch, verify and install the selected plugin; modules remain inactive.</td>
-<td>JSON body: <code>id</code>, <code>version?</code>, <code>registry?</code>, <code>consents?</code> (module ID to digest), <code>adopt_sources?</code> (explicit legacy IDs), <code>archive_digest?</code> (from preview)</td>
+<td>Fetch, verify and install the selected plugin; sources stay disabled and integrations uninstalled, while configured embedding profiles can select their module.</td>
+<td>JSON body: <code>id</code>, <code>version?</code>, <code>registry?</code>, <code>consents?</code> (module ID or <code>embedding:MODULE</code> to digest), <code>adopt_sources?</code> (explicit legacy IDs), <code>archive_digest?</code> (from preview)</td>
 </tr>
 <tr>
 <td><code>POST /api/plugins/preview</code></td>
-<td>Validate a plugin <code>.tar.gz</code> and show per-source consent digests and legacy source IDs needing explicit adoption, without installing it.</td>
+<td>Validate a plugin <code>.tar.gz</code> and show <code>source_consents</code>, <code>embedding_consents</code> (keys <code>embedding:MODULE</code>), and legacy source IDs needing explicit adoption, without installing it.</td>
 <td>archive bytes (at most 64 MiB)</td>
 </tr>
 <tr>
