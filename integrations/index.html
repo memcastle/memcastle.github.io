@@ -1946,33 +1946,35 @@ MCP and skills stay usable on their own, with no integration installed:</p>
 <td><code>pi</code> (external plugin)</td>
 <td>Pi (<code>@earendil-works/pi-coding-agent</code>)</td>
 <td>1.0 and later</td>
-<td>0.4 and later</td>
+<td>Plugin-capable Core (0.5 or current prerelease)</td>
 <td><a href="../integrations-pi/">Pi</a></td>
 </tr>
 <tr>
 <td><code>opencode</code> (external plugin)</td>
 <td><a href="https://opencode.ai">OpenCode</a></td>
 <td>1.18.29 and later, including 2.x</td>
-<td>0.4 and later</td>
+<td>Plugin-capable Core (0.5 or current prerelease)</td>
 <td><a href="../integrations-opencode/">OpenCode</a></td>
 </tr>
 <tr>
 <td><code>claude-code</code> (external plugin)</td>
 <td><a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a></td>
 <td>2.1.83 and later</td>
-<td>0.4 and later</td>
+<td>Plugin-capable Core (0.5 or current prerelease)</td>
 <td><a href="../integrations-claude-code/">Claude Code</a></td>
 </tr>
 <tr>
 <td><code>codex</code> (external plugin)</td>
 <td><a href="https://developers.openai.com/codex">Codex</a></td>
 <td>0.154.0 and later</td>
-<td>0.4 and later</td>
+<td>Plugin-capable Core (0.5 or current prerelease)</td>
 <td><a href="../integrations-codex/">Codex</a></td>
 </tr>
 </tbody>
 </table>
-<p><code>memcastle integration list</code> shows installed plugin integrations alongside those Core ships, with their own version ranges.</p>
+<p>The integration protocol supports 0.4 and later, but the installation steps below require a Core build with
+<code>plugin install</code> (for example, 0.5 or the current prerelease); stable 0.4.1 cannot install provider plugins.
+<code>memcastle integration list</code> shows installed plugin integrations alongside those Core ships, with their own version ranges.</p>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The agent is installed and its command (<code>pi</code>, <code>opencode</code>, <code>claude</code>, <code>codex</code>) is on your <code>PATH</code>.

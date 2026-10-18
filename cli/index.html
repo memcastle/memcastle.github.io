@@ -2981,8 +2981,8 @@ Installing a name that is already installed replaces it and keeps its state.
 <code>update</code> installs the newest version of the sources that came from a registry, from the same place, and keeps their
 state; a source installed from a file has no upstream and is left alone, and a bundled source is updated with MemCastle
 (<code>update &lt;NAME&gt;</code> for one is refused with <code>memcastle::source::bundled</code>, and a bare <code>update</code> skips it).
-A version that asks for permissions the installed one did not is not installed until you agree to them (a prompt, or
-<code>--yes</code>); without either the command says what is waiting and exits non-zero.
+A version with any change to its permission set, including a reduction, is not installed until you agree to the new set
+(a prompt, or <code>--yes</code>); without either the command says what is waiting and exits non-zero.
 <code>--check</code> only lists what has an update.
 <code>enable</code> and <code>disable</code> turn a source on or off, and a bundled source needs no consent to be enabled: it ships with
 MemCastle, and <code>show</code> prints what it may do.

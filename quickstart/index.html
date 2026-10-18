@@ -1754,7 +1754,7 @@ To get your terminal back instead, run <code>memcastle daemon start</code>, whic
 <p>Restart with <code>memcastle daemon restart</code>, stop with <code>memcastle daemon stop</code>.</p>
 <p>The <code>mcp</code> line is the URL to give your agent, see <a href="../mcp-clients/">Connect an MCP client</a>.</p>
 <h2 id="3-give-it-something-to-remember">3. Give it something to remember<a class="headerlink" href="#3-give-it-something-to-remember" title="Permanent link">&para;</a></h2>
-<p>Mining reads a directory into the palace, one memory per file.
+<p>Mining reads a directory into the palace, one document per file, stored in one or more drawers depending on its length.
 It runs as a background job, so the command returns immediately:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>./my-project<span class="w"> </span>--wing<span class="w"> </span>my-project
 </span></code></pre></div>

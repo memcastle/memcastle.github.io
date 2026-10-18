@@ -2080,11 +2080,12 @@ A remote palace may be shared by several daemons, which job leases keep safe (se
 Nothing in <code>domain</code> knows SurrealDB exists, and nothing in <code>cli</code>, <code>mcp</code> or <code>api</code> knows <code>store</code> exists.
 The dotted line is the important one: the CLI is an HTTP client of the daemon, exactly as a script or dashboard would be.</p>
 <p><strong>The CLI has no business logic MCP/HTTP can't reuse.</strong>
-Every subcommand except <code>serve</code>/<code>daemon start</code>/<code>daemon restart</code>/<code>migrate</code>, the local <code>completions</code>, the local
-<code>source init</code>/<code>build</code>/<code>test</code>/<code>package</code>/<code>index</code>/<code>keygen</code> and the local <code>integration list</code>/<code>install</code>/<code>update</code>/<code>remove</code>
-is a thin <code>client::DaemonClient</code> call
+Every subcommand except <code>serve</code>/<code>daemon start</code>/<code>daemon restart</code>/<code>migrate</code>, offline <code>doctor</code>, local <code>completions</code>,
+local <code>source init</code>/<code>build</code>/<code>test</code>/<code>package</code>/<code>index</code>/<code>keygen</code>, local <code>plugin inspect</code>/<code>package</code>/<code>sign</code>/<code>test</code>, and
+local <code>integration list</code>/<code>install</code>/<code>update</code>/<code>remove</code> is a thin <code>client::DaemonClient</code> call
 (<code>note</code> also reads the project directory through <code>crate::project</code> to choose a wing and room, then calls the daemon) —
 <code>memcastle mine ./project</code> submits a job over HTTP the way an MCP tool call would, rather than mining anything itself.
+<code>doctor</code> checks local prerequisites and uses the daemon client for runtime state when one is available.
 <code>daemon stop</code> is one of them: it only asks the daemon to shut down.
 <code>daemon start</code> and <code>daemon restart</code> add only process management:
 they read the daemon's registry file (<code>server::lifecycle</code>) to know when the old daemon is really gone,
@@ -2543,8 +2544,8 @@ What else a release may carry falls into three kinds, kept apart on purpose:</p>
 <ul>
 <li><strong>Embedded</strong> in the binary: anything small that must match its version exactly.
   The SurrealDB schema (<code>surrealkit::embed_schema!</code>) and the data migrations (<code>crate::migrate</code>) are of this kind.</li>
-<li><strong>Installed</strong> by a package manager under <code>share/memcastle</code>: the sources bundled with MemCastle, the agent integrations
-  and the skills they read, and the web UI.</li>
+<li><strong>Installed</strong> by a package manager under <code>share/memcastle</code>: shared skills and the web UI.
+  Core's sources and integrations directories are empty; provider plugins supply their own sources and agent integrations.</li>
 <li><strong>User data and configuration</strong>, under the XDG directories and never treated as assets.</li>
 </ul>
 <p><code>assets::Assets::resolve</code> picks one source for the run, in this order:</p>
@@ -2589,7 +2590,8 @@ Logging follows the same shape: a <code>tower-http</code> trace layer on the sha
 and every MCP tool call is traced at <code>debug</code> (a failed one at <code>warn</code>).</p>
 <p><strong>One authentication layer.</strong>
 When authentication is enabled, a single middleware on the merged router checks the bearer token before any REST
-handler or the MCP service sees the request, and only <code>GET /api/health</code> is exempt.
+handler or the MCP service sees the request.
+<code>GET /api/health</code> is exempt, as are <code>GET</code> and <code>HEAD</code> for static files under <code>/ui</code> when <code>web.enable</code> is set.
 It calls <code>AppServices::authenticate</code>, which checks a configured secret and the stored verifier in constant time.
 Generating and revoking a token are REST and CLI operations over <code>AppServices</code>, and MCP has no tool for either.
 The trace layer logs no headers, so the <code>Authorization</code> header never reaches the log.
@@ -2601,7 +2603,7 @@ The core stays a memory runtime:
 it has no scheduler for an integration's timers and no session of its own beyond the MCP session.
 See the <a href="../integration-contract/">Integration contract</a> and <a href="../adr/019-shared-integration-contract/">ADR-019</a>.</p>
 <p><strong>Installing an integration is local tooling, not a daemon operation.</strong>
-<code>memcastle integration</code> finds an integration under the assets root, checks it against the running MemCastle and the
+<code>memcastle integration</code> finds an integration under the assets root, checks it against the local MemCastle version and the
 agent's version, copies it to the user's data directory, and registers it through the agent's own mechanism:
 <code>pi install</code> for Pi, one marked plugin file for OpenCode.
 It lives in <code>crate::integration</code>, which like <code>crate::source</code> touches neither the store nor the jobs and opens no network,
@@ -2700,8 +2702,9 @@ See <a href="../triggers/">Triggers</a> and <a href="../adr/043-source-triggers/
 <li>Handing a static credential (an environment variable or a file) to a source: the model stores a credential
   <em>reference</em> and never a secret, and the source contract takes no static credential yet.
   What exists is an OAuth sign-in a source can declare, which the daemon runs, keeps and renews, and hands over as an
-  access token (<a href="../adr/039-oauth-credentials-for-mining-sources/">ADR-039</a>); the shipped <code>chatgpt</code> source uses it in
-  <a href="../mining-sources/#chatgpt">experimental web mode</a>, while importing an export needs no sign-in.</li>
+  access token (<a href="../adr/039-oauth-credentials-for-mining-sources/">ADR-039</a>); the separately installed <code>memcastle-openai</code>
+  plugin's <code>chatgpt</code> source uses it in <a href="../mining-sources/#chatgpt">experimental web mode</a>, while importing an export
+  needs no sign-in.</li>
 <li>Restricting an installed source's network access by host name and a filesystem write permission for sources: the package
   contract allows each, and neither is built.</li>
 <li>A registry server and a search across registries beyond their names and descriptions: the official registry is a static

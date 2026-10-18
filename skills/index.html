@@ -1812,7 +1812,7 @@ A skill you copied under the same name as one of the integration's is the one th
 <li>Get the skills of the release you run.
    The repository at a release tag holds the skills written for that release:</li>
 </ol>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span><span class="m">0</span>.2.0<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/memcastle/memcastle
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>memcastle<span class="w"> </span>--version<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="w"> </span><span class="s1">' '</span><span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="k">)</span><span class="s2">"</span><span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/memcastle/memcastle
 </span></code></pre></div>
 <p>Use the tag matching <code>memcastle --version</code>.
    Downloading the source archive of the release from GitHub works too.
