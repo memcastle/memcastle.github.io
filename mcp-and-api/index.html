@@ -2046,8 +2046,8 @@ A failure comes back as an MCP error result carrying the <a href="#errors">error
 </tr>
 <tr>
 <td><code>memcastle_search</code></td>
-<td><code>query</code>, <code>limit?</code>, <code>wing?</code>, <code>room?</code>, <code>ranking?</code>, <code>tags?</code>, <code>source_kind?</code>, <code>as_of?</code>, <code>from?</code>, <code>until?</code>, <code>include_historical?</code>, <code>expand?</code></td>
-<td>Search drawer content: lexical, semantic or hybrid, see <a href="#searching">Searching</a>.</td>
+<td><code>query</code>, <code>limit?</code>, <code>wing?</code>, <code>room?</code>, <code>ranking?</code>, <code>profile?</code>, <code>tags?</code>, <code>source_kind?</code>, <code>as_of?</code>, <code>from?</code>, <code>until?</code>, <code>include_historical?</code>, <code>expand?</code></td>
+<td>Search drawer content: lexical, semantic or hybrid in a selected profile, see <a href="#searching">Searching</a>.</td>
 </tr>
 <tr>
 <td><code>memcastle_recall</code></td>
@@ -2609,8 +2609,8 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>PUT /api/drawers/{id}/embedding</code></td>
-<td>Attach a vector you computed to a drawer.</td>
-<td>JSON body: <code>embedding</code> (768 numbers)</td>
+<td>Attach a vector you computed to a drawer in a configured profile.</td>
+<td>JSON body: <code>profile</code>, <code>embedding</code> (profile dimensions)</td>
 </tr>
 <tr>
 <td><code>GET /api/drawers/{id}/duplicates</code></td>
@@ -3012,17 +3012,23 @@ Equal scores order by drawer id, so a query ranks identically every time.
 A hit never carries the embedding vector.</p>
 <p><strong>Your own vectors.</strong>
 <code>POST /api/search</code> takes the request as JSON, so it can carry a <code>query_embedding</code>.
+Set <code>profile</code> to select one compatible embedding space, in either JSON or the GET query string.
+Caller-supplied vectors require an explicit configured profile, including when the connection is <code>external</code>.
+Older callers that omit <code>profile</code> now receive <code>400 memcastle::input::invalid</code> instead of writing vectors of unknown
+provenance; configure an <code>external</code> profile with their model and dimensions, then send its name on both requests.
 Its text is <code>text</code> (or <code>query</code>, like everywhere else), and the scope is a nested <code>filter</code> rather than the flat
 <code>wing</code>, <code>room</code> and <code>tags</code> of the <code>GET</code> form:</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"…"</span><span class="p">,</span><span class="w"> </span><span class="nt">"ranking"</span><span class="p">:</span><span class="w"> </span><span class="s2">"semantic"</span><span class="p">,</span><span class="w"> </span><span class="nt">"limit"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">"filter"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"wing"</span><span class="p">:</span><span class="w"> </span><span class="s2">"work"</span><span class="p">,</span><span class="w"> </span><span class="nt">"tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"style"</span><span class="p">],</span><span class="w"> </span><span class="nt">"temporal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"current"</span><span class="w"> </span><span class="p">},</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">"query_embedding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="w"> </span><span class="s2">"… 768 numbers"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">"profile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"local"</span><span class="p">,</span><span class="w"> </span><span class="nt">"query_embedding"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="w"> </span><span class="s2">"… profile dimensions"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 </span></code></pre></div>
 <p><code>temporal</code> is <code>"current"</code>, <code>"all"</code>, <code>{"as_of": "2026-01-31T12:00:00Z"}</code> or
 <code>{"between": {"from": "2026-01-01T00:00:00Z", "until": "2026-02-01T00:00:00Z"}}</code>.
 An interval whose <code>from</code> is not before its <code>until</code> is refused with <code>memcastle::input::invalid</code>.
-Attach a document vector with <code>PUT /api/drawers/{id}/embedding</code>, whose body is <code>{"embedding": [...]}</code>.
-Both need exactly 768 numbers: the dimension is part of the palace's schema.</p>
+Attach a document vector with <code>PUT /api/drawers/{id}/embedding</code>, whose body is
+<code>{"profile": "local", "embedding": [...]}</code>.
+The selected profile records provider, model, dimension and pipeline provenance with the vector.
+The document and query vectors must both have the selected profile's configured dimensions.</p>
 <p><strong>Correcting a drawer.</strong>
 <code>POST /api/drawers/{id}/supersede</code> closes the drawer and, when the body has <code>content</code>, files a replacement in the same room
 from the same instant.
@@ -3251,7 +3257,7 @@ The reasoning is in <a href="../adr/024-entity-extraction-as-an-enrich-job/">ADR
 </tr>
 <tr>
 <td><code>embed</code></td>
-<td><code>wing?</code>; fills the embeddings that are missing, and needs an <code>[embeddings]</code> provider (REST and CLI only, no MCP tool)</td>
+<td><code>wing?</code>, <code>profile?</code>, <code>refresh?</code> (<code>missing</code> by default; <code>stale</code> or <code>all</code> when explicitly requested); pins the provider, model, dimension and space in the durable job (REST and CLI only, no MCP tool)</td>
 </tr>
 <tr>
 <td><code>extract</code></td>

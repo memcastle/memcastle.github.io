@@ -1172,6 +1172,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#existing-embeddings-without-provenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Existing embeddings without provenance
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#inspect-or-run-migrations-by-hand" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1662,6 +1673,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#existing-embeddings-without-provenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Existing embeddings without provenance
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#inspect-or-run-migrations-by-hand" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1830,6 +1852,14 @@ If a step fails, the daemon exits with <code>memcastle::migrate::failed</code> i
 The version stays at the last step that succeeded, so once the cause is fixed a later start resumes rather than starts over.
 The lock is a lease, so a crashed run does not block the next one forever;
 a start that finds it held fails with <code>memcastle::migrate::locked</code>.</p>
+<h2 id="existing-embeddings-without-provenance">Existing embeddings without provenance<a class="headerlink" href="#existing-embeddings-without-provenance" title="Permanent link">&para;</a></h2>
+<p>Version 4 records the switch to profile-scoped vectors after SurrealKit adds the derived-vector tables,
+and retires the unscoped legacy HNSW index with SurrealKit's destructive rollout API.
+The old <code>drawer.embedding</code> values remain recoverable, but their provider and model cannot be inferred reliably;
+semantic search does not use them in a selected profile.
+Migration does not contact a provider or rewrite canonical content.
+After configuring a profile, run <code>memcastle embed --profile NAME</code> to fill its missing vectors as a durable job.
+Use <code>--refresh stale</code> or <code>--refresh all</code> only when those replacements are intended.</p>
 <h2 id="inspect-or-run-migrations-by-hand">Inspect or run migrations by hand<a class="headerlink" href="#inspect-or-run-migrations-by-hand" title="Permanent link">&para;</a></h2>
 <p><code>memcastle migrate</code> runs the same code as <code>serve</code>, but talks to storage directly and needs no daemon.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>migrate<span class="w"> </span>--status<span class="w">   </span><span class="c1"># report, change nothing</span>
@@ -1855,7 +1885,7 @@ Applying prints what happened, in the same two forms:</p>
 <p>An embedded palace can only be opened by one process, so <strong>stop the daemon before running <code>memcastle migrate</code></strong>;
 otherwise it fails with <code>memcastle::store::backend_failed</code>.
 While a daemon is running, <code>memcastle status</code> shows the same information under its datastore line
-(<code>migrations 3/3</code>), and lists any pending steps.</p>
+(<code>migrations 4/4</code>), and lists any pending steps.</p>
 <h2 id="upgrading-memcastle">Upgrading MemCastle<a class="headerlink" href="#upgrading-memcastle" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Stop the daemon: <code>memcastle daemon stop</code>.</li>

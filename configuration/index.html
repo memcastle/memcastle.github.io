@@ -1375,6 +1375,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#named-connections-and-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Named connections and profiles
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-command-provider" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2051,6 +2062,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#named-connections-and-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Named connections and profiles
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-command-provider" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2723,7 +2745,7 @@ Keep secrets out of version control: put this file outside any repository, and r
 <td><code>false</code></td>
 </tr>
 <tr>
-<td><code>embeddings.provider</code> (<code>none</code>, <code>command</code> or <code>http</code>)</td>
+<td><code>embeddings.provider</code> (<code>none</code>, <code>command</code>, <code>http</code>, <code>openai</code> or <code>external</code>)</td>
 <td><code>MEMCASTLE_EMBEDDINGS_PROVIDER</code></td>
 <td><code>none</code></td>
 </tr>
@@ -2754,6 +2776,31 @@ Keep secrets out of version control: put this file outside any repository, and r
 </tr>
 <tr>
 <td><code>embeddings.command</code> (a list)</td>
+<td>none</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>embeddings.dimensions</code> (positive integer, legacy single-provider form)</td>
+<td>none</td>
+<td><code>768</code></td>
+</tr>
+<tr>
+<td><code>embeddings.default</code> (named profile)</td>
+<td>none</td>
+<td>legacy <code>default</code> when a single provider is configured</td>
+</tr>
+<tr>
+<td><code>embeddings.providers.&lt;name&gt;.type</code> (<code>command</code>, <code>openai</code>, <code>http</code> or <code>external</code>)</td>
+<td>none</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>embeddings.providers.&lt;name&gt;.url</code> (<code>base_url</code> is an alias)</td>
+<td>none</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>embeddings.profiles.&lt;name&gt;.provider</code>, <code>.model</code>, <code>.dimensions</code></td>
 <td>none</td>
 <td>none</td>
 </tr>
@@ -3043,20 +3090,62 @@ and has not created the palace, migrated it or touched its jobs.</p>
 MemCastle links no model and does not want your API keys, so the <code>[embeddings]</code> section only says how to reach one.
 Without it the palace works exactly as before and <code>search</code> is lexical.
 A vector is <em>derived</em> data: it is stored beside the drawer, never replaces its content, and can be recomputed at any time.</p>
-<p>Every stored vector has <strong>768</strong> numbers, because the vector index's dimension is part of the palace's schema.
-Pick a model that produces 768, or one that can be asked for 768 (OpenAI's <code>text-embedding-3-*</code> models accept a
-<code>dimensions</code> setting, which MemCastle sends).
-Anything else is refused with <code>memcastle::embed::dimension_mismatch</code>.</p>
-<h3 id="the-command-provider">The <code>command</code> provider<a class="headerlink" href="#the-command-provider" title="Permanent link">&para;</a></h3>
+<p>The legacy single-provider configuration defaults to 768 dimensions; set <code>dimensions</code> for another model.
+The daemon requests each profile's configured dimensions and rejects a different-sized response with
+<code>memcastle::embed::dimension_mismatch</code>.
+Vectors for different profiles have separate records keyed by a generation-pipeline fingerprint, including the
+connection identity, model, dimensions and truncation version.
+Changing any of those settings creates a new space, rather than silently reusing incompatible vectors.
+The first space to claim a schema-declared 768-, 1536- or 3072-dimensional HNSW tier owns that tier permanently;
+other spaces, including models with the same dimensions, use slower exact profile-filtered ranking.
+Other positive dimensions also use exact ranking, so a model change never needs runtime schema DDL.
+The indexed tier cannot be reassigned by disabling a profile; choose the profile to index before the first embedding
+at that dimension (usually by setting it as the default), or plan for exact searches that grow with its corpus size.
+Use a versioned, immutable model identifier when the provider offers one.
+If an endpoint silently changes the model behind the <em>same</em> alias, MemCastle cannot detect that from configuration:
+pin the revision at the provider, or change the configured model/profile deliberately and re-embed.</p>
+<h3 id="named-connections-and-profiles">Named connections and profiles<a class="headerlink" href="#named-connections-and-profiles" title="Permanent link">&para;</a></h3>
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">[embeddings]</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"command"</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"/usr/local/bin/embed"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--quiet"</span><span class="p">]</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"my-model"</span><span class="w">      </span><span class="c1"># passed to the program, optional</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"local"</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">[embeddings.providers.ollama]</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"openai"</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http://localhost:11434/v1"</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="k">[embeddings.providers.router]</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"openai"</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">base_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"https://openrouter.ai/api/v1"</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="k">[embeddings.profiles.local]</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"ollama"</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"qwen3-embedding"</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="n">dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">768</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="k">[embeddings.profiles.bulk]</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"router"</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"openai/text-embedding-3-small"</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="n">dimensions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1536</span>
+</span></code></pre></div>
+<p>The <code>openai</code> type implements the OpenAI embeddings protocol, including compatible endpoints.
+<code>http</code> remains available for the legacy single-provider form.
+For caller-computed vectors without a daemon provider, use <code>type = "external"</code> for a named connection and select its
+profile explicitly on upload and query; the declared model and dimensions identify the space.
+Do not use one external profile for vectors from different models.
+The existing single-provider keys under <code>[embeddings]</code> map to a profile named <code>default</code> when that provider is enabled.
+If only named profiles are configured, set <code>embeddings.default</code> to enable automatic sweeps and unqualified semantic
+queries; otherwise select a profile explicitly for each job or search.
+Old vectors in <code>drawer.embedding</code> have no verifiable model identity: they are retained but excluded from profile search.
+Run <code>memcastle embed --profile NAME</code> to populate a new space.</p>
+<h3 id="the-command-provider">The <code>command</code> provider<a class="headerlink" href="#the-command-provider" title="Permanent link">&para;</a></h3>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">[embeddings]</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"command"</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"/usr/local/bin/embed"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--quiet"</span><span class="p">]</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"my-model"</span><span class="w">      </span><span class="c1"># passed to the program, optional</span>
 </span></code></pre></div>
 <p>MemCastle runs the program, without a shell, once per batch, writes one JSON object to its standard input
 and reads one from its standard output:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-model"</span><span class="p">,</span><span class="w"> </span><span class="nt">"dimension"</span><span class="p">:</span><span class="w"> </span><span class="mi">768</span><span class="p">,</span><span class="w"> </span><span class="nt">"texts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"first text"</span><span class="p">,</span><span class="w"> </span><span class="s2">"second text"</span><span class="p">]}</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span><span class="nt">"embeddings"</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">0.01</span><span class="p">,</span><span class="w"> </span><span class="mf">0.02</span><span class="p">,</span><span class="w"> </span><span class="s2">"… 768 numbers"</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">0.03</span><span class="p">,</span><span class="w"> </span><span class="mf">0.04</span><span class="p">,</span><span class="w"> </span><span class="s2">"…"</span><span class="p">]]}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-model"</span><span class="p">,</span><span class="w"> </span><span class="nt">"dimension"</span><span class="p">:</span><span class="w"> </span><span class="mi">768</span><span class="p">,</span><span class="w"> </span><span class="nt">"texts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"first text"</span><span class="p">,</span><span class="w"> </span><span class="s2">"second text"</span><span class="p">]}</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">{</span><span class="nt">"embeddings"</span><span class="p">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">0.01</span><span class="p">,</span><span class="w"> </span><span class="mf">0.02</span><span class="p">,</span><span class="w"> </span><span class="s2">"… 768 numbers"</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mf">0.03</span><span class="p">,</span><span class="w"> </span><span class="mf">0.04</span><span class="p">,</span><span class="w"> </span><span class="s2">"…"</span><span class="p">]]}</span>
 </span></code></pre></div>
 <p>The program returns one vector per text, in order, and exits <code>0</code>.
 A non-zero exit, output that is not that JSON, or no answer within <code>timeout_secs</code> fails the call, and the program is killed.
@@ -3064,10 +3153,10 @@ This is the provider to use when the model needs a credential or a client librar
 sees them, and the daemon's own <code>MEMCASTLE_*</code> variables (its auth token included) are removed from the program's environment.
 Everything else is inherited, so <code>PATH</code> and the program's own variables work.</p>
 <h3 id="the-http-provider">The <code>http</code> provider<a class="headerlink" href="#the-http-provider" title="Permanent link">&para;</a></h3>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">[embeddings]</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http"</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http://localhost:11434/v1"</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"nomic-embed-text"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">[embeddings]</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http"</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http://localhost:11434/v1"</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"nomic-embed-text"</span>
 </span></code></pre></div>
 <p>MemCastle posts to <code>{url}/embeddings</code> in the OpenAI format, so OpenAI, Ollama, llama.cpp's server and vLLM all work.
 A local server needs no key.
@@ -3076,9 +3165,13 @@ A hosted one takes <code>MEMCASTLE_EMBEDDINGS_API_KEY</code>, sent as a bearer t
 <ul>
 <li>The daemon embeds in the background.
   After anything that writes drawers (mining, a checkpoint, a diary entry, a created drawer) and once at startup,
-  it queues a low-priority <code>embed</code> job that embeds every drawer without a vector.
+  it queues a low-priority <code>embed</code> job that embeds every drawer missing a vector in the default profile.
   Queued sweeps are coalesced, so a burst of writes leaves one waiting job.
-  <code>memcastle embed</code> queues one by hand, for example after you first configure a provider.</li>
+  <code>memcastle embed</code> queues one by hand, for example after you first configure a provider.
+  <code>memcastle embed --profile bulk --refresh stale --wing project</code> selects a profile and refreshes missing or stale inputs;
+  <code>--refresh all</code> re-embeds every drawer in scope, while the default is <code>missing</code>.
+  Jobs persist their selected model and generation settings and fail with an actionable error if a restarted daemon has
+  changed them; submit a new job after changing a profile.</li>
 <li>A drawer is embedded from its first 8,000 characters, because providers cap their input.
   Its content is stored whole and verbatim whatever the provider sees.</li>
 <li>A query is embedded on the fly.
@@ -3128,8 +3221,8 @@ See <a href="../adr/024-entity-extraction-as-an-enrich-job/">ADR-024</a>.</p>
 </tbody>
 </table>
 <h3 id="the-heuristic-extractor">The <code>heuristic</code> extractor<a class="headerlink" href="#the-heuristic-extractor" title="Permanent link">&para;</a></h3>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">[extraction]</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"heuristic"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">[extraction]</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"heuristic"</span>
 </span></code></pre></div>
 <p>Deterministic, with nothing to configure and no model.
 It finds runs of capitalised words (<code>Ada Lovelace</code>), <code>@handles</code> and <code>`code spans`</code>, and relates two of them when the
@@ -3139,20 +3232,20 @@ It never guesses: two names that merely share a sentence are not related, and a 
 entities and no relationship.
 For more than that, use a model.</p>
 <h3 id="the-command-extractor">The <code>command</code> extractor<a class="headerlink" href="#the-command-extractor" title="Permanent link">&para;</a></h3>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">[extraction]</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"command"</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"/usr/local/bin/extract"</span><span class="p">]</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"my-model"</span><span class="w">      </span><span class="c1"># passed to the program, optional</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[extraction]</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"command"</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"/usr/local/bin/extract"</span><span class="p">]</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"my-model"</span><span class="w">      </span><span class="c1"># passed to the program, optional</span>
 </span></code></pre></div>
 <p>MemCastle runs the program, without a shell, once per batch, writes one JSON object to its standard input
 and reads one from its standard output:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-model"</span><span class="p">,</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w"> </span><span class="nt">"vocabulary"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"kinds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"person"</span><span class="p">,</span><span class="w"> </span><span class="s2">"…"</span><span class="p">],</span><span class="w"> </span><span class="nt">"predicates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"works_on"</span><span class="p">,</span><span class="w"> </span><span class="s2">"…"</span><span class="p">]},</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w"> </span><span class="nt">"texts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"first text"</span><span class="p">,</span><span class="w"> </span><span class="s2">"second text"</span><span class="p">]}</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">{</span><span class="nt">"extractions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="p">{</span><span class="nt">"entities"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ada"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person"</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MemCastle"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"project"</span><span class="p">}],</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">   </span><span class="nt">"relations"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ada"</span><span class="p">,</span><span class="w"> </span><span class="nt">"predicate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"works_on"</span><span class="p">,</span><span class="w"> </span><span class="nt">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MemCastle"</span><span class="p">,</span><span class="w"> </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.9</span><span class="p">}]},</span>
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">  </span><span class="p">{</span><span class="nt">"entities"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"relations"</span><span class="p">:</span><span class="w"> </span><span class="p">[]}]}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-model"</span><span class="p">,</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w"> </span><span class="nt">"vocabulary"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"kinds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"person"</span><span class="p">,</span><span class="w"> </span><span class="s2">"…"</span><span class="p">],</span><span class="w"> </span><span class="nt">"predicates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"works_on"</span><span class="p">,</span><span class="w"> </span><span class="s2">"…"</span><span class="p">]},</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w"> </span><span class="nt">"texts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"first text"</span><span class="p">,</span><span class="w"> </span><span class="s2">"second text"</span><span class="p">]}</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">{</span><span class="nt">"extractions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="p">{</span><span class="nt">"entities"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ada"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"person"</span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MemCastle"</span><span class="p">,</span><span class="w"> </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"project"</span><span class="p">}],</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">   </span><span class="nt">"relations"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"subject"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ada"</span><span class="p">,</span><span class="w"> </span><span class="nt">"predicate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"works_on"</span><span class="p">,</span><span class="w"> </span><span class="nt">"object"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MemCastle"</span><span class="p">,</span><span class="w"> </span><span class="nt">"confidence"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.9</span><span class="p">}]},</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="p">{</span><span class="nt">"entities"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w"> </span><span class="nt">"relations"</span><span class="p">:</span><span class="w"> </span><span class="p">[]}]}</span>
 </span></code></pre></div>
 <p>One extraction per text, in order, and exit <code>0</code>.
 When source preferences are configured, the request also contains <code>"preferences"</code>, an array aligned with <code>"texts"</code>.
@@ -3162,10 +3255,10 @@ A preference is a cue for evidence selection, not permission to invent a fact or
 A non-zero exit, output that is not that JSON, or no answer within <code>timeout_secs</code> fails the call, and the program is killed.
 The program owns the model and any credential, and the daemon's own <code>MEMCASTLE_*</code> variables are removed from its environment.</p>
 <h3 id="the-http-extractor">The <code>http</code> extractor<a class="headerlink" href="#the-http-extractor" title="Permanent link">&para;</a></h3>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">[extraction]</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http"</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http://localhost:11434/v1"</span>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"llama3.1"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">[extraction]</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http"</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http://localhost:11434/v1"</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"llama3.1"</span>
 </span></code></pre></div>
 <p>MemCastle posts to <code>{url}/chat/completions</code> in the OpenAI format, one request per drawer, telling the model the
 vocabulary and asking for JSON.
@@ -3231,20 +3324,20 @@ called.
 Triggers are the <code>[[triggers]]</code> entries of the configuration file, managed from the file or from
 <a href="../cli/#trigger"><code>memcastle trigger</code></a> (<a href="../adr/043-source-triggers/">ADR-043</a>).
 <strong>Every trigger is disabled until <code>enabled = true</code></strong>, and nothing the daemon does ever sets it.</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">[[triggers]]</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes-watch"</span><span class="w">       </span><span class="c1"># unique: lowercase letters, digits, `-` and `_`; `reload` is reserved</span>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes"</span><span class="w">            </span><span class="c1"># the miner it asks to run</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"watch"</span><span class="w">             </span><span class="c1"># "schedule", "poll", "webhook" or "watch"</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">            </span><span class="c1"># the default</span>
-</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/notes"</span><span class="w"> </span><span class="c1"># the other keys depend on the type</span>
-</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">debounce</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2s"</span>
-</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
-</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="k">[[triggers]]</span>
-</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes-hook"</span>
-</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes"</span>
-</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"webhook"</span>
-</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"NOTES_HOOK_SECRET"</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1"># or { type = "file", path = "/run/secrets/hook" }</span>
-</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="n">delivery_header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"x-delivery-id"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">[[triggers]]</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes-watch"</span><span class="w">       </span><span class="c1"># unique: lowercase letters, digits, `-` and `_`; `reload` is reserved</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes"</span><span class="w">            </span><span class="c1"># the miner it asks to run</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"watch"</span><span class="w">             </span><span class="c1"># "schedule", "poll", "webhook" or "watch"</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">            </span><span class="c1"># the default</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/notes"</span><span class="w"> </span><span class="c1"># the other keys depend on the type</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">debounce</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2s"</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="k">[[triggers]]</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes-hook"</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="n">miner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"notes"</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"webhook"</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"NOTES_HOOK_SECRET"</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1"># or { type = "file", path = "/run/secrets/hook" }</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="n">delivery_header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"x-delivery-id"</span>
 </span></code></pre></div>
 <p>The settings of each type, what enabling needs, the webhook listener (<code>[webhook]</code> above), its security and
 networking prerequisites, bursts, repeats, restarts and failures are on the <a href="../triggers/">Triggers</a> page.
@@ -3307,18 +3400,18 @@ leaves the sources to the installed assets.
 They are the <code>[[miners]]</code> entries of the configuration file, so they are declarative and survive a restart,
 and they are managed from the file, from <a href="../cli/#miner"><code>memcastle miner</code></a> and, read-only, from MCP
 (<a href="../adr/037-persistent-miner-configuration/">ADR-037</a>).</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal-personal"</span><span class="w">          </span><span class="c1"># unique: lowercase letters, digits, `-` and `_`; `reload` is reserved</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                 </span><span class="c1"># the source adapter: `directory`, or an installed source's name</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">                    </span><span class="c1"># default true</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"+336..."</span><span class="w">               </span><span class="c1"># where in the source to read; the source decides what it means</span>
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">wing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                   </span><span class="c1"># the wing its drawers go to, when it should not be the source's default</span>
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"SIGNAL_TOKEN"</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1"># or { type = "file", path = "/run/secrets/signal" }, or { type = "oauth" }</span>
-</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
-</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="k">[miners.options]</span><span class="w">                  </span><span class="c1"># source options: strings, numbers, booleans, lists of strings</span>
-</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="n">contacts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"+336..."</span><span class="p">]</span>
-</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"MemCastle"</span><span class="p">]</span>
-</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="n">window_days</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal-personal"</span><span class="w">          </span><span class="c1"># unique: lowercase letters, digits, `-` and `_`; `reload` is reserved</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                 </span><span class="c1"># the source adapter: `directory`, or an installed source's name</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">                    </span><span class="c1"># default true</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"+336..."</span><span class="w">               </span><span class="c1"># where in the source to read; the source decides what it means</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">wing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"signal"</span><span class="w">                   </span><span class="c1"># the wing its drawers go to, when it should not be the source's default</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"SIGNAL_TOKEN"</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1"># or { type = "file", path = "/run/secrets/signal" }, or { type = "oauth" }</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="k">[miners.options]</span><span class="w">                  </span><span class="c1"># source options: strings, numbers, booleans, lists of strings</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="n">contacts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"+336..."</span><span class="p">]</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"MemCastle"</span><span class="p">]</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="n">window_days</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span>
 </span></code></pre></div>
 <p>A key that is not listed is an error, not an ignored typo: <code>enable = false</code> must not leave a miner enabled.
 <code>options</code> is an open table, so a source can define keys of its own.
@@ -3368,15 +3461,15 @@ Likewise REST callers must replace <code>scope</code> and <code>config</code> wi
 <h3 id="claude-code-history-miner">Claude Code history miner<a class="headerlink" href="#claude-code-history-miner" title="Permanent link">&para;</a></h3>
 <p>The externally installed <code>claude</code> source reads only session transcripts under <code>~/.claude/projects</code>.
 Define a miner explicitly; no Claude Code client or source installation creates one:</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude"</span>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="k">[miners.options]</span>
-</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-09"</span>
-</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/src/*"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude-history"</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"claude"</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">locator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/.claude/projects"</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="k">[miners.options]</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-09"</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="n">dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/home/alice/src/*"</span>
 </span></code></pre></div>
 <p><code>since</code> narrows by transcript modification time and <code>dir</code> matches the working directory recorded in each transcript.
 Use a separate miner or run <code>memcastle mine claude --full</code> when a restored transcript predates its cursor.</p>
@@ -3385,14 +3478,14 @@ Use a separate miner or run <code>memcastle mine claude --full</code> when a res
 Sign the source in with <code>memcastle source auth chatgpt</code> on the daemon's machine before running web miners.
 This source's desktop-compatible OAuth bearer was verified to read history without cookies using a browser-style
 User-Agent; the old manually supplied web session remains a fallback (<a href="../mining-sources/#chatgpt">ChatGPT</a>).</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt-work"</span>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt"</span>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
-</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="k">[miners.options]</span>
-</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">projects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"name:Work"</span><span class="p">,</span><span class="w"> </span><span class="s2">"id:g-p-example"</span><span class="p">]</span>
-</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"web"</span>
-</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="n">account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"personal"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt-work"</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"chatgpt"</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="k">[miners.options]</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">projects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"name:Work"</span><span class="p">,</span><span class="w"> </span><span class="s2">"id:g-p-example"</span><span class="p">]</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"web"</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"personal"</span>
 </span></code></pre></div>
 <p>The miner joins the <code>projects</code> list with commas and the source resolves names to unique project IDs.
 If a name no longer exists or names collide, the run fails rather than broadening its scope.
@@ -3404,18 +3497,18 @@ Changing or removing an option that broadens project selection still follows the
 <p>The <code>memcastle-github</code> plugin's source requires an explicit repository <code>include</code> pattern.
 <code>org/*</code> selects repositories owned by an organization; an <code>exclude</code> pattern overrides inclusion.
 The wiki can be selected independently within those repositories with <code>wiki_include</code> and <code>wiki_exclude</code>.</p>
-<div class="language-toml highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">[[miners]]</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"acme-github"</span>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github"</span>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"GH_TOKEN"</span><span class="w"> </span><span class="p">}</span>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
-</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">[miners.options]</span>
-</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/*"</span><span class="p">]</span>
-</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/private-experiment"</span><span class="p">]</span>
-</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">wiki_include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/docs"</span><span class="p">]</span>
-</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="n">comments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">reviews</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-01-01"</span>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">[[miners]]</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"acme-github"</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"github"</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">"GH_TOKEN"</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">[miners.options]</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/*"</span><span class="p">]</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="n">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/private-experiment"</span><span class="p">]</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="n">wiki_include</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"acme/docs"</span><span class="p">]</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="n">comments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="n">reviews</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="n">since</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2026-01-01"</span>
 </span></code></pre></div>
 <p>Set <code>GH_TOKEN</code> or <code>GITHUB_TOKEN</code> in the daemon's environment; when both are set, <code>GH_TOKEN</code> wins.
 The miner's env credential reference checks that variable exists, while the source's explicit manifest grant actually
@@ -3427,6 +3520,13 @@ CLI <code>memcastle miner set</code> accepts the same options with repeatable <c
 <code>--option 'exclude=acme/private-experiment'</code> flags, and the REST miner API accepts the same table.
 MCP can list/get this miner but cannot change it.
 See <a href="../mining-sources/#github">GitHub source</a> for Git prerequisites, path/label/topic filters and cursor behavior.</p>
+<p>A miner can override the global embedding profile with <code>embedding_profile = "bulk"</code> as a top-level <code>[[miners]]</code> field.
+This is not a source acquisition option: it does not go to the source adapter or alter its cursor.
+The miner pins its resolved profile on the mine job and queues a separate, pinned, missing-only embedding job limited
+to that mined source when mining finishes; a <code>wing</code> further restricts it if set.
+An explicit <code>memcastle embed --profile NAME</code> selects its own profile instead.
+Set it through <code>memcastle miner set NAME --embedding-profile bulk --wing WING</code> or unset it with
+<code>memcastle miner set NAME --unset embedding_profile</code>.</p>
 <h3 id="changing-miners-while-the-daemon-runs">Changing miners while the daemon runs<a class="headerlink" href="#changing-miners-while-the-daemon-runs" title="Permanent link">&para;</a></h3>
 <p>The file is the one source of truth, and the daemon is the one tool that rewrites it.
 <code>miner set</code>, <code>enable</code>, <code>disable</code> and <code>remove</code> edit only the <code>[[miners]]</code> section, in place:

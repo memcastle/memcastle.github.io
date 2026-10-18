@@ -2268,13 +2268,16 @@ See <a href="../deduplication/">Deduplication</a> and <a href="../adr/025-memory
 (<a href="../adr/021-richer-retrieval/">ADR-021</a>).
 The <code>search</code> module takes a <code>SearchQuery</code> (text, ranking, scope, point in time, expansion) and returns <code>SearchHit</code>s: the
 stored drawer verbatim, a score and the signals behind it.
-No second vector store, graph store or index file exists; everything runs against the one <code>drawer</code> table.</p>
+No second datastore or vector index file exists: canonical drawers, derived profile-scoped vectors and graph records
+share the same SurrealDB palace.</p>
 <pre class="mermaid"><code>flowchart LR
     Q[SearchQuery] --&gt; R{ranking}
     R --&gt;|lexical| BM[BM25 full-text index]
-    R --&gt;|semantic| HN[HNSW vector index]
-    R --&gt;|hybrid| BM &amp; HN
-    BM &amp; HN --&gt; FU[search::rrf fusion]
+    R --&gt;|semantic| VS{selected profile}
+    R --&gt;|hybrid| BM &amp; VS
+    VS --&gt;|assigned tier| HN[dedicated HNSW index]
+    VS --&gt;|other dimension or space| ES[exact profile-filtered search]
+    BM &amp; HN &amp; ES --&gt; FU[search::rrf fusion]
     FU --&gt; TB[id tie-break]
     TB --&gt; EX{expand?}
     EX --&gt;|yes| GR[mentions, entity, relates_to traversal]
@@ -2284,7 +2287,8 @@ No second vector store, graph store or index file exists; everything runs agains
 <li><strong>Lexical</strong> (BM25) first requires every word to match.
   Only if that finds nothing does it retry with any single word sufficing,
   because SurrealDB has no stop-word filter and a natural-language question carries words the stored text never contains.</li>
-<li><strong>Semantic</strong> is a k-nearest-neighbour query on an HNSW index over <code>drawer.embedding</code> (768 dimensions, cosine).</li>
+<li><strong>Semantic</strong> selects one immutable space fingerprint and searches its dedicated HNSW tier when assigned;
+  otherwise it ranks only that space's derived vectors exactly by cosine similarity.</li>
 <li><strong>Hybrid</strong> runs both and merges them with SurrealDB's own <code>search::rrf</code>, which fuses by rank and so needs no score
   normalisation.
   Rust breaks ties by drawer id, so a query always ranks the same way.</li>
@@ -2306,8 +2310,11 @@ No second vector store, graph store or index file exists; everything runs agains
   after the direct hits, and never reorders them.</li>
 <li><strong>Where vectors come from.</strong>
   The <code>embed</code> module wraps a provider (an operator's program, an OpenAI-compatible endpoint, or none) behind one trait,
-  and the <code>Embed</code> job fills drawers that have none.
-  A caller may instead send vectors itself.
+  and the <code>Embed</code> job fills the selected profile's missing vectors by default, or refreshes existing ones when asked.
+  Every vector lives in a separate derived record with a content hash and a pinned provider/model/pipeline identity;
+  an HNSW dimension tier serves only its assigned space, and other profiles use exact profile-filtered ranking.
+  Old, provenance-free vectors remain outside profile search until a new job re-embeds them.
+  A caller may instead send vectors itself under an explicit configured external profile.
   With no provider, <code>auto</code> ranking is lexical, so a palace keeps working without any model.</li>
 </ul>
 <h2 id="memory-flows">Memory flows<a class="headerlink" href="#memory-flows" title="Permanent link">&para;</a></h2>

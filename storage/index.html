@@ -1880,11 +1880,15 @@ and <code>possibly_same_as</code> links an entity to others it might be.
 A drawer carries a derived <code>fingerprint</code> (its content with case, punctuation and whitespace ignored, hashed) beside its
 <code>content_hash</code>, and an entity a <code>key</code> and its <code>aliases</code>; all are indexed, none replaces the canonical <code>content</code> or <code>name</code>,
 and deleting an edge undoes the call.</p>
-<p>Everything retrieval uses lives in the same database as the drawers: a BM25 full-text index, an HNSW vector index over
-<code>embedding</code>, and the graph edges.
+<p>Everything retrieval uses lives in the same database as the drawers: a BM25 full-text index, profile-keyed derived
+vector records, and the graph edges.
 There is no separate vector file or index to back up, and none can fall out of step with the drawers.
-The <code>embedding</code> field is derived data and is empty until an <a href="../configuration/#embeddings">embedding provider</a>
-(or a vector you send) fills it, so a palace without one searches lexically.
+New vectors live in <code>drawer_embedding</code>, keyed by drawer and immutable generation-space fingerprint, with model,
+provider, dimension, pipeline version and input/content hashes alongside them.
+The legacy <code>drawer.embedding</code> field is retained for old palaces but excluded from profile-aware semantic search because
+its model is unknown.
+An <a href="../configuration/#embeddings">embedding profile</a> or a caller-supplied vector fills the derived record;
+without either, search remains lexical.
 A drawer's content never changes: correcting it sets the old drawer's <code>valid_to</code> and files a replacement, so older memory
 stays in the database and is found by an <code>--as-of</code> or <code>--from</code>/<code>--until</code> search.
 The two drawers record each other (<code>superseded_by</code> and <code>supersedes</code>), which is what <code>drawer history</code> follows.</p>
