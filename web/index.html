@@ -1756,7 +1756,7 @@ The REST API and MCP are unaffected.</p>
 </tr>
 <tr>
 <td>Palace</td>
-<td>Browse wings, rooms and drawers, open a drawer to read it verbatim with its source, validity, history and likely duplicates.</td>
+<td>Browse wings, rooms and drawers; select a drawer to read it beside the list with its source, validity, history and likely duplicates.</td>
 </tr>
 <tr>
 <td>Search</td>
@@ -1772,11 +1772,7 @@ The REST API and MCP are unaffected.</p>
 </tr>
 <tr>
 <td>Jobs</td>
-<td>Active jobs and history, filtered by state and kind, with progress, parameters and results; pause, resume, cancel and retry.</td>
-</tr>
-<tr>
-<td>Launch</td>
-<td>Submit a mine job (a directory, installed source or saved miner), an extract job or an embed job.</td>
+<td>Active jobs and history, filtered by state and kind; select a row to read its progress, parameters and results, pause, resume, cancel and retry, or launch mining, extract, embed, audit and repair jobs.</td>
 </tr>
 <tr>
 <td>Miners</td>
@@ -1796,7 +1792,19 @@ The REST API and MCP are unaffected.</p>
 </tr>
 </tbody>
 </table>
-<p>The app fills the available window width; reading surfaces such as dialogs keep their own sensible widths.
+<p>Selecting a job row or a Palace drawer opens a non-modal side panel with its own scroll;
+the list remains visible and keeps its scroll position.
+Use the panel's Close button or Escape to return to the list, and select another entry to change the panel.
+Job rows and Palace drawers support keyboard selection.
+Links to <code>/ui/#/jobs?job=&lt;id&gt;</code> and <code>/ui/#/palace?wing=&lt;wing&gt;&amp;room=&lt;room&gt;&amp;drawer=&lt;id&gt;</code> open the selected detail;
+browser history restores it.
+On narrow screens the panel stacks above the list.
+The <code>/ui/#/launch</code> link opens the Jobs launcher.
+Jobs' <strong>Launch</strong> dialog distinguishes ad-hoc directory and enabled-source mining (using the source's default configuration)
+from running a ready configured miner (which may use a named source configuration and its own destination/options).
+Schedules and triggers are separate from a manual miner run.
+The same dialog offers extract, embed, audit and repair jobs with only their relevant inputs;
+repair defaults to a dry run and asks before applying changes.
 On narrow screens the sidebar and split views stack,
 while wide tables scroll within their own region rather than widening the page.</p>
 <p>Job progress appears on active and finished jobs, in their details and beside Maintenance's latest audit and repair.
