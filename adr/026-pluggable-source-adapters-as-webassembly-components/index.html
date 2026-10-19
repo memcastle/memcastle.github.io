@@ -1735,7 +1735,9 @@ a source whoever wrote it.</p>
   These touch neither the store nor the jobs, a third narrow exception to invariant 1 beside <code>serve</code>/<code>migrate</code>,
   enforced by <code>tests/source_isolation.rs</code>.
   The <code>cli</code> template is a component that wraps a command-line program through <code>run-process</code>, which is how a source
-  written as a script is packaged behind the same contract.</li>
+  written as a script is packaged behind the same contract.
+  Later plugin-template work removed the <code>source init</code> CLI scaffold; new projects use <code>memcastle-source.tpl</code> through
+  GitTPL, while <code>source build</code>, <code>test</code> and <code>package</code> remain local commands.</li>
 <li><strong>One conformance suite, run against both kinds.</strong>
   <code>tests/fixtures/sources/conformance/</code> holds language-neutral cases (a tree, the page size, the documents and canonical
   fields expected).

@@ -1947,7 +1947,7 @@
 <h1 id="writing-a-mining-source">Writing a mining source<a class="headerlink" href="#writing-a-mining-source" title="Permanent link">&para;</a></h1>
 <p>For a new provider plugin, invoke <a href="../plugins/"><code>memcastle-source.tpl</code></a> directly through GitTPL and compose the module
 into the provider's parent template.
-<code>memcastle source init</code> continues to scaffold the legacy single-source package format for v0.4 compatibility.</p>
+The same source template can render a standalone module for the legacy source-package workflow.</p>
 <p>A mining source finds documents in some origin (a chat export, an issue tracker, an agent's session files),
 reads them, and puts them in MemCastle's terms.
 MemCastle does everything else: chunking, deduplication, drawers, the cursor and the durable job
@@ -1958,19 +1958,20 @@ An <strong>installed</strong> source is a WebAssembly component the user install
 Both implement the same adapter contract and are held to the same conformance cases,
 so the pipeline cannot tell them apart (<a href="../adr/026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a>).</p>
 <pre class="mermaid"><code>flowchart LR
-    I["memcastle source init"] --&gt; B["source build"] --&gt; T["source test"] --&gt; P["source package"] --&gt; N["source install"]
+    I["memcastle-source.tpl via GitTPL"] --&gt; B["source build"] --&gt; T["source test"] --&gt; P["source package"] --&gt; N["source install"]
     N --&gt; E["source enable"] --&gt; M["memcastle mine name"]</code></pre>
 <h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>init<span class="w"> </span>my-notes<span class="w"> </span>--template<span class="w"> </span>rust
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>my-notes
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>build<span class="w">        </span><span class="c1"># dist/source.wasm</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">test</span><span class="w">         </span><span class="c1"># the conformance cases, in the daemon's own sandbox</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>package<span class="w">      </span><span class="c1"># dist/my-notes-0.1.0.tar.gz</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>dist/my-notes-0.1.0.tar.gz<span class="w"> </span>--enable
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>my-notes<span class="w"> </span>~/notes
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>tpl<span class="w"> </span>init<span class="w"> </span>https://github.com/memcastle/memcastle-source.tpl<span class="w"> </span>my-notes<span class="w"> </span>--init<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--answer<span class="w"> </span><span class="nv">module_name</span><span class="o">=</span>my-notes<span class="w"> </span>--defaults<span class="w"> </span>--strict-answers<span class="w"> </span>--trust
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>my-notes
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>build<span class="w">        </span><span class="c1"># dist/source.wasm</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span><span class="nb">test</span><span class="w">         </span><span class="c1"># the conformance cases, in the daemon's own sandbox</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>package<span class="w">      </span><span class="c1"># dist/my-notes-0.1.0.tar.gz</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>memcastle<span class="w"> </span><span class="nb">source</span><span class="w"> </span>install<span class="w"> </span>dist/my-notes-0.1.0.tar.gz<span class="w"> </span>--enable
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>my-notes<span class="w"> </span>~/notes
 </span></code></pre></div>
-<p><code>init</code>, <code>build</code>, <code>test</code>, <code>package</code>, <code>index</code> and <code>keygen</code> are local: they need no daemon and no palace.
+<p>GitTPL and <code>build</code>, <code>test</code>, <code>package</code>, <code>index</code> and <code>keygen</code> are local: they need no daemon and no palace.
 <code>install</code> and the commands after it talk to the daemon.</p>
 <h2 id="what-a-source-implements">What a source implements<a class="headerlink" href="#what-a-source-implements" title="Permanent link">&para;</a></h2>
 <p>The contract is <code>wit/memcastle-source.wit</code>, and the same six functions as the native <code>SourceAdapter</code> trait.
@@ -2356,8 +2357,11 @@ against.</p>
 <p>A patch version is documentation only.
 A new contract version makes every installed source of the old one <code>unavailable</code> with a reason that says to rebuild,
 rather than failing at the first mine.
-<code>memcastle source init</code> scaffolds against the contract of the MemCastle that ran it.</p>
+Use a revision of <code>memcastle-source.tpl</code> whose contract matches the MemCastle release you target.</p>
 <h2 id="templates-and-their-toolchains">Templates and their toolchains<a class="headerlink" href="#templates-and-their-toolchains" title="Permanent link">&para;</a></h2>
+<p>The maintained GitTPL source template is Rust/Wasm.
+The other implementations below describe existing legacy source projects and their toolchains; GitTPL does not generate
+those variants.</p>
 <table>
 <thead>
 <tr>

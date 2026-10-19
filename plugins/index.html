@@ -1791,43 +1791,45 @@ it restores that pointer if the transaction fails.
 Only after the commit does the daemon publish the new pointer and remove retired source credentials.
 If cleanup is interrupted, startup reconciles current pointers from the ledger, drops orphan pointers and retries
 credential deletion for source IDs whose installation rows have gone.</p>
-<p>GitTPL authoring templates are maintained separately as <code>memcastle-plugin.tpl</code>, <code>memcastle-source.tpl</code> and
-<code>memcastle-integration.tpl</code>.
+<p>GitTPL authoring templates are maintained separately as <code>memcastle-plugin.tpl</code>, <code>memcastle-source.tpl</code>,
+<code>memcastle-integration.tpl</code> and <code>memcastle-embedding-provider.tpl</code>.
 Plugin composition requires the released GitTPL 0.14 or newer; the Core checkout's older GitTPL tooling for its own
 Rust project template is not the provider-template toolchain.
-The parent composes source/integration templates for each selected module ID and records their resolved commits;
+The parent composes source/integration/embedding templates for each selected module ID and records their resolved commits;
 an empty initial plugin is valid, and another module can be added by changing the recorded answer and updating GitTPL.
 Call <code>git tpl init</code> on those repositories directly rather than asking MemCastle to scaffold code.
 GitTPL 0.14 currently refuses the same name in both composition lists; a provider with shared source/integration IDs
-composes one module, overlays the other from its pinned child template, and records that step in its repository.</p>
-<p>From a directory containing local clones of all three template repositories:</p>
+composes one module, overlays the other from its child template, and records that step in its repository.</p>
+<p>From a directory containing local clones of all four template repositories:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>tpl<span class="w"> </span>init<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/memcastle-plugin.tpl"</span><span class="w"> </span>example<span class="w"> </span>--init<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--answer<span class="w"> </span><span class="nv">plugin_id</span><span class="o">=</span>example<span class="w"> </span>--answer<span class="w"> </span><span class="s1">'sources=["files-one","files-two"]'</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s1">'integrations=["assistant"]'</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s1">'integrations=["assistant"]'</span><span class="w"> </span>--answer<span class="w"> </span><span class="s1">'embeddings=["vector-one"]'</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s2">"source_template=</span><span class="nv">$PWD</span><span class="s2">/memcastle-source.tpl"</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s2">"integration_template=</span><span class="nv">$PWD</span><span class="s2">/memcastle-integration.tpl"</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span>--defaults<span class="w"> </span>--strict-answers<span class="w"> </span>--json
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Build every selected source and integration first, then package their existing artifacts.</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>package<span class="w"> </span>example/plugin.toml<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.1.0
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>example/dist/example-0.1.0.tar.gz
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span>--answer<span class="w"> </span><span class="s2">"embedding_template=</span><span class="nv">$PWD</span><span class="s2">/memcastle-embedding-provider.tpl"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--defaults<span class="w"> </span>--strict-answers<span class="w"> </span>--json
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Build every selected source and embedding component and integration first, then package their existing artifacts.</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>package<span class="w"> </span>example/plugin.toml<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.1.0
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>memcastle<span class="w"> </span>plugin<span class="w"> </span>install<span class="w"> </span>example/dist/example-0.1.0.tar.gz
 </span></code></pre></div>
 <p>This offline example records the machine-specific child paths in the generated project's configuration.
-For a shared provider repository, use the published GitTPL and all three published template URLs from the start;
+For a shared provider repository, use the published GitTPL and all four published template URLs from the start;
 GitTPL records those URLs and the resolved child commits and does not rewrite local paths to remote URLs later.</p>
 <p>Build source components with the provider's reproducible Cargo flags before calling Core's packager;
 the packager only gathers validated, already-built artifacts.</p>
-<p>With the three published <code>https://github.com/memcastle/*.tpl</code> URLs, <code>git tpl init</code> needs <code>--trust</code>
+<p>With the four published <code>https://github.com/memcastle/*.tpl</code> URLs, <code>git tpl init</code> needs <code>--trust</code>
 to allow the child-template clones.</p>
-<p>To scaffold only a module, invoke <code>memcastle-source.tpl</code> or <code>memcastle-integration.tpl</code> directly.
-For an existing provider project, edit its recorded <code>sources</code> or <code>integrations</code> array in
+<p>To scaffold only a module, invoke <code>memcastle-source.tpl</code>, <code>memcastle-integration.tpl</code> or
+<code>memcastle-embedding-provider.tpl</code> directly.
+For an existing provider project, edit its recorded <code>sources</code>, <code>integrations</code> or <code>embeddings</code> array in
 <code>.config/git.tpl.toml</code>, then run <code>git tpl update --defaults --trust</code>, review <code>git tpl diff</code>, and run <code>git tpl merge</code>.
-The parent pins each child to a reviewed full commit in its <code>template.toml</code>; the corresponding template CI checks out
-those same commits, and <code>.config/git.tpl.toml</code> records the revisions used by each provider rendering.
-Update the child template and its tests first, advance both pins together with the parent composition test, then have
-provider authors review <code>git tpl diff --json</code> before <code>git tpl merge --json</code> to adopt the new scaffold.
+The parent follows each child's <code>main</code> branch and template CI checks those current branches.
+Fresh projects resolve the current commits at creation; <code>.config/git.tpl.toml</code> records the revisions used by each
+provider rendering, so existing providers adopt later child changes only after reviewing <code>git tpl diff --json</code> and
+running <code>git tpl merge --json</code>.
 Changing a template does not change an existing plugin until its owner explicitly updates and merges its rendered ref.</p>
 <p>The checked-in <code>plugins/example</code> project is a packaging-tooling fixture run by Core CI;
-standalone providers use the workflows produced by the pinned parent template rather than copied example workflows.
+standalone providers use the workflows produced by their recorded parent-template revision rather than copied examples.
 A standalone provider publishes its own versioned artifact;
 its reviewed catalogue entry lists the artifact URL and digest explicitly.
 A direct GitHub repository URL is for a standalone repository whose releases publish exactly one plugin ID;
@@ -1858,11 +1860,13 @@ from built modules, refusing unsafe or unlisted files. Both inspect and package 
 An exact <code>ID/vVERSION</code> tag yields that version; untagged Git revisions use an identifiable development version,
 and <code>--version</code> overrides Git when packaging without a repository;
 it does not build source components or agent bundles. <code>plugin test</code> uses a disposable palace and does not register
-agent integrations; provider-specific agent and adoption tests remain in the standalone repository.
-Provider-owned JavaScript adoption and agent-installation checks remain separate; generic <code>plugin test</code> checks source
-activation without changing the user's palace or agent configuration.
-The shared plugin validation workflow always tests source conformance and archive installation/activation against the
-tested Core <code>main</code> prerelease.
+agent integrations; it discovers installed integration modules in the local catalogue, checks independent source
+activation, replays installation, upgrades the parent version with unchanged module bytes, checks uninstall is blocked
+by a configured miner, then uninstalls and reinstalls the package.
+Provider-specific mining, checkpoint preservation, agent installation and legacy-adoption checks remain in the
+standalone repository; this generic lifecycle smoke does not claim to have mined provider data.
+The shared plugin validation workflow always tests source conformance and the isolated archive lifecycle against the
+tested Core <code>main</code> prerelease, reporting the provider revision, archive digest and exact Core revision.
 Callers may additionally name plugin-capable release trees such as <code>0.5</code> (the latest published patch), or an exact
 stable version; each gets the same required integration checks.
 Stable Core 0.4.1 does not support plugin installation, so it cannot be added to this matrix.

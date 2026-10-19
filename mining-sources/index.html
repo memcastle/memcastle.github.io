@@ -2590,7 +2590,7 @@ and acquisition limits.</p>
   This is the extension model: the core compiles no source-specific code, and a source can be written, shipped and
   updated without a MemCastle release.
   <a href="../writing-sources/">Writing a mining source</a> is the guide (the contract, the manifest, permissions, lifecycle,
-  conformance, packaging), and <code>memcastle source init</code> scaffolds one.</li>
+  conformance, packaging), and <code>memcastle-source.tpl</code> scaffolds one through GitTPL.</li>
 <li><strong>A built-in adapter</strong> is Rust compiled into MemCastle, for the few sources that are simpler or faster native.</li>
 </ul>
 <p>Both implement the same contract, and a source cannot tell which kind it is.

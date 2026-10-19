@@ -2081,7 +2081,7 @@ Nothing in <code>domain</code> knows SurrealDB exists, and nothing in <code>cli<
 The dotted line is the important one: the CLI is an HTTP client of the daemon, exactly as a script or dashboard would be.</p>
 <p><strong>The CLI has no business logic MCP/HTTP can't reuse.</strong>
 Every subcommand except <code>serve</code>/<code>daemon start</code>/<code>daemon restart</code>/<code>migrate</code>, offline <code>doctor</code>, local <code>completions</code>,
-local <code>source init</code>/<code>build</code>/<code>test</code>/<code>package</code>/<code>index</code>/<code>keygen</code>, local <code>plugin inspect</code>/<code>package</code>/<code>sign</code>/<code>test</code>, and
+local <code>source build</code>/<code>test</code>/<code>package</code>/<code>index</code>/<code>keygen</code>, local <code>plugin inspect</code>/<code>package</code>/<code>sign</code>/<code>test</code>, and
 local <code>integration list</code>/<code>install</code>/<code>update</code>/<code>remove</code> is a thin <code>client::DaemonClient</code> call
 (<code>note</code> also reads the project directory through <code>crate::project</code> to choose a wing and room, then calls the daemon) —
 <code>memcastle mine ./project</code> submits a job over HTTP the way an MCP tool call would, rather than mining anything itself.
@@ -2646,7 +2646,7 @@ named programs without a shell, named environment variables, the network all or 
 limit.
 The source never sees the store, and the core compiles no source-specific SDK.
 Installing, enabling and removing are administrative (REST and CLI, no MCP tool),
-and the <code>source init</code>, <code>build</code>, <code>test</code>, <code>package</code>, <code>index</code> and <code>keygen</code> commands work without a daemon.
+and the <code>source build</code>, <code>test</code>, <code>package</code>, <code>index</code> and <code>keygen</code> commands work without a daemon.
 See <a href="../writing-sources/">Writing a mining source</a> and <a href="../adr/026-pluggable-source-adapters-as-webassembly-components/">ADR-026</a>.</p>
 <p><strong>Sources arrive from four places and share one lifecycle.</strong>
 A built-in source is compiled in.

@@ -2056,7 +2056,8 @@ The first index that offers a name decides, in the order of <code>mining.registr
 <h2 id="publishing">Publishing<a class="headerlink" href="#publishing" title="Permanent link">&para;</a></h2>
 <p>Nothing here needs a service or an account: a registry is a directory of archives and one index file.</p>
 <ol>
-<li><strong>Scaffold, build and test</strong>: <code>memcastle source init</code>, <code>memcastle source build</code>, <code>memcastle source test</code>.</li>
+<li><strong>Scaffold, build and test</strong>: render <code>memcastle-source.tpl</code> with GitTPL, then run <code>memcastle source build</code> and
+   <code>memcastle source test</code> from the rendered project.</li>
 <li><strong>Bump <code>source.version</code></strong> in <code>memcastle-source.toml</code> for a new release.
    A version never changes once published.</li>
 <li><strong>Package</strong>: <code>memcastle source package</code> writes <code>dist/&lt;name&gt;-&lt;version&gt;.tar.gz</code> and <code>dist/&lt;name&gt;-&lt;version&gt;.tar.gz.sha256</code>
