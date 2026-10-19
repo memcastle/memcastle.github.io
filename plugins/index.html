@@ -1873,11 +1873,12 @@ standalone provider CI and its release workflow build neither unrelated provider
 <p>Every successful Core CI run on <code>main</code> that passes the basic, slow, WebAssembly and other required Core jobs
 publishes a Linux amd64 development binary to the fixed
 <a href="https://github.com/memcastle/memcastle/releases/tag/development"><code>development</code> prerelease</a>.
-The release body contains <code>Core main SHA: &lt;40-character SHA&gt;</code>; the binary is named
-<code>memcastle_&lt;SHA&gt;_linux-amd64</code>, with <code>SHA256SUMS_&lt;SHA&gt;</code> covering it.
-Only after the binary and checksum are uploaded does the publisher change the body to the new SHA.
-If CI, a build, or an upload fails, the previously advertised SHA stays in place;
-a superseded commit is not published.
+The release contains exactly <code>memcastle_linux-amd64</code> and <code>SHA256SUMS</code>, whose sole entry covers that binary.
+The release body contains <code>Core main SHA: &lt;40-character SHA&gt;</code>, and the binary asset's label records the same SHA.
+The publisher updates the body only after both assets are uploaded, then removes all older assets.
+If CI or a build fails, the previous release stays available; a failed upload or an in-progress replacement
+may briefly prevent downloads until a complete pair with the advertised SHA is restored.
+A superseded commit is not published when the publisher starts.
 The <code>development</code> tag is a fixed discovery address, <strong>not</strong> a pointer to the newest source commit:
 read the release body.
 Stable tags, versioning, Homebrew and AUR publication remain independent of this prerelease.
@@ -1898,15 +1899,15 @@ For example, after a provider's <code>package</code> job uploads one archive and
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">package</span>
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="nt">strategy</span><span class="p">:</span>
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">      </span><span class="nt">matrix</span><span class="p">:</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">main</span><span class="p p-Indicator">]</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">development</span><span class="p p-Indicator">]</span>
 </span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">memcastle/memcastle/.github/workflows/plugin-validation.yaml@main</span>
 </span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="nt">artifact-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugin-package</span>
 </span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">      </span><span class="nt">core-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ matrix.core }}</span>
 </span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="nt">extra-smoke-command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node scripts/smoke_adoption.mjs</span>
 </span></code></pre></div>
-<p>The legacy <code>core-versions</code> JSON array still accepts exact tags and defaults to <code>[]</code>, yielding <code>[main]</code> for old callers.
-New callers supply one <code>core-version</code> per static matrix leg, including <code>main</code> or a published stable release tree.
+<p>Callers supply one required <code>core-version</code> per matrix leg, including <code>development</code> or a published stable release tree.
+The shared workflow validates exactly that one version; the caller owns its compatibility matrix.
 Add <code>0.5</code> only after a plugin-capable Core release exists; there is no conditional integration-test skip.
 The required <code>artifact-name</code> identifies the already-built plugin; <code>archive-path</code> remains an optional legacy input.
 Without it Core demands exactly one archive below <code>dist/</code> and reports that path to the caller;
@@ -1918,9 +1919,10 @@ the generic <code>plugin test</code> always runs on the supplied archive before 
 The provider's release workflow decides when to validate, requires its own reviewed version tag,
 and publishes the archive only after the shared validation succeeds.
 The root <code>memcastle/memcastle@main</code> action places the verified binary on PATH and returns <code>binary</code>, <code>core_sha</code> and
-<code>resolved_version</code>. <code>main</code> is verified against SHA-qualified development checksums, while <code>0.5</code>/<code>1</code> choose the latest
-published patch in that minor/major tree before checking its exact stable release checksum.
-The nested <code>core-binary</code> action still supports exact versions and exports <code>MEMCASTLE_BIN</code> for older callers.
+<code>resolved_version</code>. <code>development</code> is checked against the release body, asset label and fixed-name checksum;
+<code>0.5</code>/<code>1</code> choose the latest published patch in that minor/major tree before checking its exact stable release checksum.
+An exact stable tag is downloaded directly; a missing release or asset fails at download time.
+During the plugin workflow migration, <code>main</code> remains a temporary input alias for <code>development</code>.
 Each compatibility matrix leg reports its exact Core revision in the job summary.
 To add another provider, supply its own package/check and archive install scripts,
 select compatible stable tags explicitly, and keep provider-specific fixture setup or legacy migration smokes
