@@ -1965,8 +1965,9 @@ Every path, environment variable, flag and the precedence between them is in <a 
   the <code>wasm</code> and <code>ci-wasm</code> profiles run Core's component tests.
   <code>mise run test</code> uses the same execution filter but may still compile excluded component test binaries;
   use <code>test:fast</code> to avoid linking them.
-  Process-boundary durability, MCP and auth tests and the committed retrieval baseline form the Linux-only slow suite,
-  selected with the <code>slow-tests</code> Cargo feature by <code>mise run test:slow</code> and CI's <code>ci-slow</code> profile.
+  Process-boundary durability, MCP and auth tests, the real-time miner schedule and the committed retrieval baseline
+  form the Linux-only slow suite, selected with the <code>slow-tests</code> Cargo feature by <code>mise run test:slow</code> and CI's <code>ci-slow</code>
+  profile.
   <code>mise run check:all</code> combines the template's <code>check</code> task with this project-specific slow gate.
   The basic suite runs in CI on Linux, macOS and Windows and needs no WebAssembly target.
   The WebAssembly suite runs in CI on Linux only, in its own <code>wasm</code> job with its own Codecov flag,
@@ -2130,56 +2131,48 @@ Core's built-in directory adapter has its separate native conformance test.
 Scaffolding and sandbox tests (<code>tests/wasm_projects.rs</code>), OAuth tests (<code>tests/wasm_oauth.rs</code>) and the release bundle test
 use purpose-built components because their behavior is what those tests verify.</p>
 <h3 id="where-the-ci-time-goes">Where the CI time goes<a class="headerlink" href="#where-the-ci-time-goes" title="Permanent link">&para;</a></h3>
-<p>Measured on GitHub's runners after the suites were split, so that a change aimed at speed has a baseline to beat.
-Compiling is the test binaries built instrumented for coverage; running is nextest's own summary line.
-The figures are from runs that restored their caches; the first run of a new job, or one whose cache was evicted,
-compiles <code>wasmtime</code> and Cranelift from scratch and takes several minutes longer.</p>
+<p>Compiling is the test binaries built instrumented for coverage; running is nextest's own summary line.
+The October 18–19 main runs show why these numbers must be compared separately:</p>
 <table>
 <thead>
 <tr>
 <th>Job</th>
-<th>Compiling</th>
-<th>Running</th>
-<th>Whole job</th>
+<th><code>23d0b37</code> compile / run</th>
+<th><code>3cc7a72</code> compile / run</th>
+<th><code>27ac1c1</code> compile / run</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Tests, Linux (basic, 1119 tests)</td>
-<td>46 s</td>
-<td>224 s</td>
-<td>5.4 min</td>
+<td>Linux basic</td>
+<td>4m17s / 201s</td>
+<td>6m02s / 344s</td>
+<td>1m07s / 345s</td>
 </tr>
 <tr>
-<td>Tests, macOS (basic)</td>
-<td>25 s</td>
-<td>67 s</td>
-<td>2.5 min</td>
+<td>Windows basic</td>
+<td>2m13s / 370s</td>
+<td>12m48s / 456s</td>
+<td>12m41s / 484s</td>
 </tr>
 <tr>
-<td>Tests, Windows (basic)</td>
-<td>75 s</td>
-<td>215 s</td>
-<td>7.3 min</td>
-</tr>
-<tr>
-<td>WebAssembly tests, Linux (38 tests)</td>
-<td>10 s with warm caches, 2.8 min cold</td>
-<td>38 s</td>
-<td>1.5 to 4.3 min</td>
-</tr>
-<tr>
-<td>Source, one leg per <code>sources/&lt;name&gt;/</code></td>
-<td>10 s</td>
-<td>seconds</td>
-<td>about 1 min</td>
+<td>Linux WebAssembly</td>
+<td>37s / 97s</td>
+<td>5m54s / 142s</td>
+<td>46s / 136s</td>
 </tr>
 </tbody>
 </table>
-<p>The WebAssembly tests run in under a minute in CI, and their job finishes well before the basic Linux one.
-Both suites build only the test binaries they run: the wasm job passes <code>--test 'wasm_*'</code> to Cargo,
-and the daemon tests that start a server in the test process are one binary, <code>tests/in_process</code>, rather than sixteen.
-The time left in the basic suite is its roughly 1100 tests, not compiling or WebAssembly.</p>
+<p>At <code>3cc7a72</code>, <code>Cargo.lock</code> changed and Windows stopped finding its previous Rust cache; later main runs still missed
+that cache even with the same key.
+The action caches about a gigabyte per job, so saving separate PR copies evicted main's build artifacts.
+CI now lets PRs restore main's caches without saving duplicate PR copies, and four jobs building the same Linux
+debug binary share one cache key.
+Test execution grew too, including a real-time miner timetable test introduced in <code>3cc7a72</code>; that test runs once in
+the Linux slow suite rather than on every OS's basic suite.
+Remaining changes in execution duration across unrelated tests should be judged separately from compiler cache misses.</p>
+<p>Both suites build only the test binaries they run: the wasm job passes <code>--test 'wasm_*'</code> to Cargo,
+and the daemon tests that start a server in the test process are one binary, <code>tests/in_process</code>, rather than sixteen.</p>
 <h4 id="building-components-in-tests">Building components in tests<a class="headerlink" href="#building-components-in-tests" title="Permanent link">&para;</a></h4>
 <p>Under nextest every test is its own process, so a component built by one test is invisible to the next, and the cost
 is how many times Cargo has to compile what.
