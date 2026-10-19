@@ -2383,6 +2383,11 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <td>none</td>
 </tr>
 <tr>
+<td><code>POST /api/embeddings/test</code></td>
+<td>Explicitly send sample text to a selected embedding profile (global default if omitted); validate the response without creating a job or storing text/vectors. Returns <code>{profile, dimensions}</code>. Authenticated, with no MCP tool.</td>
+<td>JSON body: <code>text</code> (nonempty, at most 8000 characters), <code>profile?</code>; maximum body 32 KiB</td>
+</tr>
+<tr>
 <td><code>GET /api/search</code></td>
 <td>Search drawers.</td>
 <td>query string: <code>q</code> (or <code>query</code>), <code>limit</code>, <code>wing</code>, <code>room</code>, <code>ranking</code>, <code>tags</code>, <code>source_kind</code>, <code>as_of</code>, <code>from</code>, <code>until</code>, <code>include_historical</code>, <code>expand</code></td>

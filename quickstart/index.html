@@ -1789,6 +1789,8 @@ The payload is JSON that has already been sorted into buckets by whoever produce
 </span></code></pre></div>
 <p><code>search</code> matches the words you stored (and, once you configure an <a href="../configuration/#embeddings">embedding provider</a>,
 their meaning), and shows each hit with its score and the start of its content.
+To enable semantic search, configure a dedicated embedding model, start the daemon, run
+<code>memcastle doctor</code>, then <code>memcastle embed test --text 'a sample sentence'</code> before running <code>memcastle embed</code>.
 <code>wake-up</code> builds the context an agent would load at the start of a session.
 Piped, or with <code>--json</code>, they print JSON with each drawer's content verbatim,
 so <code>memcastle search formatter | jq '.[].content'</code> picks out what you need.</p>

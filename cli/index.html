@@ -2564,7 +2564,10 @@ Checks that depend on invalid configuration or a stopped daemon are marked <code
 A stopped daemon is a warning: offline checks can succeed without starting one.
 The command never initializes a palace, opens the database, executes a provider, contacts a provider/model or source registry,
 or writes to the filesystem; actual write access and provider/model availability remain unverified.
-It prints no credential values or raw sensitive settings.</p>
+It prints no credential values or raw sensitive settings.
+Named embedding profiles are checked individually without contacting the service; missing local credentials are hints,
+since the daemon may have a different environment.
+Run <code>memcastle embed test --profile NAME --text 'sample'</code> with a running daemon to confirm actual provider readiness.</p>
 <p>Example terminal output (a new palace with no daemon):</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>MemCastle doctor
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -2580,15 +2583,16 @@ It prints no credential values or raw sensitive settings.</p>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Providers
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>  [OK] embeddings: No external provider is selected.
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>  [OK] extraction: No external provider is selected.
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>Daemon and storage
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>  [WARNING] daemon: No daemon is reachable for this palace.
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        Fix: Start it with `memcastle daemon start` to run online checks.
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>  [SKIPPED] storage and migrations: Requires an authenticated running daemon.
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Sources and miners
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>  [SKIPPED] runtime prerequisites: Requires an authenticated running daemon.
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>        Fix: Configure a named `openai` (OpenAI-compatible) or `command` connection and a model profile in [embeddings]; see docs/configuration.md.
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>  [OK] extraction: No external provider is selected.
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>Daemon and storage
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>  [WARNING] daemon: No daemon is reachable for this palace.
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        Fix: Start it with `memcastle daemon start` to run online checks.
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>  [SKIPPED] storage and migrations: Requires an authenticated running daemon.
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>Sources and miners
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>  [SKIPPED] runtime prerequisites: Requires an authenticated running daemon.
 </span></code></pre></div>
 <p><code>memcastle doctor --json</code> (also the default when piped) returns an object with <code>findings</code> in presentation order.
 A plugin-backed default embedding profile is reported as configured;
@@ -3303,8 +3307,13 @@ Looking is gated as a read and changing as a write, see <a href="../memory-modes
 <h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
 <h3 id="embed"><code>embed</code><a class="headerlink" href="#embed" title="Permanent link">&para;</a></h3>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>memcastle<span class="w"> </span>embed<span class="w"> </span><span class="o">[</span>--wing<span class="w"> </span>&lt;WING&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--profile<span class="w"> </span>&lt;NAME&gt;<span class="o">]</span><span class="w"> </span><span class="o">[</span>--refresh<span class="w"> </span>missing<span class="p">|</span>stale<span class="p">|</span>all<span class="o">]</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>memcastle<span class="w"> </span>embed<span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="o">[</span>--profile<span class="w"> </span>&lt;NAME&gt;<span class="o">]</span><span class="w"> </span>--text<span class="w"> </span>&lt;SAMPLE&gt;
 </span></code></pre></div>
 <p>Submits a job that computes vectors missing from the selected profile (the configured default unless <code>--profile</code> is set).
+The <code>test</code> action instead makes one explicit provider call, checks that the result has the profile's dimensions and
+returns only its profile name and vector length; it stores no text/vector and submits no job.
+When piped or with <code>--json</code>, it prints <code>{ "profile": "NAME", "dimensions": 768 }</code> instead of a human-readable summary.
+It is available regardless of memory mode and requires an authenticated daemon when authentication is enabled.
 <code>--refresh stale</code> also recomputes vectors whose input or canonical content changed; <code>--refresh all</code> recomputes the entire
 selected scope, including vectors that were already up to date.
 It needs an <a href="../configuration/#embeddings"><code>[embeddings]</code> provider</a> and is refused with <code>memcastle::embed::not_configured</code>
