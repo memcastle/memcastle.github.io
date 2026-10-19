@@ -2639,8 +2639,8 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>GET /api/wings/{wing}/rooms/{room}/drawers</code></td>
-<td>List the newest drawers, with a preview of each.</td>
-<td>query string: <code>limit</code> (default 50, at most 200)</td>
+<td>List drawers newest first, with a preview of each. To fetch the next page, pass both the <code>created_at</code> and <code>id</code> of the last returned drawer; equal timestamps are ordered by ID. The array response remains the same.</td>
+<td>query string: <code>limit</code> (default 50, at most 200), optional <code>before_created_at</code> (RFC 3339) <strong>and</strong> <code>before_id</code> (drawer ID)</td>
 </tr>
 <tr>
 <td><code>POST /api/wings/{wing}/rooms/{room}/drawers</code></td>
@@ -2650,6 +2650,11 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <tr>
 <td><code>GET /api/wings/{wing}/rooms/{room}/drawers/{drawer}</code></td>
 <td>One drawer in full.</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>GET /api/drawers/{id}</code></td>
+<td>Resolve an evidence drawer ID to <code>{wing, room, drawer}</code> so a client can link to its Palace location without reading its content.</td>
 <td>none</td>
 </tr>
 <tr>

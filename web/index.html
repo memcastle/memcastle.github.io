@@ -1756,7 +1756,7 @@ The REST API and MCP are unaffected.</p>
 </tr>
 <tr>
 <td>Palace</td>
-<td>Browse wings, rooms and drawers; select a drawer to read it beside the list with its source, validity, history and likely duplicates.</td>
+<td>Filter a scrollable wing/room tree and browse every room in 50-drawer pages; select a drawer to read it beside the list with its source, validity, history and likely duplicates.</td>
 </tr>
 <tr>
 <td>Search</td>
@@ -1764,7 +1764,7 @@ The REST API and MCP are unaffected.</p>
 </tr>
 <tr>
 <td>Graph</td>
-<td>The knowledge graph: an overview, or the neighbourhood of one entity up to three hops, with each fact's provenance and the drawers that mention an entity.</td>
+<td>The knowledge graph: the first 80 entities alphabetically, or the neighbourhood of one entity up to three hops. Select by canvas or keyboard-operable list, and open the evidence drawers for facts and mentions in Palace.</td>
 </tr>
 <tr>
 <td>Diary</td>
@@ -1775,12 +1775,16 @@ The REST API and MCP are unaffected.</p>
 <td>Active jobs and history, filtered by state and kind; select a row to read its progress, parameters and results, pause, resume, cancel and retry, or launch mining, extract, embed, audit and repair jobs.</td>
 </tr>
 <tr>
+<td>Source configurations</td>
+<td>Create and edit named reusable source-native defaults and credential references; inspect credential availability without revealing values or locations.</td>
+</tr>
+<tr>
 <td>Miners</td>
-<td>List and edit saved miner files, source-configuration defaults, destination overrides, limits and opt-in timetables.</td>
+<td>List, enable or disable, and edit execution presets: source configuration, input scope, destinations, embedding profile, limits and opt-in timetable. See every independently configured trigger for the selected miner.</td>
 </tr>
 <tr>
 <td>Triggers</td>
-<td>What asks for mining runs on its own, read only: each trigger's miner, type, status (<code>disabled</code>, <code>active</code>, <code>failing</code>, <code>unavailable</code>), settings, when it last fired and is next due, and what last went wrong, and where the <a href="../triggers/#the-webhook-listener">webhook listener</a> is. Defining, enabling and firing are <code>memcastle trigger</code>, never the page.</td>
+<td>In Sources &amp; mining, inspect what asks for mining runs on its own, read only: each trigger links to its miner and shows its type, status (<code>disabled</code>, <code>active</code>, <code>failing</code>, <code>unavailable</code>), settings, last and next run, last error and <a href="../triggers/#the-webhook-listener">webhook listener</a>. Defining, enabling and firing are <code>memcastle trigger</code>, never the page.</td>
 </tr>
 <tr>
 <td>Maintenance</td>
@@ -1798,11 +1802,19 @@ Use the panel's Close button or Escape to return to the list, and select another
 Job rows and Palace drawers support keyboard selection.
 Links to <code>/ui/#/jobs?job=&lt;id&gt;</code> and <code>/ui/#/palace?wing=&lt;wing&gt;&amp;room=&lt;room&gt;&amp;drawer=&lt;id&gt;</code> open the selected detail;
 browser history restores it.
+The Palace tree and drawer previews scroll within their panels rather than lengthening the whole page.
+The drawer listing starts with the newest 50 and <strong>Load more</strong> fetches older pages without losing the selection.
+Graph search reports when no name matches; the overview is alphabetical and capped, so search for an entity to see its neighbourhood.
+Graph evidence links resolve the containing wing and room through the API before opening Palace.
 On narrow screens the panel stacks above the list.
 The <code>/ui/#/launch</code> link opens the Jobs launcher.
 Jobs' <strong>Launch</strong> dialog distinguishes ad-hoc directory and enabled-source mining (using the source's default configuration)
 from running a ready configured miner (which may use a named source configuration and its own destination/options).
 Schedules and triggers are separate from a manual miner run.
+Source configurations hold reusable source settings and credentials, while miners choose input scope and destination mapping;
+one miner may have more than one independent trigger as well as its own opt-in schedule.
+The Sources &amp; mining sidebar section keeps those configuration views together;
+the Jobs launcher remains the place for manual runs.
 The same dialog offers extract, embed, audit and repair jobs with only their relevant inputs;
 repair defaults to a dry run and asks before applying changes.
 On narrow screens the sidebar and split views stack,
@@ -1816,7 +1828,8 @@ other job states keep that count without an animated bar.
 Progress messages remain visible, and no percentage is estimated for unknown totals.</p>
 <p>The dashboard does not poll, and it updates by itself.
 The daemon pushes small "something changed" notices over <a href="../mcp-and-api/#the-event-stream"><code>GET /api/events</code></a>,
-and the Overview, Palace, Jobs, Triggers and Maintenance pages read again, quietly, a moment after a change they show:
+and the Overview, Palace, Graph, Jobs, Triggers and Maintenance pages read again, quietly,
+a moment after a change they show:
 a job's progress bar moves and a new note appears without a button press.
 The sidebar says whether updates are <strong>Live</strong>, <strong>Connecting</strong> or <strong>Manual</strong>.
 The notices carry identifiers and never content,
