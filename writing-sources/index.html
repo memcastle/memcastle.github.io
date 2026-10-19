@@ -1108,6 +1108,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#selected-env-and-file-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Selected env and file credentials
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#signing-in-with-oauth" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1799,6 +1810,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#selected-env-and-file-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Selected env and file credentials
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#signing-in-with-oauth" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2024,34 +2046,35 @@ Every table refuses unknown keys.</p>
 </span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="n">network</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">              </span><span class="c1"># all or nothing</span>
 </span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="n">process</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w">                 </span><span class="c1"># bare program names the source may run</span>
 </span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w">                     </span><span class="c1"># environment variables the source may read</span>
-</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
-</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="c1"># Only for a source that signs in with OAuth; see "Signing in with OAuth". needs_credentials must then be true.</span>
-</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="c1"># [permissions.oauth]</span>
-</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="c1"># client_id = "my-public-client-id"</span>
-</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="c1"># scopes = ["read"]</span>
-</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="c1"># token_url = "https://auth.example.com/oauth/token"</span>
-</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="c1"># device_authorization_url = "https://auth.example.com/oauth/device/code"   # the device flow</span>
-</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="c1"># authorize_url = "https://auth.example.com/oauth/authorize"                # the browser flow, with PKCE</span>
-</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="c1"># callback_path = "/auth/callback"   # optional registered loopback path, defaults to /callback</span>
-</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="c1"># on_demand = true                  # optional: only online calls need a sign-in; offline calls can still run</span>
-</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>
-</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="k">[options.since]</span><span class="w">              </span><span class="c1"># optional: what `memcastle mine my-notes key=value` accepts; see "Options"</span>
-</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"date"</span><span class="w">                </span><span class="c1"># "string" (the default), "path" or "date"</span>
-</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"only files modified at or after this date"</span>
-</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>
-</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="k">[triggers.watch]</span><span class="w">             </span><span class="c1"># optional: what can trigger a run beyond a timetable and a poll; see "Triggers"</span>
-</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"a file under the directory is created or changed"</span>
-</span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>
-</span><span id="__span-1-45"><a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="k">[limits]</span>
-</span><span id="__span-1-46"><a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="n">memory_mib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="w">              </span><span class="c1"># at most mining.source_memory_mib</span>
-</span><span id="__span-1-47"><a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="n">timeout_secs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="w">            </span><span class="c1"># per call; at most mining.source_timeout_secs</span>
-</span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>
-</span><span id="__span-1-49"><a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="k">[build]</span><span class="w">                      </span><span class="c1"># development only; the daemon never runs it</span>
-</span><span id="__span-1-50"><a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"cargo"</span><span class="p">,</span><span class="w"> </span><span class="s2">"build"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--release"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target"</span><span class="p">,</span><span class="w"> </span><span class="s2">"wasm32-wasip2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target-dir"</span><span class="p">,</span><span class="w"> </span><span class="s2">"target"</span><span class="p">]</span>
-</span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"target/wasm32-wasip2/release/my_notes.wasm"</span>
-</span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>
-</span><span id="__span-1-53"><a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="k">[test]</span><span class="w">                       </span><span class="c1"># development only</span>
-</span><span id="__span-1-54"><a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="n">fixtures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"fixtures"</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">           </span><span class="c1"># opt in to the selected env/file credential (needs_credentials = true)</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="c1"># Only for a source that signs in with OAuth; see "Signing in with OAuth". needs_credentials must then be true.</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="c1"># [permissions.oauth]</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="c1"># client_id = "my-public-client-id"</span>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="c1"># scopes = ["read"]</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="c1"># token_url = "https://auth.example.com/oauth/token"</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="c1"># device_authorization_url = "https://auth.example.com/oauth/device/code"   # the device flow</span>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="c1"># authorize_url = "https://auth.example.com/oauth/authorize"                # the browser flow, with PKCE</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="c1"># callback_path = "/auth/callback"   # optional registered loopback path, defaults to /callback</span>
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="c1"># on_demand = true                  # optional: only online calls need a sign-in; offline calls can still run</span>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="k">[options.since]</span><span class="w">              </span><span class="c1"># optional: what `memcastle mine my-notes key=value` accepts; see "Options"</span>
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"date"</span><span class="w">                </span><span class="c1"># "string" (the default), "path" or "date"</span>
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"only files modified at or after this date"</span>
+</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>
+</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="k">[triggers.watch]</span><span class="w">             </span><span class="c1"># optional: what can trigger a run beyond a timetable and a poll; see "Triggers"</span>
+</span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="n">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"a file under the directory is created or changed"</span>
+</span><span id="__span-1-45"><a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>
+</span><span id="__span-1-46"><a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="k">[limits]</span>
+</span><span id="__span-1-47"><a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="n">memory_mib</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="w">              </span><span class="c1"># at most mining.source_memory_mib</span>
+</span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="n">timeout_secs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="w">            </span><span class="c1"># per call; at most mining.source_timeout_secs</span>
+</span><span id="__span-1-49"><a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>
+</span><span id="__span-1-50"><a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="k">[build]</span><span class="w">                      </span><span class="c1"># development only; the daemon never runs it</span>
+</span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"cargo"</span><span class="p">,</span><span class="w"> </span><span class="s2">"build"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--release"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target"</span><span class="p">,</span><span class="w"> </span><span class="s2">"wasm32-wasip2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target-dir"</span><span class="p">,</span><span class="w"> </span><span class="s2">"target"</span><span class="p">]</span>
+</span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"target/wasm32-wasip2/release/my_notes.wasm"</span>
+</span><span id="__span-1-53"><a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>
+</span><span id="__span-1-54"><a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="k">[test]</span><span class="w">                       </span><span class="c1"># development only</span>
+</span><span id="__span-1-55"><a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a><span class="n">fixtures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"fixtures"</span>
 </span></code></pre></div>
 <table>
 <thead>
@@ -2092,6 +2115,10 @@ Every table refuses unknown keys.</p>
 <tr>
 <td><code>permissions.process</code></td>
 <td>Bare program names (<code>git</code>), never a path or a command line.</td>
+</tr>
+<tr>
+<td><code>permissions.credential</code></td>
+<td><code>true</code> requires <code>capabilities.needs_credentials = true</code>; consent grants access to the selected env/file reference, not to every daemon credential.</td>
 </tr>
 <tr>
 <td><code>permissions.oauth</code></td>
@@ -2183,12 +2210,19 @@ The manifest lists what it asks for and nothing else is granted.</p>
 <td>Passes the listed variables, when set, into the sandbox. It sees no others.</td>
 </tr>
 <tr>
+<td><code>credential</code></td>
+<td>Allows <code>host.source-credential()</code> to return the job's selected env/file credential during acquisition. Neither its variable name nor file path needs an <code>env</code>/<code>filesystem</code> grant. It is never inherited by <code>run-process</code> unless the variable is separately listed under <code>env</code>.</td>
+</tr>
+<tr>
 <td><code>oauth</code></td>
 <td>Lets the source call <code>access-token</code> for the sign-in the manifest declares (see below). The consent prompt says "sign in with OAuth at <em>host</em>" with the scopes, and a credential is never used under terms other than the ones agreed to.</td>
 </tr>
 </tbody>
 </table>
-<p><code>normalize</code> runs with none of these, whatever the manifest says.</p>
+<p><code>normalize</code> runs with none of these, whatever the manifest says.
+<code>default-wing</code> and <code>default-room</code> also receive no credential.
+When a selected credential references <code>PATH</code>, <code>HOME</code> or <code>SystemRoot</code>, the host omits that variable from a child process's
+normally inherited environment unless the manifest separately lists it under <code>env</code>.</p>
 <p>Installing a package that asks for anything needs the user's consent to exactly those permissions.
 <code>memcastle source install</code> prints them and asks;
 the daemon recomputes a digest of the name and the normalized permissions and refuses an install that does not carry it,
@@ -2196,6 +2230,26 @@ so consent for one source or one set of permissions is not consent for another.
 A script is never asked and never consents on its own behalf:
 pass <code>--yes</code>, or <code>--consent &lt;digest&gt;</code> after reviewing the permissions the refusal lists.
 A package that asks for nothing needs no consent.</p>
+<h2 id="selected-env-and-file-credentials">Selected env and file credentials<a class="headerlink" href="#selected-env-and-file-credentials" title="Permanent link">&para;</a></h2>
+<p>A source using operator-managed account tokens declares <code>needs_credentials = true</code> under <code>[capabilities]</code> and
+<code>credential = true</code> under <code>[permissions]</code>.
+Inside <code>identify</code>, <code>discover</code> or <code>read</code>, a Rust component generated from this WIT can call
+<code>memcastle::source::host::source_credential()</code> and handle its <code>Result&lt;String, String&gt;</code>.
+For example, <code>let token = memcastle::source::host::source_credential().map_err(SourceError::Failed)?;</code>.
+Do not put the token in a <code>source-ref</code>, option, cursor, candidate, document, metadata, or error message.
+Only the selected source for this job receives it; another installed source needs its own permission and selection.
+A source which received a secret is trusted with it: Core cannot stop that component from deliberately emitting it.</p>
+<p>The daemon pins the <strong>reference</strong>, not its value, when a mining job is queued.
+Each execution (also after a crash, retry, or resume) reads the current value from that same environment variable or
+the first line of the same file; an edited configuration cannot switch an already queued job to another account.
+The daemon needs a nonempty UTF-8 value, and the file's first line must be at most 64 KiB; failures name the reference
+and how to fix it, never its contents.
+Set an environment variable before starting the daemon and restart it after changing the variable;
+rotating a file's contents does not require a daemon restart.
+The job stores only the reference and public job responses omit its name/path and the value.
+The selected credential is separate from OAuth <code>access-token</code>: a source declaring both permissions can use either
+mechanism when its acquisition mode calls for it, but an OAuth selection does not supply an env/file credential.
+Older 0.4 components that do not import <code>source-credential</code> keep their existing behavior and consent digest.</p>
 <p>Each call runs in a fresh sandbox with a memory ceiling (<code>mining.source_memory_mib</code>) and a time limit
 (<code>mining.source_timeout_secs</code>), either of which the manifest can only lower.
 A source that loops is stopped by the engine, not by its own good manners.</p>
