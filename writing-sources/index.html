@@ -2037,7 +2037,7 @@ Every table refuses unknown keys.</p>
 </span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="k">[capabilities]</span><span class="w">               </span><span class="c1"># the same three as a built-in adapter; all default to false</span>
 </span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">incremental</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">retains_raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
-</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="n">needs_credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="n">needs_credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">   </span><span class="c1"># true when credentials are required; see the OAuth rule below</span>
 </span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
 </span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="k">[permissions.filesystem]</span>
 </span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="n">read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"locator"</span><span class="p">]</span><span class="w">           </span><span class="c1"># "locator", an absolute directory, or "~/..."</span>
@@ -2046,7 +2046,7 @@ Every table refuses unknown keys.</p>
 </span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="n">network</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">              </span><span class="c1"># all or nothing</span>
 </span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="n">process</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w">                 </span><span class="c1"># bare program names the source may run</span>
 </span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="n">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[]</span><span class="w">                     </span><span class="c1"># environment variables the source may read</span>
-</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">           </span><span class="c1"># opt in to the selected env/file credential (needs_credentials = true)</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w">           </span><span class="c1"># opt in to the selected env/file credential, required or optional</span>
 </span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
 </span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="c1"># Only for a source that signs in with OAuth; see "Signing in with OAuth". needs_credentials must then be true.</span>
 </span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="c1"># [permissions.oauth]</span>
@@ -2118,7 +2118,7 @@ Every table refuses unknown keys.</p>
 </tr>
 <tr>
 <td><code>permissions.credential</code></td>
-<td><code>true</code> requires <code>capabilities.needs_credentials = true</code>; consent grants access to the selected env/file reference, not to every daemon credential.</td>
+<td><code>true</code> grants access to a selected env/file reference, not every daemon credential. With <code>capabilities.needs_credentials = false</code>, mining without a selection is allowed; with <code>true</code>, a selected env/file credential is required.</td>
 </tr>
 <tr>
 <td><code>permissions.oauth</code></td>
@@ -2231,8 +2231,15 @@ A script is never asked and never consents on its own behalf:
 pass <code>--yes</code>, or <code>--consent &lt;digest&gt;</code> after reviewing the permissions the refusal lists.
 A package that asks for nothing needs no consent.</p>
 <h2 id="selected-env-and-file-credentials">Selected env and file credentials<a class="headerlink" href="#selected-env-and-file-credentials" title="Permanent link">&para;</a></h2>
-<p>A source using operator-managed account tokens declares <code>needs_credentials = true</code> under <code>[capabilities]</code> and
-<code>credential = true</code> under <code>[permissions]</code>.
+<p>A source using operator-managed account tokens declares <code>credential = true</code> under <code>[permissions]</code>.
+Set <code>needs_credentials = true</code> under <code>[capabilities]</code> when every miner needs a selected env/file reference;
+leave it <code>false</code> for a source that can also mine public material without one.
+An enabled miner without a reference can run the optional source, but <code>source-credential</code> returns an error when called
+without a selection, so the source must handle that result and use its public mode or a separately consented fallback.
+When a miner or its source configuration does select a reference, the daemon still requires it to resolve before the
+miner can run.
+For example, a source may separately grant <code>GH_TOKEN</code> under <code>permissions.env</code>; that grant is independent of a job's
+selected credential, and the source must handle an unset variable if it supports public mining.
 Inside <code>identify</code>, <code>discover</code> or <code>read</code>, a Rust component generated from this WIT can call
 <code>memcastle::source::host::source_credential()</code> and handle its <code>Result&lt;String, String&gt;</code>.
 For example, <code>let token = memcastle::source::host::source_credential().map_err(SourceError::Failed)?;</code>.

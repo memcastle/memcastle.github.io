@@ -3592,7 +3592,13 @@ Credentials and their paths are never returned by a configuration view; OAuth si
 retain the existing source-keyed credential so upgrades do not lose them.
 ChatGPT's current web authorization can select only the default account: an additional named ChatGPT web configuration
 cannot authenticate yet; export-import miners remain usable without an account.
-Legacy miner <code>credential</code> references still load, but put new reusable credentials on the source configuration.</p>
+Legacy miner <code>credential</code> references still load, but put new reusable credentials on the source configuration.
+When a source declares <code>[permissions] credential = true</code> and <code>capabilities.needs_credentials = false</code>, a miner can
+run without any credential reference, while another miner can use a named source configuration with a shared env/file
+reference.
+If <code>needs_credentials = true</code>, an enabled miner must select a resolvable reference through its miner definition or
+source configuration.
+Any selected env/file reference must resolve for either kind of source; the daemon pins that reference to each job.</p>
 <p>For a source named <code>team-feed</code> whose manifest declares <code>needs_credentials = true</code>,
 <code>[permissions] credential = true</code> and the network permission it needs to fetch its feed,
 two accounts can use separate references without putting either value in TOML:</p>
