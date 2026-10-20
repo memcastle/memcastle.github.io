@@ -2390,7 +2390,7 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <tr>
 <td><code>GET /api/search</code></td>
 <td>Search drawers.</td>
-<td>query string: <code>q</code> (or <code>query</code>), <code>limit</code>, <code>wing</code>, <code>room</code>, <code>ranking</code>, <code>tags</code>, <code>source_kind</code>, <code>as_of</code>, <code>from</code>, <code>until</code>, <code>include_historical</code>, <code>expand</code></td>
+<td>query string: <code>q</code> (or <code>query</code>), <code>limit</code>, <code>wing</code>, <code>room</code>, <code>ranking</code>, <code>profile</code>, <code>tags</code>, <code>source_kind</code>, <code>as_of</code>, <code>from</code>, <code>until</code>, <code>include_historical</code>, <code>expand</code></td>
 </tr>
 <tr>
 <td><code>POST /api/search</code></td>
@@ -2444,8 +2444,8 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>PUT /api/miners/{name}</code></td>
-<td>Create the miner, or change the fields the body names: <code>{miner, created, changed, identity_changed}</code>. A change that may broaden its options is a <code>409</code> unless <code>allow_broaden</code> is set.</td>
-<td>JSON body, all optional once the miner exists: <code>source</code>, <code>enabled</code>, <code>locator</code>, <code>wing</code>, <code>credential</code>, <code>options</code>, <code>unset_options</code>, <code>unset</code>, <code>allow_broaden</code></td>
+<td>Create the miner, or change the fields the body names: <code>{miner, created, changed, identity_changed}</code>. A change that may broaden its options is a <code>409</code> unless <code>allow_broaden</code> is set. See <a href="../configuration/#miners">miner configuration</a> for mapping and schedule shapes.</td>
+<td>JSON body, all optional once the miner exists: <code>source</code>, <code>source_config</code>, <code>enabled</code>, <code>locator</code>, <code>wing</code>, <code>room</code>, <code>mapping</code>, <code>max_documents</code>, <code>embedding_profile</code>, <code>schedule</code>, <code>credential</code>, <code>options</code>, <code>unset_options</code>, <code>unset</code>, <code>allow_broaden</code></td>
 </tr>
 <tr>
 <td><code>GET /api/source-configs</code></td>
@@ -2459,8 +2459,8 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>PUT /api/source-configs/{id}</code></td>
-<td>Save source-native defaults and a credential reference.</td>
-<td>JSON body: <code>source</code> (required for new IDs), <code>options</code>, <code>credential</code>, <code>unset_options</code>, <code>unset_credential</code></td>
+<td>Save source-native defaults and a credential reference. A change that may broaden what miners read is refused with <code>409</code> unless <code>allow_broaden</code> is true.</td>
+<td>JSON body: <code>source</code> (required for new IDs), <code>options</code>, <code>credential</code>, <code>unset_options</code>, <code>unset_credential</code>, <code>allow_broaden</code></td>
 </tr>
 <tr>
 <td><code>DELETE /api/source-configs/{id}</code></td>
@@ -3143,8 +3143,10 @@ deleting a wing is a human decision, and an agent that can file memories can alr
 The decision is recorded in <a href="../adr/018-palace-hierarchy-management/">ADR-018</a>.</p>
 <h3 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h3>
 <p>Authentication is optional and off by default.
-When the daemon has it enabled, every request, REST and <code>/mcp</code> alike, must carry <code>Authorization: Bearer &lt;token&gt;</code>.
-The one exception is <code>GET /api/health</code>, which stays open for liveness probes.</p>
+When the daemon has it enabled, REST and <code>/mcp</code> requests must carry <code>Authorization: Bearer &lt;token&gt;</code>.
+<code>GET /api/health</code> stays open for liveness probes.
+When <code>web.enable</code> is set, <code>GET</code> and <code>HEAD</code> under <code>/ui</code> are also open so a browser can load the sign-in page;
+every <code>/api</code> request the page makes still requires a token.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$MEMCASTLE_AUTH_TOKEN</span><span class="s2">"</span><span class="w"> </span>http://127.0.0.1:8420/api/status
 </span></code></pre></div>
 <p>The two <code>/api/auth/token</code> routes are open while authentication is disabled, which is how the first token is made,

@@ -1898,9 +1898,9 @@ so the storage engine itself needs no C/C++ toolchain.
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard, including its rule fixtures, described below</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:check<span class="w"> </span><span class="c1"># test the Core-shipped integration and install its bundle</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:build<span class="w"> </span><span class="c1"># bundle integrations/*/src into integrations/*/dist, for `--assets-dir "$PWD"`</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:package<span class="w"> </span><span class="c1"># lay out what a release ships in target/bundled-integrations</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:check<span class="w"> </span><span class="c1"># package shared skills and test the checkout and release asset layouts</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:build<span class="w"> </span><span class="c1"># prepare any Core-shipped declarative integrations (currently none)</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:package<span class="w"> </span><span class="c1"># package shared skills in target/bundled-integrations</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mise<span class="w"> </span>run<span class="w"> </span>web:check<span class="w">  </span><span class="c1"># typecheck, test, build and package the web UI, then serve it from a real daemon (needs bun and node)</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>mise<span class="w"> </span>run<span class="w"> </span>web:build<span class="w">  </span><span class="c1"># build web/ into web/dist, for `--assets-dir "$PWD"` with `web.enable`</span>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>mise<span class="w"> </span>run<span class="w"> </span>web:dev<span class="w">    </span><span class="c1"># the dashboard's dev server, proxying /api to the running daemon</span>
@@ -1938,10 +1938,10 @@ Full-project Clippy runs in CI and with <code>mise run lint</code>, rather than 
 <code>MEMCASTLE_ASSETS_DIR</code> is the checkout and <code>MEMCASTLE_WEB_ENABLE</code> is <code>true</code>.
 They apply to <code>mise run</code>, to <code>mise cli</code> and to any shell with <a href="https://mise.jdx.dev/dev-tools/shims.html">mise activated</a>
 once you are in the project directory, so <code>mise cli serve</code> already serves the dashboard from <code>web/dist</code> (after
-<code>mise run web:build</code>) and finds the integrations and sources of the checkout, with no flag.
+<code>mise run web:build</code>) and finds the checkout's shared skills and sources, with no flag.
 Because the variables follow the shell, <strong>any <code>memcastle</code> you run from the project directory uses them, including an
-installed one</strong>: <code>memcastle integration install codex</code> there installs the assets prepared in the checkout
-(<code>mise run integrations:build</code>) and not the package's.
+installed one</strong>: the checkout supplies shared skills, but no agent-specific integration assets.
+Install provider integrations through their plugins rather than expecting integration bundles in this checkout.
 Run it from another directory, or <code>env -u MEMCASTLE_ASSETS_DIR memcastle ...</code>, to use the installed assets.
 A flag still wins over the variable (<code>--assets-dir</code>), and your own <code>mise.local.toml</code> can override or drop either.</p>
 <p>The suites that start a daemon or run the installer are not affected:
