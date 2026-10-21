@@ -3198,7 +3198,7 @@ ask before they act when run in a terminal.
 Run the command again and answer <code>y</code>, or pass <code>--yes</code> to skip the question.
 In a script, CI job or pipe the first group never asks, so this error only appears at a keyboard.
 <code>source install</code> and <code>source update</code> do not proceed there either: they refuse with <code>memcastle::source::consent_required</code>
-(<code>update</code> exits <code>1</code>) until you pass <code>--yes</code> or <code>--consent &lt;digest&gt;</code>.</p>
+(<code>update</code> exits <code>1</code>) until you pass <code>--yes</code>; <code>source install</code> also accepts <code>--consent &lt;digest&gt;</code> instead.</p>
 <h3 id="memcastlecliprompt_failed"><code>memcastle::cli::prompt_failed</code><a class="headerlink" href="#memcastlecliprompt_failed" title="Permanent link">&para;</a></h3>
 <p>A confirmation could not be shown or read, for example because you pressed Ctrl-C at the prompt.
 Pass <code>--yes</code> to skip it, or run the command from an interactive terminal.</p>

@@ -3067,7 +3067,7 @@ and an invalid value is never echoed.</p>
 <tbody>
 <tr>
 <td><code>--config &lt;FILE&gt;</code></td>
-<td>every command</td>
+<td>commands that load configuration; completions and local source/plugin publishing commands accept but do not read it</td>
 <td>the default config file location</td>
 </tr>
 <tr>
@@ -3584,6 +3584,7 @@ Source configuration options are applied first and matching miner options replac
 one-off <code>miner run</code> options replace matching saved options without rewriting either definition.
 A change to shared source defaults that may read more material needs <code>--allow-broaden</code> in the CLI
 or <code>allow_broaden = true</code> in the REST body; the UI asks for the same explicit choice.
+That includes the first saved entry for a source's implicit default when its options select additional material.
 The common <code>mining.max_documents</code> default (zero for unlimited) is overridden by a miner's positive <code>max_documents</code>.
 <code>embedding_profile</code> selects a runnable named embedding profile for drawers this miner files.
 The resolved vector space is pinned to its durable job; an explicit embedding-job profile outranks the miner override,

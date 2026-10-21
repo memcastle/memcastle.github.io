@@ -2460,7 +2460,7 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 <tr>
 <td><code>PUT /api/source-configs/{id}</code></td>
 <td>Save source-native defaults and a credential reference. A change that may broaden what miners read is refused with <code>409</code> unless <code>allow_broaden</code> is true.</td>
-<td>JSON body: <code>source</code> (required for new IDs), <code>options</code>, <code>credential</code>, <code>unset_options</code>, <code>unset_credential</code>, <code>allow_broaden</code></td>
+<td>JSON body: <code>source</code> (required for a new named ID, inferred for a known source's default), <code>options</code>, <code>credential</code>, <code>unset_options</code>, <code>unset_credential</code>, <code>allow_broaden</code></td>
 </tr>
 <tr>
 <td><code>DELETE /api/source-configs/{id}</code></td>
@@ -2990,8 +2990,10 @@ nothing matched.
 <code>auto</code> is hybrid when the query can be embedded and lexical otherwise: a palace with no
 <a href="../configuration/#embeddings">embedding provider</a> keeps searching exactly as before, and a provider that is down
 degrades <code>auto</code> to lexical with a warning in the daemon log.
-An explicit <code>semantic</code> or <code>hybrid</code> that cannot get a vector fails with <code>memcastle::search::semantic_unavailable</code>
-instead of answering lexically.</p>
+An explicit <code>semantic</code> or <code>hybrid</code> with no available query vector fails with
+<code>memcastle::search::semantic_unavailable</code> (HTTP 400) instead of answering lexically.
+If a configured embedding provider fails while producing the vector, the provider error
+<code>memcastle::embed::failed</code> is returned instead (HTTP 502); only <code>auto</code> degrades to lexical in that case.</p>
 <p><strong>Time.</strong>
 Time here is <em>validity time</em>: <code>valid_from</code> and <code>valid_to</code> say when a piece of knowledge was true,
 and <code>created_at</code> says when MemCastle recorded it.

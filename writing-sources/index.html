@@ -2507,7 +2507,8 @@ Publishing one, finding one by name, updating it, signing it and trusting a publ
 <a href="../publishing-sources/">Publishing and installing sources</a>.</p>
 <h2 id="reference-sources">Reference sources<a class="headerlink" href="#reference-sources" title="Permanent link">&para;</a></h2>
 <p><code>sources/</code> holds maintained reference sources, one directory each, with the same package layout as any other.
-<code>sources/directory/</code> is the built-in <code>directory</code> source as a Rust component, and is the worked example to read.
+<code>sources/directory/</code> is a reference Rust WebAssembly component implementing the same contract as the built-in
+<code>directory</code> adapter in <code>src/mining/adapters/directory.rs</code>, and is the worked example to read when writing a package.
 The Pi coding agent's session-history source now lives in
 <a href="https://github.com/memcastle/memcastle-pi"><code>memcastle-pi</code></a> and retains its original <code>pi</code> ID.
 The <a href="https://github.com/memcastle/memcastle-openai"><code>memcastle-openai</code></a> plugin owns the <code>codex</code> and <code>chatgpt</code> sources,
