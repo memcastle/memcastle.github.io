@@ -1601,7 +1601,9 @@ Amends <a href="../013-release-packaging-and-asset-resolution/">ADR-013</a> (the
 <a href="../020-skills-are-versioned-with-the-repository/">ADR-020</a> (skills are now packaged, because an installed integration
 reads them) and <a href="../022-integrations-are-bun-packages-tested-against-a-real-daemon/">ADR-022</a> (an integration is also
 distributed as one bundled file, still tested from its sources).
-<a href="../035-web-ui/">ADR-035</a> adds <code>web/</code> as a further tree under the same root.</p>
+<a href="../035-web-ui/">ADR-035</a> adds <code>web/</code> as a further tree under the same root.
+After provider integrations moved to plugins, Core's separate archive carries only shared skills as
+<code>memcastle_&lt;version&gt;_skills.tar.gz</code>; the integrations archive described below is historical.</p>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p>Issue #200 asks for the Pi and OpenCode integrations to be installable: documented, packaged with releases, and usable
 from a package and from a development checkout.
@@ -1639,7 +1641,7 @@ That directory is the natural place for integrations too, and the same rule make
   <code>packaging/integrations/build.sh</code> bundles each integration with <code>bun build</code> into one file (the agents' own SDKs stay
   external), so installing needs no <code>node_modules</code>, no bun and no npm package.
   The release tarballs, <code>.deb</code>, <code>.rpm</code>, AUR package and Homebrew formula carry <code>share/memcastle/{integrations,skills}</code>,
-  and <code>memcastle_&lt;version&gt;_integrations.tar.gz</code> carries them alone for the recipes that fetch a single binary.</li>
+  At the time of this decision, <code>memcastle_&lt;version&gt;_integrations.tar.gz</code> carried them for recipes that fetch a single binary.</li>
 <li><strong><code>memcastle integration list|install|update|remove</code> is local tooling.</strong>
   It reads files and runs the agent's own program; it opens no palace, calls no daemon and uses no network, like
   <code>memcastle source build</code>.

@@ -2159,11 +2159,11 @@ them, and their SHA-256 is checked like any other.</p>
 on disk after install is never run.</p>
 <h2 id="bundled-sources">Bundled sources<a class="headerlink" href="#bundled-sources" title="Permanent link">&para;</a></h2>
 <p>Core currently ships no bundled WebAssembly sources; <code>share/memcastle/sources/</code> is empty.
+Core releases do not attach a standalone sources archive.
 The runtime can still load a bundle supplied through <code>mining.bundled_dir</code>, and its sources appear as <code>bundled</code> and
-<code>installed</code> until enabled by the user. The release packaging script writes the empty directory to prevent older source
-archives from remaining in an upgraded installation.</p>
-<p>The set is a line in <code>packaging/sources/build.sh</code>, which a release and <code>mise run sources:package</code> both run,
-and it does not constrain the runtime: any directory under <code>sources/</code> could be added.
+<code>installed</code> until enabled by the user. Release packages keep the empty directory for the runtime's bundled-source lookup.</p>
+<p><code>mise run sources:package</code> still exercises optional local bundles through <code>packaging/sources/build.sh</code>.
+Its empty Core bundle does not constrain the runtime: an unpacked source package can still be supplied separately.
 <code>directory</code> is the worked example of the built-in source and is not bundled.</p>
 <p>The bundle shares its root with the agent integrations and the skills: <code>assets.dir</code> is the one directory a package
 installs into, and <code>sources/</code> is one of the directories under it (see <a href="../configuration/#runtime-assets">Runtime assets</a>

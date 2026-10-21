@@ -2119,7 +2119,8 @@ Installed provider plugins supply their own integration assets separately:</p>
 </ol>
 <p>Any of the MemCastle release packages carry the assets root: the tarballs, the <code>.deb</code> and <code>.rpm</code>, the AUR package and the
 Homebrew formula (see <a href="../installation/">Installation</a>).
-The standalone tarball <code>memcastle_&lt;version&gt;_integrations.tar.gz</code> holds the empty <code>integrations/</code> tree and shared <code>skills/</code>.</p>
+The standalone tarball <code>memcastle_&lt;version&gt;_skills.tar.gz</code> holds only the shared <code>skills/</code> tree.
+Packaged installations retain an empty <code>integrations/</code> directory; provider plugins supply their own integration files.</p>
 <p><code>memcastle integration list</code> prints the assets root it used and how it was chosen, so you can see which of the two you
 are looking at.</p>
 <h3 id="developing-memcastle">Developing MemCastle<a class="headerlink" href="#developing-memcastle" title="Permanent link">&para;</a></h3>

@@ -1957,6 +1957,8 @@ See <a href="../configuration/#runtime-assets">Runtime assets</a> for the rule, 
 Core's packaged <code>share/memcastle/sources/</code> and <code>share/memcastle/integrations/</code> are empty:
 sources and agent integrations come from separately installed <a href="../plugins/">provider plugins</a>.
 Package assets include the shared skills under <code>share/memcastle/skills/</code>.
+The release distributes these separately as <code>memcastle_&lt;version&gt;_skills.tar.gz</code> for AUR and Homebrew;
+there are no Core source or integration tarballs.
 The standalone binary has no accompanying asset directory; install a provider plugin or supply assets separately.
 <code>memcastle plugin install anthropic</code> makes the Claude Code integration available;
 <code>memcastle integration install claude-code</code> copies it to your home and registers it with the agent
@@ -1967,7 +1969,7 @@ you set <code>web.enable</code>.</p>
 <h3 id="homebrew-macos">Homebrew (macOS)<a class="headerlink" href="#homebrew-macos" title="Permanent link">&para;</a></h3>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>brew<span class="w"> </span>install<span class="w"> </span>noirbizarre/homebrew-tap/memcastle
 </span></code></pre></div>
-<p>The formula ships macOS builds only (Apple silicon and Intel), shared skills and the web UI.
+<p>The formula ships macOS builds only (Apple silicon and Intel), shared skills from the skills archive and the web UI.
 Core's source and agent-integration directories are empty; install a provider plugin for Codex or Claude Code.
 Install the <a href="../integrations-opencode/#install-update-remove">OpenCode provider plugin</a> separately.
 On Linux, use one of the other methods, including under Linuxbrew.</p>
