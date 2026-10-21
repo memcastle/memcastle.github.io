@@ -1857,7 +1857,8 @@ The <code>memcastle plugin inspect --json</code>, <code>memcastle plugin package
 <code>memcastle plugin test dist/ID-VERSION.tar.gz</code> authoring commands are provider-independent.
 <code>plugin package</code> generates the complete manifest <strong>only inside the archive</strong> and writes an external archive checksum
 from built modules, refusing unsafe or unlisted files. Both inspect and package default to <code>./plugin.toml</code>.
-An exact <code>ID/vVERSION</code> tag yields that version; untagged Git revisions use an identifiable development version,
+An exact <code>X.Y.Z</code> or <code>vX.Y.Z</code> tag yields that version;
+untagged Git revisions use an identifiable development version,
 and <code>--version</code> overrides Git when packaging without a repository;
 it does not build source components or agent bundles. <code>plugin test</code> uses a disposable palace and does not register
 agent integrations; it discovers installed integration modules in the local catalogue, checks independent source
