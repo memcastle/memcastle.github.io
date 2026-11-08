@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP/HTTP">
+        <meta name="description" content="Local-first, always-on memory server for AI coding agents over MCP&#x2f;HTTP">
       
       
         <meta name="author" content="noirbizarre">
@@ -26,7 +26,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.0.71">
+      <meta name="generator" content="zensical-0.1.0">
     
     
       
@@ -37,7 +37,7 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e442bf79.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.4ab2de0c.min.css">
       
         
           
@@ -104,9 +104,10 @@
   <img src="../images/icon.svg" alt="memcastle">
 
     </a>
-    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+    <label class="md-header__button md-icon" for="__drawer">
       
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+      <span class="md-visually-hidden">Navigation</span>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -168,9 +169,10 @@
     
       
       
-        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+        <label class="md-header__button md-icon" for="__search">
           
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+          <span class="md-visually-hidden">Search</span>
         </label>
         <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
   <button type="button" class="md-search__button">
@@ -1883,7 +1885,9 @@ workflow inputs and compatibility policy.</p>
 <ul>
 <li>Node and bun, only for <code>web/</code> and <code>integrations/</code> (<code>mise run web:check</code> and <code>integrations:check</code> install them for the
   task; the Rust build needs neither).</li>
-<li>Rust, via <code>rustup</code>, which installs the channel pinned in <code>rust-toolchain.toml</code> (mise does not manage Rust itself).</li>
+<li>Rust via <code>rustup</code>, with mise 2026.9.2+ providing native Mr Boxington wrapping for Cargo builds.
+  <code>rust-toolchain.toml</code> and mise declare the stable channel; explicit <code>RUSTUP_TOOLCHAIN</code> selections still win.
+  Mise also installs <code>wasm32-wasip2</code> for the reference sources and WebAssembly tests.</li>
 <li>The remaining tools (nextest, prek, ast-grep, typos, ...) via <code>mise</code> — run <code>mise install</code> once.</li>
 </ul>
 <p>That's it — SurrealKV, the embedded storage engine, is pure Rust,
@@ -1921,9 +1925,14 @@ when their inputs have not changed and their required outputs still exist.
 Changing a source or removing an output makes the corresponding task run again; use <code>mise run --force web:build</code>
 (or the other task name) to rebuild regardless of freshness.
 The test and check tasks still run on every invocation, including when used through <code>mise run check</code> or <code>mise run ci</code>.</p>
-<p><code>prek install</code> (once) wires formatting, spelling, actionlint, markdownlint, commitlint, basic file hygiene,
+<p><code>mise install</code> also installs the Git hooks through its postinstall hook.
+The hooks wire formatting, spelling, actionlint, rumdl, Commitizen with Emotional, basic file hygiene,
 and the architecture guard described below into <code>git commit</code> as hooks.
 Full-project Clippy runs in CI and with <code>mise run lint</code>, rather than on every local commit.</p>
+<p>Cargo commands in mise tasks use Mr Boxington automatically.
+For direct commands, use <code>mise exec -- cargo ...</code> so the wrapper is active even without shell activation.
+<code>MBX_TARGET_VIEWS=0</code> keeps existing <code>target/</code> paths, and machine-specific cache budgets stay in the global mbx config.
+See <a href="../../CONTRIBUTING/#mr-boxington-build-caching">Mr Boxington build caching</a> for diagnostics and cache policy.</p>
 <h2 id="running-the-daemon-locally">Running the daemon locally<a class="headerlink" href="#running-the-daemon-locally" title="Permanent link">&para;</a></h2>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mise<span class="w"> </span>cli<span class="w"> </span>serve
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># in another terminal:</span>
@@ -2369,10 +2378,10 @@ and <code>AGENTS.md</code> for where project-specific content goes so template u
       
         
         
-      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.c47bb847.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.a2388154.min.js"></script>
+      <script src="../assets/javascripts/bundle.d31f0ffa.min.js"></script>
       
     
   </body>
