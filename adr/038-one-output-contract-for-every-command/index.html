@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../images/icon.svg">
-      <meta name="generator" content="zensical-0.1.0">
+      <meta name="generator" content="zensical-0.1.1">
     
     
       
@@ -33,7 +33,7 @@
       
         
       
-      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.4ab2de0c.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.ebb7f775.min.css">
       
         
           
@@ -1664,9 +1664,10 @@ needs next, the job's <code>id</code>, is somewhere in the middle.</p>
   This is a breaking change and is released as one.</li>
 <li>At the time, <code>CLICOLOR_FORCE</code> no longer put colour into a command's result in a pipe.
   The current CLI uses <code>FORCE_COLOR</code> for help, diagnostics and progress instead;
-  JSON remains plain in pipes and is syntax-highlighted on a coloured terminal (see <a href="../../cli/#output-colour-and-prompts">the CLI reference</a>).</li>
-<li>The readable forms are only exercised by unit tests: no test runs the binary on a pseudo-terminal,
-  so the stream decision is covered through <code>term::is_pretty</code> and through the piped output of every command.</li>
+  JSON is compact and plain in pipes and indented on terminals, with syntax highlighting when colour is enabled
+  (see <a href="../../cli/#output-colour-and-prompts">the CLI reference</a>).</li>
+<li>Unit tests exercise readable forms and the stream decision through <code>term::is_pretty</code>.
+  Subprocess tests cover piped JSON, and Linux pseudo-terminal tests cover terminal JSON and progress feedback.</li>
 </ul>
 
 
@@ -1737,7 +1738,7 @@ needs next, the job's <code>id</code>, is somewhere in the middle.</p>
       <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d31f0ffa.min.js"></script>
+      <script src="../../assets/javascripts/bundle.3cb411a8.min.js"></script>
       
     
   </body>
