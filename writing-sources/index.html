@@ -1066,6 +1066,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#reconciliation-extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reconciliation extension
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-manifest" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1768,6 +1779,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#reconciliation-extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Reconciliation extension
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-manifest" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -2020,6 +2042,60 @@ A cursor is an optimisation, never a correctness mechanism: reading a document t
 the job).
 A trap, a timeout and an out-of-memory are reported by the host as <code>memcastle::source::failed</code> or
 <code>memcastle::source::timeout</code>.</p>
+<h2 id="reconciliation-extension">Reconciliation extension<a class="headerlink" href="#reconciliation-extension" title="Permanent link">&para;</a></h2>
+<p>Remote synchronizing sources can implement the optional <code>reconciled-source</code> world from the same WIT file.
+Declare <code>reconciliation = "0.1.0"</code> under <code>[compatibility]</code> and export
+<code>memcastle:source/reconciliation@0.4.0</code> alongside the original adapter interface.
+The extension version is independent of the unchanged base WIT package version.
+An older host rejects the new manifest key instead of silently treating retirement as a skip.
+Components without the declaration retain the original six-function behavior and identities.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reconcile(source, known)</code></td>
+<td>Recheck one Core-owned inventory entry with the run's current options; return <code>unchanged</code>, <code>refresh(handle)</code> or <code>retire(reason)</code>.</td>
+</tr>
+<tr>
+<td><code>discover(source, cursor, limit)</code></td>
+<td>The original candidate ordering plus an optional page-level <code>cursor-after</code>, committed after every candidate succeeds.</td>
+</tr>
+<tr>
+<td><code>acquire(source, candidate)</code></td>
+<td>Return <code>document(raw)</code>, <code>skip</code> or <code>retire(reason)</code> explicitly.</td>
+</tr>
+</tbody>
+</table>
+<p>Core walks the inventory in bounded keyset pages before discovery, even on <code>--full</code>.
+A known entry contains its external ID, last revision, source metadata, and <code>pending</code>/<code>retired</code> flags, never its body.
+<code>pending</code> means an ID was registered before its first acquisition but no ingestion has completed yet.
+Registration happens before reads, so a crash cannot leave newly filed content outside the durable inventory.
+The inventory includes older <code>source_document</code> records without requiring a backfill.
+Its position is persisted separately from the adapter cursor, so document-limited jobs continue the walk.
+Inventory checks count toward the document limit; empty progress pages do not.</p>
+<p>Return <code>retire</code> only for confirmed removal, scope exclusion or object-specific loss of access.
+Missing search results, partial listings, global credential failures and transient API errors are not proof of removal.
+Return a source error for failures that should stop the run without advancing its progress.
+Core retires all current chunks for that effective source and external ID, including partially filed chunks from an
+interrupted first ingestion, and retains their history.
+<code>skip</code> preserves existing content.
+A subsequent live acquisition can restore a retired document even when its provider revision is unchanged.</p>
+<p>An empty discovery page can persist progress using a changed page-level <code>cursor-after</code>.
+An empty nonterminal page without an advancing checkpoint is rejected.
+The page checkpoint never commits past an unsuccessful acquisition, normalization or ingestion.
+<code>normalize</code> remains pure; the new acquisition functions receive only the original manifest's consented grants.</p>
+<p>For these sources, named miners sharing an account, locator and destination have independent state automatically.
+Keep the miner name stable through filter changes; filters are not part of storage identity.
+Changing options restarts discovery and the inventory walk while retaining all known IDs for cleanup.
+Ad-hoc runs for the same effective source continue to share state.
+Legacy components retain their existing sharing behavior; switching an established provider to the extension changes
+named-miner identities and requires planning how its previously mined states are retained or migrated.
+See <a href="../adr/053-source-reconciliation/">ADR-053</a>.</p>
 <h2 id="the-manifest">The manifest<a class="headerlink" href="#the-manifest" title="Permanent link">&para;</a></h2>
 <p><code>memcastle-source.toml</code> sits at the top of a source project and of a package.
 Every table refuses unknown keys.</p>
@@ -2155,6 +2231,8 @@ Only declare a rule when the source's implementation proves it; an undeclared ru
 <code>--allow-broaden</code> for changed saved options or one-off <code>miner run</code> overrides.
 These rules do not change the component contract or the permissions a source requests.</p>
 <p>An option either narrows or selects, and the two are not the same to the cursor, which belongs to the identity:</p>
+<p>The following legacy identity rules apply to the original six-function contract.
+Reconciling sources should keep mutable filters out of identity: Core isolates named miners and reconciles option changes.</p>
 <ul>
 <li>An option that only <strong>narrows</strong> what is read (<code>since</code>) must not change the identity.
   A later run with another value continues from the same cursor, and <code>--full</code> reads back past it.</li>
@@ -2469,6 +2547,10 @@ the same cases against its native <code>directory</code> source and against the 
 <td>The options of the run, when the case is about one (<code>{"dir": "/home/me/project"}</code>).</td>
 </tr>
 <tr>
+<td><code>opaque_locator</code></td>
+<td>Optional API locator passed verbatim instead of resolving <code>locator</code> as a local directory.</td>
+</tr>
+<tr>
 <td><code>documents</code></td>
 <td>The external ids that must be produced, each with its normalized <code>title</code>, <code>kind</code>, <code>tags</code>, <code>room</code> and <code>segments</code>.</td>
 </tr>
@@ -2479,6 +2561,12 @@ the same cases against its native <code>directory</code> source and against the 
 </tbody>
 </table>
 <p>What differs legitimately between sources (the shape of a cursor, a revision's format, a drawer name) is not compared.</p>
+<p>For an offline API fixture, set <code>[test] fixture_credential = true</code>.
+The runner supplies the fixed selected credential <code>memcastle-source-test-credential</code>, only through the normal consented
+credential host function.
+It never resolves a developer environment variable, token file or OAuth sign-in.
+Use the value in your fake transport; do not put a real credential in fixtures or manifests.
+The runner exercises <code>acquire</code> and page checkpoints for reconciling components and the original calls for legacy ones.</p>
 <p>The cases shipped with MemCastle:</p>
 <table>
 <thead>

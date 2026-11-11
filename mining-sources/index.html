@@ -2107,7 +2107,9 @@ See <a href="../deduplication/">Deduplication</a>.</p>
 <h3 id="identity-cursor-and-documents">Identity, cursor and documents<a class="headerlink" href="#identity-cursor-and-documents" title="Permanent link">&para;</a></h3>
 <p>A source is identified by <code>(source, account, locator)</code>: the adapter's name, the account on it if it has accounts, and the
 part of it that is read (a directory, a sessions folder, a channel).
-Two jobs that name the same place share one source, and therefore one cursor.</p>
+Two jobs that name the same place share one source, and therefore one cursor.
+An opt-in reconciling source additionally partitions named miners, even when their account, locator and destination match.
+Its mutable filters do not change that identity, so narrowing a miner can retire its previous content safely.</p>
 <p>MemCastle keeps, for each source:</p>
 <ul>
 <li>the <strong>cursor</strong>: where the last run stopped, in the adapter's own terms.
@@ -2135,7 +2137,10 @@ how the source identifies itself, and keeps an older drawer's preference criteri
   The old text stays as history (<code>valid_to</code>), and a search for "as of" an earlier date still finds it.
   Appending to a transcript changes only its last chunk.</li>
 <li>A document that got shorter closes the chunks past its new end, so stale text is not searchable as if it were current.</li>
-<li>A document that vanished from the source is not noticed: deletions are not propagated.</li>
+<li>Legacy sources do not propagate deletion merely because a document vanished from discovery.
+  Sources implementing the <a href="../writing-sources/#reconciliation-extension">reconciliation extension</a> recheck Core's durable
+  inventory and explicitly retire confirmed deletions, revoked sharing and out-of-scope content.
+  <code>--full</code> resets discovery without deleting that inventory, and a skipped read still preserves existing content.</li>
 <li>A job that is paused, interrupted or crashed resumes from its own checkpoint and files nothing twice.</li>
 </ul>
 <h3 id="chunking">Chunking<a class="headerlink" href="#chunking" title="Permanent link">&para;</a></h3>
@@ -2149,7 +2154,13 @@ Sizes count characters, so a cut never lands inside a character.</p>
 <p>By default jobs are unlimited (<code>mining.max_documents = 0</code>) but discover in bounded pages and checkpoint every document.
 Set a positive <code>mining.max_documents</code> to limit every job, or a positive <code>max_documents</code> on one miner to override it.
 If the source has more, the job completes with <code>"truncated": true</code>, its progress message says to run it again, and the
-next job continues from the cursor.</p>
+next job continues from the cursor.
+For reconciling sources the core-owned inventory walk also continues across limited jobs.
+Each inventory check counts as a handled document; progress-only discovery pages do not consume that limit.</p>
+<p>Mining jobs serialize per effective source through a database-backed admission lock tied to the durable job lease.
+The source cursor is read after admission, and canonical writes check ownership in the same transaction as the mutation.
+This also protects a remote palace shared by multiple daemons: an expired worker cannot overwrite a successor's state.
+Waiting jobs honor pause and cancellation, and different effective sources remain independently runnable.</p>
 <h2 id="using-it">Using it<a class="headerlink" href="#using-it" title="Permanent link">&para;</a></h2>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>memcastle<span class="w"> </span>sources<span class="w">                        </span><span class="c1"># what can be mined, and what has been</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>memcastle<span class="w"> </span>mine<span class="w"> </span>~/project<span class="w">                 </span><span class="c1"># a directory (the shorthand for `memcastle mine directory ~/project`)</span>
