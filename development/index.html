@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -16,6 +18,7 @@
       
       
       
+      
         <link rel="prev" href="../architecture/">
       
       
@@ -26,7 +29,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.1.2">
+      <meta name="generator" content="zensical-0.1.3">
     
     
       
@@ -37,12 +40,13 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.ebb7f775.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e2cf241e.min.css">
       
         
           
         
         <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
+      
       
       
 
@@ -1505,6 +1509,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#component-migration-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Component migration baseline
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1776,6 +1797,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#component-migration-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Component migration baseline
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1941,15 +1979,46 @@ See <a href="../container/#build-locally">Build locally</a>
 for local assembly and the inline daemon status check.</p>
 <ul>
 <li>Bun for <code>web/</code>, installed globally by mise; the Rust build does not need it.</li>
-<li>Rust via <code>rustup</code>, with mise 2026.9.2+ providing native Mr Boxington wrapping for Cargo builds.
+<li>Rust 1.100 or newer via <code>rustup</code>, with mise 2026.9.2+ providing native Mr Boxington wrapping for Cargo builds.
   <code>rust-toolchain.toml</code> and mise declare the stable channel; explicit <code>RUSTUP_TOOLCHAIN</code> selections still win.
-  Mise also installs <code>wasm32-wasip2</code> for the reference sources and WebAssembly tests.</li>
+  Mise also installs <code>wasm32-wasip3</code> for the reference sources and WebAssembly tests.</li>
 <li>The remaining tools (nextest, prek, ast-grep, typos, ...) via <code>mise</code> — run <code>mise install</code> once.</li>
 </ul>
-<p>The source-conformance and WebAssembly CI jobs pin Rust 1.99.1 while the host uses Wasmtime 41.
-Rust 1.100 emits WASI imports that this runtime does not implement, so moving those jobs to a newer compiler
-requires validating its generated components against the host first.
-Other CI jobs continue to exercise the current stable compiler.</p>
+<p>CI and releases build with Rust 1.100.0; the MSRV job reads the minimum from <code>Cargo.toml</code>.
+The embedded Wasmtime 50.0.3 host executes WASI 0.3 components with Component Model async support.
+<code>mise run components:check</code> builds every reference/example/test component, validates it with wasm-tools 1.263.0,
+and checks that its WASI imports are version 0.3.0.
+The WebAssembly and source-conformance jobs also execute these components against the host.</p>
+<h3 id="component-migration-baseline">Component migration baseline<a class="headerlink" href="#component-migration-baseline" title="Permanent link">&para;</a></h3>
+<p>Older WASI components must be rebuilt for <code>wasm32-wasip3</code> and reinstalled with matching plugin releases.
+Core has no older WASI linker fallback.
+The source contract is now 0.5.0 and the embedding contract is 0.2.0.
+Acquisition functions and <code>embed</code> are async-typed in WIT: a synchronous Component Model function cannot suspend
+on WASI 0.3 I/O, even when the host calls it asynchronously.
+Rust guests may use wit-bindgen's <code>sync: true</code> stackful bindings to retain ordinary <code>std</code> I/O implementations;
+the exported WIT function type remains asynchronous.
+Pure normalization and capability functions remain synchronous in WIT.
+Native process calls share the invocation's remaining deadline;
+a timed-out invocation stops and reaps its direct child before returning.
+Wasmtime's p3 implementation is still marked experimental upstream.
+Rust 1.100's default p3 target cannot spawn threads with <code>std::thread::spawn</code>;
+Component Model async does not imply native threading or enabled cooperative threading.
+Normal Rust target installation is sufficient: WASI SDK 34+ is needed only when building Rust/LLVM
+or linking through an external SDK.</p>
+<p>The coordinated official plugin migrations are
+<a href="https://github.com/memcastle/memcastle-anthropic/issues/19">Anthropic #19</a>,
+<a href="https://github.com/memcastle/memcastle-opencode/issues/20">OpenCode #20</a>,
+<a href="https://github.com/memcastle/memcastle-openai/issues/21">OpenAI #21</a>,
+<a href="https://github.com/memcastle/memcastle-pi/issues/22">Pi #22</a>,
+<a href="https://github.com/memcastle/memcastle-github/issues/19">GitHub #19</a>,
+<a href="https://github.com/memcastle/memcastle-slack/issues/12">Slack #12</a>,
+<a href="https://github.com/memcastle/memcastle-google/issues/5">Google #5</a>, and
+<a href="https://github.com/memcastle/memcastle-notion/issues/2">Notion #2</a>.
+The corresponding template migrations are
+<a href="https://github.com/memcastle/memcastle-source.tpl/issues/2">source #2</a>,
+<a href="https://github.com/memcastle/memcastle-embedding-provider.tpl/issues/1">embedding provider #1</a>, and
+<a href="https://github.com/memcastle/memcastle-plugin.tpl/issues/18">plugin #18</a>.
+These are release dependencies of <a href="https://github.com/memcastle/memcastle/issues/387">Core #387</a>.</p>
 <p>That's it — SurrealKV, the embedded storage engine, is pure Rust,
 so the storage engine itself needs no C/C++ toolchain.
 (A transitive TLS dependency, <code>aws-lc-sys</code>, may use <code>cmake</code> on some targets; that is unrelated to storage.)</p>
@@ -1957,25 +2026,26 @@ so the storage engine itself needs no C/C++ toolchain.
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mise<span class="w"> </span>run<span class="w"> </span>build<span class="w">      </span><span class="c1"># cargo build</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mise<span class="w"> </span>run<span class="w"> </span>docker<span class="w">     </span><span class="c1"># build the local daemon image from the Rust/frontend outputs</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w">       </span><span class="c1"># the basic suite: cargo nextest run, without the WebAssembly tests (accepts nextest selectors)</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mise<span class="w"> </span>run<span class="w"> </span>test:wasm<span class="w">  </span><span class="c1"># the WebAssembly suite: every tests/wasm_*.rs binary (slow; needs the wasm32-wasip2 target)</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:check<span class="w">      </span><span class="c1"># build and conformance-test every source under sources/</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:test<span class="w"> </span>--<span class="w"> </span>directory<span class="w">   </span><span class="c1"># the same for one source, which is what each CI leg runs</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard, including its rule fixtures, described below</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>web:check<span class="w">  </span><span class="c1"># build and test the web UI, then verify checkout and installed-prefix serving</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>web:build<span class="w">  </span><span class="c1"># build web/ into web/dist, for `--assets-dir "$PWD"` with `web.enable`</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mise<span class="w"> </span>run<span class="w"> </span>web:dev<span class="w">    </span><span class="c1"># the dashboard's dev server, proxying /api to the running daemon</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w">       </span><span class="c1"># measure retrieval quality and latency on the bundled dataset (docs/retrieval-evaluation.md)</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:baseline<span class="w"> </span><span class="c1"># rewrite the committed retrieval baseline, after a change meant to move quality</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>a.json<span class="w"> </span>b.json<span class="w"> </span><span class="c1"># what changed between two retrieval reports</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>file.json<span class="w"> </span><span class="c1"># session retrieval on a downloaded LongMemEval file</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>mise<span class="w"> </span>run<span class="w"> </span>check<span class="w">      </span><span class="c1"># every lint, the guards, both test suites, the sources and the dashboard, without modifying the tree</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>mise<span class="w"> </span>run<span class="w"> </span>ci<span class="w">         </span><span class="c1"># check plus the docs build: the local equivalent of CI's lint,</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">                    </span><span class="c1"># test and docs steps</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>mise<span class="w"> </span>cli<span class="w"> </span>&lt;args&gt;<span class="w">      </span><span class="c1"># run memcastle from source, e.g. `mise cli status`</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>mise<span class="w"> </span>run<span class="w"> </span>docs<span class="w">       </span><span class="c1"># serve this documentation locally</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>mise<span class="w"> </span>run<span class="w"> </span>docs:build<span class="w"> </span><span class="c1"># build it into site/</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mise<span class="w"> </span>run<span class="w"> </span>test:wasm<span class="w">  </span><span class="c1"># the WebAssembly suite: every tests/wasm_*.rs binary (slow; needs the wasm32-wasip3 target)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span>components:check<span class="w">   </span><span class="c1"># compile and validate WASI 0.3 imports before runtime execution</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:check<span class="w">      </span><span class="c1"># build and conformance-test every source under sources/</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:test<span class="w"> </span>--<span class="w"> </span>directory<span class="w">   </span><span class="c1"># the same for one source, which is what each CI leg runs</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard, including its rule fixtures, described below</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>web:check<span class="w">  </span><span class="c1"># build and test the web UI, then verify checkout and installed-prefix serving</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mise<span class="w"> </span>run<span class="w"> </span>web:build<span class="w">  </span><span class="c1"># build web/ into web/dist, for `--assets-dir "$PWD"` with `web.enable`</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>mise<span class="w"> </span>run<span class="w"> </span>web:dev<span class="w">    </span><span class="c1"># the dashboard's dev server, proxying /api to the running daemon</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w">       </span><span class="c1"># measure retrieval quality and latency on the bundled dataset (docs/retrieval-evaluation.md)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:baseline<span class="w"> </span><span class="c1"># rewrite the committed retrieval baseline, after a change meant to move quality</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>a.json<span class="w"> </span>b.json<span class="w"> </span><span class="c1"># what changed between two retrieval reports</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>file.json<span class="w"> </span><span class="c1"># session retrieval on a downloaded LongMemEval file</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>mise<span class="w"> </span>run<span class="w"> </span>check<span class="w">      </span><span class="c1"># every lint, the guards, both test suites, the sources and the dashboard, without modifying the tree</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>mise<span class="w"> </span>run<span class="w"> </span>ci<span class="w">         </span><span class="c1"># check plus the docs build: the local equivalent of CI's lint,</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">                    </span><span class="c1"># test and docs steps</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>mise<span class="w"> </span>cli<span class="w"> </span>&lt;args&gt;<span class="w">      </span><span class="c1"># run memcastle from source, e.g. `mise cli status`</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>mise<span class="w"> </span>run<span class="w"> </span>docs<span class="w">       </span><span class="c1"># serve this documentation locally</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>mise<span class="w"> </span>run<span class="w"> </span>docs:build<span class="w"> </span><span class="c1"># build it into site/</span>
 </span></code></pre></div>
 <p>The project-owned <code>web:build</code> task skips its build when its inputs have not changed and its required outputs still exist.
 Changing a source or removing an output makes the corresponding task run again; use <code>mise run --force web:build</code>
@@ -2077,7 +2147,7 @@ Every path, environment variable, flag and the precedence between them is in <a 
 <li><code>tests/wasm_oauth.rs</code> — a source that signs in with OAuth against a real daemon and the real CLI, with a fake
     provider: consent to the sign-in, <code>source auth</code> through the device flow, the token a run is given, renewal, a revoked
     credential, a miner that needs the sign-in, and no refresh token anywhere but the credentials file (needs the
-    <code>wasm32-wasip2</code> target).</li>
+    <code>wasm32-wasip3</code> target).</li>
 <li><code>tests/config_assets.rs</code> — the assets override is honoured and checked, and a standalone binary starts with no assets
     (subprocess).</li>
 <li><code>tests/dependencies.rs</code> — the lockfile never pulls a second storage engine into the binary (ADR-001), nor a
@@ -2161,7 +2231,7 @@ Every path, environment variable, flag and the precedence between them is in <a 
 <li><code>tests/wasm_projects.rs</code> — local source fixtures and <code>memcastle source build</code>, <code>test</code> and <code>package</code> for real, the sandbox
     (a source cannot read outside its grant, see the environment, outrun its time limit or exceed its memory, or run an
     unlisted program) and installing through the CLI.
-    It builds components with Cargo for <code>wasm32-wasip2</code> (subprocess, WebAssembly suite);
+    It builds components with Cargo for <code>wasm32-wasip3</code> (subprocess, WebAssembly suite);
     see <a href="#building-components-in-tests">Building components in tests</a>.</li>
 <li><code>tests/in_process/skills.rs</code> — the shared <a href="../skills/">agent skills</a>: every skill is discoverable,
     and every tool, CLI command and REST route it names exists in this release
@@ -2285,7 +2355,7 @@ have no hook, because what they forbid is not something a grep over the whole tr
 adapter, no file access and no WebAssembly runtime; adapters, the WebAssembly host and <code>src/source/</code> never reach the store
 or the jobs (at any depth); only <code>src/mining/wasm/</code> names the engine; and the host calls nothing that hands a guest the
 daemon's environment, standard streams, arguments or a writable directory.
-Building the reference WebAssembly sources needs the <code>wasm32-wasip2</code> target (<code>rustup target add wasm32-wasip2</code>, which
+Building the reference WebAssembly sources needs the <code>wasm32-wasip3</code> target (<code>rustup target add wasm32-wasip3</code>, which
 <code>rust-toolchain.toml</code> requests); <code>mise run sources:check</code> builds and tests every source under <code>sources/</code>.
 <code>tests/source_isolation.rs</code> builds nothing and runs in the basic suite on every OS.</p>
 <p>Invariant 6 and 10's rule that MCP never touches credentials covers OAuth sign-ins too (<a href="../adr/039-oauth-credentials-for-mining-sources/">ADR-039</a>):
@@ -2445,7 +2515,8 @@ and <code>AGENTS.md</code> for where project-specific content goes so template u
       <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.3cb411a8.min.js"></script>
+      <script src="../assets/javascripts/bundle.9e76c64c.min.js"></script>
+      
       
     
   </body>

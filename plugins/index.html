@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -16,6 +18,7 @@
       
       
       
+      
         <link rel="prev" href="../publishing-sources/">
       
       
@@ -26,7 +29,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.1.2">
+      <meta name="generator" content="zensical-0.1.3">
     
     
       
@@ -37,12 +40,13 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.ebb7f775.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e2cf241e.min.css">
       
         
           
         
         <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
+      
       
       
 
@@ -1765,7 +1769,7 @@ Source modules retain their <code>memcastle-source.toml</code> and <code>source.
 integration modules retain their <code>memcastle-integration.toml</code> and agent assets.
 Embedding modules use <code>embeddings/&lt;id&gt;/memcastle-embedding.toml</code> and <code>embeddings/&lt;id&gt;/embedding.wasm</code>
 (the legacy <code>modules/&lt;id&gt;/</code> root is also accepted).
-Their manifests declare a version, <code>contract = "0.1.0"</code>, one or more <code>[[models]]</code> with <code>id</code> and <code>dimensions</code>,
+Their manifests declare a version, <code>contract = "0.2.0"</code>, one or more <code>[[models]]</code> with <code>id</code> and <code>dimensions</code>,
 optional <code>network</code> and <code>credential</code> permissions, and an optional restricted <code>config_schema</code>.
 For example, a plugin project can add this module to its root <code>plugin.toml</code>:</p>
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">[[modules]]</span>
@@ -1773,7 +1777,7 @@ For example, a plugin project can add this module to its root <code>plugin.toml<
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"embedding_provider"</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">manifest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"embeddings/vendor-embeddings/memcastle-embedding.toml"</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">entry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"embeddings/vendor-embeddings/embedding.wasm"</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.1.0"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.2.0"</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">[modules.config_schema]</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"object"</span>
@@ -1786,7 +1790,7 @@ For example, a plugin project can add this module to its root <code>plugin.toml<
 <p>The module's <code>memcastle-embedding.toml</code> then describes what that particular component supports:</p>
 <div class="language-toml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"vendor-embeddings"</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.1.0"</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.1.0"</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.2.0"</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">network</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">credential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
@@ -1802,8 +1806,10 @@ For example, a plugin project can add this module to its root <code>plugin.toml<
 </span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="k">[config_schema.properties.region]</span>
 </span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"string"</span>
 </span></code></pre></div>
-<p>Compile the <code>memcastle:embedding@0.1.0</code> world in <code>wit/embedding/memcastle-embedding.wit</code> as a
-<code>wasm32-wasip2</code> component before <code>plugin package</code>; the packager does not compile module code.
+<p>Compile the <code>memcastle:embedding@0.2.0</code> world in <code>wit/embedding/memcastle-embedding.wit</code> as a
+<code>wasm32-wasip3</code> component with Rust 1.100 or newer before <code>plugin package</code>; the packager does not compile module code.
+The <code>embed</code> export is async-typed to permit WASI I/O suspension.
+Rust implementations using ordinary <code>std</code> I/O can select wit-bindgen's <code>sync: true</code> stackful bindings.
 <code>models</code> must return the same models and dimensions as the manifest; <code>embed</code> receives a model, dimension,
 JSON settings object and ordered text batch, returning one vector per input.
 The host checks counts, lengths and finite coordinates, limits calls to 64 MiB and each connection's timeout,
@@ -2062,7 +2068,8 @@ in the caller's inputs.</p>
       <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.3cb411a8.min.js"></script>
+      <script src="../assets/javascripts/bundle.9e76c64c.min.js"></script>
+      
       
     
   </body>

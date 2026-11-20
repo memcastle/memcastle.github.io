@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -18,11 +20,12 @@
       
       
       
+      
         
       
       
       <link rel="icon" href="../../images/icon.svg">
-      <meta name="generator" content="zensical-0.1.2">
+      <meta name="generator" content="zensical-0.1.3">
     
     
       
@@ -33,12 +36,13 @@
       
         
       
-      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.ebb7f775.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.e2cf241e.min.css">
       
         
           
         
         <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.b60ce83d.min.css">
+      
       
       
 
@@ -1736,10 +1740,10 @@ a source whoever wrote it.</p>
   <code>default-room</code>, <code>discover</code>, <code>read</code>, <code>normalize</code>, the same six methods) and imports <code>host</code> (<code>run-process</code>).
   Cursors and metadata cross as JSON text, so the contract does not change when a source carries a richer cursor.
   <code>description</code> and the capabilities are the manifest's, not calls: they are needed to list a source that is disabled.
-  Components are <code>wasm32-wasip2</code>: Rust compiles to one directly, and TypeScript and Python go through a component
-  toolchain that embeds their runtime.</li>
+  Components are <code>wasm32-wasip3</code> / WASI 0.3.0, built with Rust 1.100 or newer.</li>
 <li><strong>The contract is versioned and compatibility is a policy, not a hope.</strong>
-  <code>CONTRACT_VERSION</code> (<code>0.1.0</code>) is the version of the WIT file.
+  <code>CONTRACT_VERSION</code> (<code>0.5.0</code>) is the version of the WIT file.
+  Acquisition is async-typed so WASI 0.3 operations can suspend; normalization and capability exports stay synchronous.
   Before <code>1.0</code> a source runs only on a host of the same minor version; from <code>1.0</code>, on any host of the same major whose minor
   is at least the source's; a patch version never matters.
   A source also declares the MemCastle versions it runs on as a semver requirement.
@@ -1758,8 +1762,8 @@ a source whoever wrote it.</p>
   There is no write access to the filesystem.
   Every grant is built in one function (<code>host::state</code>) from the manifest's permissions and nothing else, and
   <code>normalize</code> runs with none, so its purity is enforced rather than requested.
-  Memory is capped, and one call's time is bounded by the engine's epoch interruption, so a source stuck in a loop is
-  stopped rather than trusted to return.
+  Memory is capped; engine epochs timeslice CPU loops so a wall-clock deadline can stop either a spinning guest
+  or one suspended in WASI I/O without starving other tasks.
   Each call gets a fresh store, which is what keeps a source stateless.</li>
 <li><strong>Installing needs consent to exactly those permissions.</strong>
   <code>source install</code> shows what the package asks for and asks.
@@ -1838,7 +1842,7 @@ a source whoever wrote it.</p>
   that ships in the binary.
   The contract is logical, and the conformance suite is what keeps the two kinds from drifting.</li>
 <li><strong>A host allow-list for the network.</strong>
-  It needs <code>wasi:http</code> outbound filtering, which is not what a <code>wasm32-wasip2</code> component's sockets go through.
+  It needs <code>wasi:http</code> outbound filtering, which is not what a <code>wasm32-wasip3</code> component's sockets go through.
   All-or-nothing is honest about what is enforced today and is stated in the consent prompt; the manifest format leaves
   room for a list later.</li>
 <li><strong>Gating install by a memory mode.</strong>
@@ -1851,8 +1855,10 @@ a source whoever wrote it.</p>
 <h2 id="consequences">Consequences<a class="headerlink" href="#consequences" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The core links <code>wasmtime</code> and <code>wasmtime-wasi</code>, built without default features.
-  The release binary and the cold build grow, and the engine's Rust version sets the floor: <code>41</code> is the newest line that
-  supports the crate's MSRV of 1.90, and moving to a newer one is a deliberate MSRV bump.
+  The release binary and the cold build grow; the coordinated baseline is Rust 1.100 and Wasmtime 50.0.3.
+  Both source and embedding hosts use p3 asynchronous execution, with epochs bounding CPU loops and wall-clock
+  deadlines bounding suspended I/O.
+  Wasmtime's p3 implementation remains experimental upstream; Rust's default target cannot yet spawn threads.
   Cranelift is optimised even in debug builds (<code>[profile.dev.package.*]</code>), because compiling a component unoptimised takes
   tens of seconds.</li>
 <li>A component is compiled when first used and cached by digest, so the first mine after a daemon start pays for it.</li>
@@ -1862,10 +1868,9 @@ a source whoever wrote it.</p>
   reads it from an environment variable it listed.
   Credentials stay references (<a href="../023-unified-source-model-for-mining/">ADR-023</a>): a value is only ever in the process
   environment the user started the daemon with.</li>
-<li>TypeScript and Python sources embed a language runtime, so their components are megabytes larger and slower to start
-  than a Rust one, and only their standard library (plus pure packages bundled with them) is available.
-  Their scaffolds are provided and documented, and checked only structurally by the suite: the toolchains are not
-  installed in CI.</li>
+<li>Internal fixtures retain only the execution-tested Rust and CLI-wrapper generators.
+  Legacy TypeScript/Python generators were removed with the WASI 0.3 migration because their toolchains were not
+  execution-tested in CI.</li>
 <li>A changed WIT contract is a new contract version,
   and every installed source of the old one becomes <code>unavailable</code> with a reason that says to rebuild it,
   never a mysterious failure at the first mine.</li>
@@ -1969,7 +1974,8 @@ are rebuilt.</p>
       <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.3cb411a8.min.js"></script>
+      <script src="../../assets/javascripts/bundle.9e76c64c.min.js"></script>
+      
       
     
   </body>

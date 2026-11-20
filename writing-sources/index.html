@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -16,6 +18,7 @@
       
       
       
+      
         <link rel="prev" href="../deduplication/">
       
       
@@ -26,7 +29,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.1.2">
+      <meta name="generator" content="zensical-0.1.3">
     
     
       
@@ -37,12 +40,13 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.ebb7f775.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e2cf241e.min.css">
       
         
           
         
         <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
+      
       
       
 
@@ -2099,8 +2103,8 @@ A trap, a timeout and an out-of-memory are reported by the host as <code>memcast
 <h2 id="reconciliation-extension">Reconciliation extension<a class="headerlink" href="#reconciliation-extension" title="Permanent link">&para;</a></h2>
 <p>Remote synchronizing sources can implement the optional <code>reconciled-source</code> world from the same WIT file.
 Declare <code>reconciliation = "0.1.0"</code> under <code>[compatibility]</code> and export
-<code>memcastle:source/reconciliation@0.4.0</code> alongside the original adapter interface.
-The extension version is independent of the unchanged base WIT package version.
+<code>memcastle:source/reconciliation@0.5.0</code> alongside the adapter interface.
+The extension capability version remains <code>0.1.0</code>, independently of the base WIT package version <code>0.5.0</code>.
 An older host rejects the new manifest key instead of silently treating retirement as a skip.
 Components without the declaration retain the original six-function behavior and identities.</p>
 <table>
@@ -2164,7 +2168,7 @@ Every table refuses unknown keys.</p>
 </span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">repository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"https://example.org/my-notes.git"</span><span class="w">  </span><span class="c1"># optional: where the code is</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="k">[compatibility]</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.4"</span><span class="w">             </span><span class="c1"># the WIT contract version it was built against</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">contract</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.5"</span><span class="w">             </span><span class="c1"># the WIT contract version it was built against</span>
 </span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">memcastle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"&gt;=0.4.0, &lt;0.5.0"</span><span class="w">  </span><span class="c1"># this release line; change it when targeting another release</span>
 </span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
 </span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="k">[capabilities]</span><span class="w">               </span><span class="c1"># the same three as a built-in adapter; all default to false</span>
@@ -2203,8 +2207,8 @@ Every table refuses unknown keys.</p>
 </span><span id="__span-1-48"><a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="n">timeout_secs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="w">            </span><span class="c1"># per call; at most mining.source_timeout_secs</span>
 </span><span id="__span-1-49"><a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>
 </span><span id="__span-1-50"><a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="k">[build]</span><span class="w">                      </span><span class="c1"># development only; the daemon never runs it</span>
-</span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"cargo"</span><span class="p">,</span><span class="w"> </span><span class="s2">"build"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--release"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target"</span><span class="p">,</span><span class="w"> </span><span class="s2">"wasm32-wasip2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target-dir"</span><span class="p">,</span><span class="w"> </span><span class="s2">"target"</span><span class="p">]</span>
-</span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"target/wasm32-wasip2/release/my_notes.wasm"</span>
+</span><span id="__span-1-51"><a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"cargo"</span><span class="p">,</span><span class="w"> </span><span class="s2">"build"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--release"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target"</span><span class="p">,</span><span class="w"> </span><span class="s2">"wasm32-wasip3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--target-dir"</span><span class="p">,</span><span class="w"> </span><span class="s2">"target"</span><span class="p">]</span>
+</span><span id="__span-1-52"><a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"target/wasm32-wasip3/release/my_notes.wasm"</span>
 </span><span id="__span-1-53"><a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>
 </span><span id="__span-1-54"><a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="k">[test]</span><span class="w">                       </span><span class="c1"># development only</span>
 </span><span id="__span-1-55"><a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a><span class="n">fixtures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"fixtures"</span>
@@ -2468,7 +2472,7 @@ Installing a name that is already installed replaces it and keeps its state.
 Removing a source deletes its files and its record, and keeps what it mined.
 Built-in sources are always enabled and cannot be disabled or removed.</p>
 <h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
-<p>The contract has a version (<code>wit/memcastle-source.wit</code>, currently <code>0.4.0</code>), and a source declares the one it was built
+<p>The contract has a version (<code>wit/memcastle-source.wit</code>, currently <code>0.5.0</code>), and a source declares the one it was built
 against.</p>
 <table>
 <thead>
@@ -2493,9 +2497,13 @@ A new contract version makes every installed source of the old one <code>unavail
 rather than failing at the first mine.
 Use a revision of <code>memcastle-source.tpl</code> whose contract matches the MemCastle release you target.</p>
 <h2 id="templates-and-their-toolchains">Templates and their toolchains<a class="headerlink" href="#templates-and-their-toolchains" title="Permanent link">&para;</a></h2>
-<p>The maintained GitTPL source template is Rust/Wasm.
-The other implementations below describe existing legacy source projects and their toolchains; GitTPL does not generate
-those variants.</p>
+<p>The maintained GitTPL source template is Rust/Wasm, requiring Rust 1.100 or newer and WASI 0.3.0.
+Execution is verified against the host's embedded Wasmtime 50.0.3 with native Component Model async support.
+Use wit-bindgen 0.63.0 for the Rust bindings and wasm-tools 1.263.0 for component validation.
+The source WIT package is <code>memcastle:source@0.5.0</code>; acquisition functions are <code>async func</code> so they can suspend on I/O.
+Rust components using ordinary <code>std</code> I/O can set <code>sync: true</code> in <code>wit_bindgen::generate!</code> for stackful bindings.
+This changes Rust bindings, not the asynchronous WIT function type.
+Core exercises both a Rust source and a Rust CLI wrapper as internal fixtures.</p>
 <table>
 <thead>
 <tr>
@@ -2509,7 +2517,7 @@ those variants.</p>
 <tr>
 <td><code>rust</code></td>
 <td>Rust</td>
-<td><code>rustup target add wasm32-wasip2</code></td>
+<td><code>rustup target add wasm32-wasip3</code></td>
 <td>Compiles straight to a component. Smallest and fastest to start.</td>
 </tr>
 <tr>
@@ -2518,24 +2526,13 @@ those variants.</p>
 <td>The same</td>
 <td>Wraps a command-line program through <code>run-process</code>; the manifest lists the programs. For a source that is easiest written as a script or an existing tool.</td>
 </tr>
-<tr>
-<td><code>typescript</code></td>
-<td>TypeScript</td>
-<td>Node.js, <code>npm install</code> (<code>jco</code>, <code>typescript</code>)</td>
-<td>Compiled to JavaScript, then componentized with <code>jco</code>, which embeds a JavaScript engine: the component is megabytes and slower to start.</td>
-</tr>
-<tr>
-<td><code>python</code></td>
-<td>Python</td>
-<td><code>pip install componentize-py</code></td>
-<td>Componentized with <code>componentize-py</code>, which embeds CPython: only the standard library and pure-Python packages bundled with it are available.</td>
-</tr>
 </tbody>
 </table>
-<p>TypeScript and Python are not compiled directly to WebAssembly, and these templates are provided as starting points:
-their toolchains are not installed in MemCastle's CI, so the suite checks that they scaffold a valid project but does not
-build them.
-Rust and <code>cli</code> sources are built and run for real by the test suite.</p>
+<p>Rust and <code>cli</code> sources are built and run for real by the test suite.
+Legacy TypeScript/Python scaffolds have been removed; they did not have execution-tested WASI 0.3 toolchains.
+Rebuild older components for the new target and reinstall their matching plugin release.
+See the <a href="../development/#component-migration-baseline">migration baseline</a> for runtime maturity,
+threading limitations and the conditional WASI SDK requirement.</p>
 <h2 id="conformance">Conformance<a class="headerlink" href="#conformance" title="Permanent link">&para;</a></h2>
 <p><code>memcastle source test</code> runs the cases listed in the manifest's <code>[test] fixtures</code> against the built component, loaded the
 way the daemon loads it.
@@ -2680,7 +2677,7 @@ Core currently bundles no WebAssembly sources; <code>sources/directory/</code> r
 same package contract that provider plugins use.</p>
 <h2 id="testing-your-source-in-ci">Testing your source in CI<a class="headerlink" href="#testing-your-source-in-ci" title="Permanent link">&para;</a></h2>
 <p><code>memcastle source test</code> needs no daemon and builds the component first, so it is all a CI job has to run.
-In a project of your own, install the <code>wasm32-wasip2</code> target (or your template's toolchain), build <code>memcastle</code>,
+In a project of your own, install the <code>wasm32-wasip3</code> target, build <code>memcastle</code>,
 and run <code>memcastle source test .</code>.
 In this repository Core CI explicitly runs <code>mise run sources:test -- directory</code> for the maintained reference source.
 Adding another reference source to CI requires an entry in the <code>sources</code> matrix in <code>.github/workflows/ci.yaml</code>.</p>
@@ -2858,7 +2855,8 @@ the sandbox shows a directory it was not granted as simply not there.</p>
       <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.3cb411a8.min.js"></script>
+      <script src="../assets/javascripts/bundle.9e76c64c.min.js"></script>
+      
       
     
   </body>

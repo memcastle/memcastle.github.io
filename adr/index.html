@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -16,6 +18,7 @@
       
       
       
+      
         <link rel="prev" href="../retrieval-evaluation/">
       
       
@@ -24,7 +27,7 @@
       
       
       <link rel="icon" href="../images/icon.svg">
-      <meta name="generator" content="zensical-0.1.2">
+      <meta name="generator" content="zensical-0.1.3">
     
     
       
@@ -35,12 +38,13 @@
       
         
       
-      <link rel="stylesheet" href="../assets/stylesheets/modern/main.ebb7f775.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.e2cf241e.min.css">
       
         
           
         
         <link rel="stylesheet" href="../assets/stylesheets/modern/palette.b60ce83d.min.css">
+      
       
       
 
@@ -1851,9 +1855,10 @@ The history is the value.</p>
   (amends ADR-035, builds on ADR-006, ADR-007 and ADR-014)</li>
 <li><a href="042-mine-takes-a-source-and-its-options/">ADR-042</a> — <code>memcastle mine &lt;source&gt; [place] [key=value]...</code> replaces
   <code>--source</code> and <code>--locator</code>, with <code>memcastle mine &lt;path&gt;</code> kept as the directory shorthand;
-  sources declare the options they accept (<code>[options.&lt;name&gt;]</code>) and the daemon refuses the rest before queuing,
-  the source contract is <code>0.4.0</code> (<code>identify</code> takes the options, <code>source-ref</code> carries them) and the source decides which
-  options are identity and which only narrow; a miner's single options table becomes the defaults of its run
+  sources declare the options they accept (<code>[options.&lt;name&gt;]</code>) and the daemon refuses the rest before queuing;
+  this introduced source contract <code>0.4.0</code> (<code>identify</code> takes the options, <code>source-ref</code> carries them),
+  and the source decides which options are identity and which only narrow;
+  a miner's single options table becomes the defaults of its run
   (amends ADR-023, ADR-026 and ADR-037)</li>
 <li><a href="043-source-triggers/">ADR-043</a> — triggers are <code>[[triggers]]</code> entries (<code>schedule</code>, <code>poll</code>, <code>webhook</code>, <code>watch</code>), disabled
   until the user enables them, that only decide <em>when</em> and end in the request <code>miner run</code> makes,
@@ -1961,7 +1966,8 @@ The history is the value.</p>
       <script id="__config" type="application/json">{"annotate":null,"base":"..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../assets/javascripts/bundle.3cb411a8.min.js"></script>
+      <script src="../assets/javascripts/bundle.9e76c64c.min.js"></script>
+      
       
     
   </body>

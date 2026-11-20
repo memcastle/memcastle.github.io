@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
@@ -18,11 +20,12 @@
       
       
       
+      
         
       
       
       <link rel="icon" href="../../images/icon.svg">
-      <meta name="generator" content="zensical-0.1.2">
+      <meta name="generator" content="zensical-0.1.3">
     
     
       
@@ -33,12 +36,13 @@
       
         
       
-      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.ebb7f775.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.e2cf241e.min.css">
       
         
           
         
         <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.b60ce83d.min.css">
+      
       
       
 
@@ -1660,8 +1664,9 @@ the plugin catalogue already carries an <code>embedding_provider</code> inventor
 An executable module needs its own compatibility contract and isolation without making an
 OpenAI-compatible endpoint depend on an OpenAI product plugin.</p>
 <h2 id="decision">Decision<a class="headerlink" href="#decision" title="Permanent link">&para;</a></h2>
-<p>An <code>embedding_provider</code> module supplies <code>memcastle-embedding.toml</code> and a <code>wasm32-wasip2</code>
-<code>embedding.wasm</code> component implementing <code>memcastle:embedding@0.1.0</code>.
+<p>An <code>embedding_provider</code> module supplies <code>memcastle-embedding.toml</code> and a <code>wasm32-wasip3</code>
+<code>embedding.wasm</code> component implementing <code>memcastle:embedding@0.2.0</code>.
+The <code>embed</code> function is async-typed so WASI 0.3 I/O can suspend; <code>models</code> remains synchronous.
 Its own manifest declares the module ID, version, contract, supported model IDs and dimensions,
 an optional restricted JSON schema for non-secret settings, and whether it needs network and
 host-scoped credential access.
@@ -1768,7 +1773,8 @@ existing vectors remain in their original space until the operator requests re-e
       <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["content.action.edit","content.code.annotate","content.code.copy","navigation.instant","navigation.sections","navigation.top","navigation.tracking","search.highlight","search.suggest","toc.follow"],"redirect":null,"search":"../../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.3cb411a8.min.js"></script>
+      <script src="../../assets/javascripts/bundle.9e76c64c.min.js"></script>
+      
       
     
   </body>
