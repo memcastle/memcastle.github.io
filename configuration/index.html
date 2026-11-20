@@ -740,6 +740,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../container/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Daemon container
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../authentication/" class="md-nav__link">
         
   
@@ -2475,7 +2502,9 @@ so a dotfiles repository or a shell profile written once works on both.</p>
 <p>The last row is not a place you keep anything.
 It is where an OS package installs read-only files, the bundled sources, the agent integrations and the skills,
 and it is never under the XDG directories.
-See <a href="#runtime-assets">Runtime assets</a>.</p>
+See <a href="#runtime-assets">Runtime assets</a>.
+The <a href="../container/#storage-and-configuration">daemon container</a> sets the XDG roots under <code>/data</code>
+and installs immutable assets under <code>/usr/local/share/memcastle</code>.</p>
 <p>The XDG variables are honoured as the specification describes:
 an unset, empty or relative value is ignored, and the default under your home directory is used instead.
 For example, with <code>XDG_DATA_HOME=/srv/data</code> the palace is <code>/srv/data/memcastle/default</code>.</p>

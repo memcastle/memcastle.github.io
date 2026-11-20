@@ -740,6 +740,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../container/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Daemon container
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+                
+              
+                
+                  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../authentication/" class="md-nav__link">
         
   
@@ -1909,6 +1936,9 @@ Core CI builds and checks only the <code>plugins/example</code> fixture on each 
 See <a href="../plugins/#shared-ci-and-development-core">Plugin packages</a> for the release assets, SHA verification, reusable
 workflow inputs and compatibility policy.</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<p>Container packaging reuses existing CI/release binaries and assets rather than invoking Cargo again.
+See <a href="../container/#build-locally">Build locally</a>
+for local assembly and the inline daemon status check.</p>
 <ul>
 <li>Bun for <code>web/</code>, installed globally by mise; the Rust build does not need it.</li>
 <li>Rust via <code>rustup</code>, with mise 2026.9.2+ providing native Mr Boxington wrapping for Cargo builds.
@@ -1925,26 +1955,27 @@ so the storage engine itself needs no C/C++ toolchain.
 (A transitive TLS dependency, <code>aws-lc-sys</code>, may use <code>cmake</code> on some targets; that is unrelated to storage.)</p>
 <h2 id="everyday-tasks">Everyday tasks<a class="headerlink" href="#everyday-tasks" title="Permanent link">&para;</a></h2>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mise<span class="w"> </span>run<span class="w"> </span>build<span class="w">      </span><span class="c1"># cargo build</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w">       </span><span class="c1"># the basic suite: cargo nextest run, without the WebAssembly tests (accepts nextest selectors)</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mise<span class="w"> </span>run<span class="w"> </span>test:wasm<span class="w">  </span><span class="c1"># the WebAssembly suite: every tests/wasm_*.rs binary (slow; needs the wasm32-wasip2 target)</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:check<span class="w">      </span><span class="c1"># build and conformance-test every source under sources/</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:test<span class="w"> </span>--<span class="w"> </span>directory<span class="w">   </span><span class="c1"># the same for one source, which is what each CI leg runs</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard, including its rule fixtures, described below</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>web:check<span class="w">  </span><span class="c1"># build and test the web UI, then verify checkout and installed-prefix serving</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>web:build<span class="w">  </span><span class="c1"># build web/ into web/dist, for `--assets-dir "$PWD"` with `web.enable`</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>web:dev<span class="w">    </span><span class="c1"># the dashboard's dev server, proxying /api to the running daemon</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w">       </span><span class="c1"># measure retrieval quality and latency on the bundled dataset (docs/retrieval-evaluation.md)</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:baseline<span class="w"> </span><span class="c1"># rewrite the committed retrieval baseline, after a change meant to move quality</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>a.json<span class="w"> </span>b.json<span class="w"> </span><span class="c1"># what changed between two retrieval reports</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>file.json<span class="w"> </span><span class="c1"># session retrieval on a downloaded LongMemEval file</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>mise<span class="w"> </span>run<span class="w"> </span>check<span class="w">      </span><span class="c1"># every lint, the guards, both test suites, the sources and the dashboard, without modifying the tree</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>mise<span class="w"> </span>run<span class="w"> </span>ci<span class="w">         </span><span class="c1"># check plus the docs build: the local equivalent of CI's lint,</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">                    </span><span class="c1"># test and docs steps</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>mise<span class="w"> </span>cli<span class="w"> </span>&lt;args&gt;<span class="w">      </span><span class="c1"># run memcastle from source, e.g. `mise cli status`</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>mise<span class="w"> </span>run<span class="w"> </span>docs<span class="w">       </span><span class="c1"># serve this documentation locally</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>mise<span class="w"> </span>run<span class="w"> </span>docs:build<span class="w"> </span><span class="c1"># build it into site/</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mise<span class="w"> </span>run<span class="w"> </span>docker<span class="w">     </span><span class="c1"># build the local daemon image from the Rust/frontend outputs</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">test</span><span class="w">       </span><span class="c1"># the basic suite: cargo nextest run, without the WebAssembly tests (accepts nextest selectors)</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mise<span class="w"> </span>run<span class="w"> </span>test:wasm<span class="w">  </span><span class="c1"># the WebAssembly suite: every tests/wasm_*.rs binary (slow; needs the wasm32-wasip2 target)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:check<span class="w">      </span><span class="c1"># build and conformance-test every source under sources/</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>mise<span class="w"> </span>run<span class="w"> </span>sources:test<span class="w"> </span>--<span class="w"> </span>directory<span class="w">   </span><span class="c1"># the same for one source, which is what each CI leg runs</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>mise<span class="w"> </span>run<span class="w"> </span>lint<span class="w">       </span><span class="c1"># cargo clippy --all-targets --all-features -- -D warnings</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>mise<span class="w"> </span>run<span class="w"> </span>format<span class="w">     </span><span class="c1"># cargo fmt --all</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>mise<span class="w"> </span>run<span class="w"> </span>guards<span class="w">     </span><span class="c1"># the architecture guard, including its rule fixtures, described below</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>mise<span class="w"> </span>run<span class="w"> </span>web:check<span class="w">  </span><span class="c1"># build and test the web UI, then verify checkout and installed-prefix serving</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>mise<span class="w"> </span>run<span class="w"> </span>web:build<span class="w">  </span><span class="c1"># build web/ into web/dist, for `--assets-dir "$PWD"` with `web.enable`</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>mise<span class="w"> </span>run<span class="w"> </span>web:dev<span class="w">    </span><span class="c1"># the dashboard's dev server, proxying /api to the running daemon</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>mise<span class="w"> </span>run<span class="w"> </span><span class="nb">eval</span><span class="w">       </span><span class="c1"># measure retrieval quality and latency on the bundled dataset (docs/retrieval-evaluation.md)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:baseline<span class="w"> </span><span class="c1"># rewrite the committed retrieval baseline, after a change meant to move quality</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:compare<span class="w"> </span>--<span class="w"> </span>a.json<span class="w"> </span>b.json<span class="w"> </span><span class="c1"># what changed between two retrieval reports</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>mise<span class="w"> </span>run<span class="w"> </span>eval:longmemeval<span class="w"> </span>--<span class="w"> </span>file.json<span class="w"> </span><span class="c1"># session retrieval on a downloaded LongMemEval file</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>mise<span class="w"> </span>run<span class="w"> </span>check<span class="w">      </span><span class="c1"># every lint, the guards, both test suites, the sources and the dashboard, without modifying the tree</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>mise<span class="w"> </span>run<span class="w"> </span>ci<span class="w">         </span><span class="c1"># check plus the docs build: the local equivalent of CI's lint,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">                    </span><span class="c1"># test and docs steps</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>mise<span class="w"> </span>cli<span class="w"> </span>&lt;args&gt;<span class="w">      </span><span class="c1"># run memcastle from source, e.g. `mise cli status`</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>mise<span class="w"> </span>run<span class="w"> </span>docs<span class="w">       </span><span class="c1"># serve this documentation locally</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>mise<span class="w"> </span>run<span class="w"> </span>docs:build<span class="w"> </span><span class="c1"># build it into site/</span>
 </span></code></pre></div>
 <p>The project-owned <code>web:build</code> task skips its build when its inputs have not changed and its required outputs still exist.
 Changing a source or removing an output makes the corresponding task run again; use <code>mise run --force web:build</code>
