@@ -1604,6 +1604,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#amendment-configuration-owned-clients-and-durable-grant-identity-388" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Amendment: configuration-owned clients and durable grant identity (#388)
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#alternatives-rejected" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -1758,6 +1769,27 @@ pipeline and gives a source a token without giving it the store.</p>
   <code>login</code>, <code>logout</code>, <code>status</code> and <code>remove</code> are not added: the source name chooses the flow,
   <code>source show</code> is the status, <code>source remove</code> forgets the credential, and running <code>source auth</code> again replaces it.</li>
 </ul>
+<h2 id="amendment-configuration-owned-clients-and-durable-grant-identity-388">Amendment: configuration-owned clients and durable grant identity (#388)<a class="headerlink" href="#amendment-configuration-owned-clients-and-durable-grant-identity-388" title="Permanent link">&para;</a></h2>
+<p>A reusable source configuration may override only the manifest's public client ID with <code>oauth_client_id</code>.
+The installed permission declaration and its consent digest remain unchanged.
+The effective client is used throughout authorization, exchange and refresh, with one credential slot per configuration.
+Stored authority also names the actual source and a random grant ID, so reusing a configuration ID cannot transfer a grant
+between sources, and signing in to another account with the same client cannot redirect queued work.
+Fresh authorization creates a grant ID; refresh rotation preserves it.
+Jobs persist only public binding metadata and fail if their original authority is no longer available.
+Legacy unbound credentials require sign-in again; required-OAuth jobs without a binding must be resubmitted.
+Optional jobs without a grant remain offline-only.</p>
+<p>The application provides the configuration reader to the credential service, keeping configuration policy out of the
+Wasm host while allowing each token request to reject an observed edit.
+Per-configuration synchronization serializes refresh, forgetting and credential commits.
+Sign-in generations are reserved before provider I/O and checked at commit, because aborting an asynchronous task cannot
+cancel a blocking credential-store write that already started.
+The runtime checks pinned manifest terms and exposes only a job-bound token provider.</p>
+<p>Offline conformance has an explicit <code>[test] fixture_access_token</code> provider returning the public synthetic value
+<code>memcastle-source-test-access-token</code> through the same host function.
+It never opens the real credential backend or changes permission gates, and installed execution ignores it.
+The CLI/configuration and author interfaces are documented in <a href="../../configuration/#oauth-public-clients">configuration</a>
+and <a href="../../writing-sources/#conformance">writing sources</a>.</p>
 <h2 id="alternatives-rejected">Alternatives rejected<a class="headerlink" href="#alternatives-rejected" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>The CLI runs the flow and uploads the tokens.</strong>

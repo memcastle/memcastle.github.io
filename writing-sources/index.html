@@ -2621,6 +2621,20 @@ credential host function.
 It never resolves a developer environment variable, token file or OAuth sign-in.
 Use the value in your fake transport; do not put a real credential in fixtures or manifests.
 The runner exercises <code>acquire</code> and page checkpoints for reconciling components and the original calls for legacy ones.</p>
+<p>For an OAuth-only production component, use the independent opt-in:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">[test]</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">fixtures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"fixtures"</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">fixture_access_token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</span></code></pre></div>
+<p><code>memcastle source test</code> supplies exactly <code>memcastle-source-test-access-token</code> through the ordinary <code>host.access-token</code>.
+Your manifest must still declare <code>[permissions.oauth]</code>, and normalization never receives a token.
+Use a fake transport that accepts this synthetic value so the exact production component can run offline.
+The runner never resolves real OAuth sign-ins, environment secrets or credential files, and persists no credential.
+The option defaults to false; disable it to exercise missing-token behavior.
+<code>fixture_credential</code> does not satisfy OAuth, and neither option changes installed daemon execution.</p>
+<p>The manifest's public <code>client_id</code> is the default for installed authorization.
+Users may select another public client on a <a href="../configuration/#oauth-public-clients">source configuration</a>;
+Core applies it consistently while keeping your declared endpoints, scopes and PKCE behavior.</p>
 <p>The cases shipped with MemCastle:</p>
 <table>
 <thead>

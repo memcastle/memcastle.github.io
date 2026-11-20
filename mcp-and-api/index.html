@@ -2505,7 +2505,7 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>GET /api/source-configs</code></td>
-<td>Explicit and implicit source configurations with token-free credential status.</td>
+<td>Explicit and implicit source configurations with token-free credential status, configured <code>oauth_client_id</code> and public <code>effective_oauth_client_id</code>.</td>
 <td>none</td>
 </tr>
 <tr>
@@ -2515,8 +2515,8 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>PUT /api/source-configs/{id}</code></td>
-<td>Save source-native defaults and a credential reference. A change that may broaden what miners read is refused with <code>409</code> unless <code>allow_broaden</code> is true.</td>
-<td>JSON body: <code>source</code> (required for a new named ID, inferred for a known source's default), <code>options</code>, <code>credential</code>, <code>unset_options</code>, <code>unset_credential</code>, <code>allow_broaden</code></td>
+<td>Save source-native defaults and a credential reference. A change that may broaden what miners read is refused with <code>409</code> unless <code>allow_broaden</code> is true. Changing the source or OAuth client invalidates this configuration's authorization; submit new runs after signing in again.</td>
+<td>JSON body: <code>source</code> (required for a new named ID, inferred for a known source's default), <code>options</code>, <code>credential</code>, <code>oauth_client_id</code>, <code>unset_oauth_client_id</code>, <code>unset_options</code>, <code>unset_credential</code>, <code>allow_broaden</code></td>
 </tr>
 <tr>
 <td><code>DELETE /api/source-configs/{id}</code></td>
@@ -2525,7 +2525,7 @@ provider when none is configured (<code>memcastle::embed::not_configured</code>,
 </tr>
 <tr>
 <td><code>POST /api/source-configs/{id}/auth</code></td>
-<td>Start an OAuth sign-in using this configuration's credential key.</td>
+<td>Start an OAuth sign-in using this configuration's effective public client and credential key. A completed fresh sign-in replaces its grant; older jobs cannot adopt it.</td>
 <td>none</td>
 </tr>
 <tr>
