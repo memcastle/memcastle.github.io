@@ -2154,16 +2154,15 @@ Packaged installations retain an empty <code>integrations/</code> directory; pro
 are looking at.</p>
 <h3 id="developing-memcastle">Developing MemCastle<a class="headerlink" href="#developing-memcastle" title="Permanent link">&para;</a></h3>
 <p>To develop an integration, build the archive from its provider checkout and install that plugin into a disposable palace.
-Core's checkout still holds the shared skills and source-packaging assets:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>mise<span class="w"> </span>run<span class="w"> </span>integrations:package<span class="w">  </span><span class="c1"># package the shared skills</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
+Core's checkout holds the shared skills; integration files come from provider plugins:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>memcastle<span class="w"> </span>integration<span class="w"> </span>list<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
 </span></code></pre></div>
 <p><code>MEMCASTLE_ASSETS_DIR</code> does the same as the flag for a whole shell session.
 In this repository <code>mise.toml</code> sets it to the Core checkout during development.
 Run the command from another directory to use installed assets, and see
 <a href="../development/#running-the-daemon-locally">Development</a> for what else it sets.
-<code>mise run integrations:check</code> unsets it and checks that Core packages no agent integration.</p>
-<p><code>mise run integrations:package</code> lays out the shared skills under <code>target/bundled-integrations</code> for a release.</p>
+Core packages shared skills directly and carries no agent integration assets.</p>
+<p>Release packages consume <code>skills/*/</code> directly, without a separate integration build or asset-staging step.</p>
 <p>The bundled mining sources use the same root: with <code>--assets-dir</code> pointing at a root whose <code>sources/</code> holds a
 <code>source.wasm</code> and a <code>memcastle-source.toml</code> in each directory, the daemon offers those as the
 <a href="../publishing-sources/#bundled-sources">bundled sources</a>.
@@ -2294,8 +2293,8 @@ except <code>validation_failed</code>.</p>
 <tbody>
 <tr>
 <td><code>memcastle::integration::assets_missing</code></td>
-<td>No assets root: a standalone binary, or a checkout whose bundles are not built, or a package missing files, such as a skill the manifest names.</td>
-<td>Install MemCastle from a package, or pass <code>--assets-dir</code> and run <code>mise run integrations:build</code> first.</td>
+<td>No assets root, or an integration is missing a file its manifest names.</td>
+<td>Install or reinstall the provider plugin that supplies the integration; pass its assets directory with <code>--assets-dir</code> if needed.</td>
 </tr>
 <tr>
 <td><code>memcastle::integration::not_found</code></td>

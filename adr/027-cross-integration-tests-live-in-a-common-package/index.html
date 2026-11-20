@@ -1625,7 +1625,8 @@
 
 <h1 id="adr-027-tests-that-need-two-integrations-live-in-a-common-test-package-and-production-code-stays-per-package">ADR-027: Tests that need two integrations live in a common test package, and production code stays per package<a class="headerlink" href="#adr-027-tests-that-need-two-integrations-live-in-a-common-test-package-and-production-code-stays-per-package" title="Permanent link">&para;</a></h1>
 <h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
-<p>Superseded for Pi by its move to the standalone <code>memcastle-pi</code> repository (#290).
+<p>Superseded by the move of all integrations to standalone provider repositories, starting with <code>memcastle-pi</code> (#290).
+The Core integration build tasks and common package described below have been removed.
 The language-neutral daemon contract fixtures remain in Core, while each provider tests its client independently.
 Originally accepted, amends <a href="../022-integrations-are-bun-packages-tested-against-a-real-daemon/">ADR-022</a>
 (which said there is nothing shared between packages).

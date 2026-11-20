@@ -1632,7 +1632,9 @@ reads them) and <a href="../022-integrations-are-bun-packages-tested-against-a-r
 distributed as one bundled file, still tested from its sources).
 <a href="../035-web-ui/">ADR-035</a> adds <code>web/</code> as a further tree under the same root.
 After provider integrations moved to plugins, Core's separate archive carries only shared skills as
-<code>memcastle_&lt;version&gt;_skills.tar.gz</code>; the integrations archive described below is historical.</p>
+<code>memcastle_&lt;version&gt;_skills.tar.gz</code>; the integrations archive described below is historical.
+Core integration build scripts, tasks and bundle tests described below have been removed.
+Shared skills are packaged directly from their source directories.</p>
 <h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
 <p>Issue #200 asks for the Pi and OpenCode integrations to be installable: documented, packaged with releases, and usable
 from a package and from a development checkout.

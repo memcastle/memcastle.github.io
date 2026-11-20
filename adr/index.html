@@ -1782,7 +1782,7 @@ The history is the value.</p>
   receipt, and refuses what its manifest does not support
   (amends ADR-013, ADR-020 and ADR-022)</li>
 <li><a href="035-web-ui/">ADR-035</a> — the web UI is a Vue and OpenVue client in <code>web/</code>, opt-in (<code>web.enable</code>) and
-  served under <code>/ui</code> from <code>web/dist/</code> of the one assets root, in a checkout and in a package alike;
+  served under <code>/ui</code> from <code>web/</code> of the one assets root (<code>web/dist/</code> in a checkout);
   its static shell is the second public path,
   it signs in as the database console does (user <code>memcastle</code>, the token as the password, checked by every request),
   carries a memory mode, and a hook holds <code>web/</code> to HTTP

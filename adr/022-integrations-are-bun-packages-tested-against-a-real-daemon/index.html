@@ -1625,6 +1625,8 @@
 
 <h1 id="adr-022-integrations-are-self-contained-bun-packages-tested-against-a-real-daemon">ADR-022: Integrations are self-contained bun packages, tested against a real daemon<a class="headerlink" href="#adr-022-integrations-are-self-contained-bun-packages-tested-against-a-real-daemon" title="Permanent link">&para;</a></h1>
 <h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
+<p>Historical Core build-task references below are superseded by provider plugins.
+Core no longer builds or packages integrations; each standalone provider repository owns those steps and tests.</p>
 <p>Accepted, settles the toolchain question that <a href="../019-shared-integration-contract/">ADR-019</a> left to the first adapter.
 Amended by <a href="../027-cross-integration-tests-live-in-a-common-package/">ADR-027</a>:
 tests that need two integrations live in a test-only <code>integrations/common</code> package.

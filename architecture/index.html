@@ -2600,7 +2600,7 @@ What else a release may carry falls into three kinds, kept apart on purpose:</p>
     installed -- no --&gt; useEmbedded[use the embedded assets]</code></pre>
 <p>The resolver only reads directories, so startup never needs the network.
 Its consumers are the bundle of sources (<code>sources/</code>), the integration installer (<code>integrations/</code>, <code>skills/</code>) and the
-dashboard's static routes (<code>web/dist/</code>, only when <code>web.enable</code> is set).
+dashboard's static routes (installed <code>web/</code>, checkout <code>web/dist/</code>, only when <code>web.enable</code> is set).
 The assets root is a directory with that layout, so a checkout of the repository is a valid one,
 which is how a developer installs the integrations as built in their worktree (see below).
 The module is pure and the daemon's composition root calls it once, before binding the listener,

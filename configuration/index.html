@@ -3570,7 +3570,7 @@ The schema and the data migrations are always built into the binary and are not 
 <td><code>memcastle integration</code>, which copies the ones an integration's manifest names into its installed copy</td>
 </tr>
 <tr>
-<td><code>web/dist/</code></td>
+<td><code>web/</code> (<code>web/dist/</code> in a checkout)</td>
 <td>the built <a href="../web/">web UI</a></td>
 <td>the daemon, under <code>/ui</code>, when <code>web.enable</code> is set</td>
 </tr>
@@ -3902,8 +3902,9 @@ installed source and not to a palace.</p>
 <p><code>web.enable = true</code> (or <code>MEMCASTLE_WEB_ENABLE=true</code>) makes the daemon serve its web UI under <code>/ui</code>.
 It is off by default: a daemon that does not set it answers nothing at <code>/ui</code>.
 There is no command-line flag; <code>daemon start</code> and <code>daemon restart</code> pass the environment and the file to the daemon as usual.</p>
-<p>The dashboard's files are found in <code>web/dist/</code> of the <a href="#runtime-assets">runtime assets</a>,
-in a package and in a checkout alike.
+<p>The dashboard's files are found in <code>web/</code> of the <a href="#runtime-assets">runtime assets</a> in an installed package.
+An explicit checkout assets root, identified by <code>web/package.json</code>, uses the local build in <code>web/dist/</code> instead.
+The resolver never falls back to the checkout's source <code>web/index.html</code> when that build is missing.
 If they are missing, the daemon still starts, logs a warning, and answers <code>/ui</code> with a page that says how to install them.
 See <a href="../web/">Web UI</a> for the login, the memory mode and the development workflow.</p>
 <h2 id="not-supported-other-platforms-conventions">Not supported: other platforms' conventions<a class="headerlink" href="#not-supported-other-platforms-conventions" title="Permanent link">&para;</a></h2>

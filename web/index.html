@@ -1900,15 +1900,18 @@ Pausing, resuming and cancelling a job are daemon operations and are not gated b
 The choice lasts for the tab.</p>
 <h2 id="developing-the-dashboard">Developing the dashboard<a class="headerlink" href="#developing-the-dashboard" title="Permanent link">&para;</a></h2>
 <p>The source is <code>web/</code> (Vue 3 and <a href="https://openvue.dev">OpenVue</a>, with Vite and TypeScript), its own bun package.
-It needs bun and node.</p>
+It uses Bun for dependency installation, typechecking, Vite and Vitest.
+<code>mise install</code> provisions Bun and installs the frontend dependencies with the frozen lockfile.
+<code>web/bunfig.toml</code> forces package scripts to use Bun even when a tool has a Node shebang.
+Coverage uses Istanbul instrumentation because Bun runs on JavaScriptCore.</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mise<span class="w"> </span>run<span class="w"> </span>web:build<span class="w">                      </span><span class="c1"># web/ -&gt; web/dist</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>memcastle<span class="w"> </span>serve<span class="w"> </span>--assets-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span><span class="w">     </span><span class="c1"># with web.enable, from a checkout</span>
 </span></code></pre></div>
 <p>In this repository <code>mise.toml</code> already sets <code>MEMCASTLE_ASSETS_DIR</code> to the checkout and <code>MEMCASTLE_WEB_ENABLE</code> to <code>true</code>,
 so with mise active <code>mise cli serve</code> is enough, and serves the dashboard at <code>http://127.0.0.1:8420/ui/</code> once it is built
 (see <a href="../development/#running-the-daemon-locally">Development</a>).</p>
-<p>A checkout has the same layout as a package (<code>web/dist/index.html</code>), so <code>--assets-dir &lt;checkout&gt;</code> is the whole development
-setup, and the daemon finds the files by the same lookup it uses for an installed package.
+<p>A checkout builds into <code>web/dist/</code>; packages install the build contents directly under <code>web/</code>.
+The assets resolver recognizes a checkout by <code>web/package.json</code>, so <code>--assets-dir &lt;checkout&gt;</code> is the whole development setup.
 For hot reload, run the daemon, then:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>mise<span class="w"> </span>run<span class="w"> </span>web:dev
 </span></code></pre></div>
@@ -1938,7 +1941,7 @@ the store or the jobs.</p>
 </tr>
 <tr>
 <td><code>/ui/</code> answers a page saying the files are missing</td>
-<td>The daemon found no <code>web/dist/index.html</code> in its <a href="../configuration/#runtime-assets">assets</a>. <code>mise run web:build</code> and <code>--assets-dir &lt;checkout&gt;</code>, or install a package. <code>GET /api/config</code> shows where the assets came from.</td>
+<td>The daemon found no <code>web/index.html</code> in its <a href="../configuration/#runtime-assets">assets</a>, or no <code>web/dist/index.html</code> in a checkout. Run <code>mise run web:build</code> with <code>--assets-dir &lt;checkout&gt;</code>, or install a package. <code>GET /api/config</code> shows where the assets came from.</td>
 </tr>
 <tr>
 <td>The login refuses a token you are sure of</td>
